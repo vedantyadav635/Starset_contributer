@@ -1,7 +1,3 @@
-// ============================================================================
-// IMPORTS
-// ============================================================================
-
 // React core imports
 import React, { useState, useEffect } from 'react';
 
@@ -146,21 +142,40 @@ const App: React.FC = () => {
     };
   }, [isAuthenticated]);
 
+  // --------------------------------------------------------------------------
+  // HANDLER FUNCTIONS - Navigation & Authentication
+  // --------------------------------------------------------------------------
+
+  /**
+   * Toggle between dark and light theme
+   * Updates the isDark state which triggers the theme useEffect
+   */
   const toggleTheme = () => {
     setIsDark(!isDark);
   };
 
-  // Handlers
+  /**
+   * Navigate to login page from public landing page
+   * Switches to app view mode and shows login form
+   */
   const handleEnterApp = () => {
     setAuthMode('login');
     setViewMode('app');
   };
 
+  /**
+   * Navigate to signup page from public landing page
+   * Switches to app view mode and shows signup form
+   */
   const handleStartSignup = () => {
     setAuthMode('signup');
     setViewMode('app');
   }
 
+  /**
+   * Exit the app and return to public landing page
+   * Resets all navigation state and clears authentication
+   */
   const handleExitApp = () => {
     setViewMode('public');
     setPublicPage('home');
@@ -168,8 +183,20 @@ const App: React.FC = () => {
     setIsAuthenticated(false);
   };
 
+  /**
+   * Handle user login after authentication
+   * 
+   * Flow:
+   * 1. Get authenticated user from Supabase
+   * 2. Fetch user profile from database
+   * 3. Set user role and authentication state
+   * 4. Redirect to appropriate page (profile completion or dashboard)
+   * 
+   * @param role - The role the user is logging in as (admin or contributor)
+   */
   const handleLogin = async (role: UserRole) => {
     try {
+      // Step 1: Get the authenticated user
       const { data: { user }, error: userError } = await supabase.auth.getUser();
 
       if (userError || !user) {
@@ -180,6 +207,7 @@ const App: React.FC = () => {
 
       console.log("User authenticated:", user.id);
 
+      // Step 2: Fetch user profile from database
       const { data: profile, error: profileError } = await supabase
         .from("profiles")
         .select("*")
@@ -200,14 +228,17 @@ const App: React.FC = () => {
 
       console.log("Profile loaded successfully:", profile);
 
-      // Store user profile data
+      // Step 3: Store user data in state
       setUserProfile({ ...profile, email: user.email });
       setUserRole(profile.role_text || "contributor");
       setIsAuthenticated(true);
 
+      // Step 4: Redirect based on profile completion status
       if (!profile.profile_completed) {
+        // New user - needs to complete profile
         setCurrentPage("complete-profile");
       } else {
+        // Existing user - go to dashboard
         setCurrentPage(role === "admin" ? "admin-dashboard" : "dashboard");
       }
     } catch (err) {
@@ -219,6 +250,10 @@ const App: React.FC = () => {
 
 
 
+  /**
+   * Handle user logout
+   * Clears authentication state and returns to public landing page
+   */
   const handleLogout = () => {
     setIsAuthenticated(false);
     setActiveTask(null);
@@ -226,16 +261,30 @@ const App: React.FC = () => {
     setPublicPage('home');
   };
 
+  /**
+   * Handle task selection from task list
+   * Sets the active task and navigates to execution page
+   * @param task - The task object to execute
+   */
   const handleSelectTask = (task: Task) => {
     setActiveTask(task);
     setCurrentPage('execution');
   };
 
+  /**
+   * Handle task completion
+   * Clears active task and returns to task list
+   */
   const handleCompleteTask = () => {
     setActiveTask(null);
     setCurrentPage('tasks');
   };
 
+  /**
+   * Handle new task creation (Admin only)
+   * Adds new task to the beginning of the task list
+   * @param newTask - The newly created task object
+   */
   const handleCreateTask = async (newTask: Task) => {
     setTasks(prev => [newTask, ...prev]);
     setCurrentPage("tasks");
@@ -243,10 +292,20 @@ const App: React.FC = () => {
 
 
 
+  /**
+   * Handle task deletion (Admin only)
+   * Removes task from the task list by ID
+   * @param taskId - The ID of the task to delete
+   */
   const handleDeleteTask = (taskId: string) => {
     setTasks(prev => prev.filter(t => t.id !== taskId));
   };
 
+  /**
+   * Handle navigation between public pages
+   * Scrolls to top smoothly when changing pages
+   * @param page - The public page to navigate to (home, about, contributors, money)
+   */
   const handlePublicNavigate = (page: PublicPageType) => {
     setPublicPage(page);
     window.scrollTo({ top: 0, behavior: 'smooth' });
