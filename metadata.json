@@ -1,0 +1,8 @@
+{
+  "name": "Starset Intelligence",
+  "description": "Enterprise-grade platform for managing and executing AI training data tasks.",
+  "requestFramePermissions": [
+    "microphone",
+    "camera"
+  ]
+}
