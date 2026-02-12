@@ -58,6 +58,7 @@ const App: React.FC = () => {
 
   // Global Data State - Tasks loaded from backend
   const [tasks, setTasks] = useState<Task[]>([]); // Array of all tasks
+  const [completedTaskIds, setCompletedTaskIds] = useState<string[]>([]); // Track completed tasks
 
   // --------------------------------------------------------------------------
   // SIDE EFFECTS (useEffect hooks)
@@ -71,8 +72,11 @@ const App: React.FC = () => {
   useEffect(() => {
     const fetchTasks = async () => {
       try {
+        // Import API config dynamically
+        const { API_ENDPOINTS } = await import('./config/api');
+
         // Call backend API to get all tasks
-        const res = await fetch("http://localhost:3000/admin/tasks");
+        const res = await fetch(API_ENDPOINTS.ADMIN_TASKS);
 
         if (!res.ok) {
           throw new Error("Failed to fetch tasks");
@@ -88,6 +92,38 @@ const App: React.FC = () => {
 
     fetchTasks();
   }, []); // Empty array = run once on mount
+
+  /**
+   * EFFECT: Fetch user's completed tasks when user logs in
+   * Runs when authentication state changes
+   */
+  useEffect(() => {
+    const fetchCompletedTasks = async () => {
+      if (isAuthenticated && userProfile) {
+        try {
+          // Get current user from Supabase
+          const { data: { user } } = await supabase.auth.getUser();
+
+          if (user) {
+            const { API_ENDPOINTS } = await import('./config/api');
+            const res = await fetch(API_ENDPOINTS.USER_SUBMISSIONS(user.id));
+
+            if (res.ok) {
+              const data = await res.json();
+              setCompletedTaskIds(data.completedTasks || []);
+              console.log(`✅ User has completed ${data.completedTasks?.length || 0} tasks`);
+            }
+          }
+        } catch (err) {
+          console.error('Error fetching completed tasks:', err);
+        }
+      } else {
+        setCompletedTaskIds([]);
+      }
+    };
+
+    fetchCompletedTasks();
+  }, [isAuthenticated, userProfile]);
 
   // Theme State - Dark mode by default
   const [isDark, setIsDark] = useState(true);

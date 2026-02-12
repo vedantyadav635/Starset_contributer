@@ -16,8 +16,11 @@
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.93.3",
+    "@types/multer": "^2.0.0",
+    "backblaze-b2": "^1.7.1",
     "cors": "^2.8.6",
     "dotenv": "^17.2.3",
-    "express": "^5.2.1"
+    "express": "^5.2.1",
+    "multer": "^2.0.2"
   }
 }

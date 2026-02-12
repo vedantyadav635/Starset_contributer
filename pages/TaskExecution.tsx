@@ -2,6 +2,8 @@ import React, { useState, useEffect, useRef } from 'react';
 import { Task, TaskType } from '../types';
 import { Button } from '../components/Button';
 import { AlertTriangle, Mic, Square, Check, ArrowLeft, Play, Info, ShieldCheck, Clock, CheckCircle, Database, Lock, Cpu, Camera, RefreshCcw } from 'lucide-react';
+import { supabase } from '../supabaseClient';
+import { API_ENDPOINTS } from '../config/api';
 
 interface TaskExecutionProps {
   task: Task;
@@ -70,20 +72,37 @@ export const TaskExecution: React.FC<TaskExecutionProps> = ({ task, onBack, onCo
 
   const handleStartRecording = async () => {
     try {
-      const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+      const stream = await navigator.mediaDevices.getUserMedia({
+        audio: {
+          echoCancellation: true,
+          noiseSuppression: true,
+          autoGainControl: true,
+        }
+      });
 
       audioChunksRef.current = [];
-      const mediaRecorder = new MediaRecorder(stream);
+      const mediaRecorder = new MediaRecorder(stream, {
+        mimeType: 'audio/webm;codecs=opus'
+      });
       mediaRecorderRef.current = mediaRecorder;
+
+      let isFirstChunk = true;
 
       mediaRecorder.ondataavailable = (event) => {
         if (event.data.size > 0) {
+          // Skip the first very small chunk which often contains silence
+          if (isFirstChunk && event.data.size < 1000) {
+            console.log('🔇 Skipping initial silence chunk:', event.data.size, 'bytes');
+            isFirstChunk = false;
+            return;
+          }
+          isFirstChunk = false;
           audioChunksRef.current.push(event.data);
         }
       };
 
       mediaRecorder.onstop = () => {
-        const audioBlob = new Blob(audioChunksRef.current, { type: 'audio/webm' });
+        const audioBlob = new Blob(audioChunksRef.current, { type: 'audio/webm;codecs=opus' });
         const url = URL.createObjectURL(audioBlob);
         setAudioBlob(audioBlob);
         setAudioUrl(url);
@@ -96,7 +115,9 @@ export const TaskExecution: React.FC<TaskExecutionProps> = ({ task, onBack, onCo
         stream.getTracks().forEach(track => track.stop());
       };
 
-      mediaRecorder.start();
+      // Start recording with timeslice to get chunks every 100ms
+      // This helps capture audio more responsively
+      mediaRecorder.start(100);
       setIsRecording(true);
       setHasRecorded(false);
       setRecordingTime(0);
@@ -186,13 +207,100 @@ export const TaskExecution: React.FC<TaskExecutionProps> = ({ task, onBack, onCo
     startCamera();
   };
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     setIsSubmitting(true);
-    // Simulate network request
-    setTimeout(() => {
+
+    try {
+      // Get user ID from Supabase
+      const { data: { user } } = await supabase.auth.getUser();
+
+      if (!user) {
+        alert('User not authenticated. Please log in again.');
+        setIsSubmitting(false);
+        return;
+      }
+
+      // Handle audio submission
+      if (task.type === TaskType.AUDIO_COLLECTION && audioBlob) {
+        const formData = new FormData();
+        formData.append('audio', audioBlob, 'recording.webm');
+        formData.append('taskId', task.id);
+        formData.append('userId', user.id);
+
+        const response = await fetch(API_ENDPOINTS.SUBMIT_AUDIO, {
+          method: 'POST',
+          body: formData,
+        });
+
+        if (!response.ok) {
+          const error = await response.json();
+          throw new Error(error.error || 'Failed to submit audio');
+        }
+
+        const result = await response.json();
+        console.log('✅ Audio submitted successfully:', result);
+      }
+
+      // Handle image submission
+      else if (task.type === TaskType.IMAGE_COLLECTION && capturedImage) {
+        // Convert base64 to blob
+        const base64Response = await fetch(capturedImage);
+        const imageBlob = await base64Response.blob();
+
+        const formData = new FormData();
+        formData.append('image', imageBlob, 'capture.png');
+        formData.append('taskId', task.id);
+        formData.append('userId', user.id);
+
+        const response = await fetch(API_ENDPOINTS.SUBMIT_IMAGE, {
+          method: 'POST',
+          body: formData,
+        });
+
+        if (!response.ok) {
+          const error = await response.json();
+          throw new Error(error.error || 'Failed to submit image');
+        }
+
+        const result = await response.json();
+        console.log('✅ Image submitted successfully:', result);
+      }
+
+      // Handle text/annotation submission
+      else if (task.type === TaskType.IMAGE_LABELING ||
+        task.type === TaskType.TEXT_ANNOTATION ||
+        task.type === TaskType.SURVEY) {
+        const response = await fetch(API_ENDPOINTS.SUBMIT_TEXT, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            taskId: task.id,
+            userId: user.id,
+            textContent: textInput || null,
+            selectedOption: selectedOption || null,
+          }),
+        });
+
+        if (!response.ok) {
+          const error = await response.json();
+          throw new Error(error.error || 'Failed to submit text');
+        }
+
+        const result = await response.json();
+        console.log('✅ Text submitted successfully:', result);
+      }
+
+      // Success - move to submitted step
       setIsSubmitting(false);
       setStep('submitted');
-    }, 2000);
+
+    } catch (error: any) {
+      console.error('❌ Submission error:', error);
+      alert(`Submission failed: ${error.message}`);
+      setIsSubmitting(false);
+    }
   };
 
   const formatTime = (seconds: number) => {
