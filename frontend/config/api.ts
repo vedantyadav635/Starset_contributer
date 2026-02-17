@@ -1,7 +1,7 @@
 // API Configuration
 // This file centralizes all API endpoints for easy configuration
 
-const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000';
+const API_URL = import.meta.env.VITE_API_URL || 'https://starset-contributer.onrender.com';
 
 export const API_ENDPOINTS = {
     // Admin endpoints
