@@ -331,13 +331,13 @@ export const TaskExecution: React.FC<TaskExecutionProps> = ({ task, onBack, onCo
             <div>
               <h2 className="text-xl md:text-2xl font-bold text-[#121212] dark:text-white leading-tight">{task.title}</h2>
               <div className="flex flex-wrap items-center mt-2 gap-2 text-sm text-stone-500">
-                <span className="flex items-center bg-white dark:bg-black px-3 py-1 rounded border border-stone-200 dark:border-white/10 shadow-sm font-medium"><Info className="h-4 w-4 mr-2 text-[#0f766e] dark:text-blue-400" /> {task.type}</span>
+                <span className="flex items-center bg-white dark:bg-black px-3 py-1 rounded border border-stone-200 dark:border-white/10 shadow-sm font-medium"><Info className="h-4 w-4 mr-2 text-blue-600 dark:text-blue-400" /> {task.type}</span>
                 <span className="font-mono text-xs text-stone-400">OP_ID: {task.id}</span>
               </div>
             </div>
             <div className="flex items-center md:block w-full md:w-auto justify-between md:text-right border-t md:border-t-0 border-stone-200 dark:border-white/10 pt-4 md:pt-0">
               <div className="text-sm text-stone-500 font-medium uppercase tracking-wider mb-1">Compensation</div>
-              <div className="text-xl md:text-2xl font-bold text-[#0f766e] dark:text-emerald-400">₹{task.compensation.toFixed(2)}</div>
+              <div className="text-xl md:text-2xl font-bold text-blue-600 dark:text-blue-400">₹{task.compensation.toFixed(2)}</div>
             </div>
           </div>
 
@@ -392,8 +392,8 @@ export const TaskExecution: React.FC<TaskExecutionProps> = ({ task, onBack, onCo
     return (
       <div className="max-w-2xl mx-auto mt-4 md:mt-12 animate-in zoom-in-95 duration-300">
         <div className="bg-white dark:bg-zinc-900 rounded-3xl border border-stone-200 dark:border-white/10 shadow-xl shadow-stone-200/50 dark:shadow-none p-6 md:p-12">
-          <div className="flex items-center justify-center h-16 w-16 md:h-20 md:w-20 bg-teal-50 dark:bg-teal-900/20 rounded-full mx-auto mb-6 md:mb-8">
-            <Lock className="h-8 w-8 md:h-10 md:w-10 text-[#0f766e] dark:text-teal-400" />
+          <div className="flex items-center justify-center h-16 w-16 md:h-20 md:w-20 bg-blue-50 dark:bg-blue-900/20 rounded-full mx-auto mb-6 md:mb-8">
+            <Lock className="h-8 w-8 md:h-10 md:w-10 text-blue-600 dark:text-blue-400" />
           </div>
           <h2 className="text-2xl md:text-3xl font-bold text-[#121212] dark:text-white mb-3 text-center">Protocol Acceptance</h2>
           <p className="text-stone-500 text-center mb-8 md:mb-10 text-base md:text-lg">Confirm understanding of data handling protocols.</p>
@@ -404,20 +404,20 @@ export const TaskExecution: React.FC<TaskExecutionProps> = ({ task, onBack, onCo
             </p>
             <div className="h-px bg-stone-200 dark:bg-white/10"></div>
             <ul className="space-y-3">
-              <li className="flex items-start"><Check className="h-5 w-5 text-[#0f766e] dark:text-emerald-400 mr-3 mt-0.5 flex-shrink-0" /> No personal identity data is collected.</li>
-              <li className="flex items-start"><Check className="h-5 w-5 text-[#0f766e] dark:text-emerald-400 mr-3 mt-0.5 flex-shrink-0" /> Inputs are validated before acceptance.</li>
-              <li className="flex items-start"><Check className="h-5 w-5 text-[#0f766e] dark:text-emerald-400 mr-3 mt-0.5 flex-shrink-0" /> Compensation transfers usage rights to Starset.</li>
+              <li className="flex items-start"><Check className="h-5 w-5 text-blue-600 dark:text-blue-400 mr-3 mt-0.5 flex-shrink-0" /> No personal identity data is collected.</li>
+              <li className="flex items-start"><Check className="h-5 w-5 text-blue-600 dark:text-blue-400 mr-3 mt-0.5 flex-shrink-0" /> Inputs are validated before acceptance.</li>
+              <li className="flex items-start"><Check className="h-5 w-5 text-blue-600 dark:text-blue-400 mr-3 mt-0.5 flex-shrink-0" /> Compensation transfers usage rights to Starset.</li>
             </ul>
           </div>
 
-          <div className="flex items-start md:items-center mb-8 md:mb-10 bg-white dark:bg-black/20 border border-stone-200 dark:border-white/10 p-5 rounded-xl cursor-pointer hover:border-[#0f766e] dark:hover:border-teal-500 transition-colors" onClick={() => setConsentGiven(!consentGiven)}>
+          <div className="flex items-start md:items-center mb-8 md:mb-10 bg-white dark:bg-black/20 border border-stone-200 dark:border-white/10 p-5 rounded-xl cursor-pointer hover:border-blue-600 dark:hover:border-blue-500 transition-colors" onClick={() => setConsentGiven(!consentGiven)}>
             <div className="flex items-center h-6">
               <input
                 id="consent"
                 type="checkbox"
                 checked={consentGiven}
                 onChange={(e) => setConsentGiven(e.target.checked)}
-                className="h-5 w-5 md:h-6 md:w-6 text-[#0f766e] border-stone-300 rounded focus:ring-[#0f766e] transition-all"
+                className="h-5 w-5 md:h-6 md:w-6 text-blue-600 border-stone-300 rounded focus:ring-blue-600 transition-all"
               />
             </div>
             <div className="ml-4 text-sm md:text-base select-none">
@@ -460,7 +460,7 @@ export const TaskExecution: React.FC<TaskExecutionProps> = ({ task, onBack, onCo
             <div className="h-px bg-stone-200 dark:bg-white/10 w-full"></div>
             <div className="flex justify-between items-center">
               <span className="text-sm text-stone-500 font-medium">Pending Compensation</span>
-              <span className="text-sm font-bold text-[#0f766e] dark:text-emerald-400 bg-teal-50 dark:bg-emerald-900/20 px-3 py-1 rounded border border-teal-100 dark:border-emerald-800">₹{task.compensation.toFixed(2)}</span>
+              <span className="text-sm font-bold text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-900/20 px-3 py-1 rounded border border-blue-100 dark:border-blue-800">₹{task.compensation.toFixed(2)}</span>
             </div>
           </div>
 
@@ -497,7 +497,7 @@ export const TaskExecution: React.FC<TaskExecutionProps> = ({ task, onBack, onCo
               <span className="text-xs font-bold text-[#121212] dark:text-white">0%</span>
             </div>
             <div className="h-2 bg-stone-200 dark:bg-white/10 rounded-full overflow-hidden">
-              <div className="h-full bg-[#0f766e] dark:bg-blue-500 w-0"></div>
+              <div className="h-full bg-blue-600 dark:bg-blue-500 w-0"></div>
             </div>
           </div>
         </div>
@@ -521,7 +521,7 @@ export const TaskExecution: React.FC<TaskExecutionProps> = ({ task, onBack, onCo
 
               <div className="w-full max-w-2xl mx-auto text-center space-y-6 md:space-y-8">
                 <div className="space-y-3">
-                  <span className="inline-block px-4 py-1.5 bg-teal-50 dark:bg-teal-900/20 text-[#0f766e] dark:text-teal-400 text-xs font-bold uppercase tracking-wider rounded-full">Script</span>
+                  <span className="inline-block px-4 py-1.5 bg-blue-50 dark:bg-blue-900/20 text-blue-600 dark:text-blue-400 text-xs font-bold uppercase tracking-wider rounded-full">Script</span>
                   <p className="text-xl md:text-3xl font-serif text-[#121212] dark:text-white leading-tight px-2">
                     "{task.prompt}"
                   </p>
@@ -554,8 +554,8 @@ export const TaskExecution: React.FC<TaskExecutionProps> = ({ task, onBack, onCo
                           <button
                             onClick={handlePlayAudio}
                             className={`h-10 w-10 md:h-12 md:w-12 rounded-full bg-white dark:bg-black border border-stone-200 dark:border-white/10 flex items-center justify-center transition-colors shadow-sm ${isPlaying
-                              ? 'text-[#0f766e] dark:text-teal-400 border-[#0f766e] dark:border-teal-400'
-                              : 'text-stone-700 dark:text-stone-300 hover:text-[#0f766e] dark:hover:text-teal-400 hover:border-[#0f766e] dark:hover:border-teal-400'
+                              ? 'text-blue-600 dark:text-blue-400 border-blue-600 dark:border-blue-400'
+                              : 'text-stone-700 dark:text-stone-300 hover:text-blue-600 dark:hover:text-blue-400 hover:border-blue-600 dark:hover:border-blue-400'
                               }`}
                           >
                             <Play className="h-5 w-5 md:h-6 md:w-6 ml-1" />
@@ -563,7 +563,7 @@ export const TaskExecution: React.FC<TaskExecutionProps> = ({ task, onBack, onCo
                           <div className="h-8 md:h-10 w-px bg-stone-200 dark:bg-white/10 mx-2"></div>
                           <div className="h-6 md:h-8 flex items-center space-x-1">
                             {[...Array(8)].map((_, i) => (
-                              <div key={i} className="w-1 md:w-1.5 bg-stone-300 dark:bg-zinc-600 rounded-full transition-all hover:bg-[#0f766e] dark:hover:bg-teal-400" style={{ height: Math.random() * 20 + 6 + 'px' }}></div>
+                              <div key={i} className="w-1 md:w-1.5 bg-stone-300 dark:bg-zinc-600 rounded-full transition-all hover:bg-blue-600 dark:hover:bg-blue-400" style={{ height: Math.random() * 20 + 6 + 'px' }}></div>
                             ))}
                           </div>
                         </div>
@@ -652,7 +652,7 @@ export const TaskExecution: React.FC<TaskExecutionProps> = ({ task, onBack, onCo
                 <textarea
                   value={textInput}
                   onChange={(e) => setTextInput(e.target.value)}
-                  className="w-full h-32 md:h-40 p-4 md:p-6 border border-stone-200 dark:border-white/10 rounded-xl focus:ring-2 focus:ring-[#0f766e]/20 dark:focus:ring-teal-500/20 focus:border-[#0f766e] dark:focus:border-teal-500 outline-none transition-all resize-none text-base md:text-lg bg-[#FAF9F7] dark:bg-black/20 focus:bg-white dark:focus:bg-black/40 dark:text-white"
+                  className="w-full h-32 md:h-40 p-4 md:p-6 border border-stone-200 dark:border-white/10 rounded-xl focus:ring-2 focus:ring-blue-600/20 dark:focus:ring-blue-500/20 focus:border-blue-600 dark:focus:border-blue-500 outline-none transition-all resize-none text-base md:text-lg bg-[#FAF9F7] dark:bg-black/20 focus:bg-white dark:focus:bg-black/40 dark:text-white"
                   placeholder="Type your description here..."
                 ></textarea>
                 <p className="text-right text-xs text-stone-400 mt-2">{textInput.length} characters</p>
@@ -682,13 +682,13 @@ export const TaskExecution: React.FC<TaskExecutionProps> = ({ task, onBack, onCo
                       onClick={() => setSelectedOption(option)}
                       className={`p-4 md:p-5 rounded-xl border-2 cursor-pointer transition-all flex items-center justify-between group
                              ${selectedOption === option
-                          ? 'border-[#0f766e] dark:border-teal-500 bg-teal-50/30 dark:bg-teal-900/10 shadow-sm'
+                          ? 'border-blue-600 dark:border-blue-500 bg-blue-50/30 dark:bg-blue-900/10 shadow-sm'
                           : 'border-stone-100 dark:border-white/10 bg-white dark:bg-white/5 hover:border-stone-300 dark:hover:border-white/20'}`}
                     >
-                      <span className={`text-base md:text-lg font-medium ${selectedOption === option ? 'text-[#0f766e] dark:text-teal-400' : 'text-stone-600 dark:text-stone-300'}`}>{option}</span>
+                      <span className={`text-base md:text-lg font-medium ${selectedOption === option ? 'text-blue-600 dark:text-blue-400' : 'text-stone-600 dark:text-stone-300'}`}>{option}</span>
                       <div className={`h-5 w-5 md:h-6 md:w-6 rounded-full border-2 flex items-center justify-center
-                              ${selectedOption === option ? 'border-[#0f766e] dark:border-teal-500' : 'border-stone-300 dark:border-zinc-600 group-hover:border-stone-400'}`}>
-                        {selectedOption === option && <div className="h-2.5 w-2.5 md:h-3 md:w-3 rounded-full bg-[#0f766e] dark:bg-teal-500"></div>}
+                              ${selectedOption === option ? 'border-blue-600 dark:border-blue-500' : 'border-stone-300 dark:border-zinc-600 group-hover:border-stone-400'}`}>
+                        {selectedOption === option && <div className="h-2.5 w-2.5 md:h-3 md:w-3 rounded-full bg-blue-600 dark:bg-blue-500"></div>}
                       </div>
                     </div>
                   ))}

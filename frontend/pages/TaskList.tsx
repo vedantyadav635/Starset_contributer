@@ -22,7 +22,7 @@ export const TaskList: React.FC<TaskListProps> = ({ onSelectTask, tasks, userRol
 
   const getTaskIcon = (type: TaskType) => {
     switch (type) {
-      case TaskType.AUDIO_COLLECTION: return <Play className="h-6 w-6 text-[#0f766e] fill-current" />;
+      case TaskType.AUDIO_COLLECTION: return <Play className="h-6 w-6 text-blue-600 fill-current" />;
       case TaskType.IMAGE_COLLECTION: return <Camera className="h-6 w-6 text-pink-600" />;
       case TaskType.TEXT_ANNOTATION: return <Edit3 className="h-6 w-6 text-blue-600" />;
       case TaskType.IMAGE_LABELING: return <ImageIcon className="h-6 w-6 text-purple-600" />;
@@ -53,8 +53,8 @@ export const TaskList: React.FC<TaskListProps> = ({ onSelectTask, tasks, userRol
             key={type}
             onClick={() => setFilterType(type)}
             className={`px-5 py-2.5 text-sm font-medium rounded-lg transition-all duration-200 ${filterType === type
-                ? 'bg-[#121212] dark:bg-white text-white dark:text-black shadow-md'
-                : 'bg-transparent text-stone-600 dark:text-stone-400 hover:bg-stone-100 dark:hover:bg-white/10'
+              ? 'bg-[#121212] dark:bg-white text-white dark:text-black shadow-md'
+              : 'bg-transparent text-stone-600 dark:text-stone-400 hover:bg-stone-100 dark:hover:bg-white/10'
               }`}
           >
             {type === 'All' ? 'All Operations' : type}
@@ -68,7 +68,7 @@ export const TaskList: React.FC<TaskListProps> = ({ onSelectTask, tasks, userRol
           filteredTasks.map((task) => (
             <div
               key={task.id}
-              className={`group bg-white dark:bg-white/5 rounded-2xl border border-stone-200 dark:border-white/10 p-0 transition-all duration-300 relative overflow-hidden flex flex-col md:flex-row h-full md:h-52 ${userRole === 'contributor' ? 'cursor-pointer hover:border-[#0f766e] dark:hover:border-blue-500 hover:shadow-lg hover:shadow-teal-900/5' : ''}`}
+              className={`group bg-white dark:bg-white/5 rounded-2xl border border-stone-200 dark:border-white/10 p-0 transition-all duration-300 relative overflow-hidden flex flex-col md:flex-row h-full md:h-52 ${userRole === 'contributor' ? 'cursor-pointer hover:border-blue-500 dark:hover:border-blue-400 hover:shadow-lg hover:shadow-blue-900/5' : ''}`}
               onClick={() => userRole === 'contributor' && onSelectTask(task)}
             >
               {/* Task Image */}
@@ -105,7 +105,7 @@ export const TaskList: React.FC<TaskListProps> = ({ onSelectTask, tasks, userRol
               <div className="flex-1 p-6 md:p-6 flex flex-col justify-center">
                 <div className="flex flex-wrap items-center gap-3 mb-3">
                   <span className={`inline-flex items-center px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wide border 
-                    ${task.type === TaskType.AUDIO_COLLECTION ? 'bg-teal-50 dark:bg-teal-900/20 text-teal-700 dark:text-teal-300 border-teal-100 dark:border-teal-800' :
+                    ${task.type === TaskType.AUDIO_COLLECTION ? 'bg-blue-50 dark:bg-blue-900/20 text-blue-700 dark:text-blue-300 border-blue-100 dark:border-blue-800' :
                       task.type === TaskType.IMAGE_COLLECTION ? 'bg-pink-50 dark:bg-pink-900/20 text-pink-700 dark:text-pink-300 border-pink-100 dark:border-pink-800' :
                         task.type === TaskType.TEXT_ANNOTATION ? 'bg-blue-50 dark:bg-blue-900/20 text-blue-700 dark:text-blue-300 border-blue-100 dark:border-blue-800' :
                           task.type === TaskType.IMAGE_LABELING ? 'bg-purple-50 dark:bg-purple-900/20 text-purple-700 dark:text-purple-300 border-purple-100 dark:border-purple-800' :
@@ -126,7 +126,7 @@ export const TaskList: React.FC<TaskListProps> = ({ onSelectTask, tasks, userRol
                   </span>
                 </div>
 
-                <h3 className="text-xl font-bold text-[#121212] dark:text-white mb-2 group-hover:text-[#0f766e] dark:group-hover:text-blue-400 transition-colors line-clamp-1">{task.title}</h3>
+                <h3 className="text-xl font-bold text-[#121212] dark:text-white mb-2 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors line-clamp-1">{task.title}</h3>
 
                 {/* AI Capability & Requirements */}
                 <div className="flex flex-col gap-1 mb-4">
@@ -147,7 +147,7 @@ export const TaskList: React.FC<TaskListProps> = ({ onSelectTask, tasks, userRol
                   <span className="flex items-center bg-[#FAF9F7] dark:bg-white/5 px-3 py-1.5 rounded-lg border border-stone-200 dark:border-white/10">
                     <Clock className="h-4 w-4 mr-2 text-stone-400" /> <span className="font-medium text-[#121212] dark:text-white">{task.estimatedTimeMin} min</span>
                   </span>
-                  <span className="flex items-center text-lg font-bold text-[#0f766e] dark:text-emerald-400 bg-teal-50 dark:bg-emerald-900/20 px-4 py-1.5 rounded-lg border border-teal-100 dark:border-emerald-800">
+                  <span className="flex items-center text-lg font-bold text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-900/20 px-4 py-1.5 rounded-lg border border-blue-100 dark:border-blue-800">
                     ₹{task.compensation.toFixed(2)}
                   </span>
 

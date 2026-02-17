@@ -3,6 +3,7 @@ import { Button } from '../components/Button';
 import { ArrowRight, Activity, Database, Server, Zap, Globe, ShieldCheck, Lock, Smartphone, Banknote, Mic, Image as ImageIcon, MessageSquare, CheckCircle2, ChevronDown, Play, Star, TrendingUp, Users, Cpu, FileText } from 'lucide-react';
 import { PublicLayout, PublicPageType } from '../components/PublicLayout';
 import { BrainCircuit } from 'lucide-react';
+import { motion } from 'framer-motion';
 
 interface LandingPageProps {
    onEnterApp: () => void;
@@ -46,13 +47,18 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onEnterApp, onStartSig
             <div className="max-w-7xl mx-auto grid lg:grid-cols-2 gap-12 lg:gap-8 items-center relative z-20">
 
                {/* Left Column: Text Content */}
-               <div className="text-center lg:text-left space-y-8">
+               <motion.div
+                  initial={{ opacity: 0, x: -50 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ duration: 0.8 }}
+                  className="text-center lg:text-left space-y-8"
+               >
                   <div className="inline-block relative">
                      <Sparkle className="absolute -top-6 -right-6 w-8 h-8 text-purple-400/60 animate-bounce delay-700 hidden lg:block" />
                      <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-blue-50/50 dark:bg-white/5 border border-blue-200 dark:border-white/10 text-xs font-bold text-blue-700 dark:text-blue-300 font-mono backdrop-blur-md shadow-lg shadow-blue-500/10 hover:scale-105 transition-transform cursor-default">
                         <span className="relative flex h-2 w-2">
-                           <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
-                           <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
+                           <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-blue-400 opacity-75"></span>
+                           <span className="relative inline-flex rounded-full h-2 w-2 bg-blue-500"></span>
                         </span>
                         SYSTEM ONLINE v2.4
                      </div>
@@ -83,16 +89,21 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onEnterApp, onStartSig
 
                   <div className="flex flex-wrap justify-center lg:justify-start gap-6 pt-4 text-xs font-bold text-zinc-500 font-mono tracking-wider">
                      <div className="flex items-center gap-2 bg-white/50 dark:bg-black/20 px-3 py-1 rounded-md border border-zinc-200 dark:border-white/5">
-                        <ShieldCheck className="h-4 w-4 text-emerald-500" /> SECURE PAYMENTS
+                        <ShieldCheck className="h-4 w-4 text-blue-500" /> SECURE PAYMENTS
                      </div>
                      <div className="flex items-center gap-2 bg-white/50 dark:bg-black/20 px-3 py-1 rounded-md border border-zinc-200 dark:border-white/5">
                         <Lock className="h-4 w-4 text-blue-500" /> NO EXPERIENCE
                      </div>
                   </div>
-               </div>
+               </motion.div>
 
                {/* Right Column: Nexus Visual */}
-               <div className="relative h-[300px] lg:h-[600px] w-full flex items-center justify-center select-none perspective-2000 mt-12 lg:mt-0">
+               <motion.div
+                  initial={{ opacity: 0, scale: 0.8 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  transition={{ duration: 0.8, delay: 0.2 }}
+                  className="relative h-[300px] lg:h-[600px] w-full flex items-center justify-center select-none perspective-2000 mt-12 lg:mt-0"
+               >
 
                   {/* Background Glow for Visual */}
                   <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[300px] lg:w-[500px] h-[300px] lg:h-[500px] bg-blue-500/10 rounded-full blur-[80px] animate-pulse-glow"></div>
@@ -182,7 +193,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onEnterApp, onStartSig
                               <div className="text-center relative z-20">
                                  <div className="text-[10px] lg:text-xs text-blue-300/70 font-mono tracking-widest mb-1 lg:mb-2">STARSET</div>
                                  <div className="text-2xl lg:text-4xl font-black text-transparent bg-clip-text bg-gradient-to-br from-white to-zinc-400 tracking-tight leading-none mb-2 drop-shadow-lg">NEXUS</div>
-                                 <div className="text-[8px] lg:text-[10px] font-bold text-emerald-400 tracking-widest animate-pulse border border-emerald-500/30 px-2 lg:px-3 py-0.5 rounded-full bg-emerald-950/30 inline-block">PROCESSING</div>
+                                 <div className="text-[8px] lg:text-[10px] font-bold text-blue-400 tracking-widest animate-pulse border border-blue-500/30 px-2 lg:px-3 py-0.5 rounded-full bg-blue-950/30 inline-block">PROCESSING</div>
                               </div>
                            </div>
                         </div>
@@ -207,7 +218,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onEnterApp, onStartSig
                      </div>
 
                   </div>
-               </div>
+               </motion.div>
 
             </div>
          </section>
@@ -223,13 +234,13 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onEnterApp, onStartSig
                <div className="flex gap-6 animate-marquee whitespace-nowrap">
                   {[...Array(10)].map((_, i) => (
                      <div key={i} className="flex items-center gap-3 bg-white/5 border border-white/5 rounded-full pl-2 pr-6 py-2 backdrop-blur-sm hover:bg-white/10 transition-colors cursor-default">
-                        <div className={`h-10 w-10 rounded-full flex items-center justify-center font-bold text-xs text-white shadow-lg bg-gradient-to-br ${['from-purple-500 to-indigo-600', 'from-blue-500 to-cyan-500', 'from-emerald-500 to-teal-600', 'from-orange-500 to-red-500', 'from-pink-500 to-rose-500'][i % 5]
+                        <div className={`h-10 w-10 rounded-full flex items-center justify-center font-bold text-xs text-white shadow-lg bg-gradient-to-br ${['from-purple-500 to-indigo-600', 'from-blue-500 to-cyan-500', 'from-sky-500 to-blue-600', 'from-orange-500 to-red-500', 'from-pink-500 to-rose-500'][i % 5]
                            }`}>
                            {['MK', 'JD', 'AS', 'TR', 'PL'][i % 5]}
                         </div>
                         <div className="flex flex-col">
                            <div className="text-white text-sm font-bold flex items-center gap-1">
-                              Just Paid <span className="text-emerald-400">₹{Math.floor(Math.random() * 800) + 100}</span>
+                              Just Paid <span className="text-blue-400">₹{Math.floor(Math.random() * 800) + 100}</span>
                            </div>
                            <span className="text-[10px] text-zinc-500 font-medium uppercase tracking-wide">via UPI • {Math.floor(Math.random() * 59) + 1}m ago</span>
                         </div>
@@ -237,13 +248,13 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onEnterApp, onStartSig
                   ))}
                   {[...Array(10)].map((_, i) => (
                      <div key={`dup-${i}`} className="flex items-center gap-3 bg-white/5 border border-white/5 rounded-full pl-2 pr-6 py-2 backdrop-blur-sm hover:bg-white/10 transition-colors cursor-default">
-                        <div className={`h-10 w-10 rounded-full flex items-center justify-center font-bold text-xs text-white shadow-lg bg-gradient-to-br ${['from-purple-500 to-indigo-600', 'from-blue-500 to-cyan-500', 'from-emerald-500 to-teal-600', 'from-orange-500 to-red-500', 'from-pink-500 to-rose-500'][i % 5]
+                        <div className={`h-10 w-10 rounded-full flex items-center justify-center font-bold text-xs text-white shadow-lg bg-gradient-to-br ${['from-purple-500 to-indigo-600', 'from-blue-500 to-cyan-500', 'from-sky-500 to-blue-600', 'from-orange-500 to-red-500', 'from-pink-500 to-rose-500'][i % 5]
                            }`}>
                            {['MK', 'JD', 'AS', 'TR', 'PL'][i % 5]}
                         </div>
                         <div className="flex flex-col">
                            <div className="text-white text-sm font-bold flex items-center gap-1">
-                              Just Paid <span className="text-emerald-400">₹{Math.floor(Math.random() * 800) + 100}</span>
+                              Just Paid <span className="text-blue-400">₹{Math.floor(Math.random() * 800) + 100}</span>
                            </div>
                            <span className="text-[10px] text-zinc-500 font-medium uppercase tracking-wide">via UPI • {Math.floor(Math.random() * 59) + 1}m ago</span>
                         </div>
@@ -259,7 +270,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onEnterApp, onStartSig
             <div className="max-w-7xl mx-auto px-6 relative z-10">
                <div className="grid grid-cols-2 md:grid-cols-4 gap-12 text-center">
                   <div className="space-y-2">
-                     <div className="text-4xl md:text-5xl font-bold text-emerald-500">₹40M+</div>
+                     <div className="text-4xl md:text-5xl font-bold text-indigo-500">₹40M+</div>
                      <div className="text-xs font-bold text-zinc-500 uppercase tracking-widest">Paid to Contributors</div>
                   </div>
                   <div className="space-y-2">
@@ -280,7 +291,13 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onEnterApp, onStartSig
 
          {/* --- WHY STARSET / BENEFITS --- */}
          <section className="py-24 px-4 md:px-6 bg-zinc-50/50 dark:bg-black/40">
-            <div className="max-w-7xl mx-auto">
+            <motion.div
+               initial={{ opacity: 0, y: 50 }}
+               whileInView={{ opacity: 1, y: 0 }}
+               viewport={{ once: true, margin: "-100px" }}
+               transition={{ duration: 0.8 }}
+               className="max-w-7xl mx-auto"
+            >
                <div className="text-center mb-20">
                   <h2 className="text-4xl md:text-6xl font-bold text-zinc-900 dark:text-white mb-6 tracking-tight">Why Contribute?</h2>
                   <p className="text-xl md:text-2xl text-zinc-500 max-w-3xl mx-auto">The most flexible and rewarding way to join the AI economy.</p>
@@ -304,8 +321,8 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onEnterApp, onStartSig
                      },
                      {
                         icon: ShieldCheck,
-                        color: "text-emerald-500",
-                        bg: "bg-emerald-50 dark:bg-emerald-900/10",
+                        color: "text-blue-500",
+                        bg: "bg-blue-50 dark:bg-blue-900/10",
                         title: "Trusted Platform",
                         desc: "SOC2 certified. Trusted by 50,000+ contributors. Your data and privacy are our priority."
                      }
@@ -320,14 +337,20 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onEnterApp, onStartSig
                      </div>
                   ))}
                </div>
-            </div>
+            </motion.div>
          </section>
 
          {/* --- TASKS SHOWCASE --- */}
          <section className="py-24 px-4 md:px-6 bg-white dark:bg-black border-y border-zinc-200 dark:border-white/5 relative overflow-hidden">
             <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,_var(--tw-gradient-stops))] from-purple-900/20 via-transparent to-transparent opacity-50 pointer-events-none"></div>
 
-            <div className="max-w-7xl mx-auto relative z-10">
+            <motion.div
+               initial={{ opacity: 0, y: 50 }}
+               whileInView={{ opacity: 1, y: 0 }}
+               viewport={{ once: true, margin: "-100px" }}
+               transition={{ duration: 0.8 }}
+               className="max-w-7xl mx-auto relative z-10"
+            >
                <div className="flex flex-col md:flex-row justify-between items-start md:items-end mb-16 gap-6">
                   <div>
                      <span className="text-purple-600 dark:text-purple-400 font-bold uppercase tracking-widest text-xs mb-3 block">Task Types</span>
@@ -338,11 +361,11 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onEnterApp, onStartSig
 
                <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
                   {/* Task Card 1 */}
-                  <div className="group bg-zinc-50 dark:bg-zinc-900/50 p-1 rounded-3xl border border-zinc-200 dark:border-white/10 hover:border-teal-500/50 hover:shadow-2xl hover:shadow-teal-500/10 transition-all duration-300 hover:-translate-y-2">
+                  <div className="group bg-zinc-50 dark:bg-zinc-900/50 p-1 rounded-3xl border border-zinc-200 dark:border-white/10 hover:border-blue-500/50 hover:shadow-2xl hover:shadow-blue-500/10 transition-all duration-300 hover:-translate-y-2">
                      <div className="bg-white dark:bg-zinc-900 rounded-[22px] p-6 h-full flex flex-col">
-                        <div className="h-48 bg-teal-50 dark:bg-teal-900/10 rounded-2xl mb-6 flex items-center justify-center relative overflow-hidden">
-                           <div className="absolute inset-0 bg-gradient-to-tr from-teal-500/10 to-transparent"></div>
-                           <Mic className="h-16 w-16 text-teal-600 dark:text-teal-400 group-hover:scale-110 transition-transform duration-500 drop-shadow-lg" />
+                        <div className="h-48 bg-blue-50 dark:bg-blue-900/10 rounded-2xl mb-6 flex items-center justify-center relative overflow-hidden">
+                           <div className="absolute inset-0 bg-gradient-to-tr from-blue-500/10 to-transparent"></div>
+                           <Mic className="h-16 w-16 text-blue-600 dark:text-blue-400 group-hover:scale-110 transition-transform duration-500 drop-shadow-lg" />
                            <div className="absolute bottom-4 right-4 bg-white/90 dark:bg-black/90 px-3 py-1.5 rounded-lg text-xs font-bold shadow-lg border border-zinc-100 dark:border-white/10 backdrop-blur-sm">Avg: ₹150/hr</div>
                         </div>
                         <h3 className="text-2xl font-bold text-zinc-900 dark:text-white mb-2">Audio Recording</h3>
@@ -385,15 +408,21 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onEnterApp, onStartSig
                      </div>
                   </div>
                </div>
-            </div>
+            </motion.div>
          </section>
 
          {/* --- HOW IT WORKS --- */}
          <section className="py-24 px-4 md:px-6 bg-zinc-50/50 dark:bg-zinc-900/20 overflow-hidden relative">
             {/* Background Elements */}
-            <div className="absolute top-0 right-0 w-[800px] h-[800px] bg-emerald-500/5 rounded-full blur-[120px] pointer-events-none"></div>
+            <div className="absolute top-0 right-0 w-[800px] h-[800px] bg-blue-500/5 rounded-full blur-[120px] pointer-events-none"></div>
 
-            <div className="max-w-7xl mx-auto relative z-10">
+            <motion.div
+               initial={{ opacity: 0, y: 50 }}
+               whileInView={{ opacity: 1, y: 0 }}
+               viewport={{ once: true, margin: "-100px" }}
+               transition={{ duration: 0.8 }}
+               className="max-w-7xl mx-auto relative z-10"
+            >
                <div className="text-center mb-20">
                   <h2 className="text-4xl md:text-5xl font-bold text-zinc-900 dark:text-white mb-6">Start Earning in Minutes</h2>
                   <p className="text-xl text-zinc-500">No complex onboarding. Just create an account and go.</p>
@@ -422,12 +451,18 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onEnterApp, onStartSig
                <div className="text-center mt-20">
                   <Button onClick={onStartSignup} size="lg" className="rounded-full px-12 h-16 text-xl bg-[#121212] dark:bg-white text-white dark:text-black hover:scale-105 transition-transform w-full md:w-auto shadow-2xl">Create Free Account</Button>
                </div>
-            </div>
+            </motion.div>
          </section>
 
          {/* --- COMMUNITY STORIES --- */}
          <section className="py-24 bg-[#050505] relative">
-            <div className="max-w-7xl mx-auto px-6">
+            <motion.div
+               initial={{ opacity: 0, y: 50 }}
+               whileInView={{ opacity: 1, y: 0 }}
+               viewport={{ once: true, margin: "-100px" }}
+               transition={{ duration: 0.8 }}
+               className="max-w-7xl mx-auto px-6"
+            >
                <h2 className="text-3xl md:text-4xl font-bold text-center text-white mb-16">Community Stories</h2>
                <div className="grid md:grid-cols-3 gap-8">
                   {[
@@ -467,12 +502,18 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onEnterApp, onStartSig
                      </div>
                   ))}
                </div>
-            </div>
+            </motion.div>
          </section>
 
          {/* --- FAQ SECTION --- */}
          <section className="py-24 bg-black relative">
-            <div className="max-w-3xl mx-auto px-6">
+            <motion.div
+               initial={{ opacity: 0, y: 50 }}
+               whileInView={{ opacity: 1, y: 0 }}
+               viewport={{ once: true, margin: "-100px" }}
+               transition={{ duration: 0.8 }}
+               className="max-w-3xl mx-auto px-6"
+            >
                <h2 className="text-3xl md:text-4xl font-bold text-center text-white mb-16">Frequently Asked Questions</h2>
                <div className="space-y-4">
                   {[
@@ -497,7 +538,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onEnterApp, onStartSig
                      </div>
                   ))}
                </div>
-            </div>
+            </motion.div>
          </section>
 
          {/* --- REDESIGNED CTA SECTION --- */}
@@ -537,8 +578,8 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onEnterApp, onStartSig
                </div>
 
                <div className="mt-16 flex flex-wrap items-center justify-center gap-6 md:gap-12 text-sm text-zinc-500 font-mono">
-                  <span className="flex items-center gap-2"><div className="h-2 w-2 rounded-full bg-emerald-500 shadow-[0_0_10px_#10b981]"></div> INSTANT WITHDRAWAL</span>
-                  <span className="flex items-center gap-2"><div className="h-2 w-2 rounded-full bg-blue-500 shadow-[0_0_10px_#3b82f6]"></div> SECURE SSL</span>
+                  <span className="flex items-center gap-2"><div className="h-2 w-2 rounded-full bg-blue-500 shadow-[0_0_10px_#3b82f6]"></div> INSTANT WITHDRAWAL</span>
+                  <span className="flex items-center gap-2"><div className="h-2 w-2 rounded-full bg-indigo-500 shadow-[0_0_10px_#6366f1]"></div> SECURE SSL</span>
                </div>
             </div>
          </section>

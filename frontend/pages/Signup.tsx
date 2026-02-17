@@ -123,14 +123,14 @@ export const Signup: React.FC<SignupProps> = ({ onLogin, onSwitchToLogin, onBack
       </nav>
 
       {/* Background Ambience */}
-      <div className="absolute top-[-20%] left-[-10%] w-[600px] h-[600px] bg-emerald-600/10 dark:bg-emerald-600/10 rounded-full blur-[100px] animate-blob"></div>
-      <div className="absolute bottom-[-20%] right-[-10%] w-[600px] h-[600px] bg-blue-600/10 dark:bg-blue-600/10 rounded-full blur-[100px] animate-blob animation-delay-2000"></div>
+      <div className="absolute top-[-20%] left-[-10%] w-[600px] h-[600px] bg-blue-600/10 dark:bg-blue-600/10 rounded-full blur-[100px] animate-blob"></div>
+      <div className="absolute bottom-[-20%] right-[-10%] w-[600px] h-[600px] bg-indigo-600/10 dark:bg-indigo-600/10 rounded-full blur-[100px] animate-blob animation-delay-2000"></div>
 
       <div className="w-full max-w-md relative z-10 pt-20">
         <div className="mb-8 text-center">
           <div className="flex flex-col items-center justify-center gap-4 mb-6">
-            <div className="h-16 w-16 bg-gradient-to-br from-emerald-500/10 to-blue-500/10 dark:from-emerald-500/20 dark:to-blue-500/20 rounded-2xl flex items-center justify-center shadow-[0_0_30px_rgba(16,185,129,0.15)] backdrop-blur-md border border-zinc-200 dark:border-white/10">
-              <Logo className="h-8 w-8 text-emerald-600 dark:text-emerald-400" />
+            <div className="h-16 w-16 bg-gradient-to-br from-blue-500/10 to-indigo-500/10 dark:from-blue-500/20 dark:to-indigo-500/20 rounded-2xl flex items-center justify-center shadow-[0_0_30px_rgba(59,130,246,0.15)] backdrop-blur-md border border-zinc-200 dark:border-white/10">
+              <Logo className="h-8 w-8 text-blue-600 dark:text-blue-400" />
             </div>
             <span className="font-bold text-2xl tracking-[0.15em] bg-clip-text text-transparent bg-gradient-to-r from-zinc-900 to-zinc-500 dark:from-white dark:to-zinc-400 uppercase">STARSET</span>
           </div>
@@ -143,11 +143,11 @@ export const Signup: React.FC<SignupProps> = ({ onLogin, onSwitchToLogin, onBack
 
             <div className="space-y-4">
               <div className="relative group">
-                <User className="absolute top-3.5 left-4 h-5 w-5 text-zinc-400 group-focus-within:text-emerald-500 transition-colors" />
+                <User className="absolute top-3.5 left-4 h-5 w-5 text-zinc-400 group-focus-within:text-blue-500 transition-colors" />
                 <input
                   type="text"
                   required
-                  className="w-full pl-12 pr-4 py-3 border border-zinc-300 dark:border-white/10 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500/50 focus:border-emerald-500 transition-all bg-white/50 dark:bg-black/20 text-zinc-900 dark:text-white placeholder-zinc-400 dark:placeholder-zinc-600"
+                  className="w-full pl-12 pr-4 py-3 border border-zinc-300 dark:border-white/10 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500 transition-all bg-white/50 dark:bg-black/20 text-zinc-900 dark:text-white placeholder-zinc-400 dark:placeholder-zinc-600"
                   placeholder="Full Legal Name"
                   value={formData.name}
                   onChange={(e) => setFormData({ ...formData, name: e.target.value })}
@@ -155,11 +155,11 @@ export const Signup: React.FC<SignupProps> = ({ onLogin, onSwitchToLogin, onBack
               </div>
 
               <div className="relative group">
-                <Mail className="absolute top-3.5 left-4 h-5 w-5 text-zinc-400 group-focus-within:text-emerald-500 transition-colors" />
+                <Mail className="absolute top-3.5 left-4 h-5 w-5 text-zinc-400 group-focus-within:text-blue-500 transition-colors" />
                 <input
                   type="email"
                   required
-                  className="w-full pl-12 pr-4 py-3 border border-zinc-300 dark:border-white/10 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500/50 focus:border-emerald-500 transition-all bg-white/50 dark:bg-black/20 text-zinc-900 dark:text-white placeholder-zinc-400 dark:placeholder-zinc-600"
+                  className="w-full pl-12 pr-4 py-3 border border-zinc-300 dark:border-white/10 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500 transition-all bg-white/50 dark:bg-black/20 text-zinc-900 dark:text-white placeholder-zinc-400 dark:placeholder-zinc-600"
                   placeholder="Email Address"
                   value={formData.email}
                   onChange={(e) => setFormData({ ...formData, email: e.target.value })}
@@ -167,9 +167,9 @@ export const Signup: React.FC<SignupProps> = ({ onLogin, onSwitchToLogin, onBack
               </div>
 
               <div className="relative group">
-                <Globe className="absolute top-3.5 left-4 h-5 w-5 text-zinc-400 group-focus-within:text-emerald-500 transition-colors" />
+                <Globe className="absolute top-3.5 left-4 h-5 w-5 text-zinc-400 group-focus-within:text-blue-500 transition-colors" />
                 <select
-                  className="w-full pl-12 pr-4 py-3 border border-zinc-300 dark:border-white/10 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500/50 focus:border-emerald-500 transition-all bg-white/50 dark:bg-black/20 text-zinc-900 dark:text-white appearance-none"
+                  className="w-full pl-12 pr-4 py-3 border border-zinc-300 dark:border-white/10 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500 transition-all bg-white/50 dark:bg-black/20 text-zinc-900 dark:text-white appearance-none"
                   value={formData.language}
                   onChange={(e) => setFormData({ ...formData, language: e.target.value })}
                 >
@@ -182,11 +182,11 @@ export const Signup: React.FC<SignupProps> = ({ onLogin, onSwitchToLogin, onBack
               </div>
 
               <div className="relative group">
-                <Lock className="absolute top-3.5 left-4 h-5 w-5 text-zinc-400 group-focus-within:text-emerald-500 transition-colors" />
+                <Lock className="absolute top-3.5 left-4 h-5 w-5 text-zinc-400 group-focus-within:text-blue-500 transition-colors" />
                 <input
                   type="password"
                   required
-                  className="w-full pl-12 pr-4 py-3 border border-zinc-300 dark:border-white/10 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500/50 focus:border-emerald-500 transition-all bg-white/50 dark:bg-black/20 text-zinc-900 dark:text-white placeholder-zinc-400 dark:placeholder-zinc-600"
+                  className="w-full pl-12 pr-4 py-3 border border-zinc-300 dark:border-white/10 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500 transition-all bg-white/50 dark:bg-black/20 text-zinc-900 dark:text-white placeholder-zinc-400 dark:placeholder-zinc-600"
                   placeholder="Create Password"
                   value={formData.password}
                   onChange={(e) => setFormData({ ...formData, password: e.target.value })}
@@ -196,19 +196,19 @@ export const Signup: React.FC<SignupProps> = ({ onLogin, onSwitchToLogin, onBack
 
             <div className="flex items-start gap-3 mt-2">
               <div className="flex items-center h-5">
-                <input id="terms" type="checkbox" required className="w-4 h-4 rounded border-zinc-300 text-emerald-600 focus:ring-emerald-500" />
+                <input id="terms" type="checkbox" required className="w-4 h-4 rounded border-zinc-300 text-blue-600 focus:ring-blue-500" />
               </div>
               <label htmlFor="terms" className="text-xs text-zinc-500 dark:text-zinc-400">
-                I agree to the <a href="#" className="underline hover:text-emerald-500">Contributor Agreement</a> and <a href="#" className="underline hover:text-emerald-500">Privacy Policy</a>.
+                I agree to the <a href="#" className="underline hover:text-blue-500">Contributor Agreement</a> and <a href="#" className="underline hover:text-blue-500">Privacy Policy</a>.
               </label>
             </div>
 
-            <Button type="submit" variant="primary" className="w-full h-12 shadow-[0_0_20px_rgba(16,185,129,0.2)] bg-emerald-600 hover:bg-emerald-500 border-emerald-500/50 mt-4" isLoading={isLoading}>
+            <Button type="submit" variant="primary" className="w-full h-12 shadow-[0_0_20px_rgba(59,130,246,0.2)] bg-blue-600 hover:bg-blue-500 border-blue-500/50 mt-4" isLoading={isLoading}>
               Create Account <ArrowRight className="ml-2 h-4 w-4" />
             </Button>
 
             <div className="text-sm text-center text-zinc-500 mt-6 leading-relaxed">
-              Already have an ID? <button type="button" onClick={onSwitchToLogin} className="text-emerald-600 dark:text-emerald-400 hover:text-emerald-500 dark:hover:text-emerald-300 transition-colors font-bold ml-1">Log In</button>
+              Already have an ID? <button type="button" onClick={onSwitchToLogin} className="text-blue-600 dark:text-blue-400 hover:text-blue-500 dark:hover:text-blue-300 transition-colors font-bold ml-1">Log In</button>
             </div>
           </form>
         </div>
