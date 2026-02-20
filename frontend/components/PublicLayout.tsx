@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Logo } from './Logo';
 import { Button } from './Button';
-import { Moon, Sun, Menu, Activity, Database, X } from 'lucide-react';
+import { Menu, Activity, Database, X } from 'lucide-react';
 
 export type PublicPageType = 'home' | 'about' | 'contributors' | 'money';
 
@@ -10,8 +10,6 @@ interface PublicLayoutProps {
    currentPage: PublicPageType;
    onNavigate: (page: PublicPageType) => void;
    onEnterApp: () => void;
-   isDark: boolean;
-   toggleTheme: () => void;
 }
 
 export const PublicLayout: React.FC<PublicLayoutProps> = ({
@@ -19,8 +17,6 @@ export const PublicLayout: React.FC<PublicLayoutProps> = ({
    currentPage,
    onNavigate,
    onEnterApp,
-   isDark,
-   toggleTheme
 }) => {
    const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
    const [showNav, setShowNav] = useState(true);
@@ -86,7 +82,7 @@ export const PublicLayout: React.FC<PublicLayoutProps> = ({
                <div className="flex items-center gap-3 cursor-pointer group" onClick={() => onNavigate('home')}>
                   <div className="relative">
                      <div className="absolute inset-0 bg-blue-500/20 blur-lg rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
-                     <Logo className="h-9 w-9 text-blue-600 dark:text-blue-500 relative z-10 transition-transform duration-500" />
+                     <Logo className="h-16 w-16 relative z-10 transition-transform duration-500" />
                   </div>
                   <span className="font-bold text-lg tracking-[0.1em] text-zinc-900 dark:text-white transition-colors font-mono uppercase whitespace-nowrap">Starset</span>
                </div>
@@ -105,23 +101,10 @@ export const PublicLayout: React.FC<PublicLayoutProps> = ({
                </div>
 
                {/* Right Actions */}
-               <div className="flex items-center gap-4 md:gap-6">
-                  <button
-                     onClick={toggleTheme}
-                     className="p-2 rounded-full hover:bg-black/5 dark:hover:bg-white/5 text-zinc-600 dark:text-zinc-400 transition-colors"
-                  >
-                     {isDark ? <Moon className="h-5 w-5" /> : <Sun className="h-5 w-5" />}
-                  </button>
-
-                  <div className="h-4 w-px bg-zinc-300 dark:bg-white/10 hidden md:block"></div>
-
-                  <div className="flex items-center gap-3">
-
-
-                     <Button onClick={onEnterApp} size="sm" variant={isDark ? "glow" : "black"} className="rounded-full px-4 md:px-6 shadow-none hover:shadow-lg transition-all text-xs md:text-sm">
-                        Start Earning
-                     </Button>
-                  </div>
+               <div className="flex items-center gap-3">
+                  <Button onClick={onEnterApp} size="sm" variant="glow" className="rounded-full px-4 md:px-6 shadow-none hover:shadow-lg transition-all text-xs md:text-sm">
+                     Start Earning
+                  </Button>
 
                   <button
                      className="lg:hidden text-zinc-900 dark:text-white p-1"
@@ -164,7 +147,7 @@ export const PublicLayout: React.FC<PublicLayoutProps> = ({
          <footer className="border-t border-zinc-200 dark:border-white/5 bg-white dark:bg-black pt-16 pb-8 px-6 relative z-10">
             <div className="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center text-xs text-zinc-500">
                <div className="flex items-center gap-2 mb-4 md:mb-0">
-                  <Logo className="h-4 w-4 text-zinc-900 dark:text-white" />
+                  <Logo className="h-12 w-12" />
                   <span className="font-bold text-zinc-900 dark:text-white uppercase tracking-widest">Starset</span>
                </div>
                <div className="flex gap-8">
@@ -174,6 +157,6 @@ export const PublicLayout: React.FC<PublicLayoutProps> = ({
                </div>
             </div>
          </footer>
-      </div>
+      </div >
    );
 };

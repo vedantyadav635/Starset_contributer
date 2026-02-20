@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Button } from '../components/Button';
-import { ArrowRight, Moon, Sun, User, Mail, Lock, Globe, Check } from 'lucide-react';
+import { ArrowRight, User, Mail, Lock, Globe, Check } from 'lucide-react';
 import { Logo } from '../components/Logo';
 import { supabase } from "../supabaseClient";
 
@@ -10,11 +10,9 @@ interface SignupProps {
   onLogin: () => void;
   onSwitchToLogin: () => void;
   onBackHome: () => void;
-  isDark: boolean;
-  toggleTheme: () => void;
 }
 
-export const Signup: React.FC<SignupProps> = ({ onLogin, onSwitchToLogin, onBackHome, isDark, toggleTheme }) => {
+export const Signup: React.FC<SignupProps> = ({ onLogin, onSwitchToLogin, onBackHome }) => {
   const [step, setStep] = useState(1);
   const [isLoading, setIsLoading] = useState(false);
   const [formData, setFormData] = useState({
@@ -110,15 +108,9 @@ export const Signup: React.FC<SignupProps> = ({ onLogin, onSwitchToLogin, onBack
       <nav className="fixed top-0 w-full z-50 border-b border-zinc-200/50 dark:border-white/5 bg-white/50 dark:bg-black/50 backdrop-blur-xl transition-all duration-300">
         <div className="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
           <div className="flex items-center gap-2 cursor-pointer group" onClick={onBackHome}>
-            <Logo className="h-6 w-6 text-blue-600 dark:text-blue-500 transition-transform duration-500 group-hover:rotate-180" />
+            <Logo className="h-14 w-14 transition-transform duration-500 group-hover:rotate-180" />
             <span className="font-bold text-sm tracking-[0.1em] text-zinc-900 dark:text-white uppercase">Starset</span>
           </div>
-          <button
-            onClick={toggleTheme}
-            className="p-2 rounded-full hover:bg-black/5 dark:hover:bg-white/5 text-zinc-600 dark:text-zinc-400 transition-colors"
-          >
-            {isDark ? <Moon className="h-5 w-5" /> : <Sun className="h-5 w-5" />}
-          </button>
         </div>
       </nav>
 
@@ -130,7 +122,7 @@ export const Signup: React.FC<SignupProps> = ({ onLogin, onSwitchToLogin, onBack
         <div className="mb-8 text-center">
           <div className="flex flex-col items-center justify-center gap-4 mb-6">
             <div className="h-16 w-16 bg-gradient-to-br from-blue-500/10 to-indigo-500/10 dark:from-blue-500/20 dark:to-indigo-500/20 rounded-2xl flex items-center justify-center shadow-[0_0_30px_rgba(59,130,246,0.15)] backdrop-blur-md border border-zinc-200 dark:border-white/10">
-              <Logo className="h-8 w-8 text-blue-600 dark:text-blue-400" />
+              <Logo className="h-16 w-16" />
             </div>
             <span className="font-bold text-2xl tracking-[0.15em] bg-clip-text text-transparent bg-gradient-to-r from-zinc-900 to-zinc-500 dark:from-white dark:to-zinc-400 uppercase">STARSET</span>
           </div>
@@ -215,7 +207,7 @@ export const Signup: React.FC<SignupProps> = ({ onLogin, onSwitchToLogin, onBack
       </div>
 
       <div className="fixed bottom-6 w-full flex items-center justify-center gap-2 pointer-events-none">
-        <Logo className="h-4 w-4 text-zinc-400 dark:text-zinc-600" />
+        <Logo className="h-12 w-12" />
         <span className="text-zinc-500 dark:text-zinc-600 text-[10px] uppercase tracking-widest">
           Starset Network • Secure Environment • v2.4.0
         </span>

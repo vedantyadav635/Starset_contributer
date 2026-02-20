@@ -6,6 +6,7 @@ const API_URL = import.meta.env.VITE_API_URL || 'https://starset-contributer.onr
 export const API_ENDPOINTS = {
     // Admin endpoints
     ADMIN_TASKS: `${API_URL}/admin/tasks`,
+    ADMIN_STATS: `${API_URL}/admin/stats`,
 
     // Contributor endpoints
     CONTRIBUTOR_TASKS: `${API_URL}/contributor/tasks`,

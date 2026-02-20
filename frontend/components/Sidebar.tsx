@@ -1,14 +1,12 @@
 import React from 'react';
-import { 
-  LayoutDashboard, 
-  Database, 
-  CreditCard, 
-  ShieldAlert, 
-  LifeBuoy, 
-  User, 
+import {
+  LayoutDashboard,
+  Database,
+  CreditCard,
+  ShieldAlert,
+  LifeBuoy,
+  User,
   Power,
-  Sun,
-  Moon,
   PlusCircle,
   Settings,
   Users
@@ -25,26 +23,22 @@ interface SidebarProps {
   setIsMobileOpen: (open: boolean) => void;
   onLogout: () => void;
   onExitApp: () => void;
-  isDark: boolean;
-  toggleTheme: () => void;
   userRole?: UserRole;
 }
 
-export const Sidebar: React.FC<SidebarProps> = ({ 
-  currentPage, 
-  onNavigate, 
-  isMobileOpen, 
+export const Sidebar: React.FC<SidebarProps> = ({
+  currentPage,
+  onNavigate,
+  isMobileOpen,
   setIsMobileOpen,
   onLogout,
   onExitApp,
-  isDark,
-  toggleTheme,
   userRole = 'contributor'
 }) => {
   const { user } = useAuth();
   const contributorNavItems = [
     { id: 'dashboard', label: 'Overview', icon: LayoutDashboard },
-    { id: 'tasks', label: 'Data Tasks', icon: Database }, 
+    { id: 'tasks', label: 'Data Tasks', icon: Database },
     { id: 'earnings', label: 'Compensation', icon: CreditCard },
     { id: 'guidelines', label: 'Protocols', icon: ShieldAlert },
     { id: 'support', label: 'Support', icon: LifeBuoy },
@@ -69,23 +63,23 @@ export const Sidebar: React.FC<SidebarProps> = ({
     <>
       {/* Mobile Overlay */}
       {isMobileOpen && (
-        <div 
+        <div
           className="fixed inset-0 bg-zinc-900/50 backdrop-blur-sm z-40 md:hidden transition-opacity"
           onClick={() => setIsMobileOpen(false)}
         />
       )}
 
       <aside className={sidebarClasses}>
-        <div className="flex flex-col h-full"> 
+        <div className="flex flex-col h-full">
           {/* Header */}
           <div className="flex flex-col px-8 py-8 border-b border-zinc-200 dark:border-white/5 cursor-pointer hover:bg-zinc-50 dark:hover:bg-white/5 transition-colors" onClick={onExitApp}>
-             <div className="flex items-center gap-3 mb-1">
-                <Logo className="h-6 w-6 text-blue-600 dark:text-blue-500" />
-                <span className="font-bold text-base text-zinc-900 dark:text-white tracking-[0.1em] uppercase whitespace-nowrap">STARSET</span>
-             </div>
-             <span className="text-[10px] text-zinc-500 font-medium uppercase tracking-widest pl-9">
-               {userRole === 'admin' ? 'Administrator Node' : 'Contributor Node'}
-             </span>
+            <div className="flex items-center gap-3 mb-1">
+              <Logo className="h-14 w-14" />
+              <span className="font-bold text-base text-zinc-900 dark:text-white tracking-[0.1em] uppercase whitespace-nowrap">STARSET</span>
+            </div>
+            <span className="text-[10px] text-zinc-500 font-medium uppercase tracking-widest pl-9">
+              {userRole === 'admin' ? 'Administrator Node' : 'Contributor Node'}
+            </span>
           </div>
 
           {/* Navigation */}
@@ -104,8 +98,8 @@ export const Sidebar: React.FC<SidebarProps> = ({
                   }}
                   className={`
                     w-full flex items-center px-4 py-3 text-sm font-medium rounded-lg transition-all duration-200 group
-                    ${isActive 
-                      ? 'bg-blue-50 dark:bg-blue-500/10 text-blue-600 dark:text-blue-400 shadow-sm ring-1 ring-zinc-200 dark:ring-transparent' 
+                    ${isActive
+                      ? 'bg-blue-50 dark:bg-blue-500/10 text-blue-600 dark:text-blue-400 shadow-sm ring-1 ring-zinc-200 dark:ring-transparent'
                       : 'hover:bg-zinc-100 dark:hover:bg-white/5 text-zinc-600 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-zinc-200'}
                   `}
                 >
@@ -118,23 +112,12 @@ export const Sidebar: React.FC<SidebarProps> = ({
 
           {/* User Status */}
           <div className="p-6 border-t border-zinc-200 dark:border-white/5 bg-zinc-50/50 dark:bg-transparent space-y-4">
-            {/* Theme Toggle */}
-            <button 
-               onClick={toggleTheme}
-               className="w-full flex items-center justify-between px-4 py-2 text-xs font-medium bg-white dark:bg-white/5 border border-zinc-200 dark:border-white/10 rounded-lg hover:border-zinc-300 dark:hover:border-white/20 transition-all text-zinc-600 dark:text-zinc-400"
-            >
-               <span>Appearance</span>
-               <div className="flex items-center gap-2">
-                  <span className="text-[10px] uppercase tracking-wide">{isDark ? 'Dark' : 'Light'}</span>
-                  {isDark ? <Moon className="h-3 w-3" /> : <Sun className="h-3 w-3" />}
-               </div>
-            </button>
 
             <div className="flex items-center gap-4">
               <div className={`h-10 w-10 rounded-lg border border-zinc-200 dark:border-white/5 flex items-center justify-center shadow-sm ${userRole === 'admin' ? 'bg-purple-100 dark:bg-purple-900/20 text-purple-600' : 'bg-white dark:bg-white/10 text-zinc-900 dark:text-white'}`}>
-                 <span className="font-bold text-sm">
-                    {userRole === 'admin' ? 'AD' : 'JD'}
-                 </span>
+                <span className="font-bold text-sm">
+                  {userRole === 'admin' ? 'AD' : 'JD'}
+                </span>
               </div>
               <div className="flex flex-col">
                 <span className="text-sm font-bold text-zinc-900 dark:text-white">

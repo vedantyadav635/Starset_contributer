@@ -2,8 +2,6 @@ import React, { useState } from "react";
 import { Button } from "../components/Button";
 import {
   ArrowRight,
-  Moon,
-  Sun,
   AlertCircle,
   Shield,
   User,
@@ -20,16 +18,12 @@ interface LoginProps {
   onLogin: (role: UserRole) => void;
   onSwitchToSignup: () => void;
   onBackHome: () => void;
-  isDark: boolean;
-  toggleTheme: () => void;
 }
 
 export const Login: React.FC<LoginProps> = ({
   onLogin,
   onSwitchToSignup,
   onBackHome,
-  isDark,
-  toggleTheme,
 }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -121,27 +115,20 @@ export const Login: React.FC<LoginProps> = ({
             className="flex items-center gap-2 cursor-pointer"
             onClick={onBackHome}
           >
-            <Logo className="h-6 w-6 text-blue-600" />
+            <Logo className="h-14 w-14" />
             <span className="font-bold text-sm tracking-widest uppercase">
               Starset
             </span>
           </div>
-          <button
-            onClick={toggleTheme}
-            className="p-2 rounded-full hover:bg-black/5 dark:hover:bg-white/5"
-          >
-            {isDark ? <Moon /> : <Sun />}
-          </button>
         </div>
       </nav>
 
-      {/* CARD */}
       <div className="w-full max-w-md z-10 pt-20">
         <div className="mb-8 text-center">
           <div className="flex justify-center mb-4">
             <div className="h-16 w-16 rounded-2xl flex items-center justify-center border backdrop-blur-md">
               {isContributor ? (
-                <Logo className="h-8 w-8" />
+                <Logo className="h-16 w-16" />
               ) : (
                 <Shield className="h-8 w-8 text-purple-500" />
               )}
@@ -250,12 +237,12 @@ export const Login: React.FC<LoginProps> = ({
             </button>
           </div>
         </div>
-      </div>
+      </div >
 
       <div className="fixed bottom-6 text-[10px] text-zinc-500 flex items-center gap-2">
-        <Logo className="h-4 w-4" />
+        <Logo className="h-12 w-12" />
         Starset Network • Secure Environment • v2.5.4
       </div>
-    </div>
+    </div >
   );
 };

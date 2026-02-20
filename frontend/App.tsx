@@ -20,7 +20,10 @@ import { AdminDashboard } from './pages/AdminDashboard';
 import { PageView, Task, UserRole, TaskType, TaskStatus } from './types';
 
 // Icon library - Lucide React icons
-import { Menu, User, MapPin, Smartphone, Laptop, Globe, Shield, Award, Calendar, LayoutDashboard, Database, CreditCard, MoreHorizontal, Moon, Sun, CheckCircle2 } from 'lucide-react';
+import { Menu, User, MapPin, Globe, Shield, LayoutDashboard, Database, CreditCard, MoreHorizontal, CheckCircle2 } from 'lucide-react';
+
+// Always use dark mode — add class once at module load
+document.documentElement.classList.add('dark');
 
 // Custom components and utilities
 import { Logo } from './components/Logo';
@@ -125,21 +128,7 @@ const App: React.FC = () => {
     fetchCompletedTasks();
   }, [isAuthenticated, userProfile]);
 
-  // Theme State - Dark mode by default
-  const [isDark, setIsDark] = useState(true);
 
-  /**
-   * EFFECT 2: Apply dark/light theme to the document
-   * Runs whenever isDark changes
-   * Adds or removes 'dark' class from HTML element for Tailwind CSS
-   */
-  useEffect(() => {
-    if (isDark) {
-      document.documentElement.classList.add('dark'); // Enable dark mode
-    } else {
-      document.documentElement.classList.remove('dark'); // Enable light mode
-    }
-  }, [isDark]); // Re-run when isDark changes
 
   /**
    * EFFECT 3: Security - Auto-logout on inactivity
@@ -182,13 +171,7 @@ const App: React.FC = () => {
   // HANDLER FUNCTIONS - Navigation & Authentication
   // --------------------------------------------------------------------------
 
-  /**
-   * Toggle between dark and light theme
-   * Updates the isDark state which triggers the theme useEffect
-   */
-  const toggleTheme = () => {
-    setIsDark(!isDark);
-  };
+
 
   /**
    * Navigate to login page from public landing page
@@ -351,13 +334,13 @@ const App: React.FC = () => {
   if (viewMode === 'public') {
     switch (publicPage) {
       case 'about':
-        return <About onNavigate={handlePublicNavigate} onEnterApp={handleEnterApp} isDark={isDark} toggleTheme={toggleTheme} />;
+        return <About onNavigate={handlePublicNavigate} onEnterApp={handleEnterApp} />;
       case 'contributors':
-        return <Contributors onNavigate={handlePublicNavigate} onEnterApp={handleStartSignup} isDark={isDark} toggleTheme={toggleTheme} />;
+        return <Contributors onNavigate={handlePublicNavigate} onEnterApp={handleStartSignup} />;
       case 'money':
-        return <Money onNavigate={handlePublicNavigate} onEnterApp={handleStartSignup} isDark={isDark} toggleTheme={toggleTheme} />;
+        return <Money onNavigate={handlePublicNavigate} onEnterApp={handleStartSignup} />;
       default:
-        return <LandingPage onNavigate={handlePublicNavigate} onEnterApp={handleEnterApp} onStartSignup={handleStartSignup} isDark={isDark} toggleTheme={toggleTheme} />;
+        return <LandingPage onNavigate={handlePublicNavigate} onEnterApp={handleEnterApp} onStartSignup={handleStartSignup} />;
     }
   }
 
@@ -368,8 +351,6 @@ const App: React.FC = () => {
           onLogin={() => handleLogin('contributor')}
           onSwitchToLogin={() => setAuthMode('login')}
           onBackHome={handleExitApp}
-          isDark={isDark}
-          toggleTheme={toggleTheme}
         />
       );
     }
@@ -378,8 +359,6 @@ const App: React.FC = () => {
         onLogin={handleLogin}
         onSwitchToSignup={() => setAuthMode('signup')}
         onBackHome={handleExitApp}
-        isDark={isDark}
-        toggleTheme={toggleTheme}
       />
     );
   }
@@ -533,7 +512,6 @@ const App: React.FC = () => {
             // Reload profile after completion
             handleLogin(userRole);
           }}
-          isDark={isDark}
         />;
       case 'dashboard':
         return <Dashboard onNavigate={setCurrentPage} />;
@@ -697,8 +675,6 @@ const App: React.FC = () => {
           setIsMobileOpen={setIsMobileNavOpen}
           onLogout={handleLogout}
           onExitApp={handleExitApp}
-          isDark={isDark}
-          toggleTheme={toggleTheme}
           userRole={userRole}
         />
       </div>
@@ -707,13 +683,10 @@ const App: React.FC = () => {
         {/* Mobile Header - Visible only on Mobile */}
         <header className="md:hidden bg-white/90 dark:bg-black/90 backdrop-blur-md border-b border-stone-200 dark:border-white/10 h-16 flex items-center justify-between px-4 flex-shrink-0 z-30 relative">
           <div className="flex items-center gap-2">
-            <Logo className="h-6 w-6 text-blue-600 dark:text-blue-500" />
+            <Logo className="h-14 w-14" />
             <span className="font-bold text-base text-[#121212] dark:text-white tracking-[0.1em] uppercase whitespace-nowrap">STARSET</span>
           </div>
           <div className="flex items-center gap-3">
-            <button onClick={toggleTheme} className="p-2 text-zinc-600 dark:text-zinc-400">
-              {isDark ? <Moon className="h-5 w-5" /> : <Sun className="h-5 w-5" />}
-            </button>
             {/* Open Sidebar Overlay for extra menu items if needed */}
             <button
               onClick={() => setIsMobileNavOpen(true)}
@@ -733,8 +706,6 @@ const App: React.FC = () => {
             setIsMobileOpen={setIsMobileNavOpen}
             onLogout={handleLogout}
             onExitApp={handleExitApp}
-            isDark={isDark}
-            toggleTheme={toggleTheme}
             userRole={userRole}
           />
         </div>
@@ -748,7 +719,7 @@ const App: React.FC = () => {
 
             <footer className="mt-12 py-6 border-t border-zinc-200 dark:border-white/5 flex flex-col md:flex-row items-center justify-between gap-4 text-zinc-400 dark:text-zinc-600 text-xs">
               <div className="flex items-center gap-2">
-                <Logo className="h-5 w-5 opacity-70" />
+                <Logo className="h-12 w-12 opacity-70" />
                 <span className="font-bold tracking-wider uppercase">Starset Intelligence</span>
               </div>
               <div className="flex items-center gap-6">
