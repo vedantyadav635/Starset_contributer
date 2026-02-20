@@ -68,6 +68,70 @@ const App: React.FC = () => {
   // --------------------------------------------------------------------------
 
   /**
+   * EFFECT 0: Restore session on page load
+   * Checks if user has an existing Supabase session (survives reload)
+   * Also listens for auth state changes (login/logout/token refresh)
+   */
+  useEffect(() => {
+    // 1. Check for existing session on mount
+    const restoreSession = async () => {
+      try {
+        const { data: { session } } = await supabase.auth.getSession();
+
+        if (session?.user) {
+          console.log("🔄 Restoring session for:", session.user.email);
+
+          // Fetch profile
+          const { data: profile, error: profileError } = await supabase
+            .from("profiles")
+            .select("*")
+            .eq("id", session.user.id)
+            .single();
+
+          if (profile && !profileError) {
+            setUserProfile({ ...profile, email: session.user.email });
+            setUserRole(profile.role_text || "contributor");
+            setIsAuthenticated(true);
+            setViewMode('app');
+
+            if (!profile.profile_completed) {
+              setCurrentPage("complete-profile");
+            } else {
+              setCurrentPage(
+                (profile.role_text || "contributor") === "admin"
+                  ? "admin-dashboard"
+                  : "dashboard"
+              );
+            }
+            console.log("✅ Session restored successfully");
+          }
+        }
+      } catch (err) {
+        console.error("Error restoring session:", err);
+      }
+    };
+
+    restoreSession();
+
+    // 2. Listen for auth state changes (login, logout, token refresh)
+    const { data: { subscription } } = supabase.auth.onAuthStateChange(
+      async (event, session) => {
+        console.log("🔑 Auth event:", event);
+        if (event === "SIGNED_OUT") {
+          setIsAuthenticated(false);
+          setUserProfile(null);
+          setViewMode('public');
+          setPublicPage('home');
+        }
+      }
+    );
+
+    return () => {
+      subscription.unsubscribe();
+    };
+  }, []);
+
+  /**
    * EFFECT 1: Fetch all tasks from backend on component mount
    * Runs once when the app loads (empty dependency array [])
    * Loads tasks from the Express backend API
@@ -273,9 +337,11 @@ const App: React.FC = () => {
    * Handle user logout
    * Clears authentication state and returns to public landing page
    */
-  const handleLogout = () => {
+  const handleLogout = async () => {
+    await supabase.auth.signOut();
     setIsAuthenticated(false);
     setActiveTask(null);
+    setUserProfile(null);
     setViewMode('public');
     setPublicPage('home');
   };
@@ -316,8 +382,24 @@ const App: React.FC = () => {
    * Removes task from the task list by ID
    * @param taskId - The ID of the task to delete
    */
-  const handleDeleteTask = (taskId: string) => {
-    setTasks(prev => prev.filter(t => t.id !== taskId));
+  const handleDeleteTask = async (taskId: string) => {
+    try {
+      const { API_ENDPOINTS } = await import('./config/api');
+      const res = await fetch(API_ENDPOINTS.DELETE_TASK(taskId), {
+        method: "DELETE",
+      });
+
+      if (!res.ok) {
+        throw new Error("Failed to delete task");
+      }
+
+      // Remove from UI
+      setTasks(prev => prev.filter(t => t.id !== taskId));
+      console.log("✅ Task soft-deleted:", taskId);
+    } catch (err) {
+      console.error("Error deleting task:", err);
+      alert("Failed to delete task");
+    }
   };
 
   /**

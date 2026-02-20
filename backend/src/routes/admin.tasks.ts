@@ -93,5 +93,34 @@ router.get("/", async (req, res) => {
   }
 });
 
+/**
+ * DELETE /admin/tasks/:id
+ * Soft-delete: sets task status to 'deleted' (keeps in DB for stats)
+ */
+router.delete("/:id", async (req, res) => {
+  try {
+    const { id } = req.params;
+    console.log("🗑️ Soft-deleting task:", id);
+
+    const { data, error } = await supabase
+      .from("tasks")
+      .update({ status: "deleted" })
+      .eq("id", id)
+      .select()
+      .single();
+
+    if (error) {
+      console.error("❌ Supabase error:", error);
+      return res.status(500).json({ error: error.message });
+    }
+
+    console.log("✅ Task soft-deleted:", data);
+    res.status(200).json(data);
+
+  } catch (err) {
+    console.error("🔥 Server crash:", err);
+    res.status(500).json({ error: "Server error" });
+  }
+});
 
 export default router;

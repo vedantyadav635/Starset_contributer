@@ -64,16 +64,10 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onNavigate, task
    return (
 
       <div className="space-y-8 animate-in fade-in duration-500">
-         {loading && (
-            <div className="text-center text-zinc-400 text-sm">
-               Loading tasks...
-            </div>
-         )}
-
          {/* Admin Header */}
          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-6 border-b border-zinc-200 dark:border-white/10">
             <div>
-               <h1 className="text-2xl font-bold text-[#121212] dark:text-white tracking-tight">Command Center</h1>
+               <h1 className="text-2xl font-bold text-[#121212] dark:text-white tracking-tight">Analytics</h1>
                <p className="text-zinc-500 text-sm mt-1 flex items-center gap-2">
                   <span className="flex h-2 w-2 rounded-full bg-emerald-500 animate-pulse"></span>
                   System Operational • Region: Asia-Pacific
@@ -141,42 +135,6 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onNavigate, task
                   {statsLoading ? "..." : stats.deletedTasks.toLocaleString()}
                </div>
                <div className="text-xs text-zinc-500 uppercase tracking-wider">Flagged / Deleted</div>
-            </div>
-         </div>
-
-         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-            Live Throughput Chart
-            <div className="lg:col-span-2 bg-white dark:bg-zinc-900 rounded-xl border border-zinc-200 dark:border-white/10 p-6 shadow-sm">
-               <h3 className="font-bold text-lg text-zinc-900 dark:text-white mb-6 flex items-center gap-2">
-                  <TrendingUp className="h-5 w-5 text-zinc-400" /> Live Data Ingestion Rate
-               </h3>
-            </div>
-
-            {/* Server Status */}
-            <div className="bg-white dark:bg-zinc-900 rounded-xl border border-zinc-200 dark:border-white/10 p-6 shadow-sm">
-               <h3 className="font-bold text-lg text-zinc-900 dark:text-white mb-6 flex items-center gap-2">
-                  <Server className="h-5 w-5 text-zinc-400" /> Node Status
-               </h3>
-               <div className="space-y-4">
-                  {[
-                     { name: 'US-East-1', status: 'Optimal', load: '45%' },
-                     { name: 'EU-West-2', status: 'Optimal', load: '52%' },
-                     { name: 'AP-South-1', status: 'High Load', load: '89%' },
-                     { name: 'SA-East-1', status: 'Optimal', load: '30%' },
-                  ].map((server, i) => (
-                     <div key={i} className="flex items-center justify-between p-3 bg-zinc-50 dark:bg-white/5 rounded-lg border border-zinc-100 dark:border-white/5">
-                        <div className="flex items-center gap-3">
-                           <Globe className="h-4 w-4 text-zinc-400" />
-                           <span className="text-sm font-medium text-zinc-700 dark:text-zinc-300">{server.name}</span>
-                        </div>
-                        <div className="text-right">
-                           <div className={`text-xs font-bold ${server.status === 'High Load' ? 'text-amber-500' : 'text-emerald-500'}`}>{server.status}</div>
-                           <div className="text-[10px] text-zinc-400">{server.load} Load</div>
-                        </div>
-                     </div>
-                  ))}
-               </div>
-               <Button variant="outline" size="sm" className="w-full mt-6">View Full Diagnostic</Button>
             </div>
          </div>
 

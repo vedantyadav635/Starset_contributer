@@ -1,28 +1,82 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Transaction } from '../types';
 import { Button } from '../components/Button';
-import { Download, Building2, CreditCard, Wallet, Plus, X, Smartphone, Landmark, Check } from 'lucide-react';
-
-const mockTransactions: Transaction[] = [
-  { id: 'tx-1', date: '2023-10-24', amount: 1250.00, currency: 'INR', description: 'Monthly Settlement - Batch #88A', status: 'Processed' },
-  { id: 'tx-2', date: '2023-10-23', amount: 120.00, currency: 'INR', description: 'Data Contribution: Voice Set #882', status: 'Pending' },
-  { id: 'tx-3', date: '2023-10-23', amount: 150.00, currency: 'INR', description: 'Data Contribution: Voice Set #881', status: 'Pending' },
-  { id: 'tx-4', date: '2023-10-22', amount: 45.00, currency: 'INR', description: 'Data Contribution: Text Set #102', status: 'Processed' },
-  { id: 'tx-5', date: '2023-10-21', amount: 60.00, currency: 'INR', description: 'Data Contribution: Image Set #442', status: 'Processed' },
-];
+import { Download, CreditCard, Wallet, Plus, X, Smartphone, Landmark, Check, Inbox } from 'lucide-react';
+import { supabase } from '../supabaseClient';
 
 export const Earnings: React.FC = () => {
   const [showAddMethod, setShowAddMethod] = useState(false);
   const [addMethodTab, setAddMethodTab] = useState<'upi' | 'bank'>('upi');
   const [isWithdrawLoading, setIsWithdrawLoading] = useState(false);
+  const [transactions, setTransactions] = useState<Transaction[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [userProfile, setUserProfile] = useState<any>(null);
+
+  // Fetch real submission-based transactions for this user
+  useEffect(() => {
+    const fetchEarnings = async () => {
+      try {
+        const { data: { user } } = await supabase.auth.getUser();
+        if (!user) return;
+
+        // Fetch profile for UPI/payment info
+        const { data: profile } = await supabase
+          .from("profiles")
+          .select("*")
+          .eq("id", user.id)
+          .single();
+
+        if (profile) {
+          setUserProfile(profile);
+        }
+
+        // Fetch submissions as transactions
+        const { data: submissions, error } = await supabase
+          .from("submissions")
+          .select("id, task_id, status, submitted_at")
+          .eq("user_id", user.id)
+          .order("submitted_at", { ascending: false });
+
+        if (!error && submissions) {
+          // Map submissions to transaction format
+          const txns: Transaction[] = submissions.map((sub, i) => ({
+            id: sub.id,
+            date: new Date(sub.submitted_at).toLocaleDateString('en-CA'),
+            amount: 0, // Will be calculated if task compensation is available
+            currency: 'INR',
+            description: `Task Submission #${sub.task_id?.substring(0, 8) || i + 1}`,
+            status: sub.status === 'accepted' || sub.status === 'validated' || sub.status === 'approved'
+              ? 'Processed'
+              : sub.status === 'pending_validation'
+                ? 'Pending'
+                : 'Pending' as 'Pending' | 'Processed' | 'Failed',
+          }));
+          setTransactions(txns);
+        }
+      } catch (err) {
+        console.error("Error fetching earnings:", err);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchEarnings();
+  }, []);
+
+  const totalEarned = transactions
+    .filter(tx => tx.status === 'Processed')
+    .reduce((sum, tx) => sum + tx.amount, 0);
 
   const handleWithdraw = () => {
     setIsWithdrawLoading(true);
     setTimeout(() => {
       setIsWithdrawLoading(false);
-      alert("Transfer request of ₹3,585.00 initiated.");
+      alert("Transfer request initiated.");
     }, 1500);
   };
+
+  const upiId = userProfile?.upi_id || 'Not set';
+  const userName = userProfile?.full_name || 'Contributor';
 
   return (
     <div className="space-y-8 animate-in fade-in duration-500 relative pb-24 md:pb-0 perspective-1000">
@@ -38,14 +92,12 @@ export const Earnings: React.FC = () => {
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-        {/* Balance Card - 3D Effect */}
+        {/* Balance Card */}
         <div className="relative group perspective-1000 h-full min-h-[300px]">
           <div className="absolute inset-0 bg-blue-600/20 blur-2xl rounded-3xl transform group-hover:scale-105 transition-transform duration-500"></div>
           <div className="bg-gradient-to-br from-[#1c1917] to-black dark:from-black dark:to-zinc-900 rounded-3xl p-8 text-white shadow-2xl shadow-black/50 flex flex-col justify-between relative overflow-hidden border border-zinc-800 h-full transform transition-transform duration-500 group-hover:rotate-x-2 group-hover:scale-[1.02] transform-style-3d">
 
-            {/* Dynamic Shine */}
             <div className="absolute inset-0 bg-gradient-to-tr from-white/0 via-white/5 to-white/0 translate-x-[-100%] group-hover:animate-[shimmer_2s_infinite] pointer-events-none z-20"></div>
-
             <div className="absolute top-0 right-0 p-32 bg-blue-500/10 rounded-full blur-3xl -mr-16 -mt-16 pointer-events-none z-0"></div>
             <div className="absolute bottom-0 left-0 p-32 bg-purple-500/10 rounded-full blur-3xl -ml-16 -mb-16 pointer-events-none z-0"></div>
 
@@ -63,10 +115,12 @@ export const Earnings: React.FC = () => {
               </div>
 
               <div className="space-y-1 mb-10 transform-style-3d group-hover:translate-z-10 transition-transform">
-                <div className="text-5xl md:text-6xl font-bold tracking-tight text-transparent bg-clip-text bg-gradient-to-b from-white to-zinc-400">₹3,585<span className="text-3xl text-zinc-500">.00</span></div>
+                <div className="text-5xl md:text-6xl font-bold tracking-tight text-transparent bg-clip-text bg-gradient-to-b from-white to-zinc-400">
+                  ₹{totalEarned.toLocaleString('en-IN')}<span className="text-3xl text-zinc-500">.00</span>
+                </div>
                 <div className="text-emerald-400 text-sm font-mono flex items-center gap-2">
                   <span className="flex h-2 w-2 rounded-full bg-emerald-500 animate-pulse"></span>
-                  Available for withdrawal
+                  {totalEarned > 0 ? 'Available for withdrawal' : 'No earnings yet'}
                 </div>
               </div>
 
@@ -79,8 +133,8 @@ export const Earnings: React.FC = () => {
                   Initiate Transfer
                 </Button>
                 <div className="flex justify-between text-xs text-zinc-500 font-mono">
-                  <span>ID: 8829-X</span>
-                  <span>VALID: 10/25</span>
+                  <span>{userName}</span>
+                  <span>{transactions.length} submissions</span>
                 </div>
               </div>
             </div>
@@ -93,40 +147,37 @@ export const Earnings: React.FC = () => {
 
           <h2 className="text-xl font-bold text-[#121212] dark:text-white mb-8 flex items-center justify-between relative z-10">
             <span>Transfer Accounts</span>
-            <span className="text-xs font-bold text-emerald-600 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-900/20 px-3 py-1 rounded-full border border-emerald-100 dark:border-emerald-900/30">Active</span>
+            {upiId !== 'Not set' && (
+              <span className="text-xs font-bold text-emerald-600 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-900/20 px-3 py-1 rounded-full border border-emerald-100 dark:border-emerald-900/30">Active</span>
+            )}
           </h2>
 
           <div className="space-y-4 flex-1 relative z-10">
-            {/* Existing UPI Method */}
-            <div className="flex flex-col sm:flex-row sm:items-center justify-between p-5 border border-blue-600 dark:border-blue-500 bg-blue-50/50 dark:bg-blue-900/10 rounded-2xl transition-all cursor-pointer group gap-4 hover:shadow-lg hover:shadow-blue-500/10 hover:-translate-y-1 duration-300">
-              <div className="flex items-center">
-                <div className="h-14 w-14 bg-white dark:bg-black border border-stone-200 dark:border-white/10 rounded-2xl flex items-center justify-center text-blue-600 dark:text-blue-400 mr-5 shadow-sm group-hover:scale-110 transition-transform">
-                  <Smartphone className="h-7 w-7" />
+            {/* UPI Method from profile */}
+            {upiId !== 'Not set' ? (
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between p-5 border border-blue-600 dark:border-blue-500 bg-blue-50/50 dark:bg-blue-900/10 rounded-2xl transition-all cursor-pointer group gap-4 hover:shadow-lg hover:shadow-blue-500/10 hover:-translate-y-1 duration-300">
+                <div className="flex items-center">
+                  <div className="h-14 w-14 bg-white dark:bg-black border border-stone-200 dark:border-white/10 rounded-2xl flex items-center justify-center text-blue-600 dark:text-blue-400 mr-5 shadow-sm group-hover:scale-110 transition-transform">
+                    <Smartphone className="h-7 w-7" />
+                  </div>
+                  <div>
+                    <p className="font-bold text-[#121212] dark:text-white text-lg">UPI ID (VPA)</p>
+                    <p className="text-sm text-stone-500 font-mono">{upiId}</p>
+                  </div>
                 </div>
-                <div>
-                  <p className="font-bold text-[#121212] dark:text-white text-lg">UPI ID (VPA)</p>
-                  <p className="text-sm text-stone-500 font-mono">contributor@okhdfcbank</p>
-                </div>
-              </div>
-              <div className="flex items-center gap-3 sm:ml-auto">
-                <span className="text-xs font-bold px-3 py-1.5 bg-white dark:bg-black text-blue-700 dark:text-blue-400 rounded-lg border border-blue-100 dark:border-blue-900 shadow-sm flex items-center">
-                  <Check className="h-3 w-3 mr-1" /> Verified
-                </span>
-              </div>
-            </div>
-
-            {/* Existing Bank Method */}
-            <div className="flex items-center justify-between p-5 border border-stone-200 dark:border-white/10 rounded-2xl hover:border-stone-300 dark:hover:border-white/30 hover:bg-stone-50 dark:hover:bg-white/5 transition-all cursor-pointer group opacity-80 hover:opacity-100 hover:shadow-md hover:-translate-y-1 duration-300">
-              <div className="flex items-center">
-                <div className="h-14 w-14 bg-white dark:bg-black border border-stone-200 dark:border-white/10 rounded-2xl flex items-center justify-center text-stone-600 dark:text-stone-400 mr-5 shadow-sm group-hover:scale-110 transition-transform">
-                  <Landmark className="h-7 w-7" />
-                </div>
-                <div>
-                  <p className="font-bold text-[#121212] dark:text-white text-lg">HDFC Bank</p>
-                  <p className="text-sm text-stone-500">Savings •••• 8832</p>
+                <div className="flex items-center gap-3 sm:ml-auto">
+                  <span className="text-xs font-bold px-3 py-1.5 bg-white dark:bg-black text-blue-700 dark:text-blue-400 rounded-lg border border-blue-100 dark:border-blue-900 shadow-sm flex items-center">
+                    <Check className="h-3 w-3 mr-1" /> Verified
+                  </span>
                 </div>
               </div>
-            </div>
+            ) : (
+              <div className="p-6 border border-dashed border-zinc-300 dark:border-white/10 rounded-2xl text-center">
+                <Smartphone className="h-8 w-8 text-zinc-400 mx-auto mb-2" />
+                <p className="text-zinc-500 text-sm">No UPI ID configured</p>
+                <p className="text-zinc-400 text-xs mt-1">Add your UPI ID in your profile settings</p>
+              </div>
+            )}
 
             {/* Add New Button */}
             <button
@@ -149,50 +200,55 @@ export const Earnings: React.FC = () => {
             <h2 className="text-xl font-bold text-[#121212] dark:text-white">Settlement Ledger</h2>
             <select className="text-xs border-stone-200 dark:border-white/10 rounded-lg py-1.5 px-3 bg-white dark:bg-black focus:ring-blue-600 focus:border-blue-600 text-zinc-900 dark:text-white shadow-sm">
               <option>All Entries</option>
-              <option>Transfers</option>
-              <option>Contributions</option>
+              <option>Processed</option>
+              <option>Pending</option>
             </select>
           </div>
           <div className="text-xs font-bold text-stone-400 uppercase tracking-wider">Recent Activity</div>
         </div>
-        <div className="overflow-x-auto">
-          <table className="w-full text-sm text-left whitespace-nowrap">
-            <thead className="bg-white dark:bg-black/20 text-stone-500 font-bold border-b border-stone-100 dark:border-white/5 text-xs uppercase tracking-wider">
-              <tr>
-                <th className="px-8 py-5">Date</th>
-                <th className="px-8 py-5">Description</th>
-                <th className="px-8 py-5">Status</th>
-                <th className="px-8 py-5 text-right">Compensation</th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-stone-100 dark:divide-white/5">
-              {mockTransactions.map((tx) => (
-                <tr key={tx.id} className="hover:bg-blue-50/50 dark:hover:bg-white/5 transition-colors group cursor-default">
-                  <td className="px-8 py-5 text-stone-500 font-mono text-xs">{tx.date}</td>
-                  <td className="px-8 py-5 text-[#121212] dark:text-white font-medium group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">
-                    {tx.description}
-                  </td>
-                  <td className="px-8 py-5">
-                    <span className={`inline-flex items-center px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-wide shadow-sm ${tx.status === 'Processed' ? 'bg-teal-100 dark:bg-teal-900/30 text-teal-700 dark:text-teal-300 border border-teal-200 dark:border-teal-800' :
+
+        {loading ? (
+          <div className="p-12 text-center text-zinc-500">Loading transactions...</div>
+        ) : transactions.length === 0 ? (
+          <div className="p-12 text-center">
+            <Inbox className="h-12 w-12 text-zinc-300 dark:text-zinc-600 mx-auto mb-3" />
+            <p className="text-zinc-500 font-medium">No transactions yet</p>
+            <p className="text-zinc-400 text-sm mt-1">Complete tasks to see your earnings here</p>
+          </div>
+        ) : (
+          <div className="overflow-x-auto">
+            <table className="w-full text-sm text-left whitespace-nowrap">
+              <thead className="bg-white dark:bg-black/20 text-stone-500 font-bold border-b border-stone-100 dark:border-white/5 text-xs uppercase tracking-wider">
+                <tr>
+                  <th className="px-8 py-5">Date</th>
+                  <th className="px-8 py-5">Description</th>
+                  <th className="px-8 py-5">Status</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-stone-100 dark:divide-white/5">
+                {transactions.map((tx) => (
+                  <tr key={tx.id} className="hover:bg-blue-50/50 dark:hover:bg-white/5 transition-colors group cursor-default">
+                    <td className="px-8 py-5 text-stone-500 font-mono text-xs">{tx.date}</td>
+                    <td className="px-8 py-5 text-[#121212] dark:text-white font-medium group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">
+                      {tx.description}
+                    </td>
+                    <td className="px-8 py-5">
+                      <span className={`inline-flex items-center px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-wide shadow-sm ${tx.status === 'Processed' ? 'bg-teal-100 dark:bg-teal-900/30 text-teal-700 dark:text-teal-300 border border-teal-200 dark:border-teal-800' :
                         tx.status === 'Pending' ? 'bg-amber-100 dark:bg-amber-900/30 text-amber-700 dark:text-amber-300 border border-amber-200 dark:border-amber-800' :
                           'bg-red-100 text-red-700'
-                      }`}>
-                      {tx.status}
-                    </span>
-                  </td>
-                  <td className="px-8 py-5 text-right font-bold text-[#121212] dark:text-white text-base">
-                    <span className={tx.amount > 0 ? "text-emerald-600 dark:text-emerald-400" : ""}>
-                      {tx.amount > 0 ? '+' : ''}₹{tx.amount.toLocaleString('en-IN', { minimumFractionDigits: 2 })}
-                    </span>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
+                        }`}>
+                        {tx.status}
+                      </span>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        )}
       </div>
 
-      {/* Add Payment Method Modal Overlay */}
+      {/* Add Payment Method Modal */}
       {showAddMethod && (
         <div className="fixed inset-0 z-50 flex items-end md:items-center justify-center p-4 bg-black/60 backdrop-blur-md animate-in fade-in duration-300 perspective-1000">
           <div className="bg-white dark:bg-zinc-900 rounded-t-3xl md:rounded-3xl shadow-2xl w-full max-w-md overflow-hidden animate-in slide-in-from-bottom-20 md:zoom-in-95 duration-300 border border-white/10 transform-style-3d">
@@ -220,7 +276,6 @@ export const Earnings: React.FC = () => {
                 </button>
               </div>
 
-              {/* Form Content */}
               {addMethodTab === 'upi' ? (
                 <div className="space-y-5">
                   <div className="group">

@@ -22,11 +22,11 @@ router.get("/", async (req: Request, res: Response) => {
             console.error("❌ Error counting users:", usersError);
         }
 
-        // 2. Active tasks
+        // 2. Active tasks (status = 'AVAILABLE' or 'In Progress')
         const { count: activeTasks, error: tasksError } = await supabase
             .from("tasks")
             .select("*", { count: "exact", head: true })
-            .eq("status", "active");
+            .in("status", ["AVAILABLE", "Available", "active", "In Progress"]);
 
         if (tasksError) {
             console.error("❌ Error counting active tasks:", tasksError);
@@ -45,7 +45,7 @@ router.get("/", async (req: Request, res: Response) => {
         const { count: deletedTasks, error: deletedError } = await supabase
             .from("tasks")
             .select("*", { count: "exact", head: true })
-            .in("status", ["deleted", "discarded", "flagged"]);
+            .in("status", ["deleted", "discarded", "flagged", "Not Accepted"]);
 
         if (deletedError) {
             console.error("❌ Error counting deleted tasks:", deletedError);

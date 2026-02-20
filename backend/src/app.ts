@@ -6,6 +6,7 @@ import adminStats from "./routes/admin.stats";
 import contributorTasks from "./routes/contributor.tasks";
 import submissions from "./routes/submissions";
 import userSubmissions from "./routes/user.submissions";
+import userStats from "./routes/user.stats";
 
 const app = express();
 
@@ -53,5 +54,6 @@ app.use("/admin/stats", adminStats);
 app.use("/contributor/tasks", contributorTasks);
 app.use("/submissions", submissions);
 app.use("/user/submissions", userSubmissions);
+app.use("/user/stats", userStats);
 
 export default app;

@@ -46,7 +46,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
   ];
 
   const adminNavItems = [
-    { id: 'admin-dashboard', label: 'Command Center', icon: LayoutDashboard },
+    { id: 'admin-dashboard', label: 'Analytics', icon: LayoutDashboard },
     { id: 'admin-create-task', label: 'Create Task', icon: PlusCircle },
     { id: 'tasks', label: 'Task Registry', icon: Database }, // Shared view but different context
     { id: 'account', label: 'Admin Profile', icon: User },

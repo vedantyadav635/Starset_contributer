@@ -7,6 +7,7 @@ export const API_ENDPOINTS = {
     // Admin endpoints
     ADMIN_TASKS: `${API_URL}/admin/tasks`,
     ADMIN_STATS: `${API_URL}/admin/stats`,
+    DELETE_TASK: (taskId: string) => `${API_URL}/admin/tasks/${taskId}`,
 
     // Contributor endpoints
     CONTRIBUTOR_TASKS: `${API_URL}/contributor/tasks`,
@@ -18,6 +19,7 @@ export const API_ENDPOINTS = {
 
     // User submissions (check completed tasks)
     USER_SUBMISSIONS: (userId: string) => `${API_URL}/user/submissions/${userId}`,
+    USER_STATS: (userId: string) => `${API_URL}/user/stats/${userId}`,
     CHECK_TASK_COMPLETION: (userId: string, taskId: string) =>
         `${API_URL}/user/submissions/${userId}/task/${taskId}`,
 };
