@@ -186,13 +186,10 @@ const App: React.FC = () => {
           requirements: t.requirements || [],
         }));
 
-        setTasks(mappedTasks); // Update state with mapped tasks
+        setTasks(mappedTasks);
         console.log(`✅ Loaded ${data.length} tasks from backend`);
-        console.log('📋 Raw API response:', JSON.stringify(data.slice(0, 2)));
-        console.log('📋 Mapped tasks:', JSON.stringify(mappedTasks.slice(0, 2)));
-        console.log('📋 AVAILABLE tasks:', mappedTasks.filter(t => (t.status as string).toUpperCase() === 'AVAILABLE').length);
       } catch (err) {
-        console.error("❌ Error fetching tasks:", err);
+        console.error("Error fetching tasks:", err);
       }
     };
 
