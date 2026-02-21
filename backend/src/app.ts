@@ -30,7 +30,10 @@ app.use(
         origin.startsWith('http://10.') ||
         origin.startsWith('http://172.') ||
         origin.endsWith('.netlify.app') ||
-        origin.endsWith('.onrender.com')
+        origin.endsWith('.onrender.com') ||
+        origin.endsWith('starset.online') ||
+        origin === 'https://starset.online' ||
+        origin === 'https://www.starset.online'
       ) {
         return callback(null, true);
       }
