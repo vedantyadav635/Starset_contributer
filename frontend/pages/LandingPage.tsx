@@ -97,12 +97,12 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onEnterApp, onStartSig
                   </div>
                </motion.div>
 
-               {/* Right Column: Nexus Visual */}
+               {/* Right Column: Nexus Visual - Hidden on mobile */}
                <motion.div
                   initial={{ opacity: 0, scale: 0.8 }}
                   animate={{ opacity: 1, scale: 1 }}
                   transition={{ duration: 0.8, delay: 0.2 }}
-                  className="relative h-[300px] lg:h-[600px] w-full flex items-center justify-center select-none perspective-2000 mt-12 lg:mt-0"
+                  className="relative h-[300px] lg:h-[600px] w-full items-center justify-center select-none perspective-2000 mt-12 lg:mt-0 hidden lg:flex"
                >
 
                   {/* Background Glow for Visual */}
