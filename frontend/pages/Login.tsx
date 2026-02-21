@@ -18,12 +18,14 @@ interface LoginProps {
   onLogin: (role: UserRole) => void;
   onSwitchToSignup: () => void;
   onBackHome: () => void;
+  onForgotPassword?: () => void;
 }
 
 export const Login: React.FC<LoginProps> = ({
   onLogin,
   onSwitchToSignup,
   onBackHome,
+  onForgotPassword,
 }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -196,6 +198,19 @@ export const Login: React.FC<LoginProps> = ({
                 onChange={(e) => setPassword(e.target.value)}
               />
             </div>
+
+            {/* Forgot Password Link */}
+            {onForgotPassword && (
+              <div className="flex justify-end -mt-1">
+                <button
+                  type="button"
+                  onClick={onForgotPassword}
+                  className="text-xs text-teal-600 dark:text-teal-400 hover:text-teal-700 dark:hover:text-teal-300 font-medium hover:underline transition-colors"
+                >
+                  Forgot Password?
+                </button>
+              </div>
+            )}
 
             <Button
               type="submit"

@@ -15,6 +15,8 @@ import { Contributors } from './pages/Contributors';
 import { Money } from './pages/Money';
 import { AdminCreateTask } from './pages/AdminCreateTask';
 import { AdminDashboard } from './pages/AdminDashboard';
+import { ForgotPassword } from './pages/ForgotPassword';
+import { ResetPassword } from './pages/ResetPassword';
 
 // Type definitions for TypeScript
 import { PageView, Task, UserRole, TaskType, TaskStatus } from './types';
@@ -50,7 +52,7 @@ const App: React.FC = () => {
 
   // Navigation State - Controls which part of the app is displayed
   const [viewMode, setViewMode] = useState<'public' | 'app'>('public'); // 'public' = landing page, 'app' = authenticated app
-  const [authMode, setAuthMode] = useState<'login' | 'signup'>('login'); // Which auth form to show
+  const [authMode, setAuthMode] = useState<'login' | 'signup' | 'forgot-password' | 'reset-password'>('login'); // Which auth form to show
   const [publicPage, setPublicPage] = useState<PublicPageType>('home'); // Which public page (home, about, etc.)
   const [isAuthenticated, setIsAuthenticated] = useState(false); // Is user logged in?
   const [userRole, setUserRole] = useState<UserRole>('contributor'); // User's role (contributor or admin)
@@ -73,6 +75,12 @@ const App: React.FC = () => {
    * Also listens for auth state changes (login/logout/token refresh)
    */
   useEffect(() => {
+    // 0. Check if user arrived via password reset link
+    if (window.location.hash.includes('reset-password') || window.location.hash.includes('type=recovery')) {
+      setViewMode('app');
+      setAuthMode('reset-password');
+    }
+
     // 1. Check for existing session on mount
     const restoreSession = async () => {
       try {
@@ -123,6 +131,11 @@ const App: React.FC = () => {
           setViewMode('public');
           setPublicPage('home');
         }
+        // Handle password recovery flow
+        if (event === "PASSWORD_RECOVERY") {
+          setViewMode('app');
+          setAuthMode('reset-password');
+        }
       }
     );
 
@@ -150,7 +163,30 @@ const App: React.FC = () => {
         }
 
         const data = await res.json();
-        setTasks(data); // Update state with fetched tasks
+
+        // Map snake_case API response to camelCase frontend Task interface
+        const mappedTasks: Task[] = data.map((t: any) => ({
+          id: t.id,
+          title: t.title,
+          type: t.type,
+          compensation: t.compensation,
+          currency: t.currency || 'INR',
+          estimatedTimeMin: t.estimated_time_min ?? t.estimatedTimeMin,
+          status: t.status,
+          language: t.language,
+          instructions: t.instructions,
+          deadline: t.deadline,
+          imageUrl: t.image_url ?? t.imageUrl,
+          aiCapability: t.ai_capability ?? t.aiCapability ?? '',
+          dataUsage: t.data_usage ?? t.dataUsage ?? '',
+          prompt: t.prompt || '',
+          options: t.options,
+          project: t.project || '',
+          difficulty: t.difficulty || 'Beginner',
+          requirements: t.requirements || [],
+        }));
+
+        setTasks(mappedTasks); // Update state with mapped tasks
         console.log(`✅ Loaded ${data.length} tasks from backend`);
       } catch (err) {
         console.error("Error fetching tasks:", err);
@@ -370,8 +406,29 @@ const App: React.FC = () => {
    * Adds new task to the beginning of the task list
    * @param newTask - The newly created task object
    */
-  const handleCreateTask = async (newTask: Task) => {
-    setTasks(prev => [newTask, ...prev]);
+  const handleCreateTask = async (newTask: any) => {
+    // Map snake_case API response to camelCase frontend format
+    const mappedTask: Task = {
+      id: newTask.id,
+      title: newTask.title,
+      type: newTask.type,
+      compensation: newTask.compensation,
+      currency: newTask.currency || 'INR',
+      estimatedTimeMin: newTask.estimated_time_min ?? newTask.estimatedTimeMin,
+      status: newTask.status,
+      language: newTask.language,
+      instructions: newTask.instructions,
+      deadline: newTask.deadline,
+      imageUrl: newTask.image_url ?? newTask.imageUrl,
+      aiCapability: newTask.ai_capability ?? newTask.aiCapability ?? '',
+      dataUsage: newTask.data_usage ?? newTask.dataUsage ?? '',
+      prompt: newTask.prompt || '',
+      options: newTask.options,
+      project: newTask.project || '',
+      difficulty: newTask.difficulty || 'Beginner',
+      requirements: newTask.requirements || [],
+    };
+    setTasks(prev => [mappedTask, ...prev]);
     setCurrentPage("tasks");
   };
 
@@ -427,6 +484,24 @@ const App: React.FC = () => {
   }
 
   if (!isAuthenticated) {
+    if (authMode === 'forgot-password') {
+      return (
+        <ForgotPassword
+          onBackToLogin={() => setAuthMode('login')}
+          onBackHome={handleExitApp}
+        />
+      );
+    }
+    if (authMode === 'reset-password') {
+      return (
+        <ResetPassword
+          onBackToLogin={() => {
+            setAuthMode('login');
+          }}
+          onBackHome={handleExitApp}
+        />
+      );
+    }
     if (authMode === 'signup') {
       return (
         <Signup
@@ -440,6 +515,7 @@ const App: React.FC = () => {
       <Login
         onLogin={handleLogin}
         onSwitchToSignup={() => setAuthMode('signup')}
+        onForgotPassword={() => setAuthMode('forgot-password')}
         onBackHome={handleExitApp}
       />
     );
