@@ -32,6 +32,7 @@ import { Logo } from './components/Logo';
 import { PublicPageType } from './components/PublicLayout';
 import { supabase } from "./supabaseClient"; // Supabase client for database operations
 import CompleteProfile from "./pages/CompleteProfile";
+import { SmoothCursor } from "@/components/ui/smooth-cursor";
 
 // ============================================================================
 // CONSTANTS
@@ -469,394 +470,365 @@ const App: React.FC = () => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
-  // Render Logic
-  if (viewMode === 'public') {
-    switch (publicPage) {
-      case 'about':
-        return <About onNavigate={handlePublicNavigate} onEnterApp={handleEnterApp} />;
-      case 'contributors':
-        return <Contributors onNavigate={handlePublicNavigate} onEnterApp={handleStartSignup} />;
-      case 'money':
-        return <Money onNavigate={handlePublicNavigate} onEnterApp={handleStartSignup} />;
-      default:
-        return <LandingPage onNavigate={handlePublicNavigate} onEnterApp={handleEnterApp} onStartSignup={handleStartSignup} />;
+  // Render logic
+  const renderMainContent = () => {
+    if (viewMode === 'public') {
+      switch (publicPage) {
+        case 'about':
+          return <About onNavigate={handlePublicNavigate} onEnterApp={handleEnterApp} />;
+        case 'contributors':
+          return <Contributors onNavigate={handlePublicNavigate} onEnterApp={handleStartSignup} />;
+        case 'money':
+          return <Money onNavigate={handlePublicNavigate} onEnterApp={handleStartSignup} />;
+        default:
+          return <LandingPage onNavigate={handlePublicNavigate} onEnterApp={handleEnterApp} onStartSignup={handleStartSignup} />;
+      }
     }
-  }
 
-  if (!isAuthenticated) {
-    if (authMode === 'forgot-password') {
+    if (!isAuthenticated) {
+      if (authMode === 'forgot-password') {
+        return (
+          <ForgotPassword
+            onBackToLogin={() => setAuthMode('login')}
+            onBackHome={handleExitApp}
+          />
+        );
+      }
+      if (authMode === 'reset-password') {
+        return (
+          <ResetPassword
+            onBackToLogin={() => {
+              setAuthMode('login');
+            }}
+            onBackHome={handleExitApp}
+          />
+        );
+      }
+      if (authMode === 'signup') {
+        return (
+          <Signup
+            onLogin={() => handleLogin('contributor')}
+            onSwitchToLogin={() => setAuthMode('login')}
+            onBackHome={handleExitApp}
+          />
+        );
+      }
       return (
-        <ForgotPassword
-          onBackToLogin={() => setAuthMode('login')}
+        <Login
+          onLogin={handleLogin}
+          onSwitchToSignup={() => setAuthMode('signup')}
+          onForgotPassword={() => setAuthMode('forgot-password')}
           onBackHome={handleExitApp}
         />
       );
     }
-    if (authMode === 'reset-password') {
-      return (
-        <ResetPassword
-          onBackToLogin={() => {
-            setAuthMode('login');
-          }}
-          onBackHome={handleExitApp}
-        />
-      );
-    }
-    if (authMode === 'signup') {
-      return (
-        <Signup
-          onLogin={() => handleLogin('contributor')}
-          onSwitchToLogin={() => setAuthMode('login')}
-          onBackHome={handleExitApp}
-        />
-      );
-    }
-    return (
-      <Login
-        onLogin={handleLogin}
-        onSwitchToSignup={() => setAuthMode('signup')}
-        onForgotPassword={() => setAuthMode('forgot-password')}
-        onBackHome={handleExitApp}
-      />
-    );
-  }
 
-  const renderContent = () => {
-    // Admin Views
-    if (userRole === 'admin') {
+    const renderContent = () => {
+      // Admin Views
+      if (userRole === 'admin') {
+        switch (currentPage) {
+          case 'admin-dashboard':
+            return <AdminDashboard onNavigate={setCurrentPage} tasks={tasks} />;
+          case 'admin-create-task':
+            return <AdminCreateTask onSave={handleCreateTask} />;
+          case 'tasks':
+            return <TaskList onSelectTask={handleSelectTask} tasks={tasks} userRole="admin" onDeleteTask={handleDeleteTask} />;
+          case 'account':
+            const formatLastLogin = () => {
+              // Get current time as last login (you can store this in state when user logs in)
+              const now = new Date();
+              return now.toLocaleString('en-US', {
+                month: 'short',
+                day: 'numeric',
+                year: 'numeric',
+                hour: '2-digit',
+                minute: '2-digit'
+              });
+            };
+
+            return (
+              <div className="space-y-6 animate-in fade-in duration-500">
+                <h1 className="text-2xl md:text-3xl font-bold mb-6 text-[#121212] dark:text-white">
+                  Administrator Profile
+                </h1>
+
+                {/* Admin Profile Card */}
+                <div className="bg-white dark:bg-zinc-900 rounded-2xl border border-stone-200 dark:border-white/10 p-6 md:p-8 shadow-sm">
+                  <div className="flex flex-col md:flex-row items-start md:items-center gap-6 mb-8">
+                    {/* Admin Avatar */}
+                    <div className="h-20 w-20 bg-gradient-to-br from-purple-500 to-indigo-600 rounded-full flex items-center justify-center text-3xl font-bold text-white shadow-lg">
+                      {userProfile?.full_name?.charAt(0) || userProfile?.email?.charAt(0) || 'A'}
+                    </div>
+
+                    {/* Admin Info */}
+                    <div className="flex-1">
+                      <h2 className="text-2xl font-bold text-[#121212] dark:text-white mb-1">
+                        {userProfile?.full_name || userProfile?.email?.split('@')[0] || 'Administrator'}
+                      </h2>
+                      <p className="text-stone-500 dark:text-stone-400 flex items-center gap-2">
+                        <Shield className="h-4 w-4 text-purple-500" />
+                        System Administrator • Level 5 Clearance
+                      </p>
+                    </div>
+
+                    {/* Status Badge */}
+                    <div className="bg-emerald-50 dark:bg-emerald-900/20 border border-emerald-200 dark:border-emerald-800 px-4 py-2 rounded-lg">
+                      <div className="flex items-center gap-2">
+                        <span className="relative flex h-3 w-3">
+                          <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+                          <span className="relative inline-flex rounded-full h-3 w-3 bg-emerald-500"></span>
+                        </span>
+                        <span className="text-sm font-bold text-emerald-700 dark:text-emerald-400">Active</span>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Admin Details Grid */}
+                  <div className="grid md:grid-cols-2 gap-6">
+                    {/* Email */}
+                    <div className="space-y-2">
+                      <label className="block text-xs font-bold uppercase tracking-wider text-stone-400">Email Address</label>
+                      <p className="text-base font-medium text-[#121212] dark:text-white break-all">
+                        {userProfile?.email || 'admin@starset.ai'}
+                      </p>
+                    </div>
+
+                    {/* Role */}
+                    <div className="space-y-2">
+                      <label className="block text-xs font-bold uppercase tracking-wider text-stone-400">Role</label>
+                      <p className="text-base font-medium text-[#121212] dark:text-white">
+                        {userProfile?.role_text || 'Administrator'}
+                      </p>
+                    </div>
+
+                    {/* User ID */}
+                    <div className="space-y-2">
+                      <label className="block text-xs font-bold uppercase tracking-wider text-stone-400">User ID</label>
+                      <p className="text-base font-mono text-stone-600 dark:text-stone-400">
+                        {userProfile?.id?.slice(0, 16) || 'N/A'}...
+                      </p>
+                    </div>
+
+                    {/* Last Login */}
+                    <div className="space-y-2">
+                      <label className="block text-xs font-bold uppercase tracking-wider text-stone-400">Last Login</label>
+                      <p className="text-base font-medium text-[#121212] dark:text-white">
+                        {formatLastLogin()}
+                      </p>
+                    </div>
+
+                    {/* Account Created */}
+                    <div className="space-y-2">
+                      <label className="block text-xs font-bold uppercase tracking-wider text-stone-400">Account Created</label>
+                      <p className="text-base font-medium text-[#121212] dark:text-white">
+                        {userProfile?.created_at ? new Date(userProfile.created_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }) : 'N/A'}
+                      </p>
+                    </div>
+
+                    {/* Trust Score */}
+                    <div className="space-y-2">
+                      <label className="block text-xs font-bold uppercase tracking-wider text-stone-400">Trust Score</label>
+                      <p className="text-base font-bold text-emerald-500">
+                        {userProfile?.trust_score || 100}/100
+                      </p>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Permissions Card */}
+                <div className="bg-white dark:bg-zinc-900 rounded-2xl border border-stone-200 dark:border-white/10 p-6 md:p-8 shadow-sm">
+                  <h3 className="text-lg font-bold text-[#121212] dark:text-white mb-4 flex items-center gap-2">
+                    <Shield className="h-5 w-5 text-purple-500" />
+                    Administrator Permissions
+                  </h3>
+                  <div className="grid md:grid-cols-2 gap-3">
+                    {[
+                      'Create & Manage Tasks',
+                      'View All Contributors',
+                      'Access Analytics Dashboard',
+                      'Manage Payments',
+                      'System Configuration',
+                      'User Management'
+                    ].map((permission, idx) => (
+                      <div key={idx} className="flex items-center gap-2 text-sm text-stone-600 dark:text-stone-400">
+                        <CheckCircle2 className="h-4 w-4 text-emerald-500" />
+                        {permission}
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            );
+          default:
+            return <AdminDashboard onNavigate={setCurrentPage} tasks={tasks} />;
+        }
+      }
+
+      // Contributor Views
       switch (currentPage) {
-        case 'admin-dashboard':
-          return <AdminDashboard onNavigate={setCurrentPage} tasks={tasks} />;
-        case 'admin-create-task':
-          return <AdminCreateTask onSave={handleCreateTask} />;
+        case 'complete-profile':
+          return <CompleteProfile
+            onComplete={() => {
+              // Reload profile after completion
+              handleLogin(userRole);
+            }}
+          />;
+        case 'dashboard':
+          return <Dashboard onNavigate={setCurrentPage} />;
         case 'tasks':
-          return <TaskList onSelectTask={handleSelectTask} tasks={tasks} userRole="admin" onDeleteTask={handleDeleteTask} />;
+          return <TaskList onSelectTask={handleSelectTask} tasks={tasks} />;
+        case 'execution':
+          if (!activeTask) return <TaskList onSelectTask={handleSelectTask} tasks={tasks} />;
+          return (
+            <TaskExecution
+              task={activeTask}
+              onBack={() => setCurrentPage('tasks')}
+              onComplete={handleCompleteTask}
+            />
+          );
+        case 'earnings':
+          return <Earnings />;
+        case 'guidelines':
+          return (
+            <div className="bg-white/70 dark:bg-black/40 backdrop-blur-md p-6 md:p-10 rounded-2xl border border-stone-200 dark:border-white/10 shadow-sm max-w-4xl animate-in fade-in duration-500">
+              <h1 className="text-2xl md:text-3xl font-bold mb-8 text-[#121212] dark:text-white">Quality Guidelines</h1>
+              <p className="mb-8 text-base md:text-lg text-stone-600 dark:text-stone-300 leading-relaxed">Strict adherence to these guidelines is required for payout. Violations may result in account suspension.</p>
+              <div className="grid md:grid-cols-2 gap-6">
+                <div className="p-6 md:p-8 bg-[#FAF9F7]/80 dark:bg-white/5 rounded-xl border border-stone-200 dark:border-white/10">
+                  <h3 className="font-bold text-[#121212] dark:text-white mb-3 text-lg">Audio</h3>
+                  <p className="text-stone-600 dark:text-stone-400 leading-relaxed">No background noise (TV, fans, other people). Clear pronunciation required. Use a headset if possible.</p>
+                </div>
+                <div className="p-6 md:p-8 bg-[#FAF9F7]/80 dark:bg-white/5 rounded-xl border border-stone-200 dark:border-white/10">
+                  <h3 className="font-bold text-[#121212] dark:text-white mb-3 text-lg">Text</h3>
+                  <p className="text-stone-600 dark:text-stone-400 leading-relaxed">Proper grammar and spelling are required unless colloquialisms are explicitly requested.</p>
+                </div>
+              </div>
+            </div>
+          );
+        case 'support':
+          return (
+            <div className="bg-white/70 dark:bg-black/40 backdrop-blur-md p-6 md:p-10 rounded-2xl border border-stone-200 dark:border-white/10 shadow-sm max-w-3xl animate-in fade-in duration-500">
+              <h1 className="text-2xl md:text-3xl font-bold mb-4 text-[#121212] dark:text-white">Support</h1>
+              <p className="text-stone-600 dark:text-stone-300 mb-10 text-lg">Need help? Submit a ticket below.</p>
+              <form className="space-y-8">
+                <div>
+                  <label className="block text-sm font-bold text-stone-700 dark:text-stone-300 mb-2 uppercase tracking-wide">Issue Type</label>
+                  <select className="w-full border-stone-200 dark:border-white/10 rounded-xl p-4 border bg-[#FAF9F7]/50 dark:bg-white/5 focus:bg-white dark:focus:bg-black focus:ring-2 focus:ring-teal-500/20 focus:border-[#0f766e] transition-all outline-none text-base text-zinc-900 dark:text-white">
+                    <option>Payment Issue</option>
+                    <option>Task Bug</option>
+                    <option>Account Question</option>
+                  </select>
+                </div>
+                <div>
+                  <label className="block text-sm font-bold text-stone-700 dark:text-stone-300 mb-2 uppercase tracking-wide">Description</label>
+                  <textarea className="w-full border-stone-200 dark:border-white/10 rounded-xl p-4 border h-40 bg-[#FAF9F7]/50 dark:bg-white/5 focus:bg-white dark:focus:bg-black focus:ring-2 focus:ring-teal-500/20 focus:border-[#0f766e] transition-all resize-none outline-none text-base text-zinc-900 dark:text-white"></textarea>
+                </div>
+                <button className="bg-[#0f766e] text-white px-8 py-4 rounded-xl font-medium shadow-lg shadow-teal-900/10 hover:shadow-teal-900/20 hover:-translate-y-0.5 transition-all text-lg w-full md:w-auto">Submit Ticket</button>
+              </form>
+            </div>
+          );
         case 'account':
-          const formatLastLogin = () => {
-            // Get current time as last login (you can store this in state when user logs in)
-            const now = new Date();
-            return now.toLocaleString('en-US', {
-              month: 'short',
-              day: 'numeric',
-              year: 'numeric',
-              hour: '2-digit',
-              minute: '2-digit'
-            });
+          const getInitials = (name: string) => {
+            if (!name) return 'U';
+            const parts = name.split(' ');
+            return parts.length > 1
+              ? `${parts[0][0]}${parts[1][0]}`.toUpperCase()
+              : parts[0][0].toUpperCase();
+          };
+
+          const formatDate = (dateString: string) => {
+            if (!dateString) return 'Recently';
+            const date = new Date(dateString);
+            return date.toLocaleDateString('en-US', { month: 'short', year: 'numeric' });
           };
 
           return (
             <div className="space-y-6 animate-in fade-in duration-500">
               <h1 className="text-2xl md:text-3xl font-bold mb-6 text-[#121212] dark:text-white">
-                Administrator Profile
+                Contributor ID: {userProfile?.id?.slice(0, 8) || 'Loading...'}
               </h1>
 
-              {/* Admin Profile Card */}
-              <div className="bg-white dark:bg-zinc-900 rounded-2xl border border-stone-200 dark:border-white/10 p-6 md:p-8 shadow-sm">
-                <div className="flex flex-col md:flex-row items-start md:items-center gap-6 mb-8">
-                  {/* Admin Avatar */}
-                  <div className="h-20 w-20 bg-gradient-to-br from-purple-500 to-indigo-600 rounded-full flex items-center justify-center text-3xl font-bold text-white shadow-lg">
-                    {userProfile?.full_name?.charAt(0) || userProfile?.email?.charAt(0) || 'A'}
-                  </div>
-
-                  {/* Admin Info */}
-                  <div className="flex-1">
-                    <h2 className="text-2xl font-bold text-[#121212] dark:text-white mb-1">
-                      {userProfile?.full_name || userProfile?.email?.split('@')[0] || 'Administrator'}
-                    </h2>
-                    <p className="text-stone-500 dark:text-stone-400 flex items-center gap-2">
-                      <Shield className="h-4 w-4 text-purple-500" />
-                      System Administrator • Level 5 Clearance
-                    </p>
-                  </div>
-
-                  {/* Status Badge */}
-                  <div className="bg-emerald-50 dark:bg-emerald-900/20 border border-emerald-200 dark:border-emerald-800 px-4 py-2 rounded-lg">
-                    <div className="flex items-center gap-2">
-                      <span className="relative flex h-3 w-3">
-                        <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
-                        <span className="relative inline-flex rounded-full h-3 w-3 bg-emerald-500"></span>
-                      </span>
-                      <span className="text-sm font-bold text-emerald-700 dark:text-emerald-400">Active</span>
-                    </div>
-                  </div>
+              {/* Profile Header */}
+              <div className="bg-white dark:bg-zinc-900 rounded-2xl border border-stone-200 dark:border-white/10 p-6 md:p-8 flex flex-col md:flex-row items-center gap-8 shadow-sm">
+                <div className="h-24 w-24 bg-stone-100 dark:bg-white/10 rounded-full flex items-center justify-center text-3xl font-bold text-stone-500 dark:text-white">
+                  {getInitials(userProfile?.full_name || userProfile?.email || 'User')}
                 </div>
+                <div className="flex-1 text-center md:text-left">
+                  <h2 className="text-2xl font-bold text-[#121212] dark:text-white">
+                    {userProfile?.full_name || userProfile?.email?.split('@')[0] || 'User'}
+                  </h2>
+                  <p className="text-stone-500 dark:text-stone-400 flex items-center justify-center md:justify-start gap-2 mt-1">
+                    <Shield className="h-4 w-4 text-emerald-500" />
+                    Verified Contributor • Joined {formatDate(userProfile?.created_at)}
+                  </p>
+                </div>
+                <div className="text-center md:text-right w-full md:w-auto border-t md:border-t-0 border-stone-100 dark:border-white/5 pt-4 md:pt-0">
+                  <div className="text-xs font-bold uppercase tracking-wider text-stone-400 mb-1">Trust Score</div>
+                  <div className="text-3xl font-bold text-emerald-500">{userProfile?.trust_score || 100}/100</div>
+                </div>
+              </div>
 
-                {/* Admin Details Grid */}
-                <div className="grid md:grid-cols-2 gap-6">
-                  {/* Email */}
-                  <div className="space-y-2">
-                    <label className="block text-xs font-bold uppercase tracking-wider text-stone-400">Email Address</label>
-                    <p className="text-base font-medium text-[#121212] dark:text-white break-all">
-                      {userProfile?.email || 'admin@starset.ai'}
-                    </p>
-                  </div>
-
-                  {/* Role */}
-                  <div className="space-y-2">
-                    <label className="block text-xs font-bold uppercase tracking-wider text-stone-400">Role</label>
-                    <p className="text-base font-medium text-[#121212] dark:text-white">
-                      {userProfile?.role_text || 'Administrator'}
-                    </p>
-                  </div>
-
-                  {/* User ID */}
-                  <div className="space-y-2">
-                    <label className="block text-xs font-bold uppercase tracking-wider text-stone-400">User ID</label>
-                    <p className="text-base font-mono text-stone-600 dark:text-stone-400">
-                      {userProfile?.id?.slice(0, 16) || 'N/A'}...
-                    </p>
-                  </div>
-
-                  {/* Last Login */}
-                  <div className="space-y-2">
-                    <label className="block text-xs font-bold uppercase tracking-wider text-stone-400">Last Login</label>
-                    <p className="text-base font-medium text-[#121212] dark:text-white">
-                      {formatLastLogin()}
-                    </p>
-                  </div>
-
-                  {/* Account Created */}
-                  <div className="space-y-2">
-                    <label className="block text-xs font-bold uppercase tracking-wider text-stone-400">Account Created</label>
-                    <p className="text-base font-medium text-[#121212] dark:text-white">
-                      {userProfile?.created_at ? new Date(userProfile.created_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }) : 'N/A'}
-                    </p>
-                  </div>
-
-                  {/* Trust Score */}
-                  <div className="space-y-2">
-                    <label className="block text-xs font-bold uppercase tracking-wider text-stone-400">Trust Score</label>
-                    <p className="text-base font-bold text-emerald-500">
-                      {userProfile?.trust_score || 100}/100
-                    </p>
+              <div className="grid md:grid-cols-2 gap-6">
+                {/* Demographics */}
+                <div className="bg-white dark:bg-zinc-900 rounded-2xl border border-stone-200 dark:border-white/10 p-6 md:p-8 shadow-sm">
+                  <h3 className="text-lg font-bold text-[#121212] dark:text-white mb-6 flex items-center gap-2">
+                    <User className="h-5 w-5 text-blue-500" /> Demographics
+                  </h3>
+                  <div className="space-y-6">
+                    <div className="grid grid-cols-2 gap-4">
+                      <div>
+                        <label className="block text-xs font-bold uppercase tracking-wider text-stone-400 mb-1">Age</label>
+                        <p className="text-base font-medium text-[#121212] dark:text-white">{userProfile?.age || 'Not set'}</p>
+                      </div>
+                      <div>
+                        <label className="block text-xs font-bold uppercase tracking-wider text-stone-400 mb-1">Gender</label>
+                        <p className="text-base font-medium text-[#121212] dark:text-white">{userProfile?.gender || 'Not set'}</p>
+                      </div>
+                    </div>
+                    <div className="grid grid-cols-2 gap-4">
+                      <div>
+                        <label className="block text-xs font-bold uppercase tracking-wider text-stone-400 mb-1">City</label>
+                        <p className="text-base font-medium text-[#121212] dark:text-white flex items-center gap-2">
+                          <MapPin className="h-4 w-4 text-stone-400" /> {userProfile?.city || 'Not set'}
+                        </p>
+                      </div>
+                      <div>
+                        <label className="block text-xs font-bold uppercase tracking-wider text-stone-400 mb-1">State</label>
+                        <p className="text-base font-medium text-[#121212] dark:text-white">{userProfile?.state || 'Not set'}</p>
+                      </div>
+                    </div>
+                    <div>
+                      <label className="block text-xs font-bold uppercase tracking-wider text-stone-400 mb-1">Email</label>
+                      <p className="text-base font-medium text-[#121212] dark:text-white break-all">{userProfile?.email || 'Not available'}</p>
+                    </div>
+                    <div>
+                      <label className="block text-xs font-bold uppercase tracking-wider text-stone-400 mb-1">UPI ID</label>
+                      <p className="text-base font-medium text-[#121212] dark:text-white">{userProfile?.upi_id || 'Not set'}</p>
+                    </div>
                   </div>
                 </div>
               </div>
 
-              {/* Permissions Card */}
-              <div className="bg-white dark:bg-zinc-900 rounded-2xl border border-stone-200 dark:border-white/10 p-6 md:p-8 shadow-sm">
-                <h3 className="text-lg font-bold text-[#121212] dark:text-white mb-4 flex items-center gap-2">
-                  <Shield className="h-5 w-5 text-purple-500" />
-                  Administrator Permissions
-                </h3>
-                <div className="grid md:grid-cols-2 gap-3">
-                  {[
-                    'Create & Manage Tasks',
-                    'View All Contributors',
-                    'Access Analytics Dashboard',
-                    'Manage Payments',
-                    'System Configuration',
-                    'User Management'
-                  ].map((permission, idx) => (
-                    <div key={idx} className="flex items-center gap-2 text-sm text-stone-600 dark:text-stone-400">
-                      <CheckCircle2 className="h-4 w-4 text-emerald-500" />
-                      {permission}
-                    </div>
-                  ))}
-                </div>
+              <div className="pt-8 border-t border-stone-200 dark:border-white/10 flex justify-end pb-20 md:pb-0">
+                <button
+                  className="text-red-600 font-medium text-base hover:underline hover:text-red-700 transition-colors w-full md:w-auto text-center"
+                  onClick={() => alert("Contact support to delete account.")}
+                >
+                  Delete Account
+                </button>
               </div>
             </div>
           );
         default:
-          return <AdminDashboard onNavigate={setCurrentPage} tasks={tasks} />;
+          return <Dashboard onNavigate={setCurrentPage} />;
       }
-    }
+    };
 
-    // Contributor Views
-    switch (currentPage) {
-      case 'complete-profile':
-        return <CompleteProfile
-          onComplete={() => {
-            // Reload profile after completion
-            handleLogin(userRole);
-          }}
-        />;
-      case 'dashboard':
-        return <Dashboard onNavigate={setCurrentPage} />;
-      case 'tasks':
-        return <TaskList onSelectTask={handleSelectTask} tasks={tasks} />;
-      case 'execution':
-        if (!activeTask) return <TaskList onSelectTask={handleSelectTask} tasks={tasks} />;
-        return (
-          <TaskExecution
-            task={activeTask}
-            onBack={() => setCurrentPage('tasks')}
-            onComplete={handleCompleteTask}
-          />
-        );
-      case 'earnings':
-        return <Earnings />;
-      case 'guidelines':
-        return (
-          <div className="bg-white/70 dark:bg-black/40 backdrop-blur-md p-6 md:p-10 rounded-2xl border border-stone-200 dark:border-white/10 shadow-sm max-w-4xl animate-in fade-in duration-500">
-            <h1 className="text-2xl md:text-3xl font-bold mb-8 text-[#121212] dark:text-white">Quality Guidelines</h1>
-            <p className="mb-8 text-base md:text-lg text-stone-600 dark:text-stone-300 leading-relaxed">Strict adherence to these guidelines is required for payout. Violations may result in account suspension.</p>
-            <div className="grid md:grid-cols-2 gap-6">
-              <div className="p-6 md:p-8 bg-[#FAF9F7]/80 dark:bg-white/5 rounded-xl border border-stone-200 dark:border-white/10">
-                <h3 className="font-bold text-[#121212] dark:text-white mb-3 text-lg">Audio</h3>
-                <p className="text-stone-600 dark:text-stone-400 leading-relaxed">No background noise (TV, fans, other people). Clear pronunciation required. Use a headset if possible.</p>
-              </div>
-              <div className="p-6 md:p-8 bg-[#FAF9F7]/80 dark:bg-white/5 rounded-xl border border-stone-200 dark:border-white/10">
-                <h3 className="font-bold text-[#121212] dark:text-white mb-3 text-lg">Text</h3>
-                <p className="text-stone-600 dark:text-stone-400 leading-relaxed">Proper grammar and spelling are required unless colloquialisms are explicitly requested.</p>
-              </div>
-            </div>
-          </div>
-        );
-      case 'support':
-        return (
-          <div className="bg-white/70 dark:bg-black/40 backdrop-blur-md p-6 md:p-10 rounded-2xl border border-stone-200 dark:border-white/10 shadow-sm max-w-3xl animate-in fade-in duration-500">
-            <h1 className="text-2xl md:text-3xl font-bold mb-4 text-[#121212] dark:text-white">Support</h1>
-            <p className="text-stone-600 dark:text-stone-300 mb-10 text-lg">Need help? Submit a ticket below.</p>
-            <form className="space-y-8">
-              <div>
-                <label className="block text-sm font-bold text-stone-700 dark:text-stone-300 mb-2 uppercase tracking-wide">Issue Type</label>
-                <select className="w-full border-stone-200 dark:border-white/10 rounded-xl p-4 border bg-[#FAF9F7]/50 dark:bg-white/5 focus:bg-white dark:focus:bg-black focus:ring-2 focus:ring-teal-500/20 focus:border-[#0f766e] transition-all outline-none text-base text-zinc-900 dark:text-white">
-                  <option>Payment Issue</option>
-                  <option>Task Bug</option>
-                  <option>Account Question</option>
-                </select>
-              </div>
-              <div>
-                <label className="block text-sm font-bold text-stone-700 dark:text-stone-300 mb-2 uppercase tracking-wide">Description</label>
-                <textarea className="w-full border-stone-200 dark:border-white/10 rounded-xl p-4 border h-40 bg-[#FAF9F7]/50 dark:bg-white/5 focus:bg-white dark:focus:bg-black focus:ring-2 focus:ring-teal-500/20 focus:border-[#0f766e] transition-all resize-none outline-none text-base text-zinc-900 dark:text-white"></textarea>
-              </div>
-              <button className="bg-[#0f766e] text-white px-8 py-4 rounded-xl font-medium shadow-lg shadow-teal-900/10 hover:shadow-teal-900/20 hover:-translate-y-0.5 transition-all text-lg w-full md:w-auto">Submit Ticket</button>
-            </form>
-          </div>
-        );
-      case 'account':
-        const getInitials = (name: string) => {
-          if (!name) return 'U';
-          const parts = name.split(' ');
-          return parts.length > 1
-            ? `${parts[0][0]}${parts[1][0]}`.toUpperCase()
-            : parts[0][0].toUpperCase();
-        };
-
-        const formatDate = (dateString: string) => {
-          if (!dateString) return 'Recently';
-          const date = new Date(dateString);
-          return date.toLocaleDateString('en-US', { month: 'short', year: 'numeric' });
-        };
-
-        return (
-          <div className="space-y-6 animate-in fade-in duration-500">
-            <h1 className="text-2xl md:text-3xl font-bold mb-6 text-[#121212] dark:text-white">
-              Contributor ID: {userProfile?.id?.slice(0, 8) || 'Loading...'}
-            </h1>
-
-            {/* Profile Header */}
-            <div className="bg-white dark:bg-zinc-900 rounded-2xl border border-stone-200 dark:border-white/10 p-6 md:p-8 flex flex-col md:flex-row items-center gap-8 shadow-sm">
-              <div className="h-24 w-24 bg-stone-100 dark:bg-white/10 rounded-full flex items-center justify-center text-3xl font-bold text-stone-500 dark:text-white">
-                {getInitials(userProfile?.full_name || userProfile?.email || 'User')}
-              </div>
-              <div className="flex-1 text-center md:text-left">
-                <h2 className="text-2xl font-bold text-[#121212] dark:text-white">
-                  {userProfile?.full_name || userProfile?.email?.split('@')[0] || 'User'}
-                </h2>
-                <p className="text-stone-500 dark:text-stone-400 flex items-center justify-center md:justify-start gap-2 mt-1">
-                  <Shield className="h-4 w-4 text-emerald-500" />
-                  Verified Contributor • Joined {formatDate(userProfile?.created_at)}
-                </p>
-              </div>
-              <div className="text-center md:text-right w-full md:w-auto border-t md:border-t-0 border-stone-100 dark:border-white/5 pt-4 md:pt-0">
-                <div className="text-xs font-bold uppercase tracking-wider text-stone-400 mb-1">Trust Score</div>
-                <div className="text-3xl font-bold text-emerald-500">{userProfile?.trust_score || 100}/100</div>
-              </div>
-            </div>
-
-            <div className="grid md:grid-cols-2 gap-6">
-              {/* Demographics */}
-              <div className="bg-white dark:bg-zinc-900 rounded-2xl border border-stone-200 dark:border-white/10 p-6 md:p-8 shadow-sm">
-                <h3 className="text-lg font-bold text-[#121212] dark:text-white mb-6 flex items-center gap-2">
-                  <User className="h-5 w-5 text-blue-500" /> Demographics
-                </h3>
-                <div className="space-y-6">
-                  <div className="grid grid-cols-2 gap-4">
-                    <div>
-                      <label className="block text-xs font-bold uppercase tracking-wider text-stone-400 mb-1">Age</label>
-                      <p className="text-base font-medium text-[#121212] dark:text-white">{userProfile?.age || 'Not set'}</p>
-                    </div>
-                    <div>
-                      <label className="block text-xs font-bold uppercase tracking-wider text-stone-400 mb-1">Gender</label>
-                      <p className="text-base font-medium text-[#121212] dark:text-white">{userProfile?.gender || 'Not set'}</p>
-                    </div>
-                  </div>
-                  <div className="grid grid-cols-2 gap-4">
-                    <div>
-                      <label className="block text-xs font-bold uppercase tracking-wider text-stone-400 mb-1">City</label>
-                      <p className="text-base font-medium text-[#121212] dark:text-white flex items-center gap-2">
-                        <MapPin className="h-4 w-4 text-stone-400" /> {userProfile?.city || 'Not set'}
-                      </p>
-                    </div>
-                    <div>
-                      <label className="block text-xs font-bold uppercase tracking-wider text-stone-400 mb-1">State</label>
-                      <p className="text-base font-medium text-[#121212] dark:text-white">{userProfile?.state || 'Not set'}</p>
-                    </div>
-                  </div>
-                  <div>
-                    <label className="block text-xs font-bold uppercase tracking-wider text-stone-400 mb-1">Email</label>
-                    <p className="text-base font-medium text-[#121212] dark:text-white break-all">{userProfile?.email || 'Not available'}</p>
-                  </div>
-                  <div>
-                    <label className="block text-xs font-bold uppercase tracking-wider text-stone-400 mb-1">UPI ID</label>
-                    <p className="text-base font-medium text-[#121212] dark:text-white">{userProfile?.upi_id || 'Not set'}</p>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <div className="pt-8 border-t border-stone-200 dark:border-white/10 flex justify-end pb-20 md:pb-0">
-              <button
-                className="text-red-600 font-medium text-base hover:underline hover:text-red-700 transition-colors w-full md:w-auto text-center"
-                onClick={() => alert("Contact support to delete account.")}
-              >
-                Delete Account
-              </button>
-            </div>
-          </div>
-        );
-      default:
-        return <Dashboard onNavigate={setCurrentPage} />;
-    }
-  };
-
-  return (
-    <div className="flex h-[100dvh] bg-transparent text-[#121212] dark:text-white font-sans selection:bg-teal-100 selection:text-teal-900 overflow-hidden">
-      {/* Desktop Sidebar - Hidden on Mobile */}
-      <div className="hidden md:block h-full">
-        <Sidebar
-          currentPage={currentPage}
-          onNavigate={setCurrentPage}
-          isMobileOpen={isMobileNavOpen}
-          setIsMobileOpen={setIsMobileNavOpen}
-          onLogout={handleLogout}
-          onExitApp={handleExitApp}
-          userRole={userRole}
-        />
-      </div>
-
-      <div className="flex-1 flex flex-col h-full overflow-hidden relative">
-        {/* Mobile Header - Visible only on Mobile */}
-        <header className="md:hidden bg-white/90 dark:bg-black/90 backdrop-blur-md border-b border-stone-200 dark:border-white/10 h-16 flex items-center justify-between px-4 flex-shrink-0 z-30 relative">
-          <div className="flex items-center gap-2">
-            <Logo className="h-14 w-14" />
-            <span className="font-bold text-base text-[#121212] dark:text-white tracking-[0.1em] uppercase whitespace-nowrap">STARSET</span>
-          </div>
-          <div className="flex items-center gap-3">
-            {/* Open Sidebar Overlay for extra menu items if needed */}
-            <button
-              onClick={() => setIsMobileNavOpen(true)}
-              className="p-2 text-stone-600 dark:text-stone-300 hover:bg-stone-100 dark:hover:bg-white/10 rounded-lg transition-colors"
-            >
-              <MoreHorizontal className="h-6 w-6" />
-            </button>
-          </div>
-        </header>
-
-        {/* Mobile Sidebar Overlay (For Menu Items not in Bottom Nav) */}
-        <div className="md:hidden">
+    // Authenticated App Structure
+    return (
+      <div className="flex h-[100dvh] bg-transparent text-[#121212] dark:text-white font-sans selection:bg-teal-100 selection:text-teal-900 overflow-hidden">
+        {/* Desktop Sidebar - Hidden on Mobile */}
+        <div className="hidden md:block h-full">
           <Sidebar
             currentPage={currentPage}
             onNavigate={setCurrentPage}
@@ -868,62 +840,100 @@ const App: React.FC = () => {
           />
         </div>
 
-        {/* Main Content Scrollable Area */}
-        <main className="flex-1 overflow-y-auto p-4 md:p-10 scroll-smooth pb-24 md:pb-10">
-          <div className="max-w-[1600px] mx-auto min-h-full flex flex-col">
-            <div className="flex-1">
-              {renderContent()}
+        <div className="flex-1 flex flex-col h-full overflow-hidden relative">
+          {/* Mobile Header - Visible only on Mobile */}
+          <header className="md:hidden bg-white/90 dark:bg-black/90 backdrop-blur-md border-b border-stone-200 dark:border-white/10 h-16 flex items-center justify-between px-4 flex-shrink-0 z-30 relative">
+            <div className="flex items-center gap-2">
+              <Logo className="h-14 w-14" />
+              <span className="font-bold text-base text-[#121212] dark:text-white tracking-[0.1em] uppercase whitespace-nowrap">STARSET</span>
             </div>
+            <div className="flex items-center gap-3">
+              <button
+                onClick={() => setIsMobileNavOpen(true)}
+                className="p-2 text-stone-600 dark:text-stone-300 hover:bg-stone-100 dark:hover:bg-white/10 rounded-lg transition-colors"
+              >
+                <MoreHorizontal className="h-6 w-6" />
+              </button>
+            </div>
+          </header>
 
-            <footer className="mt-12 py-6 border-t border-zinc-200 dark:border-white/5 flex flex-col md:flex-row items-center justify-between gap-4 text-zinc-400 dark:text-zinc-600 text-xs">
-              <div className="flex items-center gap-2">
-                <Logo className="h-12 w-12 opacity-70" />
-                <span className="font-bold tracking-wider uppercase">Starset Intelligence</span>
-              </div>
-              <div className="flex items-center gap-6">
-                <span className="hover:text-zinc-600 dark:hover:text-zinc-400 transition-colors cursor-pointer">System Status: Stable</span>
-                <span className="font-mono opacity-50">v2.5.4</span>
-              </div>
-            </footer>
+          {/* Mobile Sidebar Overlay */}
+          <div className="md:hidden">
+            <Sidebar
+              currentPage={currentPage}
+              onNavigate={setCurrentPage}
+              isMobileOpen={isMobileNavOpen}
+              setIsMobileOpen={setIsMobileNavOpen}
+              onLogout={handleLogout}
+              onExitApp={handleExitApp}
+              userRole={userRole}
+            />
           </div>
-        </main>
 
-        {/* Mobile Bottom Navigation - Visible only on Mobile */}
-        <div className="md:hidden absolute bottom-0 left-0 w-full bg-white dark:bg-black border-t border-stone-200 dark:border-white/10 px-6 py-3 flex justify-between items-center z-40 safe-area-bottom">
-          <button
-            onClick={() => setCurrentPage('dashboard')}
-            className={`flex flex-col items-center gap-1 transition-colors ${currentPage === 'dashboard' ? 'text-blue-600 dark:text-blue-500' : 'text-stone-400'}`}
-          >
-            <LayoutDashboard className="h-6 w-6" strokeWidth={currentPage === 'dashboard' ? 2.5 : 2} />
-            <span className="text-[10px] font-medium">Home</span>
-          </button>
+          {/* Main Content Scrollable Area */}
+          <main className="flex-1 overflow-y-auto p-4 md:p-10 scroll-smooth pb-24 md:pb-10">
+            <div className="max-w-[1600px] mx-auto min-h-full flex flex-col">
+              <div className="flex-1">
+                {renderContent()}
+              </div>
 
-          <button
-            onClick={() => setCurrentPage('tasks')}
-            className={`flex flex-col items-center gap-1 transition-colors ${currentPage === 'tasks' || currentPage === 'execution' ? 'text-blue-600 dark:text-blue-500' : 'text-stone-400'}`}
-          >
-            <Database className="h-6 w-6" strokeWidth={currentPage === 'tasks' || currentPage === 'execution' ? 2.5 : 2} />
-            <span className="text-[10px] font-medium">Tasks</span>
-          </button>
+              <footer className="mt-12 py-6 border-t border-zinc-200 dark:border-white/5 flex flex-col md:flex-row items-center justify-between gap-4 text-zinc-400 dark:text-zinc-600 text-xs">
+                <div className="flex items-center gap-2">
+                  <Logo className="h-12 w-12 opacity-70" />
+                  <span className="font-bold tracking-wider uppercase">Starset Intelligence</span>
+                </div>
+                <div className="flex items-center gap-6">
+                  <span className="hover:text-zinc-600 dark:hover:text-zinc-400 transition-colors cursor-pointer">System Status: Stable</span>
+                  <span className="font-mono opacity-50">v2.5.4</span>
+                </div>
+              </footer>
+            </div>
+          </main>
 
-          <button
-            onClick={() => setCurrentPage('earnings')}
-            className={`flex flex-col items-center gap-1 transition-colors ${currentPage === 'earnings' ? 'text-blue-600 dark:text-blue-500' : 'text-stone-400'}`}
-          >
-            <CreditCard className="h-6 w-6" strokeWidth={currentPage === 'earnings' ? 2.5 : 2} />
-            <span className="text-[10px] font-medium">Money</span>
-          </button>
+          {/* Mobile Bottom Navigation */}
+          <div className="md:hidden absolute bottom-0 left-0 w-full bg-white dark:bg-black border-t border-stone-200 dark:border-white/10 px-6 py-3 flex justify-between items-center z-40 safe-area-bottom">
+            <button
+              onClick={() => setCurrentPage('dashboard')}
+              className={`flex flex-col items-center gap-1 transition-colors ${currentPage === 'dashboard' ? 'text-blue-600 dark:text-blue-500' : 'text-stone-400'}`}
+            >
+              <LayoutDashboard className="h-6 w-6" strokeWidth={currentPage === 'dashboard' ? 2.5 : 2} />
+              <span className="text-[10px] font-medium">Home</span>
+            </button>
 
-          <button
-            onClick={() => setCurrentPage('account')}
-            className={`flex flex-col items-center gap-1 transition-colors ${currentPage === 'account' ? 'text-blue-600 dark:text-blue-500' : 'text-stone-400'}`}
-          >
-            <User className="h-6 w-6" strokeWidth={currentPage === 'account' ? 2.5 : 2} />
-            <span className="text-[10px] font-medium">Profile</span>
-          </button>
+            <button
+              onClick={() => setCurrentPage('tasks')}
+              className={`flex flex-col items-center gap-1 transition-colors ${currentPage === 'tasks' || currentPage === 'execution' ? 'text-blue-600 dark:text-blue-500' : 'text-stone-400'}`}
+            >
+              <Database className="h-6 w-6" strokeWidth={currentPage === 'tasks' || currentPage === 'execution' ? 2.5 : 2} />
+              <span className="text-[10px] font-medium">Tasks</span>
+            </button>
+
+            <button
+              onClick={() => setCurrentPage('earnings')}
+              className={`flex flex-col items-center gap-1 transition-colors ${currentPage === 'earnings' ? 'text-blue-600 dark:text-blue-500' : 'text-stone-400'}`}
+            >
+              <CreditCard className="h-6 w-6" strokeWidth={currentPage === 'earnings' ? 2.5 : 2} />
+              <span className="text-[10px] font-medium">Money</span>
+            </button>
+
+            <button
+              onClick={() => setCurrentPage('account')}
+              className={`flex flex-col items-center gap-1 transition-colors ${currentPage === 'account' ? 'text-blue-600 dark:text-blue-500' : 'text-stone-400'}`}
+            >
+              <User className="h-6 w-6" strokeWidth={currentPage === 'account' ? 2.5 : 2} />
+              <span className="text-[10px] font-medium">Profile</span>
+            </button>
+          </div>
         </div>
       </div>
-    </div>
+    );
+  };
+
+  return (
+    <>
+      {renderMainContent()}
+      <SmoothCursor />
+    </>
   );
 };
 

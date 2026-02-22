@@ -4,10 +4,9 @@ import { User, MapPin, CreditCard, Calendar, Users } from "lucide-react";
 
 interface CompleteProfileProps {
   onComplete: () => void;
-  isDark: boolean;
 }
 
-const CompleteProfile: React.FC<CompleteProfileProps> = ({ onComplete, isDark }) => {
+const CompleteProfile: React.FC<CompleteProfileProps> = ({ onComplete }) => {
   const [age, setAge] = useState("");
   const [gender, setGender] = useState("");
   const [city, setCity] = useState("");

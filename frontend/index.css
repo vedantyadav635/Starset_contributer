@@ -1,0 +1,26 @@
+/* Main CSS file */
+/* Tailwind is loaded via CDN in index.html */
+
+:root {
+  --foreground: #ffffff;
+}
+
+.dark {
+  --foreground: #ffffff;
+}
+
+.bg-foreground {
+  background-color: var(--foreground);
+}
+
+/* Hiding Default Browser Cursor - from Magic UI Documentation */
+* {
+  cursor: none !important;
+}
+
+/* Optional: Keep text cursor for inputs */
+input, textarea {
+  cursor: text !important;
+}
+
+
