@@ -737,8 +737,9 @@ const App: React.FC = () => {
 
           return (
             <div className="space-y-6 animate-in fade-in duration-500">
-              <h1 className="text-2xl md:text-3xl font-bold mb-6 text-[#121212] dark:text-white">
-                Contributor ID: {userProfile?.contributor_id || userProfile?.id?.slice(0, 8) || 'Loading...'}
+              <h1 className="text-2xl md:text-3xl font-bold mb-6 text-[#121212] dark:text-white flex items-center gap-3">
+                <div className="h-2 w-2 rounded-full bg-blue-500 shadow-[0_0_10px_#3b82f6]"></div>
+                Contributor ID: <span className="text-blue-500">#{userProfile?.contributor_id || '101'}</span>
               </h1>
 
               {/* Profile Header */}
@@ -748,7 +749,7 @@ const App: React.FC = () => {
                 </div>
                 <div className="flex-1 text-center md:text-left">
                   <h2 className="text-2xl font-bold text-[#121212] dark:text-white">
-                    {userProfile?.full_name || userProfile?.email?.split('@')[0] || 'User'}
+                    {userProfile?.name_text || userProfile?.full_name || userProfile?.email?.split('@')[0] || 'User'}
                   </h2>
                   <p className="text-stone-500 dark:text-stone-400 flex items-center justify-center md:justify-start gap-2 mt-1">
                     <Shield className="h-4 w-4 text-emerald-500" />
