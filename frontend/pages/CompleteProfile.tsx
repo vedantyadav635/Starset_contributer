@@ -40,43 +40,26 @@ const CompleteProfile: React.FC<CompleteProfileProps> = ({ onComplete }) => {
 
       if (!user || userError) {
         console.error("User error:", userError);
-        setError("User not found. Please log in again.");
+        setError("User session not found. Please log in again.");
         setLoading(false);
         return;
       }
 
       console.log("Updating profile for user:", user.id);
-      console.log("Data to update:", {
-        age_int: Number(age),
+      const profileData = {
         age: Number(age),
-        gender_text: gender,
         gender: gender,
-        city_text: city,
         city: city,
-        state_text: state,
         state: state,
-        upi_id_text: upiId,
         upi_id: upiId,
         profile_completed: true,
-      });
+      };
 
       const { data: updateData, error: updateError } = await supabase
         .from("profiles")
-        .update({
-          age_int: Number(age),
-          age: Number(age),
-          gender_text: gender,
-          gender: gender,
-          city_text: city,
-          city: city,
-          state_text: state,
-          state: state,
-          upi_id_text: upiId,
-          upi_id: upiId,
-          profile_completed: true,
-        })
+        .update(profileData)
         .eq("id", user.id)
-        .select(); // Add .select() to return the updated data
+        .select();
 
       console.log("Update result:", { data: updateData, error: updateError });
 

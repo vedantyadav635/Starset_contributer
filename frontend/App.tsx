@@ -99,7 +99,7 @@ const App: React.FC = () => {
 
           if (profile && !profileError) {
             setUserProfile({ ...profile, email: session.user.email });
-            setUserRole(profile.role_text || "contributor");
+            setUserRole(profile.role || "contributor");
             setIsAuthenticated(true);
             setViewMode('app');
 
@@ -107,7 +107,7 @@ const App: React.FC = () => {
               setCurrentPage("complete-profile");
             } else {
               setCurrentPage(
-                (profile.role_text || "contributor") === "admin"
+                (profile.role || "contributor") === "admin"
                   ? "admin-dashboard"
                   : "dashboard"
               );
@@ -343,7 +343,7 @@ const App: React.FC = () => {
 
       // Step 3: Store user data in state
       setUserProfile({ ...profile, email: user.email });
-      setUserRole(profile.role_text || "contributor");
+      setUserRole(profile.role || "contributor");
       setIsAuthenticated(true);
 
       // Step 4: Redirect based on profile completion status
@@ -749,7 +749,7 @@ const App: React.FC = () => {
                 </div>
                 <div className="flex-1 text-center md:text-left">
                   <h2 className="text-2xl font-bold text-[#121212] dark:text-white">
-                    {userProfile?.name_text || userProfile?.full_name || userProfile?.email?.split('@')[0] || 'User'}
+                    {userProfile?.full_name || userProfile?.email?.split('@')[0] || 'User'}
                   </h2>
                   <p className="text-stone-500 dark:text-stone-400 flex items-center justify-center md:justify-start gap-2 mt-1">
                     <Shield className="h-4 w-4 text-emerald-500" />

@@ -63,10 +63,8 @@ export const Signup: React.FC<SignupProps> = ({ onLogin, onSwitchToLogin, onBack
       const { error: profileError } = await supabase.from("profiles")
         .upsert({
           id: data.user.id,
-          name_text: name,
-          email_text: email,
           full_name: name,
-          role_text: "contributor",
+          role: "contributor",
           profile_completed: false,
           trust_score: 100
         }, {

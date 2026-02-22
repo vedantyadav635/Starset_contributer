@@ -62,7 +62,7 @@ export const Login: React.FC<LoginProps> = ({
       // Get user profile to check role
       const { data: profile, error: profileError } = await supabase
         .from("profiles")
-        .select("role_text")
+        .select("role")
         .eq("id", result.user.id)
         .single();
 
@@ -73,7 +73,7 @@ export const Login: React.FC<LoginProps> = ({
         return;
       }
 
-      const userRole = profile?.role_text || "contributor";
+      const userRole = profile?.role || "contributor";
 
       // 🔐 ADMIN LOGIN CHECK
       if (loginMode === "admin") {
