@@ -65,18 +65,17 @@ export const AdminCreateTask: React.FC<AdminCreateTaskProps> = ({ onSave }) => {
       });
 
       if (!res.ok) {
-        const err = await res.text();
-        console.error(err);
-        throw new Error("Failed to create task");
+        const errorText = await res.text();
+        console.error("Server Error:", errorText);
+        throw new Error(errorText || "Failed to create task");
       }
       const createdTask = await res.json();
       onSave(createdTask);
 
-
-      alert("Task created successfully!");
-    } catch (err) {
-      console.error(err);
-      alert("Failed to create task");
+      alert("Task published successfully!");
+    } catch (err: any) {
+      console.error("Task Creation Error:", err);
+      alert(`Error: ${err.message || "An unexpected error occurred"}`);
     } finally {
       setIsLoading(false);
     }
