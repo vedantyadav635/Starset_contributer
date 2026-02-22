@@ -4,7 +4,6 @@ import { ArrowRight, Activity, Database, Server, Zap, Globe, ShieldCheck, Lock, 
 import { PublicLayout, PublicPageType } from '../components/PublicLayout';
 import { BrainCircuit } from 'lucide-react';
 import { motion } from 'framer-motion';
-import { ProgressiveBlur } from '../components/ui/progressive-blur';
 
 interface LandingPageProps {
    onEnterApp: () => void;
@@ -222,7 +221,6 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onEnterApp, onStartSig
                </motion.div>
 
             </div>
-            <ProgressiveBlur height="150px" position="bottom" className="opacity-50" />
          </section>
 
          {/* --- LIVE PAYOUTS TICKER --- */}
@@ -584,7 +582,6 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onEnterApp, onStartSig
                   <span className="flex items-center gap-2"><div className="h-2 w-2 rounded-full bg-indigo-500 shadow-[0_0_10px_#6366f1]"></div> SECURE SSL</span>
                </div>
             </div>
-            <ProgressiveBlur height="200px" position="both" className="opacity-30" />
          </section>
 
       </PublicLayout>

@@ -10,9 +10,8 @@ router.get("/", async (_req, res) => {
   const { data, error } = await supabase
     .from("tasks")
     .select("*")
-    .eq("status", "active")
-    .eq("visibility", "public")
-    .eq("is_active", true)
+    // Match the status set in AdminCreateTask.tsx
+    .eq("status", "AVAILABLE")
     .order("created_at", { ascending: false });
 
   if (error) {
