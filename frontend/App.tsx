@@ -22,7 +22,7 @@ import { ResetPassword } from './pages/ResetPassword';
 import { PageView, Task, UserRole, TaskType, TaskStatus } from './types';
 
 // Icon library - Lucide React icons
-import { Menu, User, MapPin, Globe, Shield, LayoutDashboard, Database, CreditCard, MoreHorizontal, CheckCircle2 } from 'lucide-react';
+import { Menu, User, MapPin, Globe, Shield, LayoutDashboard, Database, CreditCard, MoreHorizontal, CheckCircle2, ShieldAlert } from 'lucide-react';
 
 // Always use dark mode — add class once at module load
 document.documentElement.classList.add('dark');
@@ -33,6 +33,7 @@ import { PublicPageType } from './components/PublicLayout';
 import { supabase } from "./supabaseClient"; // Supabase client for database operations
 import CompleteProfile from "./pages/CompleteProfile";
 import { SmoothCursor } from "@/components/ui/smooth-cursor";
+import { Button } from "./components/Button";
 
 // ============================================================================
 // CONSTANTS
@@ -528,7 +529,6 @@ const App: React.FC = () => {
             return <TaskList onSelectTask={handleSelectTask} tasks={tasks} userRole="admin" onDeleteTask={handleDeleteTask} />;
           case 'account':
             const formatLastLogin = () => {
-              // Get current time as last login (you can store this in state when user logs in)
               const now = new Date();
               return now.toLocaleString('en-US', {
                 month: 'short',
@@ -540,115 +540,108 @@ const App: React.FC = () => {
             };
 
             return (
-              <div className="space-y-6 animate-in fade-in duration-500">
-                <h1 className="text-2xl md:text-3xl font-bold mb-6 text-[#121212] dark:text-white">
-                  Administrator Profile
-                </h1>
+              <div className="max-w-6xl mx-auto space-y-3 h-full flex flex-col justify-center pb-2">
+                {/* Admin Header Block */}
+                <div className="flex flex-col md:flex-row items-center gap-5 bg-white dark:bg-[#09090b] rounded-3xl border border-stone-200 dark:border-white/5 p-4 shadow-lg relative overflow-hidden">
+                  <div className="absolute top-0 right-0 w-32 h-32 bg-purple-500/5 rounded-full blur-3xl"></div>
 
-                {/* Admin Profile Card */}
-                <div className="bg-white dark:bg-zinc-900 rounded-2xl border border-stone-200 dark:border-white/10 p-6 md:p-8 shadow-sm">
-                  <div className="flex flex-col md:flex-row items-start md:items-center gap-6 mb-8">
-                    {/* Admin Avatar */}
-                    <div className="h-20 w-20 bg-gradient-to-br from-purple-500 to-indigo-600 rounded-full flex items-center justify-center text-3xl font-bold text-white shadow-lg">
-                      {userProfile?.full_name?.charAt(0) || userProfile?.email?.charAt(0) || 'A'}
+                  <div className="relative h-16 w-16 bg-gradient-to-br from-purple-500 to-indigo-600 rounded-full flex items-center justify-center text-xl font-black text-white border-2 border-white dark:border-zinc-900 shadow-inner flex-shrink-0">
+                    {userProfile?.full_name?.charAt(0) || userProfile?.email?.charAt(0) || 'A'}
+                    <div className="absolute bottom-0 right-0 h-4 w-4 bg-emerald-500 border-2 border-white dark:border-zinc-900 rounded-full shadow-lg"></div>
+                  </div>
+
+                  <div className="flex-1 min-w-0 text-center md:text-left">
+                    <div className="flex flex-col md:flex-row md:items-center gap-2 mb-0.5">
+                      <h1 className="text-xl font-black text-[#121212] dark:text-white truncate">
+                        {userProfile?.full_name || 'Administrator'}
+                      </h1>
+                      <span className="inline-flex items-center px-2 py-0.5 rounded-full text-[9px] font-black bg-purple-100 dark:bg-purple-900/30 text-purple-600 dark:text-purple-400 w-fit mx-auto md:mx-0 uppercase tracking-tighter">
+                        Admin ID: #{userProfile?.id?.slice(0, 8) || '0xAF'}
+                      </span>
                     </div>
-
-                    {/* Admin Info */}
-                    <div className="flex-1">
-                      <h2 className="text-2xl font-bold text-[#121212] dark:text-white mb-1">
-                        {userProfile?.full_name || userProfile?.email?.split('@')[0] || 'Administrator'}
-                      </h2>
-                      <p className="text-stone-500 dark:text-stone-400 flex items-center gap-2">
-                        <Shield className="h-4 w-4 text-purple-500" />
-                        System Administrator • Level 5 Clearance
-                      </p>
-                    </div>
-
-                    {/* Status Badge */}
-                    <div className="bg-emerald-50 dark:bg-emerald-900/20 border border-emerald-200 dark:border-emerald-800 px-4 py-2 rounded-lg">
-                      <div className="flex items-center gap-2">
-                        <span className="relative flex h-3 w-3">
-                          <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
-                          <span className="relative inline-flex rounded-full h-3 w-3 bg-emerald-500"></span>
-                        </span>
-                        <span className="text-sm font-bold text-emerald-700 dark:text-emerald-400">Active</span>
-                      </div>
+                    <div className="flex items-center justify-center md:justify-start gap-4 text-stone-500 dark:text-stone-400 text-[10px] font-bold uppercase tracking-wider">
+                      <span className="flex items-center gap-1.5 text-purple-500">
+                        <Shield className="h-3 w-3" /> Level 5 Clearance Node
+                      </span>
+                      <span>• Last Sync: {formatLastLogin()}</span>
                     </div>
                   </div>
 
-                  {/* Admin Details Grid */}
-                  <div className="grid md:grid-cols-2 gap-6">
-                    {/* Email */}
-                    <div className="space-y-2">
-                      <label className="block text-xs font-bold uppercase tracking-wider text-stone-400">Email Address</label>
-                      <p className="text-base font-medium text-[#121212] dark:text-white break-all">
-                        {userProfile?.email || 'admin@starset.ai'}
-                      </p>
-                    </div>
-
-                    {/* Role */}
-                    <div className="space-y-2">
-                      <label className="block text-xs font-bold uppercase tracking-wider text-stone-400">Role</label>
-                      <p className="text-base font-medium text-[#121212] dark:text-white">
-                        {userProfile?.role_text || 'Administrator'}
-                      </p>
-                    </div>
-
-                    {/* User ID */}
-                    <div className="space-y-2">
-                      <label className="block text-xs font-bold uppercase tracking-wider text-stone-400">User ID</label>
-                      <p className="text-base font-mono text-stone-600 dark:text-stone-400">
-                        {userProfile?.id?.slice(0, 16) || 'N/A'}...
-                      </p>
-                    </div>
-
-                    {/* Last Login */}
-                    <div className="space-y-2">
-                      <label className="block text-xs font-bold uppercase tracking-wider text-stone-400">Last Login</label>
-                      <p className="text-base font-medium text-[#121212] dark:text-white">
-                        {formatLastLogin()}
-                      </p>
-                    </div>
-
-                    {/* Account Created */}
-                    <div className="space-y-2">
-                      <label className="block text-xs font-bold uppercase tracking-wider text-stone-400">Account Created</label>
-                      <p className="text-base font-medium text-[#121212] dark:text-white">
-                        {userProfile?.created_at ? new Date(userProfile.created_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }) : 'N/A'}
-                      </p>
-                    </div>
-
-                    {/* Trust Score */}
-                    <div className="space-y-2">
-                      <label className="block text-xs font-bold uppercase tracking-wider text-stone-400">Trust Score</label>
-                      <p className="text-base font-bold text-emerald-500">
-                        {userProfile?.trust_score || 100}/100
-                      </p>
+                  <div className="bg-stone-50 dark:bg-white/5 border border-stone-200 dark:border-white/5 rounded-2xl p-3 px-6 text-center shadow-inner">
+                    <div className="text-[9px] font-black uppercase tracking-widest text-stone-400 mb-1">Starset Reputation</div>
+                    <div className="flex items-baseline justify-center gap-1">
+                      <span className="text-2xl font-black text-emerald-500">{userProfile?.trust_score || 100}</span>
+                      <span className="text-[10px] text-stone-400 dark:text-stone-500 font-bold">/100</span>
                     </div>
                   </div>
                 </div>
 
-                {/* Permissions Card */}
-                <div className="bg-white dark:bg-zinc-900 rounded-2xl border border-stone-200 dark:border-white/10 p-6 md:p-8 shadow-sm">
-                  <h3 className="text-lg font-bold text-[#121212] dark:text-white mb-4 flex items-center gap-2">
-                    <Shield className="h-5 w-5 text-purple-500" />
-                    Administrator Permissions
-                  </h3>
-                  <div className="grid md:grid-cols-2 gap-3">
-                    {[
-                      'Create & Manage Tasks',
-                      'View All Contributors',
-                      'Access Analytics Dashboard',
-                      'Manage Payments',
-                      'System Configuration',
-                      'User Management'
-                    ].map((permission, idx) => (
-                      <div key={idx} className="flex items-center gap-2 text-sm text-stone-600 dark:text-stone-400">
-                        <CheckCircle2 className="h-4 w-4 text-emerald-500" />
-                        {permission}
+                {/* Info Grid */}
+                <div className="grid md:grid-cols-3 gap-3">
+                  {/* Registry Details */}
+                  <div className="md:col-span-2 bg-white dark:bg-[#09090b] rounded-3xl border border-stone-200 dark:border-white/5 p-5 shadow-sm">
+                    <h3 className="text-[10px] font-black text-[#121212] dark:text-white mb-4 uppercase tracking-[0.2em] flex items-center gap-2 opacity-60">
+                      <Database className="h-3 w-3 text-purple-600 dark:text-purple-400" />
+                      Registry & System Data
+                    </h3>
+
+                    <div className="grid grid-cols-2 gap-y-4 gap-x-8">
+                      <div className="space-y-0.5">
+                        <label className="text-[8px] font-black uppercase tracking-[0.2em] text-stone-400">Biological Role</label>
+                        <p className="text-sm font-black dark:text-white uppercase">{userProfile?.role_text || 'System Administrator'}</p>
                       </div>
-                    ))}
+                      <div className="space-y-0.5">
+                        <label className="text-[8px] font-black uppercase tracking-[0.2em] text-stone-400">Security Clearance</label>
+                        <p className="text-sm font-black text-purple-500 uppercase">Level 5 (Restricted)</p>
+                      </div>
+                      <div className="space-y-0.5 min-w-0">
+                        <label className="text-[8px] font-black uppercase tracking-[0.2em] text-stone-400">Account Origin</label>
+                        <p className="text-sm font-black dark:text-white flex items-center gap-1.5 truncate uppercase">
+                          <MapPin className="h-3 w-3 text-purple-500" /> {userProfile?.created_at ? new Date(userProfile.created_at).toLocaleDateString() : 'ActiveSince_Deployment'}
+                        </p>
+                      </div>
+                      <div className="space-y-0.5 min-w-0">
+                        <label className="text-[8px] font-black uppercase tracking-[0.2em] text-stone-400">Primary Endpoint</label>
+                        <p className="text-sm font-black dark:text-white truncate lowercase opacity-80">{userProfile?.email || 'admin@starset.ai'}</p>
+                      </div>
+                    </div>
                   </div>
+
+                  {/* Permissions */}
+                  <div className="bg-white dark:bg-[#09090b] rounded-3xl border border-stone-200 dark:border-white/5 p-5 shadow-sm">
+                    <h3 className="text-[10px] font-black text-[#121212] dark:text-white mb-3 uppercase tracking-[0.2em] flex items-center gap-2 opacity-60">
+                      <Shield className="h-3 w-3 text-purple-600 dark:text-purple-400" />
+                      Privileges
+                    </h3>
+
+                    <div className="space-y-2">
+                      {[
+                        'Task Creation',
+                        'User Compliance',
+                        'Payout Validation',
+                        'System Config'
+                      ].map((perm, i) => (
+                        <div key={i} className="flex items-center gap-2 p-1.5 bg-stone-50 dark:bg-white/5 rounded-lg border border-stone-100 dark:border-white/5">
+                          <CheckCircle2 className="h-3 w-3 text-emerald-500 flex-shrink-0" />
+                          <span className="text-[9px] font-black uppercase tracking-tight opacity-80">{perm}</span>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+
+                {/* Small Danger Zone Footer */}
+                <div className="bg-red-50/20 dark:bg-red-950/5 rounded-2xl border border-red-100/50 dark:border-red-900/10 p-3 px-5 flex items-center justify-between">
+                  <div className="flex items-center gap-3">
+                    <ShieldAlert className="h-3.5 w-3.5 text-red-600/40 dark:text-red-500/30" />
+                    <span className="text-[10px] font-bold text-red-700/50 dark:text-red-400/30 uppercase tracking-tighter">System Access Resignation Protocol</span>
+                  </div>
+                  <button
+                    className="text-[9px] font-black text-red-600/80 hover:text-red-700 hover:underline transition-colors uppercase tracking-widest"
+                    onClick={() => window.confirm("Terminate admin access? Contact root@starset.ai") && alert("Contact root.")}
+                  >
+                    Initiate Removal
+                  </button>
                 </div>
               </div>
             );
@@ -683,7 +676,7 @@ const App: React.FC = () => {
           return <Earnings />;
         case 'guidelines':
           return (
-            <div className="bg-white/70 dark:bg-black/40 backdrop-blur-md p-6 md:p-10 rounded-2xl border border-stone-200 dark:border-white/10 shadow-sm max-w-4xl animate-in fade-in duration-500">
+            <div className="bg-white/70 dark:bg-black/40 backdrop-blur-md p-6 md:p-10 rounded-2xl border border-stone-200 dark:border-white/10 shadow-sm max-w-4xl">
               <h1 className="text-2xl md:text-3xl font-bold mb-8 text-[#121212] dark:text-white">Quality Guidelines</h1>
               <p className="mb-8 text-base md:text-lg text-stone-600 dark:text-stone-300 leading-relaxed">Strict adherence to these guidelines is required for payout. Violations may result in account suspension.</p>
               <div className="grid md:grid-cols-2 gap-6">
@@ -700,7 +693,7 @@ const App: React.FC = () => {
           );
         case 'support':
           return (
-            <div className="bg-white/70 dark:bg-black/40 backdrop-blur-md p-6 md:p-10 rounded-2xl border border-stone-200 dark:border-white/10 shadow-sm max-w-3xl animate-in fade-in duration-500">
+            <div className="bg-white/70 dark:bg-black/40 backdrop-blur-md p-6 md:p-10 rounded-2xl border border-stone-200 dark:border-white/10 shadow-sm max-w-3xl">
               <h1 className="text-2xl md:text-3xl font-bold mb-4 text-[#121212] dark:text-white">Support</h1>
               <p className="text-stone-600 dark:text-stone-300 mb-10 text-lg">Need help? Submit a ticket below.</p>
               <form className="space-y-8">
@@ -736,79 +729,103 @@ const App: React.FC = () => {
           };
 
           return (
-            <div className="space-y-6 animate-in fade-in duration-500">
-              <h1 className="text-2xl md:text-3xl font-bold mb-6 text-[#121212] dark:text-white flex items-center gap-3">
-                <div className="h-2 w-2 rounded-full bg-blue-500 shadow-[0_0_10px_#3b82f6]"></div>
-                Contributor ID: <span className="text-blue-500">#{userProfile?.contributor_id || '101'}</span>
-              </h1>
+            <div className="max-w-6xl mx-auto space-y-3 h-full flex flex-col justify-center pb-2">
+              {/* Profile Header Block */}
+              <div className="flex flex-col md:flex-row items-center gap-5 bg-white dark:bg-[#09090b] rounded-3xl border border-stone-200 dark:border-white/5 p-4 shadow-lg relative overflow-hidden">
+                <div className="absolute top-0 right-0 w-32 h-32 bg-blue-500/5 rounded-full blur-3xl"></div>
 
-              {/* Profile Header */}
-              <div className="bg-white dark:bg-zinc-900 rounded-2xl border border-stone-200 dark:border-white/10 p-6 md:p-8 flex flex-col md:flex-row items-center gap-8 shadow-sm">
-                <div className="h-24 w-24 bg-stone-100 dark:bg-white/10 rounded-full flex items-center justify-center text-3xl font-bold text-stone-500 dark:text-white">
+                <div className="relative h-16 w-16 bg-stone-100 dark:bg-zinc-800 rounded-full flex items-center justify-center text-xl font-black text-stone-500 dark:text-white border-2 border-white dark:border-zinc-900 shadow-inner flex-shrink-0">
                   {getInitials(userProfile?.full_name || userProfile?.email || 'User')}
+                  <div className="absolute bottom-0 right-0 h-4 w-4 bg-emerald-500 border-2 border-white dark:border-zinc-900 rounded-full shadow-lg"></div>
                 </div>
-                <div className="flex-1 text-center md:text-left">
-                  <h2 className="text-2xl font-bold text-[#121212] dark:text-white">
-                    {userProfile?.full_name || userProfile?.email?.split('@')[0] || 'User'}
-                  </h2>
-                  <p className="text-stone-500 dark:text-stone-400 flex items-center justify-center md:justify-start gap-2 mt-1">
-                    <Shield className="h-4 w-4 text-emerald-500" />
-                    Verified Contributor • Joined {formatDate(userProfile?.created_at)}
-                  </p>
-                </div>
-                <div className="text-center md:text-right w-full md:w-auto border-t md:border-t-0 border-stone-100 dark:border-white/5 pt-4 md:pt-0">
-                  <div className="text-xs font-bold uppercase tracking-wider text-stone-400 mb-1">Trust Score</div>
-                  <div className="text-3xl font-bold text-emerald-500">{userProfile?.trust_score || 100}/100</div>
-                </div>
-              </div>
 
-              <div className="grid md:grid-cols-2 gap-6">
-                {/* Demographics */}
-                <div className="bg-white dark:bg-zinc-900 rounded-2xl border border-stone-200 dark:border-white/10 p-6 md:p-8 shadow-sm">
-                  <h3 className="text-lg font-bold text-[#121212] dark:text-white mb-6 flex items-center gap-2">
-                    <User className="h-5 w-5 text-blue-500" /> Demographics
-                  </h3>
-                  <div className="space-y-6">
-                    <div className="grid grid-cols-2 gap-4">
-                      <div>
-                        <label className="block text-xs font-bold uppercase tracking-wider text-stone-400 mb-1">Age</label>
-                        <p className="text-base font-medium text-[#121212] dark:text-white">{userProfile?.age || 'Not set'}</p>
-                      </div>
-                      <div>
-                        <label className="block text-xs font-bold uppercase tracking-wider text-stone-400 mb-1">Gender</label>
-                        <p className="text-base font-medium text-[#121212] dark:text-white">{userProfile?.gender || 'Not set'}</p>
-                      </div>
-                    </div>
-                    <div className="grid grid-cols-2 gap-4">
-                      <div>
-                        <label className="block text-xs font-bold uppercase tracking-wider text-stone-400 mb-1">City</label>
-                        <p className="text-base font-medium text-[#121212] dark:text-white flex items-center gap-2">
-                          <MapPin className="h-4 w-4 text-stone-400" /> {userProfile?.city || 'Not set'}
-                        </p>
-                      </div>
-                      <div>
-                        <label className="block text-xs font-bold uppercase tracking-wider text-stone-400 mb-1">State</label>
-                        <p className="text-base font-medium text-[#121212] dark:text-white">{userProfile?.state || 'Not set'}</p>
-                      </div>
-                    </div>
-                    <div>
-                      <label className="block text-xs font-bold uppercase tracking-wider text-stone-400 mb-1">Email</label>
-                      <p className="text-base font-medium text-[#121212] dark:text-white break-all">{userProfile?.email || 'Not available'}</p>
-                    </div>
-                    <div>
-                      <label className="block text-xs font-bold uppercase tracking-wider text-stone-400 mb-1">UPI ID</label>
-                      <p className="text-base font-medium text-[#121212] dark:text-white">{userProfile?.upi_id || 'Not set'}</p>
-                    </div>
+                <div className="flex-1 min-w-0 text-center md:text-left">
+                  <div className="flex flex-col md:flex-row md:items-center gap-2 mb-0.5">
+                    <h1 className="text-xl font-black text-[#121212] dark:text-white truncate">
+                      {userProfile?.full_name || 'Contributor'}
+                    </h1>
+                    <span className="inline-flex items-center px-2 py-0.5 rounded-full text-[9px] font-black bg-blue-100 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400 w-fit mx-auto md:mx-0 uppercase">
+                      Node ID: #{userProfile?.contributor_id || '101'}
+                    </span>
+                  </div>
+                  <div className="flex items-center justify-center md:justify-start gap-4 text-stone-500 dark:text-stone-400 text-[10px] font-bold uppercase tracking-wider">
+                    <span className="flex items-center gap-1.5 text-emerald-500">
+                      <Shield className="h-3 w-3" /> Active Security Node
+                    </span>
+                    <span>• Sync Date: {formatDate(userProfile?.created_at)}</span>
+                  </div>
+                </div>
+
+                <div className="bg-stone-50 dark:bg-white/5 border border-stone-200 dark:border-white/5 rounded-2xl p-3 px-6 text-center shadow-inner">
+                  <div className="text-[9px] font-black uppercase tracking-widest text-stone-400 mb-1">Starset Reputation</div>
+                  <div className="flex items-baseline justify-center gap-1">
+                    <span className="text-2xl font-black text-emerald-500">{userProfile?.trust_score || 100}</span>
+                    <span className="text-[10px] text-stone-400 dark:text-stone-500 font-bold">/100</span>
                   </div>
                 </div>
               </div>
 
-              <div className="pt-8 border-t border-stone-200 dark:border-white/10 flex justify-end pb-20 md:pb-0">
+              {/* Info Grid */}
+              <div className="grid md:grid-cols-3 gap-3">
+                {/* Demographics */}
+                <div className="md:col-span-2 bg-white dark:bg-[#09090b] rounded-3xl border border-stone-200 dark:border-white/5 p-5 shadow-sm">
+                  <h3 className="text-[10px] font-black text-[#121212] dark:text-white mb-4 uppercase tracking-[0.2em] flex items-center gap-2 opacity-60">
+                    <User className="h-3 w-3 text-blue-600 dark:text-blue-400" />
+                    Biometric & Regional Data
+                  </h3>
+
+                  <div className="grid grid-cols-2 gap-y-4 gap-x-8">
+                    <div className="space-y-0.5">
+                      <label className="text-[8px] font-black uppercase tracking-[0.2em] text-stone-400">Biological Age</label>
+                      <p className="text-sm font-black dark:text-white uppercase">{userProfile?.age || 'Unspecified'}</p>
+                    </div>
+                    <div className="space-y-0.5">
+                      <label className="text-[8px] font-black uppercase tracking-[0.2em] text-stone-400">Gender Identity</label>
+                      <p className="text-sm font-black dark:text-white uppercase">{userProfile?.gender || 'Unspecified'}</p>
+                    </div>
+                    <div className="space-y-0.5 min-w-0">
+                      <label className="text-[8px] font-black uppercase tracking-[0.2em] text-stone-400">Geo Location</label>
+                      <p className="text-sm font-black dark:text-white flex items-center gap-1.5 truncate uppercase">
+                        <MapPin className="h-3 w-3 text-blue-500" /> {userProfile?.city || 'City'}, {userProfile?.state || 'State'}
+                      </p>
+                    </div>
+                    <div className="space-y-0.5 min-w-0">
+                      <label className="text-[8px] font-black uppercase tracking-[0.2em] text-stone-400">Validated Endpoint</label>
+                      <p className="text-sm font-black dark:text-white truncate lowercase opacity-80">{userProfile?.email || 'N/A'}</p>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Finance */}
+                <div className="bg-white dark:bg-[#09090b] rounded-3xl border border-stone-200 dark:border-white/5 p-5 shadow-sm">
+                  <h3 className="text-[10px] font-black text-[#121212] dark:text-white mb-4 uppercase tracking-[0.2em] flex items-center gap-2 opacity-60">
+                    <CreditCard className="h-3 w-3 text-emerald-600 dark:text-emerald-400" />
+                    Compensation Hub
+                  </h3>
+
+                  <div className="space-y-4">
+                    <div className="p-3 bg-stone-50 dark:bg-white/5 rounded-xl border border-stone-100 dark:border-white/5">
+                      <label className="text-[8px] font-black uppercase tracking-[0.2em] text-stone-400 mb-1 block">Active UPI Gateway</label>
+                      <p className="text-sm font-black text-blue-600 dark:text-blue-400 truncate tracking-tight">{userProfile?.upi_id || 'Not Linked'}</p>
+                    </div>
+                    <Button variant="secondary" size="sm" className="w-full text-[10px] font-black h-8 bg-zinc-100 hover:bg-zinc-200 dark:bg-white/10 dark:hover:bg-white/20 border-transparent transition-all uppercase tracking-widest" onClick={() => setCurrentPage('earnings')}>
+                      Reset Method
+                    </Button>
+                  </div>
+                </div>
+              </div>
+
+              {/* Small Danger Zone Footer */}
+              <div className="bg-red-50/20 dark:bg-red-950/5 rounded-2xl border border-red-100/50 dark:border-red-900/10 p-3 px-5 flex items-center justify-between">
+                <div className="flex items-center gap-3">
+                  <ShieldAlert className="h-3.5 w-3.5 text-red-600/40 dark:text-red-500/30" />
+                  <span className="text-[10px] font-bold text-red-700/50 dark:text-red-400/30 uppercase tracking-tighter">Emergency Account Termination Protocol</span>
+                </div>
                 <button
-                  className="text-red-600 font-medium text-base hover:underline hover:text-red-700 transition-colors w-full md:w-auto text-center"
-                  onClick={() => alert("Contact support to delete account.")}
+                  className="text-[9px] font-black text-red-600/80 hover:text-red-700 hover:underline transition-colors uppercase tracking-widest"
+                  onClick={() => window.confirm("Terminate account? Contact support@starset.ai") && alert("Contact support.")}
                 >
-                  Delete Account
+                  Initiate Removal
                 </button>
               </div>
             </div>

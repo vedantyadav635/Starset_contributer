@@ -18,7 +18,6 @@ export const Signup: React.FC<SignupProps> = ({ onLogin, onSwitchToLogin, onBack
   const [formData, setFormData] = useState({
     name: '',
     email: '',
-    language: 'English',
     password: ''
   });
 
@@ -26,7 +25,7 @@ export const Signup: React.FC<SignupProps> = ({ onLogin, onSwitchToLogin, onBack
     e.preventDefault();
     setIsLoading(true);
 
-    const { email, password, name, language } = formData;
+    const { email, password, name } = formData;
 
     try {
       // Step 1: Create auth user
@@ -35,8 +34,7 @@ export const Signup: React.FC<SignupProps> = ({ onLogin, onSwitchToLogin, onBack
         password,
         options: {
           data: {
-            full_name: name,
-            language: language
+            full_name: name
           }
         }
       });
@@ -156,20 +154,6 @@ export const Signup: React.FC<SignupProps> = ({ onLogin, onSwitchToLogin, onBack
                 />
               </div>
 
-              <div className="relative group">
-                <Globe className="absolute top-3.5 left-4 h-5 w-5 text-zinc-400 group-focus-within:text-blue-500 transition-colors" />
-                <select
-                  className="w-full pl-12 pr-4 py-3 border border-zinc-300 dark:border-white/10 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500 transition-all bg-white/50 dark:bg-black/20 text-zinc-900 dark:text-white appearance-none"
-                  value={formData.language}
-                  onChange={(e) => setFormData({ ...formData, language: e.target.value })}
-                >
-                  <option>English</option>
-                  <option>Spanish</option>
-                  <option>Hindi</option>
-                  <option>Mandarin</option>
-                  <option>French</option>
-                </select>
-              </div>
 
               <div className="relative group">
                 <Lock className="absolute top-3.5 left-4 h-5 w-5 text-zinc-400 group-focus-within:text-blue-500 transition-colors" />

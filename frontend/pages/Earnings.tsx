@@ -126,12 +126,17 @@ export const Earnings: React.FC = () => {
 
               <div className="mt-auto space-y-4">
                 <Button
-                  className="w-full bg-white text-black hover:bg-zinc-200 border-none shadow-[0_0_20px_rgba(255,255,255,0.3)] h-12 text-lg font-bold"
+                  className="w-full bg-white text-black hover:bg-zinc-200 border-none shadow-[0_0_20px_rgba(255,255,255,0.3)] h-12 text-lg font-bold disabled:opacity-70 disabled:cursor-not-allowed"
                   onClick={handleWithdraw}
                   isLoading={isWithdrawLoading}
+                  disabled={true}
                 >
                   Initiate Transfer
                 </Button>
+                <div className="flex items-center gap-2 justify-center px-4 py-2 bg-red-500/10 border border-red-500/20 rounded-xl text-[10px] font-black uppercase tracking-widest text-red-400">
+                  <span className="h-2 w-2 rounded-full bg-red-500 animate-pulse flex-shrink-0"></span>
+                  System Note: Automatic Payouts Disabled. Payments are being handled manually.
+                </div>
                 <div className="flex justify-between text-xs text-zinc-500 font-mono">
                   <span>{userName}</span>
                   <span>{transactions.length} submissions</span>
