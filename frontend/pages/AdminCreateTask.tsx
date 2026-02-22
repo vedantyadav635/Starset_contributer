@@ -2,8 +2,7 @@ import React, { useState } from 'react';
 import { Button } from '../components/Button';
 import { Task, TaskType, TaskStatus } from '../types';
 import { Save, AlertCircle, Sparkles } from 'lucide-react';
-import { supabase } from "../supabaseClient";
-import { API_ENDPOINTS } from '../config/api';
+import { supabase } from '../supabaseClient';
 
 
 interface AdminCreateTaskProps {
@@ -53,29 +52,22 @@ export const AdminCreateTask: React.FC<AdminCreateTaskProps> = ({ onSave }) => {
     };
 
     try {
+      const { data: createdTask, error } = await supabase
+        .from('tasks')
+        .insert([newTask])
+        .select()
+        .single();
 
-
-
-      const res = await fetch(API_ENDPOINTS.ADMIN_TASKS, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(newTask),
-      });
-
-      if (!res.ok) {
-        const errorText = await res.text();
-        console.error("Server Error:", errorText);
-        throw new Error(errorText || "Failed to create task");
+      if (error) {
+        console.error('Supabase insert error:', error);
+        throw new Error(error.message || 'Failed to save task to database');
       }
-      const createdTask = await res.json();
-      onSave(createdTask);
 
-      alert("Task published successfully!");
+      onSave(createdTask);
+      alert('Task published successfully!');
     } catch (err: any) {
-      console.error("Task Creation Error:", err);
-      alert(`Error: ${err.message || "An unexpected error occurred"}`);
+      console.error('Task Creation Error:', err);
+      alert(`Error: ${err.message || 'An unexpected error occurred'}`);
     } finally {
       setIsLoading(false);
     }

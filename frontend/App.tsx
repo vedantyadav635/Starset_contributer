@@ -146,27 +146,21 @@ const App: React.FC = () => {
   }, []);
 
   /**
-   * EFFECT 1: Fetch all tasks from backend on component mount
-   * Runs once when the app loads (empty dependency array [])
-   * Loads tasks from the Express backend API
+   * EFFECT 1: Fetch all tasks directly from Supabase (bypasses backend)
+   * This avoids the Render free-tier sleep problem.
    */
   useEffect(() => {
     const fetchTasks = async () => {
       try {
-        // Import API config dynamically
-        const { API_ENDPOINTS } = await import('./config/api');
+        const { data, error } = await supabase
+          .from('tasks')
+          .select('*')
+          .order('created_at', { ascending: false });
 
-        // Call backend API to get all tasks
-        const res = await fetch(API_ENDPOINTS.ADMIN_TASKS);
+        if (error) throw error;
 
-        if (!res.ok) {
-          throw new Error("Failed to fetch tasks");
-        }
-
-        const data = await res.json();
-
-        // Map snake_case API response to camelCase frontend Task interface
-        const mappedTasks: Task[] = data.map((t: any) => ({
+        // Map snake_case DB columns to camelCase Task interface
+        const mappedTasks: Task[] = (data || []).map((t: any) => ({
           id: t.id,
           title: t.title,
           type: t.type,
@@ -188,34 +182,33 @@ const App: React.FC = () => {
         }));
 
         setTasks(mappedTasks);
-        console.log(`✅ Loaded ${data.length} tasks from backend`);
+        console.log(`✅ Loaded ${mappedTasks.length} tasks from Supabase directly`);
       } catch (err) {
-        console.error("Error fetching tasks:", err);
+        console.error('Error fetching tasks from Supabase:', err);
       }
     };
 
     fetchTasks();
-  }, []); // Empty array = run once on mount
+  }, []);
 
   /**
-   * EFFECT: Fetch user's completed tasks when user logs in
-   * Runs when authentication state changes
+   * EFFECT: Fetch user's completed tasks directly from Supabase
    */
   useEffect(() => {
     const fetchCompletedTasks = async () => {
       if (isAuthenticated && userProfile) {
         try {
-          // Get current user from Supabase
           const { data: { user } } = await supabase.auth.getUser();
-
           if (user) {
-            const { API_ENDPOINTS } = await import('./config/api');
-            const res = await fetch(API_ENDPOINTS.USER_SUBMISSIONS(user.id));
+            const { data, error } = await supabase
+              .from('submissions')
+              .select('task_id')
+              .eq('user_id', user.id);
 
-            if (res.ok) {
-              const data = await res.json();
-              setCompletedTaskIds(data.completedTasks || []);
-              console.log(`✅ User has completed ${data.completedTasks?.length || 0} tasks`);
+            if (!error && data) {
+              const ids = data.map((s: any) => s.task_id).filter(Boolean);
+              setCompletedTaskIds(ids);
+              console.log(`✅ User completed ${ids.length} tasks`);
             }
           }
         } catch (err) {

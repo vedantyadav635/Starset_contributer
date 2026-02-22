@@ -10,7 +10,6 @@ import {
 } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 import { supabase } from '../supabaseClient';
-import { API_ENDPOINTS } from '../config/api';
 
 interface DashboardProps {
   onNavigate: (page: PageView) => void;
@@ -34,31 +33,41 @@ export const Dashboard: React.FC<DashboardProps> = ({ onNavigate }) => {
   const [statsLoading, setStatsLoading] = useState(true);
   const [userName, setUserName] = useState('Contributor');
 
-  // Fetch user-specific stats
+  // Fetch user-specific stats directly from Supabase
   useEffect(() => {
     const fetchUserStats = async () => {
       try {
         const { data: { user: authUser } } = await supabase.auth.getUser();
         if (authUser) {
-          // Fetch stats
-          const response = await fetch(API_ENDPOINTS.USER_STATS(authUser.id));
-          if (response.ok) {
-            const data = await response.json();
-            setStats(data);
+          // Fetch all user submissions in one query
+          const { data: submissions } = await supabase
+            .from('submissions')
+            .select('status')
+            .eq('user_id', authUser.id);
+
+          if (submissions) {
+            const total = submissions.length;
+            const accepted = submissions.filter((s: any) =>
+              ['accepted', 'validated', 'approved'].includes(s.status)
+            ).length;
+            const inValidation = submissions.filter((s: any) =>
+              ['pending_validation', 'pending', 'submitted'].includes(s.status)
+            ).length;
+            const rate = total > 0 ? ((accepted / total) * 100).toFixed(1) + '%' : '0.0%';
+
+            setStats({ totalSubmissions: total, inValidation, accepted, acceptanceRate: rate });
           }
 
           // Fetch profile name
           const { data: profile } = await supabase
-            .from("profiles")
-            .select("full_name")
-            .eq("id", authUser.id)
+            .from('profiles')
+            .select('full_name')
+            .eq('id', authUser.id)
             .single();
-          if (profile?.full_name) {
-            setUserName(profile.full_name);
-          }
+          if (profile?.full_name) setUserName(profile.full_name);
         }
       } catch (error) {
-        console.error("Error fetching user stats:", error);
+        console.error('Error fetching user stats:', error);
       } finally {
         setStatsLoading(false);
       }

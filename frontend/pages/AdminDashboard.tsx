@@ -4,7 +4,6 @@ import { Button } from '../components/Button';
 import { supabase } from "../supabaseClient";
 import { useEffect, useState } from "react";
 import { TaskList } from "./TaskList";
-import { API_ENDPOINTS } from "../config/api";
 
 import {
    Users,
@@ -40,19 +39,26 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onNavigate, task
    const [tasks, setTasks] = useState<Task[]>([]);
    const [loading, setLoading] = useState(true);
 
-   // Fetch real stats from backend
+   // Fetch real stats directly from Supabase (bypasses sleeping backend)
    useEffect(() => {
       const fetchStats = async () => {
          try {
-            const response = await fetch(API_ENDPOINTS.ADMIN_STATS);
-            if (response.ok) {
-               const data = await response.json();
-               setStats(data);
-            } else {
-               console.error("Failed to fetch stats:", response.statusText);
-            }
+            // Run all counts in parallel
+            const [usersRes, activeTasksRes, subsRes, deletedRes] = await Promise.all([
+               supabase.from('profiles').select('*', { count: 'exact', head: true }),
+               supabase.from('tasks').select('*', { count: 'exact', head: true }).in('status', ['AVAILABLE', 'Available', 'active', 'In Progress']),
+               supabase.from('submissions').select('*', { count: 'exact', head: true }),
+               supabase.from('tasks').select('*', { count: 'exact', head: true }).in('status', ['deleted', 'discarded', 'flagged']),
+            ]);
+
+            setStats({
+               totalUsers: usersRes.count || 0,
+               activeTasks: activeTasksRes.count || 0,
+               totalSubmissions: subsRes.count || 0,
+               deletedTasks: deletedRes.count || 0,
+            });
          } catch (error) {
-            console.error("Error fetching stats:", error);
+            console.error('Error fetching admin stats:', error);
          } finally {
             setStatsLoading(false);
          }
