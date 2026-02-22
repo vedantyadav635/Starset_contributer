@@ -15,8 +15,8 @@ export const TaskList: React.FC<TaskListProps> = ({ onSelectTask, tasks, userRol
 
   const filteredTasks = tasks
     .filter(task => {
-      const status = (task.status as string || '').toUpperCase();
-      return status === 'AVAILABLE';
+      const status = (task.status as string || '').trim().toUpperCase();
+      return status === 'AVAILABLE' || status === 'ACTIVE';
     })
     .filter(task =>
       filterType === "All" ? true : task.type === filterType
