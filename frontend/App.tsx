@@ -745,7 +745,7 @@ const App: React.FC = () => {
           return (
             <div className="space-y-6 animate-in fade-in duration-500">
               <h1 className="text-2xl md:text-3xl font-bold mb-6 text-[#121212] dark:text-white">
-                Contributor ID: {userProfile?.id?.slice(0, 8) || 'Loading...'}
+                Contributor ID: {userProfile?.contributor_id || userProfile?.id?.slice(0, 8) || 'Loading...'}
               </h1>
 
               {/* Profile Header */}

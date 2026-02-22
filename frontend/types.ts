@@ -33,7 +33,7 @@ export interface Task {
   aiCapability: string; // What AI model this trains
   dataUsage: string; // Consent scope
   // Content for execution
-  prompt: string; 
+  prompt: string;
   options?: string[];
   // New Project Fields
   project: string; // The parent project/campaign name
@@ -52,6 +52,7 @@ export interface Transaction {
 
 export interface UserProfile {
   id: string;
+  contributor_id?: number;
   name: string;
   email: string;
   age: number;
