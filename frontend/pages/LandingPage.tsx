@@ -64,7 +64,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onEnterApp, onStartSig
                      </div>
                   </div>
 
-                  <h1 className="text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-extrabold tracking-tight leading-[1.1] text-zinc-900 dark:text-white relative drop-shadow-2xl">
+                  <h1 className="text-4xl sm:text-6xl md:text-7xl lg:text-8xl font-extrabold tracking-tight leading-[1.1] text-zinc-900 dark:text-white relative drop-shadow-2xl">
                      Make Money <br />
                      <span className="text-transparent bg-clip-text bg-gradient-to-r from-purple-600 via-blue-500 to-cyan-400 dark:from-purple-400 dark:via-blue-400 dark:to-cyan-300 bg-[length:200%_auto] animate-marquee">
                         Teaching AI.
@@ -550,29 +550,29 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onEnterApp, onStartSig
             <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-indigo-500/10 rounded-full blur-[120px] animate-pulse"></div>
 
             <div className="max-w-5xl mx-auto text-center relative z-10 transform-style-3d">
-               <div className="inline-flex items-center gap-2 px-6 py-2 rounded-full bg-white/5 border border-white/10 text-sm font-medium text-indigo-300 mb-10 backdrop-blur-sm animate-float">
+               <div className="inline-flex items-center gap-2 px-6 py-2 rounded-full bg-white/5 border border-white/10 text-xs md:text-sm font-medium text-indigo-300 mb-10 backdrop-blur-sm animate-float">
                   <TrendingUp className="h-5 w-5" /> HIGH DEMAND FOR NEW CONTRIBUTORS
                </div>
 
-               <h2 className="text-5xl md:text-8xl font-black mb-10 text-white tracking-tighter leading-none drop-shadow-[0_0_30px_rgba(255,255,255,0.2)]">
+               <h2 className="text-4xl md:text-8xl font-black mb-10 text-white tracking-tighter leading-none drop-shadow-[0_0_30px_rgba(255,255,255,0.2)] px-2">
                   Your <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 via-indigo-400 to-purple-400">Digital Wallet</span> <br />
                   Is Waiting.
                </h2>
 
-               <p className="text-xl md:text-2xl text-zinc-400 mb-16 max-w-2xl mx-auto leading-relaxed px-4">
+               <p className="text-lg md:text-2xl text-zinc-400 mb-16 max-w-2xl mx-auto leading-relaxed px-6">
                   Join the workforce of tomorrow. Start earning real money for simple digital tasks today. No interviews, no resume, just results.
                </p>
 
-               <div className="flex flex-col sm:flex-row gap-8 justify-center items-center">
+               <div className="flex flex-col sm:flex-row gap-6 justify-center items-center px-6">
                   <button
                      onClick={onStartSignup}
-                     className="group relative px-12 py-6 bg-white text-black font-black text-2xl rounded-full hover:scale-105 transition-all duration-300 shadow-[0_0_60px_rgba(255,255,255,0.2)] w-full sm:w-auto hover:shadow-[0_0_80px_rgba(255,255,255,0.4)]"
+                     className="group relative px-10 py-5 bg-white text-black font-black text-xl md:text-2xl rounded-full hover:scale-105 transition-all duration-300 shadow-[0_0_60px_rgba(255,255,255,0.2)] w-full sm:w-auto hover:shadow-[0_0_80px_rgba(255,255,255,0.4)]"
                   >
                      Start Earning Now
                      <div className="absolute -inset-1 bg-gradient-to-r from-blue-400 to-purple-400 rounded-full blur opacity-20 group-hover:opacity-40 transition duration-200"></div>
                   </button>
 
-                  <button onClick={() => onNavigate('money')} className="text-zinc-400 hover:text-white font-bold text-lg flex items-center gap-2 transition-colors hover:underline decoration-blue-500 underline-offset-4">
+                  <button onClick={() => onNavigate('money')} className="text-zinc-400 hover:text-white font-bold text-base md:text-lg flex items-center gap-2 transition-colors hover:underline decoration-blue-500 underline-offset-4">
                      View Payment Rates <ArrowRight className="h-5 w-5" />
                   </button>
                </div>

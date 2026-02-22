@@ -108,6 +108,15 @@ export function SmoothCursor({
   })
 
   useEffect(() => {
+    // 📱 Mobile/Touch Device Detection
+    const isTouchDevice = window.matchMedia("(pointer: coarse)").matches ||
+      'ontouchstart' in window ||
+      navigator.maxTouchPoints > 0;
+
+    if (isTouchDevice) {
+      return;
+    }
+
     const updateVelocity = (currentPos: Position) => {
       const currentTime = Date.now()
       const deltaTime = currentTime - lastUpdateTime.current
@@ -166,6 +175,11 @@ export function SmoothCursor({
       document.body.style.cursor = "auto"
     }
   }, [cursorX, cursorY, rotation, scale])
+
+  // Don't render component on touch devices
+  if (typeof window !== 'undefined' && (window.matchMedia("(pointer: coarse)").matches || 'ontouchstart' in window || navigator.maxTouchPoints > 0)) {
+    return null;
+  }
 
   return (
     <motion.div

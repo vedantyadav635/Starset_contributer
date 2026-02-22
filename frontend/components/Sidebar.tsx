@@ -104,10 +104,10 @@ export const Sidebar: React.FC<SidebarProps> = ({
           </div>
 
           {/* Navigation */}
-          <nav className={`flex-1 ${isCollapsed ? 'px-2' : 'px-4'} py-8 space-y-1 overflow-y-auto overflow-x-hidden`}>
+          <nav className={`flex-1 ${isCollapsed ? 'px-2' : 'px-4'} py-6 space-y-1.5 overflow-y-auto overflow-x-hidden no-scrollbar`}>
             {!isCollapsed && (
-              <div className="px-4 mb-3 text-[11px] font-bold uppercase text-zinc-400 dark:text-zinc-500 tracking-widest truncate">
-                {userRole === 'admin' ? 'Management Console' : 'Console'}
+              <div className="px-4 mb-3 text-[10px] font-black uppercase text-zinc-400 dark:text-zinc-500 tracking-[0.2em] opacity-60">
+                {userRole === 'admin' ? 'Strategic Command' : 'Operation Center'}
               </div>
             )}
             {navItems.map((item) => {
@@ -120,15 +120,19 @@ export const Sidebar: React.FC<SidebarProps> = ({
                     setIsMobileOpen(false);
                   }}
                   className={`
-                    w-full flex items-center ${isCollapsed ? 'justify-center' : 'px-4'} py-3 text-sm font-medium rounded-lg transition-all duration-200 group
+                    w-full flex items-center ${isCollapsed ? 'justify-center py-4' : 'px-4 py-3'} text-sm font-bold rounded-2xl transition-all duration-300 group relative
                     ${isActive
-                      ? 'bg-blue-50 dark:bg-blue-500/10 text-blue-600 dark:text-blue-400 shadow-sm ring-1 ring-zinc-200 dark:ring-transparent'
-                      : 'hover:bg-zinc-100 dark:hover:bg-white/5 text-zinc-600 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-zinc-200'}
+                      ? 'bg-blue-600 dark:bg-blue-500 text-white shadow-[0_10px_20px_-5px_rgba(37,99,235,0.4)] scale-[1.02]'
+                      : 'hover:bg-zinc-100 dark:hover:bg-white/5 text-zinc-500 dark:text-zinc-500 hover:text-zinc-900 dark:hover:text-white'}
                   `}
                   title={isCollapsed ? item.label : ''}
                 >
-                  <item.icon className={`${isCollapsed ? '' : 'mr-4'} h-5 w-5 ${isActive ? 'text-blue-600 dark:text-blue-400' : 'text-zinc-400 group-hover:text-zinc-500 dark:group-hover:text-zinc-300'}`} strokeWidth={2} />
-                  {!isCollapsed && <span className="truncate">{item.label}</span>}
+                  <item.icon className={`${isCollapsed ? '' : 'mr-4'} h-5 w-5 transition-transform duration-300 ${isActive ? 'scale-110' : 'group-hover:scale-110 group-hover:text-zinc-900 dark:group-hover:text-white'}`} strokeWidth={isActive ? 3 : 2} />
+                  {!isCollapsed && <span className="truncate tracking-tight">{item.label}</span>}
+
+                  {isActive && !isCollapsed && (
+                    <div className="absolute right-3 w-1.5 h-1.5 bg-white rounded-full"></div>
+                  )}
                 </button>
               );
             })}

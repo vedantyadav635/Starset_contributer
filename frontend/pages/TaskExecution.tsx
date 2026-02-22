@@ -327,17 +327,21 @@ export const TaskExecution: React.FC<TaskExecutionProps> = ({ task, onBack, onCo
         </button>
 
         <div className="bg-white dark:bg-zinc-900 rounded-3xl border border-stone-200 dark:border-white/10 shadow-xl shadow-stone-200/50 dark:shadow-none overflow-hidden">
-          <div className="px-4 md:px-6 py-3 md:py-4 border-b border-stone-100 dark:border-white/5 flex flex-col md:flex-row justify-between items-start md:items-center bg-[#FAF9F7] dark:bg-white/5 gap-3">
-            <div>
-              <h2 className="text-xl md:text-2xl font-bold text-[#121212] dark:text-white leading-tight">{task.title}</h2>
-              <div className="flex flex-wrap items-center mt-2 gap-2 text-sm text-stone-500">
-                <span className="flex items-center bg-white dark:bg-black px-3 py-1 rounded border border-stone-200 dark:border-white/10 shadow-sm font-medium"><Info className="h-4 w-4 mr-2 text-blue-600 dark:text-blue-400" /> {task.type}</span>
-                <span className="font-mono text-xs text-stone-400">OP_ID: {task.id}</span>
+          <div className="px-5 md:px-8 py-4 md:py-6 border-b border-stone-100 dark:border-white/5 flex flex-col md:flex-row justify-between items-start md:items-center bg-[#FAF9F7] dark:bg-white/5 gap-4">
+            <div className="flex-1 w-full">
+              <div className="flex items-center gap-2 mb-1">
+                <span className="px-2 py-0.5 bg-blue-500/10 text-blue-600 dark:text-blue-400 text-[10px] font-bold uppercase tracking-wider rounded border border-blue-500/20">Active Operation</span>
+                <span className="font-mono text-[10px] text-stone-400"># {task.id.slice(0, 8)}</span>
+              </div>
+              <h2 className="text-xl md:text-3xl font-black text-[#121212] dark:text-white leading-tight tracking-tight">{task.title}</h2>
+              <div className="flex flex-wrap items-center mt-3 gap-2 text-sm text-stone-500">
+                <span className="flex items-center bg-white dark:bg-black/40 px-3 py-1.5 rounded-lg border border-stone-200 dark:border-white/10 shadow-sm font-bold text-xs"><Info className="h-3.5 w-3.5 mr-2 text-blue-600 dark:text-blue-400" /> {task.type}</span>
+                <span className="flex items-center bg-white dark:bg-black/40 px-3 py-1.5 rounded-lg border border-stone-200 dark:border-white/10 shadow-sm font-bold text-xs"><Clock className="h-3.5 w-3.5 mr-2 text-stone-400" /> {task.estimatedTimeMin}m Est.</span>
               </div>
             </div>
-            <div className="flex items-center md:block w-full md:w-auto justify-between md:text-right border-t md:border-t-0 border-stone-200 dark:border-white/10 pt-4 md:pt-0">
-              <div className="text-sm text-stone-500 font-medium uppercase tracking-wider mb-1">Compensation</div>
-              <div className="text-xl md:text-2xl font-bold text-blue-600 dark:text-blue-400">₹{task.compensation.toFixed(2)}</div>
+            <div className="flex items-center md:flex-col justify-between w-full md:w-auto md:text-right border-t md:border-t-0 border-stone-200 dark:border-white/10 pt-4 md:pt-0">
+              <div className="text-[10px] text-zinc-400 font-black uppercase tracking-[0.2em] mb-1">Compensation</div>
+              <div className="text-2xl md:text-4xl font-black text-blue-600 dark:text-blue-400 drop-shadow-sm">₹{task.compensation.toFixed(2)}</div>
             </div>
           </div>
 

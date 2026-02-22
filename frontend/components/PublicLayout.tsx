@@ -69,22 +69,22 @@ export const PublicLayout: React.FC<PublicLayoutProps> = ({
 
          {/* Navigation */}
          <nav
-            className={`fixed top-0 w-full z-[100] transition-all duration-300
+            className={`fixed top-0 w-full z-[100] transition-all duration-300 ease-in-out
              ${showNav ? 'translate-y-0' : '-translate-y-full'}
              ${isScrolled
                   ? 'border-b border-zinc-200/50 dark:border-white/5 bg-white/80 dark:bg-black/80 backdrop-blur-2xl'
                   : 'border-transparent bg-transparent backdrop-blur-none'
                }`}
          >
-            <div className="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
+            <div className="max-w-7xl mx-auto px-4 md:px-6 h-16 md:h-20 flex items-center justify-between">
 
                {/* Logo Section */}
-               <div className="flex items-center gap-3 cursor-pointer group" onClick={() => onNavigate('home')}>
+               <div className="flex items-center gap-2 md:gap-3 cursor-pointer group" onClick={() => onNavigate('home')}>
                   <div className="relative">
                      <div className="absolute inset-0 bg-blue-500/20 blur-lg rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
-                     <Logo className="h-16 w-16 relative z-10 transition-transform duration-500" />
+                     <Logo className="h-12 w-12 md:h-16 md:w-16 relative z-10 transition-transform duration-500" />
                   </div>
-                  <span className="font-bold text-lg tracking-[0.1em] text-zinc-900 dark:text-white transition-colors font-mono uppercase whitespace-nowrap">Starset</span>
+                  <span className="font-bold text-base md:text-lg tracking-[0.1em] text-zinc-900 dark:text-white transition-colors font-mono uppercase whitespace-nowrap">Starset</span>
                </div>
 
                {/* Desktop Center Navigation */}
@@ -101,14 +101,15 @@ export const PublicLayout: React.FC<PublicLayoutProps> = ({
                </div>
 
                {/* Right Actions */}
-               <div className="flex items-center gap-3">
-                  <Button onClick={onEnterApp} size="sm" variant="glow" className="rounded-full px-4 md:px-6 shadow-none hover:shadow-lg transition-all text-xs md:text-sm">
+               <div className="flex items-center gap-2 md:gap-3">
+                  <Button onClick={onEnterApp} size="sm" variant="glow" className="rounded-full px-3 md:px-6 shadow-none hover:shadow-lg transition-all text-[10px] md:text-sm h-8 md:h-10">
                      Start Earning
                   </Button>
 
                   <button
-                     className="lg:hidden text-zinc-900 dark:text-white p-1"
+                     className="lg:hidden text-zinc-900 dark:text-white p-2 hover:bg-black/5 dark:hover:bg-white/5 rounded-full transition-colors"
                      onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+                     aria-label="Toggle Menu"
                   >
                      {isMobileMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
                   </button>
@@ -117,23 +118,26 @@ export const PublicLayout: React.FC<PublicLayoutProps> = ({
 
             {/* Mobile Menu Dropdown */}
             {isMobileMenuOpen && (
-               <div className="lg:hidden fixed top-20 left-0 w-full h-[calc(100vh-80px)] bg-white dark:bg-zinc-900 border-b border-zinc-200 dark:border-white/10 p-6 flex flex-col gap-6 animate-in slide-in-from-top-4 duration-200 shadow-xl overflow-y-auto z-50">
-                  {navLinks.map((item) => (
-                     <button
-                        key={item.id}
-                        onClick={() => {
-                           onNavigate(item.id);
-                           setIsMobileMenuOpen(false);
-                        }}
-                        className={`text-2xl font-bold text-left transition-colors py-2 border-b border-zinc-100 dark:border-white/5 ${currentPage === item.id ? 'text-blue-600 dark:text-blue-400' : 'text-zinc-800 dark:text-zinc-300'}`}
-                     >
-                        {item.name}
-                     </button>
-                  ))}
+               <div className="lg:hidden fixed top-16 left-0 w-full h-[calc(100vh-64px)] bg-white/95 dark:bg-zinc-900/95 backdrop-blur-3xl border-b border-zinc-200 dark:border-white/10 p-6 flex flex-col gap-6 animate-in slide-in-from-top-4 duration-300 shadow-2xl overflow-y-auto z-50">
+                  <div className="flex flex-col gap-2">
+                     <div className="text-[10px] font-black text-zinc-400 uppercase tracking-[0.2em] mb-4 pl-2 opacity-60">Navigation</div>
+                     {navLinks.map((item) => (
+                        <button
+                           key={item.id}
+                           onClick={() => {
+                              onNavigate(item.id);
+                              setIsMobileMenuOpen(false);
+                           }}
+                           className={`text-3xl font-black text-left transition-all py-3 px-2 rounded-2xl ${currentPage === item.id ? 'bg-blue-500/10 text-blue-600 dark:text-blue-400' : 'text-zinc-800 dark:text-zinc-300 hover:bg-black/5 dark:hover:bg-white/5'}`}
+                        >
+                           {item.name}
+                        </button>
+                     ))}
+                  </div>
                   <div className="mt-auto pb-10">
-                     <div className="text-xs font-bold text-zinc-400 uppercase tracking-widest mb-4">Account</div>
-                     <Button onClick={() => { onEnterApp(); setIsMobileMenuOpen(false); }} className="w-full h-12 text-lg">
-                        Log In / Sign Up
+                     <div className="text-[10px] font-black text-zinc-400 uppercase tracking-[0.2em] mb-4 pl-2 opacity-60">Account System</div>
+                     <Button onClick={() => { onEnterApp(); setIsMobileMenuOpen(false); }} className="w-full h-16 text-xl font-black rounded-2xl shadow-xl bg-zinc-900 dark:bg-white text-white dark:text-black">
+                        Access Terminal
                      </Button>
                   </div>
                </div>

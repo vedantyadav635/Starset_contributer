@@ -91,55 +91,55 @@ export const Earnings: React.FC = () => {
         </Button>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 md:gap-8">
         {/* Balance Card */}
-        <div className="relative group perspective-1000 h-full min-h-[300px]">
+        <div className="relative group perspective-1000 h-auto md:h-full min-h-[280px]">
           <div className="absolute inset-0 bg-blue-600/20 blur-2xl rounded-3xl transform group-hover:scale-105 transition-transform duration-500"></div>
-          <div className="bg-gradient-to-br from-[#1c1917] to-black dark:from-black dark:to-zinc-900 rounded-3xl p-8 text-white shadow-2xl shadow-black/50 flex flex-col justify-between relative overflow-hidden border border-zinc-800 h-full transform transition-transform duration-500 group-hover:rotate-x-2 group-hover:scale-[1.02] transform-style-3d">
+          <div className="bg-gradient-to-br from-[#1c1917] to-black dark:from-black dark:to-zinc-900 rounded-3xl p-6 md:p-8 text-white shadow-2xl shadow-black/50 flex flex-col justify-between relative overflow-hidden border border-zinc-800 h-full transform transition-transform duration-500 group-hover:rotate-x-2 group-hover:scale-[1.02] transform-style-3d">
 
             <div className="absolute inset-0 bg-gradient-to-tr from-white/0 via-white/5 to-white/0 translate-x-[-100%] group-hover:animate-[shimmer_2s_infinite] pointer-events-none z-20"></div>
             <div className="absolute top-0 right-0 p-32 bg-blue-500/10 rounded-full blur-3xl -mr-16 -mt-16 pointer-events-none z-0"></div>
             <div className="absolute bottom-0 left-0 p-32 bg-purple-500/10 rounded-full blur-3xl -ml-16 -mb-16 pointer-events-none z-0"></div>
 
-            <div className="relative z-10">
+            <div className="relative z-10 flex flex-col h-full">
               <div className="flex items-center justify-between mb-8">
                 <div className="flex items-center gap-3">
-                  <div className="p-2.5 bg-white/10 rounded-xl backdrop-blur-md border border-white/10 shadow-inner">
-                    <CreditCard className="h-6 w-6 text-blue-300" />
+                  <div className="p-2 md:p-2.5 bg-white/10 rounded-xl backdrop-blur-md border border-white/10 shadow-inner">
+                    <CreditCard className="h-5 w-5 md:h-6 md:w-6 text-blue-300" />
                   </div>
-                  <span className="text-zinc-300 text-sm font-medium tracking-widest uppercase">Balance</span>
+                  <span className="text-zinc-300 text-[10px] md:text-sm font-medium tracking-widest uppercase">Balance</span>
                 </div>
-                <div className="h-8 w-12 bg-white/10 rounded-md border border-white/5 relative overflow-hidden">
-                  <div className="absolute top-2 left-0 right-0 h-1 bg-black/30"></div>
+                <div className="h-6 w-10 bg-white/10 rounded-md border border-white/5 relative overflow-hidden">
+                  <div className="absolute top-1.5 left-0 right-0 h-0.5 bg-black/30"></div>
                 </div>
               </div>
 
-              <div className="space-y-1 mb-10 transform-style-3d group-hover:translate-z-10 transition-transform">
-                <div className="text-5xl md:text-6xl font-bold tracking-tight text-transparent bg-clip-text bg-gradient-to-b from-white to-zinc-400">
-                  ₹{totalEarned.toLocaleString('en-IN')}<span className="text-3xl text-zinc-500">.00</span>
+              <div className="space-y-1 mb-8 transform-style-3d group-hover:translate-z-10 transition-transform">
+                <div className="text-4xl md:text-6xl font-bold tracking-tight text-transparent bg-clip-text bg-gradient-to-b from-white to-zinc-400">
+                  ₹{totalEarned.toLocaleString('en-IN')}<span className="text-2xl text-zinc-500">.00</span>
                 </div>
-                <div className="text-emerald-400 text-sm font-mono flex items-center gap-2">
-                  <span className="flex h-2 w-2 rounded-full bg-emerald-500 animate-pulse"></span>
-                  {totalEarned > 0 ? 'Available for withdrawal' : 'No earnings yet'}
+                <div className="text-emerald-400 text-xs md:text-sm font-mono flex items-center gap-2">
+                  <span className="flex h-1.5 w-1.5 md:h-2 md:w-2 rounded-full bg-emerald-500 animate-pulse"></span>
+                  {totalEarned > 0 ? 'Liquidated & Ready' : 'Awaiting Settlement'}
                 </div>
               </div>
 
               <div className="mt-auto space-y-4">
                 <Button
-                  className="w-full bg-white text-black hover:bg-zinc-200 border-none shadow-[0_0_20px_rgba(255,255,255,0.3)] h-12 text-lg font-bold disabled:opacity-70 disabled:cursor-not-allowed"
+                  className="w-full bg-white text-black hover:bg-zinc-200 border-none shadow-[0_0_20px_rgba(255,255,255,0.3)] h-12 md:h-14 text-base md:text-lg font-black disabled:opacity-70 disabled:cursor-not-allowed uppercase tracking-wider"
                   onClick={handleWithdraw}
                   isLoading={isWithdrawLoading}
                   disabled={true}
                 >
-                  Initiate Transfer
+                  Initiate Payout
                 </Button>
-                <div className="flex items-center gap-2 justify-center px-4 py-2 bg-red-500/10 border border-red-500/20 rounded-xl text-[10px] font-black uppercase tracking-widest text-red-400">
-                  <span className="h-2 w-2 rounded-full bg-red-500 animate-pulse flex-shrink-0"></span>
-                  System Note: Automatic Payouts Disabled. Payments are being handled manually.
+                <div className="flex items-center gap-2 justify-center px-4 py-2 bg-red-500/10 border border-red-500/20 rounded-xl text-[8px] md:text-[10px] font-black uppercase tracking-widest text-red-400">
+                  <span className="h-1.5 w-1.5 rounded-full bg-red-500 animate-pulse flex-shrink-0"></span>
+                  Security Lockdown: Manual Settlement Mode
                 </div>
-                <div className="flex justify-between text-xs text-zinc-500 font-mono">
+                <div className="flex justify-between text-[10px] text-zinc-500 font-mono">
                   <span>{userName}</span>
-                  <span>{transactions.length} submissions</span>
+                  <span>{transactions.length} Nodes</span>
                 </div>
               </div>
             </div>
@@ -147,7 +147,7 @@ export const Earnings: React.FC = () => {
         </div>
 
         {/* Payment Methods */}
-        <div className="md:col-span-2 bg-white dark:bg-zinc-900 rounded-3xl border border-stone-200 dark:border-white/5 shadow-xl p-8 flex flex-col h-full relative overflow-hidden">
+        <div className="lg:col-span-2 bg-white dark:bg-zinc-900 rounded-3xl border border-stone-200 dark:border-white/5 shadow-xl p-6 md:p-8 flex flex-col h-full relative overflow-hidden">
           <div className="absolute top-0 right-0 w-64 h-64 bg-emerald-500/5 rounded-full blur-3xl -mr-32 -mt-32 pointer-events-none"></div>
 
           <h2 className="text-xl font-bold text-[#121212] dark:text-white mb-8 flex items-center justify-between relative z-10">

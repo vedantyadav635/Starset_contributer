@@ -102,31 +102,31 @@ export const Signup: React.FC<SignupProps> = ({ onLogin, onSwitchToLogin, onBack
 
       {/* Header */}
       <nav className="fixed top-0 w-full z-50 border-b border-zinc-200/50 dark:border-white/5 bg-white/50 dark:bg-black/50 backdrop-blur-xl transition-all duration-300">
-        <div className="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
+        <div className="max-w-7xl mx-auto px-4 md:px-6 h-14 md:h-16 flex items-center justify-between">
           <div className="flex items-center gap-2 cursor-pointer group" onClick={onBackHome}>
-            <Logo className="h-14 w-14 transition-transform duration-500 group-hover:rotate-180" />
-            <span className="font-bold text-sm tracking-[0.1em] text-zinc-900 dark:text-white uppercase">Starset</span>
+            <Logo className="h-10 w-10 md:h-14 md:w-14 transition-transform duration-500 group-hover:rotate-180" />
+            <span className="font-bold text-xs md:text-sm tracking-[0.1em] text-zinc-900 dark:text-white uppercase">Starset</span>
           </div>
         </div>
       </nav>
 
       {/* Background Ambience */}
-      <div className="absolute top-[-20%] left-[-10%] w-[600px] h-[600px] bg-blue-600/10 dark:bg-blue-600/10 rounded-full blur-[100px] animate-blob"></div>
-      <div className="absolute bottom-[-20%] right-[-10%] w-[600px] h-[600px] bg-indigo-600/10 dark:bg-indigo-600/10 rounded-full blur-[100px] animate-blob animation-delay-2000"></div>
+      <div className="absolute top-[-20%] left-[-10%] w-[400px] md:w-[600px] h-[400px] md:h-[600px] bg-blue-600/10 dark:bg-blue-600/10 rounded-full blur-[80px] md:blur-[100px] animate-blob"></div>
+      <div className="absolute bottom-[-20%] right-[-10%] w-[400px] md:w-[600px] h-[400px] md:h-[600px] bg-indigo-600/10 dark:bg-indigo-600/10 rounded-full blur-[80px] md:blur-[100px] animate-blob animation-delay-2000"></div>
 
-      <div className="w-full max-w-md relative z-10 pt-20">
-        <div className="mb-8 text-center">
-          <div className="flex flex-col items-center justify-center gap-4 mb-6">
-            <div className="h-16 w-16 bg-gradient-to-br from-blue-500/10 to-indigo-500/10 dark:from-blue-500/20 dark:to-indigo-500/20 rounded-2xl flex items-center justify-center shadow-[0_0_30px_rgba(59,130,246,0.15)] backdrop-blur-md border border-zinc-200 dark:border-white/10">
-              <Logo className="h-16 w-16" />
+      <div className="w-full max-w-md relative z-10 pt-16 md:pt-20">
+        <div className="mb-6 md:mb-8 text-center">
+          <div className="flex flex-col items-center justify-center gap-3 md:gap-4 mb-4 md:mb-6">
+            <div className="h-12 w-12 md:h-16 md:w-16 bg-gradient-to-br from-blue-500/10 to-indigo-500/10 dark:from-blue-500/20 dark:to-indigo-500/20 rounded-xl md:rounded-2xl flex items-center justify-center shadow-[0_0_30px_rgba(59,130,246,0.15)] backdrop-blur-md border border-zinc-200 dark:border-white/10">
+              <Logo className="h-12 w-12 md:h-16 md:w-16" />
             </div>
-            <span className="font-bold text-2xl tracking-[0.15em] bg-clip-text text-transparent bg-gradient-to-r from-zinc-900 to-zinc-500 dark:from-white dark:to-zinc-400 uppercase">STARSET</span>
+            <span className="font-bold text-xl md:text-2xl tracking-[0.15em] bg-clip-text text-transparent bg-gradient-to-r from-zinc-900 to-zinc-500 dark:from-white dark:to-zinc-400 uppercase">STARSET</span>
           </div>
-          <h1 className="text-xl font-bold tracking-tight mb-2 text-zinc-900 dark:text-white">New Contributor Profile</h1>
-          <p className="text-zinc-500 dark:text-zinc-400 text-sm">Join the network to start earning.</p>
+          <h1 className="text-lg md:text-xl font-bold tracking-tight mb-1 markdown-text-zinc-900 dark:text-white">New Contributor Profile</h1>
+          <p className="text-zinc-500 dark:text-zinc-400 text-xs md:text-sm px-4">Join the network to start earning from data contributions.</p>
         </div>
 
-        <div className="bg-white/60 dark:bg-zinc-900/40 backdrop-blur-xl p-8 rounded-2xl border border-zinc-200 dark:border-white/10 shadow-xl dark:shadow-2xl">
+        <div className="bg-white/60 dark:bg-zinc-900/40 backdrop-blur-2xl p-6 md:p-8 rounded-2xl md:rounded-3xl border border-zinc-200 dark:border-white/10 shadow-xl dark:shadow-2xl mx-1 md:mx-0">
           <form onSubmit={handleSubmit} className="space-y-5">
 
             <div className="space-y-4">

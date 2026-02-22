@@ -50,14 +50,14 @@ export const TaskList: React.FC<TaskListProps> = ({ onSelectTask, tasks, userRol
       </div>
 
       {/* Filters */}
-      <div className="bg-white dark:bg-white/5 p-2 rounded-xl border border-stone-200 dark:border-white/10 shadow-sm inline-flex flex-wrap gap-1">
+      <div className="bg-white dark:bg-white/5 p-1.5 rounded-2xl border border-stone-200 dark:border-white/10 shadow-sm flex flex-wrap gap-1 overflow-x-auto no-scrollbar">
         {['All', TaskType.AUDIO_COLLECTION, TaskType.IMAGE_COLLECTION, TaskType.TEXT_ANNOTATION, TaskType.IMAGE_LABELING, TaskType.SURVEY].map((type) => (
           <button
             key={type}
             onClick={() => setFilterType(type)}
-            className={`px-5 py-2.5 text-sm font-medium rounded-lg transition-all duration-200 ${filterType === type
-              ? 'bg-[#121212] dark:bg-white text-white dark:text-black shadow-md'
-              : 'bg-transparent text-stone-600 dark:text-stone-400 hover:bg-stone-100 dark:hover:bg-white/10'
+            className={`px-4 md:px-5 py-2 md:py-2.5 text-xs md:text-sm font-bold rounded-xl transition-all duration-300 whitespace-nowrap ${filterType === type
+              ? 'bg-zinc-900 dark:bg-white text-white dark:text-black shadow-lg scale-[1.02]'
+              : 'bg-transparent text-stone-500 hover:text-stone-900 dark:hover:text-white hover:bg-stone-100 dark:hover:bg-white/5'
               }`}
           >
             {type === 'All' ? 'All Operations' : type}

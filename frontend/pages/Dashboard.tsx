@@ -7,6 +7,7 @@ import {
   CheckCircle,
   Activity,
   BarChart3,
+  ArrowRight,
 } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 import { supabase } from '../supabaseClient';
@@ -105,41 +106,47 @@ export const Dashboard: React.FC<DashboardProps> = ({ onNavigate }) => {
       </div>
 
       {/* KPI Stats - Real Data */}
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
         {statCards.map((stat, idx) => (
-          <div key={idx} className="bg-white dark:bg-white/5 p-5 rounded-lg border border-zinc-200 dark:border-white/10 shadow-[0_2px_10px_rgba(0,0,0,0.03)] hover:border-zinc-300 dark:hover:border-white/20 transition-colors">
-            <div className="flex items-center justify-between mb-2">
-              <span className="text-xs font-semibold text-zinc-500 uppercase tracking-wider">{stat.label}</span>
-              <stat.icon className="h-4 w-4 text-zinc-400" />
+          <div key={idx} className="bg-white dark:bg-zinc-900 p-6 md:p-7 rounded-[2rem] border border-stone-200 dark:border-white/10 shadow-sm transition-all hover:shadow-lg hover:scale-[1.02] duration-300 group">
+            <div className="flex items-center justify-between mb-6">
+              <div className={`p-3 rounded-2xl transition-colors ${stat.label === 'Acceptance' ? 'bg-blue-50 dark:bg-blue-900/20 text-blue-600' : stat.label === 'Accepted' ? 'bg-emerald-50 dark:bg-emerald-900/20 text-emerald-600' : stat.label === 'In Review' ? 'bg-amber-50 dark:bg-amber-900/20 text-amber-600' : 'bg-purple-50 dark:bg-purple-900/20 text-purple-600'}`}>
+                <stat.icon className="h-6 w-6" />
+              </div>
+              <span className="text-[10px] font-black text-zinc-400 uppercase tracking-[0.2em]">{stat.label}</span>
             </div>
-            <div className="text-2xl font-bold text-zinc-900 dark:text-white">{stat.value}</div>
-            <div className="text-xs text-zinc-400 mt-1">{stat.sub}</div>
+            <div className="text-3xl md:text-4xl font-black text-zinc-900 dark:text-white mb-2 tracking-tight group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">{stat.value}</div>
+            <div className="text-xs font-bold text-zinc-500 uppercase tracking-widest">{stat.sub}</div>
           </div>
         ))}
       </div>
 
       {/* Quick Actions */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        <div className="bg-white dark:bg-white/5 rounded-lg border border-zinc-200 dark:border-white/10 p-6 hover:border-blue-300 dark:hover:border-blue-700 transition-colors cursor-pointer group" onClick={() => onNavigate('tasks')}>
-          <div className="flex items-center gap-4 mb-3">
-            <div className="h-10 w-10 bg-blue-100 dark:bg-blue-900/30 rounded-lg flex items-center justify-center text-blue-600 dark:text-blue-400 group-hover:scale-110 transition-transform">
-              <Database className="h-5 w-5" />
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-8">
+        <div className="bg-zinc-900 text-white rounded-[2.5rem] p-8 md:p-10 relative overflow-hidden group cursor-pointer" onClick={() => onNavigate('tasks')}>
+          <div className="absolute top-0 right-0 w-[60%] h-full bg-gradient-to-l from-blue-600/20 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700"></div>
+          <div className="relative z-10">
+            <div className="h-14 w-14 bg-white/10 rounded-2xl flex items-center justify-center text-blue-400 mb-6 group-hover:scale-110 transition-transform duration-500">
+              <Database className="h-7 w-7" />
             </div>
-            <div>
-              <h3 className="text-sm font-bold text-zinc-900 dark:text-white">Browse Available Tasks</h3>
-              <p className="text-xs text-zinc-500 mt-0.5">Find new tasks to contribute to</p>
+            <h3 className="text-2xl font-black mb-2 tracking-tight">Active Operation Tasks</h3>
+            <p className="text-stone-400 font-medium mb-6">Contribute high-quality data to the network.</p>
+            <div className="inline-flex items-center text-sm font-black uppercase tracking-widest text-blue-400 group-hover:translate-x-2 transition-transform">
+              Launch Terminal <ArrowRight className="ml-2 h-4 w-4" />
             </div>
           </div>
         </div>
 
-        <div className="bg-white dark:bg-white/5 rounded-lg border border-zinc-200 dark:border-white/10 p-6 hover:border-emerald-300 dark:hover:border-emerald-700 transition-colors cursor-pointer group" onClick={() => onNavigate('earnings')}>
-          <div className="flex items-center gap-4 mb-3">
-            <div className="h-10 w-10 bg-emerald-100 dark:bg-emerald-900/30 rounded-lg flex items-center justify-center text-emerald-600 dark:text-emerald-400 group-hover:scale-110 transition-transform">
-              <BarChart3 className="h-5 w-5" />
+        <div className="bg-white dark:bg-zinc-900 rounded-[2.5rem] border border-stone-200 dark:border-white/10 p-8 md:p-10 relative overflow-hidden group cursor-pointer" onClick={() => onNavigate('earnings')}>
+          <div className="absolute top-0 right-0 w-[60%] h-full bg-gradient-to-l from-emerald-600/5 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700"></div>
+          <div className="relative z-10">
+            <div className="h-14 w-14 bg-emerald-50 dark:bg-emerald-900/20 rounded-2xl flex items-center justify-center text-emerald-600 dark:text-emerald-400 mb-6 group-hover:scale-110 transition-transform duration-500">
+              <BarChart3 className="h-7 w-7" />
             </div>
-            <div>
-              <h3 className="text-sm font-bold text-zinc-900 dark:text-white">View Earnings</h3>
-              <p className="text-xs text-zinc-500 mt-0.5">Check your compensation details</p>
+            <h3 className="text-2xl font-black mb-2 tracking-tight text-zinc-900 dark:text-white">Financial Yield</h3>
+            <p className="text-stone-500 dark:text-stone-400 font-medium mb-6">Track your contribution rewards.</p>
+            <div className="inline-flex items-center text-sm font-black uppercase tracking-widest text-emerald-600 dark:text-emerald-400 group-hover:translate-x-2 transition-transform">
+              View Audit <ArrowRight className="ml-2 h-4 w-4" />
             </div>
           </div>
         </div>
