@@ -58,6 +58,15 @@ export const TaskExecution: React.FC<TaskExecutionProps> = ({ task, onBack, onCo
     };
   }, [audioUrl]);
 
+  // 🔥 Background warm-up: ping the Render backend as soon as the task page opens
+  // so by the time the user records audio and clicks Submit, the backend is already awake.
+  useEffect(() => {
+    import('../config/api').then(({ API_URL }) => {
+      fetch(`${API_URL}/health`).catch(() => {/* silent */ });
+      console.log('🔥 Background backend warm-up ping sent');
+    });
+  }, []);
+
   useEffect(() => {
     if (isRecording) {
       timerRef.current = window.setInterval(() => {
@@ -210,25 +219,27 @@ export const TaskExecution: React.FC<TaskExecutionProps> = ({ task, onBack, onCo
 
   /**
    * Wake up the Render backend if it's sleeping (free-tier cold start).
-   * Polls /health every 5 seconds for up to 60 seconds.
+   * Polls /health every 5 seconds for up to 3 minutes.
+   * Does NOT throw at the end — just lets the real request attempt anyway.
    */
   const wakeUpBackend = async (): Promise<void> => {
     const { API_URL } = await import('../config/api');
-    const maxAttempts = 12; // 12 × 5s = 60 seconds max wait
+    const maxAttempts = 36; // 36 × 5s = 180 seconds max wait
     for (let i = 0; i < maxAttempts; i++) {
       try {
         const res = await fetch(`${API_URL}/health`, { signal: AbortSignal.timeout(5000) });
         if (res.ok) {
           console.log(`✅ Backend is awake (attempt ${i + 1})`);
-          return; // Backend is ready
+          return;
         }
       } catch {
-        // Still sleeping, wait and retry
+        // Still warming up, keep trying
       }
-      console.log(`⏳ Waiting for backend to wake up... (${i + 1}/${maxAttempts})`);
+      console.log(`⏳ Waiting for backend... (${i + 1}/${maxAttempts})`);
       await new Promise(r => setTimeout(r, 5000));
     }
-    throw new Error('Server is starting up — please try again in a moment.');
+    // Don't throw — just proceed and let the actual submission request report any error
+    console.warn('⚠️ Backend may still be starting, attempting submission anyway...');
   };
 
   const handleSubmit = async () => {
