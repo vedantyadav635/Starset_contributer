@@ -75,10 +75,10 @@ export const Contributors: React.FC<PageProps> = ({ onNavigate, onEnterApp, isDa
               >
                 <Button 
                   onClick={onEnterApp}
-                  className="bg-gray-900 dark:bg-white text-white dark:text-gray-900 hover:bg-gray-800 dark:hover:bg-gray-100 px-8 py-4 text-lg font-semibold group"
+                  className="bg-gray-900 dark:bg-white text-white dark:text-white-900 hover:bg-gray-800 dark:hover:bg-gray-100 px-8 py-4 text-lg font-semibold group"
                 >
                   Start Earning Now
-                  <ArrowRight className="w-5 h-5 ml-2 group-hover:translate-x-1 transition-transform" />
+                  <ArrowRight className="w-5 h-5 ml-2 text-white group-hover:translate-x-1 transition-transform" />
                 </Button>
                 
                 <button 
@@ -261,7 +261,7 @@ export const Contributors: React.FC<PageProps> = ({ onNavigate, onEnterApp, isDa
             >
               <Button 
                 onClick={onEnterApp}
-                className="bg-white text-gray-900 hover:bg-gray-100 px-10 py-5 text-lg font-semibold group"
+                className="bg-white text-white-900 hover:bg-gray-100 px-10 py-5 text-lg font-semibold group"
               >
                 Create Free Account
                 <ArrowRight className="w-5 h-5 ml-2 group-hover:translate-x-1 transition-transform" />

@@ -64,18 +64,18 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onEnterApp, onStartSig
                      </div>
                   </div>
 
-                  <h1 className="text-4xl sm:text-6xl md:text-7xl lg:text-8xl font-extrabold tracking-tight leading-[1.1] text-zinc-900 dark:text-white relative drop-shadow-2xl">
+                  <h1 className="text-4xl sm:text-6xl md:text-7xl lg:text-8xl font-extrabold tracking-tight leading-[1.1] text-zinc-900 dark:text-white relative drop-shadow-2xl px-2 sm:px-0">
                      Make Money <br />
                      <span className="text-transparent bg-clip-text bg-gradient-to-r from-purple-600 via-blue-500 to-cyan-400 dark:from-purple-400 dark:via-blue-400 dark:to-cyan-300 bg-[length:200%_auto] animate-marquee">
                         Teaching AI.
                      </span>
                   </h1>
 
-                  <p className="text-xl md:text-2xl text-zinc-600 dark:text-zinc-300 max-w-xl mx-auto lg:mx-0 leading-relaxed font-medium">
+                  <p className="text-lg md:text-2xl text-zinc-600 dark:text-zinc-300 max-w-xl mx-auto lg:mx-0 leading-relaxed font-medium px-4 sm:px-0">
                      Join 50,000+ contributors earning cash by completing simple tasks. <span className="text-zinc-900 dark:text-white">No coding required.</span>
                   </p>
 
-                  <div className="flex flex-col sm:flex-row gap-5 justify-center lg:justify-start">
+                  <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start px-4 sm:px-0">
                      <div className="relative group w-full sm:w-auto hover:-translate-y-1 transition-transform">
                         <div className="absolute -inset-1 bg-gradient-to-r from-purple-600 to-blue-600 rounded-lg blur opacity-40 group-hover:opacity-100 transition duration-500 animate-tilt"></div>
                         <Button onClick={onStartSignup} size="lg" variant={isDark ? "black" : "black"} className="relative h-14 md:h-16 px-10 text-lg md:text-xl w-full sm:w-auto font-bold bg-zinc-900 text-white dark:bg-white dark:text-black dark:hover:bg-zinc-200 shadow-2xl">
@@ -268,22 +268,22 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onEnterApp, onStartSig
          <section className="py-20 border-b border-white/5 bg-black relative overflow-hidden">
             <div className="absolute inset-0 bg-[linear-gradient(to_right,#ffffff05_1px,transparent_1px),linear-gradient(to_bottom,#ffffff05_1px,transparent_1px)] bg-[size:32px_32px] opacity-20"></div>
             <div className="max-w-7xl mx-auto px-6 relative z-10">
-               <div className="grid grid-cols-2 md:grid-cols-4 gap-12 text-center">
+               <div className="grid grid-cols-2 lg:grid-cols-4 gap-y-12 gap-x-6 text-center">
                   <div className="space-y-2">
-                     <div className="text-4xl md:text-5xl font-bold text-indigo-500">₹40M+</div>
-                     <div className="text-xs font-bold text-zinc-500 uppercase tracking-widest">Paid to Contributors</div>
+                     <div className="text-3xl md:text-5xl font-bold text-indigo-500">₹40M+</div>
+                     <div className="text-[10px] font-bold text-zinc-500 uppercase tracking-widest leading-tight">Paid to Contributors</div>
                   </div>
                   <div className="space-y-2">
-                     <div className="text-4xl md:text-5xl font-bold text-blue-500">50k+</div>
-                     <div className="text-xs font-bold text-zinc-500 uppercase tracking-widest">Active Users</div>
+                     <div className="text-3xl md:text-5xl font-bold text-blue-500">50k+</div>
+                     <div className="text-[10px] font-bold text-zinc-500 uppercase tracking-widest leading-tight">Active Users</div>
                   </div>
                   <div className="space-y-2">
-                     <div className="text-4xl md:text-5xl font-bold text-purple-400">14</div>
-                     <div className="text-xs font-bold text-zinc-500 uppercase tracking-widest">Countries Supported</div>
+                     <div className="text-3xl md:text-5xl font-bold text-purple-400">14</div>
+                     <div className="text-[10px] font-bold text-zinc-500 uppercase tracking-widest leading-tight">Countries Supported</div>
                   </div>
                   <div className="space-y-2">
-                     <div className="text-4xl md:text-5xl font-bold text-white">99.9%</div>
-                     <div className="text-xs font-bold text-zinc-500 uppercase tracking-widest">Platform Uptime</div>
+                     <div className="text-3xl md:text-5xl font-bold text-white">99.9%</div>
+                     <div className="text-[10px] font-bold text-zinc-500 uppercase tracking-widest leading-tight">Platform Uptime</div>
                   </div>
                </div>
             </div>
@@ -298,12 +298,12 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onEnterApp, onStartSig
                transition={{ duration: 0.8 }}
                className="max-w-7xl mx-auto"
             >
-               <div className="text-center mb-20">
-                  <h2 className="text-4xl md:text-6xl font-bold text-zinc-900 dark:text-white mb-6 tracking-tight">Why Contribute?</h2>
-                  <p className="text-xl md:text-2xl text-zinc-500 max-w-3xl mx-auto">The most flexible and rewarding way to join the AI economy.</p>
+               <div className="text-center mb-12 md:mb-20 px-4">
+                  <h2 className="text-4xl md:text-6xl font-bold text-zinc-900 dark:text-white mb-4 md:mb-6 tracking-tight">Why Contribute?</h2>
+                  <p className="text-lg md:text-2xl text-zinc-500 max-w-3xl mx-auto">The most flexible and rewarding way to join the AI economy.</p>
                </div>
 
-               <div className="grid md:grid-cols-3 gap-8 md:gap-12 perspective-1000">
+               <div className="flex overflow-x-auto pb-8 gap-6 snap-x snap-mandatory no-scrollbar -mx-4 px-4 md:grid md:grid-cols-3 md:gap-12 md:mx-0 md:px-0">
                   {[
                      {
                         icon: Smartphone,
@@ -327,13 +327,13 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onEnterApp, onStartSig
                         desc: "SOC2 certified. Trusted by 50,000+ contributors. Your data and privacy are our priority."
                      }
                   ].map((feature, idx) => (
-                     <div key={idx} className="glass-card p-8 rounded-3xl hover:border-blue-500/30 transition-all duration-300 relative overflow-hidden group hover:-translate-y-2 hover:shadow-2xl">
+                     <div key={idx} className="glass-card p-6 md:p-8 rounded-3xl hover:border-blue-500/30 transition-all duration-300 relative overflow-hidden group hover:-translate-y-2 hover:shadow-2xl flex-shrink-0 w-[85vw] sm:w-[350px] md:w-auto snap-center">
                         <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-current to-transparent opacity-5 rounded-bl-full pointer-events-none transition-opacity group-hover:opacity-10" style={{ color: feature.color.replace('text-', '') }}></div>
-                        <div className={`h-16 w-16 ${feature.bg} rounded-2xl flex items-center justify-center mb-8 group-hover:scale-110 transition-transform duration-300 shadow-inner`}>
-                           <feature.icon className={`h-8 w-8 ${feature.color}`} />
+                        <div className={`h-14 w-14 md:h-16 md:w-16 ${feature.bg} rounded-2xl flex items-center justify-center mb-6 md:mb-8 group-hover:scale-110 transition-transform duration-300 shadow-inner`}>
+                           <feature.icon className={`h-6 w-6 md:h-8 md:w-8 ${feature.color}`} />
                         </div>
-                        <h3 className="text-2xl font-bold text-zinc-900 dark:text-white mb-4">{feature.title}</h3>
-                        <p className="text-lg text-zinc-600 dark:text-zinc-400 leading-relaxed">{feature.desc}</p>
+                        <h3 className="text-xl md:text-2xl font-bold text-zinc-900 dark:text-white mb-4">{feature.title}</h3>
+                        <p className="text-base md:text-lg text-zinc-600 dark:text-zinc-400 leading-relaxed">{feature.desc}</p>
                      </div>
                   ))}
                </div>
@@ -359,9 +359,9 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onEnterApp, onStartSig
                   <Button onClick={() => onNavigate('contributors')} variant="outline" className="dark:text-white dark:border-white/20 w-full md:w-auto h-12 px-8">See All Tasks</Button>
                </div>
 
-               <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+               <div className="flex overflow-x-auto pb-8 gap-6 snap-x snap-mandatory no-scrollbar -mx-4 px-4 md:grid md:grid-cols-2 lg:grid-cols-3 md:mx-0 md:px-0">
                   {/* Task Card 1 */}
-                  <div className="group bg-zinc-50 dark:bg-zinc-900/50 p-1 rounded-3xl border border-zinc-200 dark:border-white/10 hover:border-blue-500/50 hover:shadow-2xl hover:shadow-blue-500/10 transition-all duration-300 hover:-translate-y-2">
+                  <div className="group bg-zinc-50 dark:bg-zinc-900/50 p-1 rounded-3xl border border-zinc-200 dark:border-white/10 hover:border-blue-500/50 hover:shadow-2xl hover:shadow-blue-500/10 transition-all duration-300 hover:-translate-y-2 flex-shrink-0 w-[85vw] sm:w-[350px] md:w-auto snap-center">
                      <div className="bg-white dark:bg-zinc-900 rounded-[22px] p-6 h-full flex flex-col">
                         <div className="h-48 bg-blue-50 dark:bg-blue-900/10 rounded-2xl mb-6 flex items-center justify-center relative overflow-hidden">
                            <div className="absolute inset-0 bg-gradient-to-tr from-blue-500/10 to-transparent"></div>
@@ -377,7 +377,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onEnterApp, onStartSig
                   </div>
 
                   {/* Task Card 2 */}
-                  <div className="group bg-zinc-50 dark:bg-zinc-900/50 p-1 rounded-3xl border border-zinc-200 dark:border-white/10 hover:border-purple-500/50 hover:shadow-2xl hover:shadow-purple-500/10 transition-all duration-300 hover:-translate-y-2">
+                  <div className="group bg-zinc-50 dark:bg-zinc-900/50 p-1 rounded-3xl border border-zinc-200 dark:border-white/10 hover:border-purple-500/50 hover:shadow-2xl hover:shadow-purple-500/10 transition-all duration-300 hover:-translate-y-2 flex-shrink-0 w-[85vw] sm:w-[350px] md:w-auto snap-center">
                      <div className="bg-white dark:bg-zinc-900 rounded-[22px] p-6 h-full flex flex-col">
                         <div className="h-48 bg-purple-50 dark:bg-purple-900/10 rounded-2xl mb-6 flex items-center justify-center relative overflow-hidden">
                            <div className="absolute inset-0 bg-gradient-to-tr from-purple-500/10 to-transparent"></div>
@@ -393,7 +393,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onEnterApp, onStartSig
                   </div>
 
                   {/* Task Card 3 */}
-                  <div className="group bg-zinc-50 dark:bg-zinc-900/50 p-1 rounded-3xl border border-zinc-200 dark:border-white/10 hover:border-blue-500/50 hover:shadow-2xl hover:shadow-blue-500/10 transition-all duration-300 hover:-translate-y-2">
+                  <div className="group bg-zinc-50 dark:bg-zinc-900/50 p-1 rounded-3xl border border-zinc-200 dark:border-white/10 hover:border-blue-500/50 hover:shadow-2xl hover:shadow-blue-500/10 transition-all duration-300 hover:-translate-y-2 flex-shrink-0 w-[85vw] sm:w-[350px] md:w-auto snap-center">
                      <div className="bg-white dark:bg-zinc-900 rounded-[22px] p-6 h-full flex flex-col">
                         <div className="h-48 bg-blue-50 dark:bg-blue-900/10 rounded-2xl mb-6 flex items-center justify-center relative overflow-hidden">
                            <div className="absolute inset-0 bg-gradient-to-tr from-blue-500/10 to-transparent"></div>
@@ -428,7 +428,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onEnterApp, onStartSig
                   <p className="text-xl text-zinc-500">No complex onboarding. Just create an account and go.</p>
                </div>
 
-               <div className="grid md:grid-cols-4 gap-8 relative">
+               <div className="flex overflow-x-auto pb-4 gap-4 snap-x snap-mandatory no-scrollbar -mx-4 px-4 md:grid md:grid-cols-4 md:gap-8 md:mx-0 md:px-0 relative">
                   {/* Connecting Line (Desktop) */}
                   <div className="hidden md:block absolute top-10 left-[10%] right-[10%] h-1 bg-gradient-to-r from-transparent via-zinc-200 dark:via-zinc-800 to-transparent -z-10"></div>
 
@@ -438,18 +438,18 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onEnterApp, onStartSig
                      { step: "03", title: "Execute", desc: "Follow the instructions and submit your work." },
                      { step: "04", title: "Get Paid", desc: "Earnings hit your wallet instantly after approval." }
                   ].map((item, i) => (
-                     <div key={i} className="flex flex-col items-center text-center bg-white dark:bg-black p-8 rounded-3xl shadow-xl border border-zinc-100 dark:border-white/5 hover:-translate-y-2 transition-transform duration-300">
+                     <div key={i} className="flex flex-col items-center text-center bg-white dark:bg-black p-8 rounded-3xl shadow-xl border border-zinc-100 dark:border-white/5 hover:-translate-y-2 transition-transform duration-300 flex-shrink-0 w-[80vw] sm:w-[300px] md:w-auto snap-center">
                         <div className="h-20 w-20 bg-zinc-50 dark:bg-zinc-900 rounded-full border-4 border-white dark:border-zinc-800 flex items-center justify-center text-2xl font-black text-zinc-900 dark:text-white shadow-lg mb-6 z-10">
                            {item.step}
                         </div>
                         <h3 className="text-xl font-bold text-zinc-900 dark:text-white mb-3">{item.title}</h3>
-                        <p className="text-zinc-500 leading-relaxed">{item.desc}</p>
+                        <p className="text-zinc-500 leading-relaxed font-medium">{item.desc}</p>
                      </div>
                   ))}
                </div>
 
                <div className="text-center mt-20">
-                  <Button onClick={onStartSignup} size="lg" className="rounded-full px-12 h-16 text-xl bg-[#121212] dark:bg-white text-white dark:text-black hover:scale-105 transition-transform w-full md:w-auto shadow-2xl">Create Free Account</Button>
+                  <Button onClick={onStartSignup} size="lg" className="rounded-full px-12 h-16 text-xl bg-[#121212] dark:bg-white text-white dark:text-white hover:scale-105 transition-transform w-full md:w-auto shadow-2xl">Create Free Account</Button>
                </div>
             </motion.div>
          </section>
@@ -464,7 +464,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onEnterApp, onStartSig
                className="max-w-7xl mx-auto px-6"
             >
                <h2 className="text-3xl md:text-4xl font-bold text-center text-white mb-16">Community Stories</h2>
-               <div className="grid md:grid-cols-3 gap-8">
+               <div className="flex overflow-x-auto pb-8 gap-6 snap-x snap-mandatory no-scrollbar -mx-4 px-4 md:grid md:grid-cols-3 md:mx-0 md:px-0">
                   {[
                      {
                         name: "Priya S.",
@@ -485,13 +485,13 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onEnterApp, onStartSig
                         initial: "S"
                      }
                   ].map((story, i) => (
-                     <div key={i} className="bg-zinc-900/50 p-8 rounded-3xl border border-white/5 hover:border-white/10 transition-colors">
+                     <div key={i} className="bg-zinc-900/50 p-8 rounded-3xl border border-white/5 hover:border-white/10 transition-colors flex-shrink-0 w-[85vw] sm:w-[350px] md:w-auto snap-center">
                         <div className="flex gap-1 text-amber-400 mb-6">
                            {[...Array(5)].map((_, i) => <Star key={i} className="h-4 w-4 fill-current" />)}
                         </div>
-                        <p className="text-zinc-300 text-lg mb-8 italic">"{story.quote}"</p>
+                        <p className="text-zinc-300 text-lg mb-8 italic leading-relaxed">"{story.quote}"</p>
                         <div className="flex items-center gap-4">
-                           <div className="h-10 w-10 rounded-full bg-zinc-800 flex items-center justify-center text-white font-bold">
+                           <div className="h-10 w-10 rounded-full bg-zinc-800 flex items-center justify-center text-white font-bold shadow-lg">
                               {story.initial}
                            </div>
                            <div>

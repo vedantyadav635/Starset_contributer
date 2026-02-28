@@ -29,6 +29,7 @@ document.documentElement.classList.add('dark');
 
 // Custom components and utilities
 import { Logo } from './components/Logo';
+import { API_URL } from './config/api';
 import { PublicPageType } from './components/PublicLayout';
 import { supabase } from "./supabaseClient"; // Supabase client for database operations
 import CompleteProfile from "./pages/CompleteProfile";
@@ -41,6 +42,10 @@ import { Button } from "./components/Button";
 
 // Auto-logout timer: 15 minutes of inactivity for security
 const INACTIVITY_LIMIT_MS = 15 * 60 * 1000; // 15 Minutes
+
+// Keep-alive ping interval: ping backend every 9 minutes to prevent Render free-tier sleep
+const KEEP_ALIVE_INTERVAL_MS = 9 * 60 * 1000; // 9 Minutes
+
 
 // ============================================================================
 // MAIN APP COMPONENT
@@ -262,9 +267,26 @@ const App: React.FC = () => {
     };
   }, [isAuthenticated]);
 
+  /**
+   * EFFECT 4: Keep-alive ping to prevent Render free-tier from sleeping
+   * Pings the backend /health endpoint every 9 minutes so the backend
+   * is always warm when a user submits a task.
+   */
+  useEffect(() => {
+    const ping = () => {
+      fetch(`${API_URL}/health`).catch(() => {
+        // Silently ignore errors - this is just a keep-alive
+      });
+    };
+    ping(); // Ping immediately on mount
+    const interval = window.setInterval(ping, KEEP_ALIVE_INTERVAL_MS);
+    return () => window.clearInterval(interval);
+  }, []);
+
   // --------------------------------------------------------------------------
   // HANDLER FUNCTIONS - Navigation & Authentication
   // --------------------------------------------------------------------------
+
 
 
 

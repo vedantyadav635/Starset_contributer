@@ -22,6 +22,11 @@ app.use(
 // ✅ JSON body parser
 app.use(express.json());
 
+// ✅ Health check route (used to keep Render free-tier awake)
+app.get("/health", (_req, res) => {
+  res.json({ status: "ok" });
+});
+
 // ✅ Routes
 app.use("/admin/tasks", adminTasks);
 app.use("/admin/stats", adminStats);
