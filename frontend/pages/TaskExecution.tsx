@@ -41,6 +41,7 @@ export const TaskExecution: React.FC<TaskExecutionProps> = ({ task, onBack, onCo
 
   const [consentGiven, setConsentGiven] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitStatus, setSubmitStatus] = useState(''); // e.g. 'Connecting to server...' | 'Uploading...'
 
   const timerRef = useRef<number | null>(null);
 
@@ -207,16 +208,45 @@ export const TaskExecution: React.FC<TaskExecutionProps> = ({ task, onBack, onCo
     startCamera();
   };
 
+  /**
+   * Wake up the Render backend if it's sleeping (free-tier cold start).
+   * Polls /health every 5 seconds for up to 60 seconds.
+   */
+  const wakeUpBackend = async (): Promise<void> => {
+    const { API_URL } = await import('../config/api');
+    const maxAttempts = 12; // 12 × 5s = 60 seconds max wait
+    for (let i = 0; i < maxAttempts; i++) {
+      try {
+        const res = await fetch(`${API_URL}/health`, { signal: AbortSignal.timeout(5000) });
+        if (res.ok) {
+          console.log(`✅ Backend is awake (attempt ${i + 1})`);
+          return; // Backend is ready
+        }
+      } catch {
+        // Still sleeping, wait and retry
+      }
+      console.log(`⏳ Waiting for backend to wake up... (${i + 1}/${maxAttempts})`);
+      await new Promise(r => setTimeout(r, 5000));
+    }
+    throw new Error('Server is starting up — please try again in a moment.');
+  };
+
   const handleSubmit = async () => {
     setIsSubmitting(true);
+    setSubmitStatus('Connecting to server...');
 
     try {
-      // Get user ID from Supabase
+      // Step 1: Wake the backend up first (handles Render free-tier cold start)
+      await wakeUpBackend();
+      setSubmitStatus('Uploading...');
+
+      // Step 2: Get user ID from Supabase
       const { data: { user } } = await supabase.auth.getUser();
 
       if (!user) {
         alert('User not authenticated. Please log in again.');
         setIsSubmitting(false);
+        setSubmitStatus('');
         return;
       }
 
@@ -243,7 +273,6 @@ export const TaskExecution: React.FC<TaskExecutionProps> = ({ task, onBack, onCo
 
       // Handle image submission
       else if (task.type === TaskType.IMAGE_COLLECTION && capturedImage) {
-        // Convert base64 to blob
         const base64Response = await fetch(capturedImage);
         const imageBlob = await base64Response.blob();
 
@@ -272,9 +301,7 @@ export const TaskExecution: React.FC<TaskExecutionProps> = ({ task, onBack, onCo
         task.type === TaskType.SURVEY) {
         const response = await fetch(API_ENDPOINTS.SUBMIT_TEXT, {
           method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
+          headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
             taskId: task.id,
             userId: user.id,
@@ -292,14 +319,16 @@ export const TaskExecution: React.FC<TaskExecutionProps> = ({ task, onBack, onCo
         console.log('✅ Text submitted successfully:', result);
       }
 
-      // Success - move to submitted step
+      // Success
       setIsSubmitting(false);
+      setSubmitStatus('');
       setStep('submitted');
 
     } catch (error: any) {
       console.error('❌ Submission error:', error);
       alert(`Submission failed: ${error.message}`);
       setIsSubmitting(false);
+      setSubmitStatus('');
     }
   };
 
@@ -714,7 +743,7 @@ export const TaskExecution: React.FC<TaskExecutionProps> = ({ task, onBack, onCo
               Reset
             </Button>
             <Button onClick={handleSubmit} className="w-2/3 h-12 md:h-14 text-base md:text-lg" isLoading={isSubmitting} disabled={isSubmitDisabled()}>
-              Submit
+              {isSubmitting && submitStatus ? submitStatus : 'Submit'}
             </Button>
           </div>
 
