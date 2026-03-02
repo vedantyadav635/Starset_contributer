@@ -36,37 +36,65 @@ export const Dashboard: React.FC<DashboardProps> = ({ onNavigate }) => {
 
   // Fetch user-specific stats directly from Supabase
   useEffect(() => {
+    let subscription: any;
+
     const fetchUserStats = async () => {
       try {
         const { data: { user: authUser } } = await supabase.auth.getUser();
-        if (authUser) {
-          // Fetch all user submissions in one query
-          const { data: submissions } = await supabase
-            .from('submissions')
-            .select('status')
-            .eq('user_id', authUser.id);
+        if (!authUser) return;
 
-          if (submissions) {
-            const total = submissions.length;
-            const accepted = submissions.filter((s: any) =>
-              ['accepted', 'validated', 'approved'].includes(s.status)
-            ).length;
-            const inValidation = submissions.filter((s: any) =>
-              ['pending_validation', 'pending', 'submitted'].includes(s.status)
-            ).length;
-            const rate = total > 0 ? ((accepted / total) * 100).toFixed(1) + '%' : '0.0%';
+        // Fetch all user submissions with both status columns
+        const { data: submissions } = await supabase
+          .from('submissions')
+          .select('status, validation_status')
+          .eq('user_id', authUser.id);
 
-            setStats({ totalSubmissions: total, inValidation, accepted, acceptanceRate: rate });
-          }
+        if (submissions) {
+          const total = submissions.length;
 
-          // Fetch profile name
-          const { data: profile } = await supabase
-            .from('profiles')
-            .select('full_name')
-            .eq('id', authUser.id)
-            .single();
-          if (profile?.full_name) setUserName(profile.full_name);
+          // Accepted = auto-validated and passed (in final bucket) OR admin approved
+          const accepted = submissions.filter((s: any) =>
+            ['auto_passed', 'approved'].includes(s.validation_status) ||
+            ['accepted', 'validated', 'approved'].includes(s.status)
+          ).length;
+
+          // Awaiting validation = still being processed in the pipeline
+          const inValidation = submissions.filter((s: any) =>
+            s.validation_status === 'pending' ||
+            (s.status === 'pending_validation' && !['auto_passed', 'auto_failed', 'approved', 'rejected'].includes(s.validation_status))
+          ).length;
+
+          const rate = total > 0 ? ((accepted / total) * 100).toFixed(1) + '%' : '0.0%';
+          setStats({ totalSubmissions: total, inValidation, accepted, acceptanceRate: rate });
         }
+
+        // Fetch profile name
+        const { data: profile } = await supabase
+          .from('profiles')
+          .select('full_name')
+          .eq('id', authUser.id)
+          .single();
+        if (profile?.full_name) setUserName(profile.full_name);
+
+        // 🔴 Real-time subscription: re-fetch stats whenever a submission changes
+        // This means the dashboard updates automatically when background validation completes
+        subscription = supabase
+          .channel('dashboard-submissions')
+          .on(
+            'postgres_changes',
+            {
+              event: 'UPDATE',
+              schema: 'public',
+              table: 'submissions',
+              filter: `user_id=eq.${authUser.id}`,
+            },
+            (payload) => {
+              console.log('📡 Submission updated in real-time:', payload.new);
+              fetchUserStats(); // Re-fetch to get accurate counts
+            }
+          )
+          .subscribe();
+
       } catch (error) {
         console.error('Error fetching user stats:', error);
       } finally {
@@ -75,6 +103,11 @@ export const Dashboard: React.FC<DashboardProps> = ({ onNavigate }) => {
     };
 
     fetchUserStats();
+
+    // Cleanup subscription on unmount
+    return () => {
+      if (subscription) supabase.removeChannel(subscription);
+    };
   }, []);
 
   const statCards = [
