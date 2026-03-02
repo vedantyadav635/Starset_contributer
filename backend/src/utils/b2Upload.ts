@@ -1,70 +1,125 @@
 const B2 = require('backblaze-b2');
 
-/**
- * Upload file to Backblaze B2
- * Creates a fresh B2 client each time to avoid stale auth tokens
- * and env var issues on Render cold starts.
- */
-export async function uploadToB2(
-    fileBuffer: Buffer,
-    fileName: string,
-    contentType: string = 'audio/webm'
-): Promise<string> {
+// ─────────────────────────────────────────────────────────────────────────────
+// Bucket configuration
+// ─────────────────────────────────────────────────────────────────────────────
+interface BucketConfig {
+    bucketId: string;
+    bucketName: string;
+    clusterUrl: string; // e.g. "f003.backblazeb2.com"
+}
+
+function getBucket(stage: 'raw' | 'final' | 'processed'): BucketConfig {
+    const map: Record<string, { idKey: string; nameKey: string }> = {
+        raw: { idKey: 'B2_RAW_BUCKET_ID', nameKey: 'B2_RAW_BUCKET_NAME' },
+        final: { idKey: 'B2_FINAL_BUCKET_ID', nameKey: 'B2_FINAL_BUCKET_NAME' },
+        processed: { idKey: 'B2_PROCESSED_BUCKET_ID', nameKey: 'B2_PROCESSED_BUCKET_NAME' },
+    };
+    const { idKey, nameKey } = map[stage];
+    const bucketId = process.env[idKey];
+    const bucketName = process.env[nameKey];
+    if (!bucketId || !bucketName) {
+        throw new Error(`Missing env vars for ${stage} bucket: ${idKey} and/or ${nameKey}`);
+    }
+    return { bucketId, bucketName, clusterUrl: 'f003.backblazeb2.com' };
+}
+
+function buildPublicUrl(bucket: BucketConfig, fileName: string): string {
+    return `https://${bucket.clusterUrl}/file/${bucket.bucketName}/${fileName}`;
+}
+
+/** Create a fresh, authenticated B2 client */
+async function createB2Client() {
     const keyId = process.env.B2_APPLICATION_KEY_ID;
     const appKey = process.env.B2_APPLICATION_KEY;
-    const bucketId = process.env.B2_BUCKET_ID;
-    const bucketName = process.env.B2_BUCKET_NAME;
-
-    // Validate all required env vars are present
-    if (!keyId || !appKey || !bucketId || !bucketName) {
-        const missing = [
-            !keyId && 'B2_APPLICATION_KEY_ID',
-            !appKey && 'B2_APPLICATION_KEY',
-            !bucketId && 'B2_BUCKET_ID',
-            !bucketName && 'B2_BUCKET_NAME',
-        ].filter(Boolean).join(', ');
-        throw new Error(`Missing B2 environment variables: ${missing}`);
-    }
-
-    console.log(`📦 B2 Upload: keyId=${keyId.slice(0, 8)}..., bucket=${bucketName}, file=${fileName}`);
-
-    // Create a fresh B2 client (avoids module-load-time env var issues)
+    if (!keyId || !appKey) throw new Error('Missing B2_APPLICATION_KEY_ID or B2_APPLICATION_KEY');
     const b2 = new B2({ applicationKeyId: keyId, applicationKey: appKey });
-
-    // Step 1: Authorize
-    console.log('🔐 Authorizing with B2...');
     await b2.authorize();
-    console.log('✅ B2 authorized');
+    return b2;
+}
 
-    // Step 2: Get upload URL
-    console.log('🔗 Getting B2 upload URL...');
-    const uploadUrlResponse = await b2.getUploadUrl({ bucketId });
-    const uploadUrl = uploadUrlResponse.data.uploadUrl;
-    const uploadAuthToken = uploadUrlResponse.data.authorizationToken;
-    console.log('✅ Got B2 upload URL');
+// ─────────────────────────────────────────────────────────────────────────────
+// Upload to a specific bucket
+// ─────────────────────────────────────────────────────────────────────────────
+export interface UploadResult {
+    url: string;
+    fileId: string;
+    fileName: string;
+}
 
-    // Step 3: Upload
-    console.log(`⬆️  Uploading ${(fileBuffer.length / 1024).toFixed(1)} KB to B2...`);
-    await b2.uploadFile({
+export async function uploadToBucket(
+    buffer: Buffer,
+    fileName: string,
+    contentType: string,
+    stage: 'raw' | 'final' | 'processed'
+): Promise<UploadResult> {
+    const bucket = getBucket(stage);
+    console.log(`⬆️  Uploading to ${stage} bucket (${bucket.bucketName}): ${fileName}`);
+
+    const b2 = await createB2Client();
+
+    const uploadUrlResp = await b2.getUploadUrl({ bucketId: bucket.bucketId });
+    const uploadUrl = uploadUrlResp.data.uploadUrl;
+    const uploadAuthToken = uploadUrlResp.data.authorizationToken;
+
+    const uploadResp = await b2.uploadFile({
         uploadUrl,
         uploadAuthToken,
         fileName,
-        data: fileBuffer,
+        data: buffer,
         contentType,
     });
-    console.log('✅ B2 upload complete:', fileName);
 
-    // Construct the download URL
-    // Native B2 format: https://f{cluster}.backblazeb2.com/file/{bucketName}/{fileName}
-    // The cluster for eu-central-003 is 003
-    const fileUrl = `https://f003.backblazeb2.com/file/${bucketName}/${fileName}`;
+    const fileId = uploadResp.data.fileId;
+    const url = buildPublicUrl(bucket, fileName);
+    console.log(`✅ Uploaded to ${stage}: fileId=${fileId}`);
 
-    return fileUrl;
+    return { url, fileId, fileName };
 }
 
-/**
- * Generate a unique filename for audio uploads
- */
+// ─────────────────────────────────────────────────────────────────────────────
+// Copy a file from one bucket to another (uses B2 server-side copy — no re-download)
+// ─────────────────────────────────────────────────────────────────────────────
+export async function copyBetweenBuckets(
+    sourceFileId: string,
+    destinationFileName: string,
+    destinationStage: 'final' | 'processed'
+): Promise<UploadResult> {
+    const destBucket = getBucket(destinationStage);
+    console.log(`📋 Copying file ${sourceFileId} → ${destinationStage} bucket (${destBucket.bucketName})`);
+
+    const b2 = await createB2Client();
+
+    const copyResp = await b2.copyFile({
+        sourceFileId,
+        destinationBucketId: destBucket.bucketId,
+        fileName: destinationFileName,
+        metadataDirective: 'COPY',  // Preserve content-type and other metadata
+    });
+
+    const newFileId = copyResp.data.fileId;
+    const url = buildPublicUrl(destBucket, destinationFileName);
+    console.log(`✅ Copied to ${destinationStage}: fileId=${newFileId}`);
+
+    return { url, fileId: newFileId, fileName: destinationFileName };
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Legacy helper (for image/text submissions that still use one bucket)
+// ─────────────────────────────────────────────────────────────────────────────
+export async function uploadToB2(
+    buffer: Buffer,
+    fileName: string,
+    contentType: string = 'audio/webm'
+): Promise<string> {
+    // Falls back to raw bucket for images etc.
+    const result = await uploadToBucket(buffer, fileName, contentType, 'raw');
+    return result.url;
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Filename generators
+// ─────────────────────────────────────────────────────────────────────────────
 export function generateAudioFileName(userId: string, taskId: string): string {
     const timestamp = Date.now();
     const randomSuffix = Math.random().toString(36).substring(2, 8);

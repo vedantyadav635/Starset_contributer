@@ -101,7 +101,9 @@ router.get("/pending", async (_req: Request, res: Response) => {
 
 /**
  * PATCH /admin/submissions/:id/approve
- * Approve a submission → triggers compensation
+ * Approve a submission:
+ * 1. Copy file from final → processed bucket (server-side)
+ * 2. Update DB: status=approved, processed_audio_url, storage_stage=processed
  */
 router.patch("/:id/approve", async (req: Request, res: Response) => {
     try {
@@ -112,11 +114,46 @@ router.patch("/:id/approve", async (req: Request, res: Response) => {
             return res.status(400).json({ error: "Submission ID required" });
         }
 
+        // Fetch submission to get final_file_id
+        const { data: submission, error: fetchError } = await supabase
+            .from('submissions')
+            .select('id, final_file_id, audio_url, mime_type, task_id, user_id')
+            .eq('id', id)
+            .single();
+
+        if (fetchError || !submission) {
+            return res.status(404).json({ error: "Submission not found" });
+        }
+
+        let processedAudioUrl: string | null = null;
+
+        // Copy to processed bucket if this is an audio submission with a final file
+        if (submission.final_file_id) {
+            try {
+                const { copyBetweenBuckets } = await import('../utils/b2Upload');
+                // Generate processed filename (same path, different bucket)
+                const timestamp = Date.now();
+                const processedFileName = `audio/${submission.user_id}/${submission.task_id}_processed_${timestamp}.webm`;
+                const processedResult = await copyBetweenBuckets(
+                    submission.final_file_id,
+                    processedFileName,
+                    'processed'
+                );
+                processedAudioUrl = processedResult.url;
+                console.log(`📦 Copied to PROCESSED bucket: ${processedAudioUrl}`);
+            } catch (copyErr: any) {
+                console.error('⚠️ Failed to copy to processed bucket:', copyErr?.message);
+                // Non-fatal — still approve even if copy fails
+            }
+        }
+
         const { data, error } = await supabase
             .from('submissions')
             .update({
                 status: 'approved',
                 validation_status: 'approved',
+                storage_stage: processedAudioUrl ? 'processed' : 'final',
+                processed_audio_url: processedAudioUrl,
                 reviewed_by: adminId || 'admin',
                 reviewed_at: new Date().toISOString(),
                 rejection_reason: null,
