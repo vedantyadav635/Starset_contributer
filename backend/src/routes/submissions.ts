@@ -45,6 +45,8 @@ router.post("/audio", upload.single('audio'), async (req: Request, res: Response
 
         console.log(`📤 Uploading audio for task ${taskId}, user ${userId}`);
         console.log(`📊 File size: ${(audioFile.size / 1024).toFixed(2)} KB`);
+        console.log(`🔍 Mime type: ${audioFile.mimetype}`);
+        console.log(`🔍 Env check: B2_BUCKET_ID=${process.env.B2_BUCKET_ID ? 'SET' : 'MISSING'}, B2_BUCKET_NAME=${process.env.B2_BUCKET_NAME ? 'SET' : 'MISSING'}`);
 
         // Generate unique filename
         const fileName = generateAudioFileName(userId, taskId);
@@ -92,10 +94,12 @@ router.post("/audio", upload.single('audio'), async (req: Request, res: Response
         });
 
     } catch (error: any) {
-        console.error('❌ Submission error:', error);
+        console.error('❌ Submission error:', error?.message || error);
+        console.error('❌ Full error:', JSON.stringify(error?.response?.data || error, null, 2));
         return res.status(500).json({
             error: "Failed to process audio submission",
-            details: error.message
+            details: error.message,
+            b2Error: error?.response?.data || null,
         });
     }
 });

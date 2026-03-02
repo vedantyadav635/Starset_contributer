@@ -1,108 +1,69 @@
 const B2 = require('backblaze-b2');
 
-// Initialize B2 client
-const b2 = new B2({
-    applicationKeyId: process.env.B2_APPLICATION_KEY_ID!,
-    applicationKey: process.env.B2_APPLICATION_KEY!,
-});
-
-let authToken: string | null = null;
-let uploadUrl: string | null = null;
-let uploadAuthToken: string | null = null;
-
-/**
- * Authenticate with B2 and get upload URL
- */
-async function authenticateB2() {
-    try {
-        // Authorize account
-        await b2.authorize();
-
-        // Get upload URL
-        const response = await b2.getUploadUrl({
-            bucketId: process.env.B2_BUCKET_ID!,
-        });
-
-        uploadUrl = response.data.uploadUrl;
-        uploadAuthToken = response.data.authorizationToken;
-
-        console.log('✅ B2 authenticated successfully');
-        return true;
-    } catch (error) {
-        console.error('❌ B2 authentication failed:', error);
-        throw error;
-    }
-}
-
 /**
  * Upload file to Backblaze B2
- * @param fileBuffer - The file buffer to upload
- * @param fileName - The name to save the file as
- * @param contentType - MIME type of the file
- * @returns Public URL of the uploaded file
+ * Creates a fresh B2 client each time to avoid stale auth tokens
+ * and env var issues on Render cold starts.
  */
 export async function uploadToB2(
     fileBuffer: Buffer,
     fileName: string,
     contentType: string = 'audio/webm'
 ): Promise<string> {
-    try {
-        // Authenticate if not already authenticated
-        if (!uploadUrl || !uploadAuthToken) {
-            await authenticateB2();
-        }
+    const keyId = process.env.B2_APPLICATION_KEY_ID;
+    const appKey = process.env.B2_APPLICATION_KEY;
+    const bucketId = process.env.B2_BUCKET_ID;
+    const bucketName = process.env.B2_BUCKET_NAME;
 
-        // Upload the file
-        const uploadResponse = await b2.uploadFile({
-            uploadUrl: uploadUrl!,
-            uploadAuthToken: uploadAuthToken!,
-            fileName: fileName,
-            data: fileBuffer,
-            contentType: contentType,
-        });
-
-        console.log('✅ File uploaded to B2:', fileName);
-
-        // Construct the public URL
-        // Format: https://f{bucketId}.backblazeb2.com/file/{bucketName}/{fileName}
-        const bucketName = process.env.B2_BUCKET_NAME!;
-        const fileUrl = `https://f${process.env.B2_BUCKET_ID}.backblazeb2.com/file/${bucketName}/${fileName}`;
-
-        return fileUrl;
-    } catch (error: any) {
-        console.error('❌ B2 upload failed:', error);
-
-        // If upload URL expired, re-authenticate and retry once
-        if (error.response?.status === 401) {
-            console.log('🔄 Upload token expired, re-authenticating...');
-            uploadUrl = null;
-            uploadAuthToken = null;
-            await authenticateB2();
-
-            // Retry upload
-            const uploadResponse = await b2.uploadFile({
-                uploadUrl: uploadUrl!,
-                uploadAuthToken: uploadAuthToken!,
-                fileName: fileName,
-                data: fileBuffer,
-                contentType: contentType,
-            });
-
-            const bucketName = process.env.B2_BUCKET_NAME!;
-            const fileUrl = `https://f${process.env.B2_BUCKET_ID}.backblazeb2.com/file/${bucketName}/${fileName}`;
-
-            return fileUrl;
-        }
-
-        throw error;
+    // Validate all required env vars are present
+    if (!keyId || !appKey || !bucketId || !bucketName) {
+        const missing = [
+            !keyId && 'B2_APPLICATION_KEY_ID',
+            !appKey && 'B2_APPLICATION_KEY',
+            !bucketId && 'B2_BUCKET_ID',
+            !bucketName && 'B2_BUCKET_NAME',
+        ].filter(Boolean).join(', ');
+        throw new Error(`Missing B2 environment variables: ${missing}`);
     }
+
+    console.log(`📦 B2 Upload: keyId=${keyId.slice(0, 8)}..., bucket=${bucketName}, file=${fileName}`);
+
+    // Create a fresh B2 client (avoids module-load-time env var issues)
+    const b2 = new B2({ applicationKeyId: keyId, applicationKey: appKey });
+
+    // Step 1: Authorize
+    console.log('🔐 Authorizing with B2...');
+    await b2.authorize();
+    console.log('✅ B2 authorized');
+
+    // Step 2: Get upload URL
+    console.log('🔗 Getting B2 upload URL...');
+    const uploadUrlResponse = await b2.getUploadUrl({ bucketId });
+    const uploadUrl = uploadUrlResponse.data.uploadUrl;
+    const uploadAuthToken = uploadUrlResponse.data.authorizationToken;
+    console.log('✅ Got B2 upload URL');
+
+    // Step 3: Upload
+    console.log(`⬆️  Uploading ${(fileBuffer.length / 1024).toFixed(1)} KB to B2...`);
+    await b2.uploadFile({
+        uploadUrl,
+        uploadAuthToken,
+        fileName,
+        data: fileBuffer,
+        contentType,
+    });
+    console.log('✅ B2 upload complete:', fileName);
+
+    // Construct the download URL
+    // Native B2 format: https://f{cluster}.backblazeb2.com/file/{bucketName}/{fileName}
+    // The cluster for eu-central-003 is 003
+    const fileUrl = `https://f003.backblazeb2.com/file/${bucketName}/${fileName}`;
+
+    return fileUrl;
 }
 
 /**
  * Generate a unique filename for audio uploads
- * @param userId - User ID
- * @param taskId - Task ID
- * @returns Unique filename
  */
 export function generateAudioFileName(userId: string, taskId: string): string {
     const timestamp = Date.now();
