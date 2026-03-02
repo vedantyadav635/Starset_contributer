@@ -8,6 +8,10 @@ export const API_ENDPOINTS = {
     ADMIN_TASKS: `${API_URL}/admin/tasks`,
     ADMIN_STATS: `${API_URL}/admin/stats`,
     DELETE_TASK: (taskId: string) => `${API_URL}/admin/tasks/${taskId}`,
+    ADMIN_SUBMISSIONS: `${API_URL}/admin/submissions`,
+    ADMIN_SUBMISSIONS_PENDING: `${API_URL}/admin/submissions/pending`,
+    APPROVE_SUBMISSION: (id: string) => `${API_URL}/admin/submissions/${id}/approve`,
+    REJECT_SUBMISSION: (id: string) => `${API_URL}/admin/submissions/${id}/reject`,
 
     // Contributor endpoints
     CONTRIBUTOR_TASKS: `${API_URL}/contributor/tasks`,

@@ -75,4 +75,5 @@ export type PageView =
   | 'guidelines'
   | 'admin-dashboard'
   | 'admin-create-task'
+  | 'admin-submissions'
   | "complete-profile";

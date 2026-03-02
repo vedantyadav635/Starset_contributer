@@ -275,6 +275,10 @@ export const TaskExecution: React.FC<TaskExecutionProps> = ({ task, onBack, onCo
 
         if (!response.ok) {
           const error = await response.json();
+          // 422 = server-side audio validation failed
+          if (response.status === 422 && error.validationErrors?.length > 0) {
+            throw new Error(error.validationErrors[0]);
+          }
           throw new Error(error.error || 'Failed to submit audio');
         }
 

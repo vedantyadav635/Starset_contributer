@@ -22,8 +22,8 @@ export const ResetPassword: React.FC<ResetPasswordProps> = ({
     onBackHome,
 }) => {
     const [password, setPassword] = useState("");
-    const [confirmPassword, setConfirmPassword] = useState("");
-    const [showPassword, setShowPassword] = useState(false);
+    const [confirmPassword, setConfirmPassword] = useState(""); 
+    const [showPassword, setShowPassword] = useState(false);    
     const [showConfirmPassword, setShowConfirmPassword] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);

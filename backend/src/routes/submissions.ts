@@ -43,10 +43,29 @@ router.post("/audio", upload.single('audio'), async (req: Request, res: Response
             });
         }
 
-        console.log(`📤 Uploading audio for task ${taskId}, user ${userId}`);
-        console.log(`📊 File size: ${(audioFile.size / 1024).toFixed(2)} KB`);
-        console.log(`🔍 Mime type: ${audioFile.mimetype}`);
-        console.log(`🔍 Env check: B2_BUCKET_ID=${process.env.B2_BUCKET_ID ? 'SET' : 'MISSING'}, B2_BUCKET_NAME=${process.env.B2_BUCKET_NAME ? 'SET' : 'MISSING'}`);
+        console.log(`📤 Audio submission: task=${taskId}, user=${userId}`);
+        console.log(`📊 File size: ${(audioFile.size / 1024).toFixed(2)} KB, mime: ${audioFile.mimetype}`);
+
+        // ── Server-side audio validation ─────────────────────────────────────
+        const { validateAudio } = await import('../utils/audioValidator');
+        const validation = await validateAudio(audioFile.buffer, audioFile.mimetype, {
+            minDurationSeconds: 1.5,
+            maxDurationSeconds: 90,
+            minFileSizeBytes: 1000,
+        });
+
+        console.log(`🎙️ Validation: passed=${validation.passed}, duration=${validation.durationSeconds.toFixed(2)}s`);
+        if (validation.errors.length > 0) console.log(`❌ Validation errors:`, validation.errors);
+        if (validation.warnings.length > 0) console.log(`⚠️ Validation warnings:`, validation.warnings);
+
+        // Reject if validation failed — return before uploading to B2
+        if (!validation.passed) {
+            return res.status(422).json({
+                error: "Audio validation failed",
+                validationErrors: validation.errors,
+                validationWarnings: validation.warnings,
+            });
+        }
 
         // Generate unique filename
         const fileName = generateAudioFileName(userId, taskId);
@@ -58,9 +77,9 @@ router.post("/audio", upload.single('audio'), async (req: Request, res: Response
             audioFile.mimetype
         );
 
-        console.log(`✅ Audio uploaded successfully: ${fileUrl}`);
+        console.log(`✅ Uploaded to B2: ${fileUrl}`);
 
-        // Store submission in database
+        // Store submission in database (including validation metadata)
         const { data: submission, error: dbError } = await supabase
             .from('submissions')
             .insert({
@@ -71,6 +90,10 @@ router.post("/audio", upload.single('audio'), async (req: Request, res: Response
                 mime_type: audioFile.mimetype,
                 status: 'pending_validation',
                 submitted_at: new Date().toISOString(),
+                duration_seconds: validation.durationSeconds || null,
+                validation_status: 'auto_passed',
+                validation_errors: validation.warnings.length > 0 ? validation.warnings : null,
+                validated_at: new Date().toISOString(),
             })
             .select()
             .single();
@@ -90,6 +113,7 @@ router.post("/audio", upload.single('audio'), async (req: Request, res: Response
                 id: submission.id,
                 audioUrl: fileUrl,
                 status: submission.status,
+                durationSeconds: validation.durationSeconds,
             },
         });
 
@@ -142,6 +166,8 @@ router.post("/image", upload.single('image'), async (req: Request, res: Response
                 mime_type: imageFile.mimetype,
                 status: 'pending_validation',
                 submitted_at: new Date().toISOString(),
+                validation_status: 'auto_passed',
+                validated_at: new Date().toISOString(),
             })
             .select()
             .single();
@@ -196,6 +222,8 @@ router.post("/text", async (req: Request, res: Response) => {
                 selected_option: selectedOption,
                 status: 'pending_validation',
                 submitted_at: new Date().toISOString(),
+                validation_status: 'auto_passed',
+                validated_at: new Date().toISOString(),
             })
             .select()
             .single();

@@ -15,6 +15,7 @@ import { Contributors } from './pages/Contributors';
 import { Money } from './pages/Money';
 import { AdminCreateTask } from './pages/AdminCreateTask';
 import { AdminDashboard } from './pages/AdminDashboard';
+import { AdminSubmissions } from './pages/AdminSubmissions';
 import { ForgotPassword } from './pages/ForgotPassword';
 import { ResetPassword } from './pages/ResetPassword';
 
@@ -547,6 +548,8 @@ const App: React.FC = () => {
             return <AdminDashboard onNavigate={setCurrentPage} tasks={tasks} />;
           case 'admin-create-task':
             return <AdminCreateTask onSave={handleCreateTask} />;
+          case 'admin-submissions':
+            return <AdminSubmissions />;
           case 'tasks':
             return <TaskList onSelectTask={handleSelectTask} tasks={tasks} userRole="admin" onDeleteTask={handleDeleteTask} />;
           case 'account':

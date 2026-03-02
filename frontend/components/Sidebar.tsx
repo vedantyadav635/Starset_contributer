@@ -12,7 +12,8 @@ import {
   Users,
   ChevronLeft,
   ChevronRight,
-  Menu
+  Menu,
+  ClipboardList
 } from 'lucide-react';
 import { PageView, UserRole } from '../types';
 import { Logo } from './Logo';
@@ -55,6 +56,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
     { id: 'admin-dashboard', label: 'Analytics', icon: LayoutDashboard },
     { id: 'admin-create-task', label: 'Create Task', icon: PlusCircle },
     { id: 'tasks', label: 'Task Registry', icon: Database },
+    { id: 'admin-submissions', label: 'Submissions', icon: ClipboardList },
     { id: 'account', label: 'Profile', icon: User },
   ];
 
