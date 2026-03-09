@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Button } from '../components/Button';
 import { Task, TaskType, TaskStatus } from '../types';
 import { Save, AlertCircle, Sparkles } from 'lucide-react';
-import { supabase } from '../supabaseClient';
+import { API_ENDPOINTS } from '../config/api';
 
 
 interface AdminCreateTaskProps {
@@ -52,17 +52,19 @@ export const AdminCreateTask: React.FC<AdminCreateTaskProps> = ({ onSave }) => {
     };
 
     try {
-      const { data: createdTask, error } = await supabase
-        .from('tasks')
-        .insert([newTask])
-        .select()
-        .single();
+      // Use backend API (service role key — bypasses RLS on tasks table)
+      const response = await fetch(API_ENDPOINTS.ADMIN_TASKS, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(newTask),
+      });
 
-      if (error) {
-        console.error('Supabase insert error:', error);
-        throw new Error(error.message || 'Failed to save task to database');
+      if (!response.ok) {
+        const errText = await response.text();
+        throw new Error(errText || 'Failed to save task');
       }
 
+      const createdTask = await response.json();
       onSave(createdTask);
       alert('Task published successfully!');
     } catch (err: any) {
