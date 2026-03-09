@@ -96,17 +96,10 @@ export const TaskExecution: React.FC<TaskExecutionProps> = ({ task, onBack, onCo
       });
       mediaRecorderRef.current = mediaRecorder;
 
-      let isFirstChunk = true;
-
       mediaRecorder.ondataavailable = (event) => {
         if (event.data.size > 0) {
-          // Skip the first very small chunk which often contains silence
-          if (isFirstChunk && event.data.size < 1000) {
-            console.log('🔇 Skipping initial silence chunk:', event.data.size, 'bytes');
-            isFirstChunk = false;
-            return;
-          }
-          isFirstChunk = false;
+          // Always keep all chunks — the first WebM chunk is the EBML container
+          // header and must never be skipped, even if it's small.
           audioChunksRef.current.push(event.data);
         }
       };
