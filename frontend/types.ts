@@ -39,6 +39,7 @@ export interface Task {
   project: string; // The parent project/campaign name
   difficulty: 'Beginner' | 'Intermediate' | 'Expert';
   requirements?: string[]; // e.g. "Headphones", "Outdoor", "No Glasses"
+  submissionCount?: number; // Current number of submissions (out of 100 max)
 }
 
 export interface Transaction {

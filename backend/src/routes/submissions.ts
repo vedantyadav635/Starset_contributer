@@ -6,6 +6,58 @@ import { supabase } from "../db/supabase";
 
 const router = Router();
 
+const MAX_SUBMISSIONS_PER_TASK = 100;
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Auto-delete task when it reaches MAX_SUBMISSIONS_PER_TASK
+// ─────────────────────────────────────────────────────────────────────────────
+async function checkAndDeleteTaskIfFull(taskId: string): Promise<void> {
+    try {
+        const { count, error } = await supabase
+            .from('submissions')
+            .select('*', { count: 'exact', head: true })
+            .eq('task_id', taskId);
+
+        if (error) {
+            console.error(`❌ [QUOTA] Error counting submissions for task ${taskId}:`, error.message);
+            return;
+        }
+
+        console.log(`📊 [QUOTA] Task ${taskId} has ${count} / ${MAX_SUBMISSIONS_PER_TASK} submissions`);
+
+        if ((count ?? 0) >= MAX_SUBMISSIONS_PER_TASK) {
+            const { error: deleteError } = await supabase
+                .from('tasks')
+                .update({ status: 'deleted' })
+                .eq('id', taskId);
+
+            if (deleteError) {
+                console.error(`❌ [QUOTA] Failed to delete task ${taskId}:`, deleteError.message);
+            } else {
+                console.log(`🗑️ [QUOTA] Task ${taskId} reached ${MAX_SUBMISSIONS_PER_TASK} submissions — auto-deleted.`);
+            }
+        }
+    } catch (err: any) {
+        console.error(`❌ [QUOTA] Unexpected error:`, err?.message);
+    }
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Returns true if the user already has a submission for this task
+// ─────────────────────────────────────────────────────────────────────────────
+async function checkAlreadySubmitted(taskId: string, userId: string): Promise<boolean> {
+    const { count, error } = await supabase
+        .from('submissions')
+        .select('*', { count: 'exact', head: true })
+        .eq('task_id', taskId)
+        .eq('user_id', userId);
+    if (error) {
+        console.error(`❌ [DUPLICATE] Check failed for task=${taskId} user=${userId}:`, error.message);
+        return false; // Let it through so a real DB error surfaces later
+    }
+    return (count ?? 0) > 0;
+}
+
 const upload = multer({
     storage: multer.memoryStorage(),
     limits: { fileSize: 50 * 1024 * 1024 },
@@ -112,7 +164,13 @@ router.post("/audio", upload.single('audio'), async (req: Request, res: Response
 
         console.log(`📤 Audio received: task=${taskId}, user=${userId}, size=${(audioFile.size / 1024).toFixed(1)} KB`);
 
-        // ── 1. Quick sanity check (synchronous, very fast) ───────────────────
+        // ── 1. Duplicate-submission guard ────────────────────────────────────────────
+        if (await checkAlreadySubmitted(taskId, userId)) {
+            console.warn(`⚠️ [DUPLICATE] user=${userId} already submitted task=${taskId}`);
+            return res.status(409).json({ error: "You have already submitted this task." });
+        }
+
+        // ── 2. Quick sanity check (synchronous, very fast) ───────────────────
         if (audioFile.size < 500) {
             return res.status(422).json({
                 error: "Audio recording appears to be empty. Please try again.",
@@ -165,8 +223,7 @@ router.post("/audio", upload.single('audio'), async (req: Request, res: Response
             },
         });
 
-        // ── 5. Run full validation pipeline in background (non-blocking) ──────
-        // We pass the buffer from memory — it's still available after res.json()
+        // ── 5. Run full validation pipeline + quota check in background ───────
         setImmediate(() => {
             runValidationPipeline(
                 submission.id,
@@ -175,6 +232,10 @@ router.post("/audio", upload.single('audio'), async (req: Request, res: Response
                 rawResult.fileId,
                 fileName,
             ).catch(err => console.error('❌ Unhandled pipeline error:', err));
+
+            checkAndDeleteTaskIfFull(taskId).catch(err =>
+                console.error('❌ Unhandled quota check error:', err)
+            );
         });
 
     } catch (error: any) {
@@ -196,6 +257,12 @@ router.post("/image", upload.single('image'), async (req: Request, res: Response
 
         if (!taskId || !userId || !imageFile) {
             return res.status(400).json({ error: "Missing required fields" });
+        }
+
+        // Duplicate-submission guard
+        if (await checkAlreadySubmitted(taskId, userId)) {
+            console.warn(`⚠️ [DUPLICATE] user=${userId} already submitted task=${taskId}`);
+            return res.status(409).json({ error: "You have already submitted this task." });
         }
 
         const timestamp = Date.now();
@@ -222,6 +289,13 @@ router.post("/image", upload.single('image'), async (req: Request, res: Response
 
         if (dbError) return res.status(500).json({ error: "Failed to save submission", details: dbError.message });
 
+        // Check quota in background (non-blocking)
+        setImmediate(() => {
+            checkAndDeleteTaskIfFull(taskId).catch(err =>
+                console.error('❌ Unhandled quota check error:', err)
+            );
+        });
+
         return res.status(201).json({
             success: true,
             message: "Image submitted successfully",
@@ -244,6 +318,12 @@ router.post("/text", async (req: Request, res: Response) => {
             return res.status(400).json({ error: "Missing required fields" });
         }
 
+        // Duplicate-submission guard
+        if (await checkAlreadySubmitted(taskId, userId)) {
+            console.warn(`⚠️ [DUPLICATE] user=${userId} already submitted task=${taskId}`);
+            return res.status(409).json({ error: "You have already submitted this task." });
+        }
+
         const { data: submission, error: dbError } = await supabase
             .from('submissions')
             .insert({
@@ -261,6 +341,13 @@ router.post("/text", async (req: Request, res: Response) => {
             .single();
 
         if (dbError) return res.status(500).json({ error: "Failed to save submission", details: dbError.message });
+
+        // Check quota in background (non-blocking)
+        setImmediate(() => {
+            checkAndDeleteTaskIfFull(taskId).catch(err =>
+                console.error('❌ Unhandled quota check error:', err)
+            );
+        });
 
         return res.status(201).json({
             success: true,

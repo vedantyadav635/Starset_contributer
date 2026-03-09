@@ -166,6 +166,19 @@ const App: React.FC = () => {
 
         if (error) throw error;
 
+        // Also fetch submission counts for all tasks
+        const taskIds = (data || []).map((t: any) => t.id);
+        let countMap: Record<string, number> = {};
+        if (taskIds.length > 0) {
+          const { data: submissionRows } = await supabase
+            .from('submissions')
+            .select('task_id')
+            .in('task_id', taskIds);
+          for (const row of submissionRows ?? []) {
+            countMap[row.task_id] = (countMap[row.task_id] || 0) + 1;
+          }
+        }
+
         // Map snake_case DB columns to camelCase Task interface
         const mappedTasks: Task[] = (data || []).map((t: any) => ({
           id: t.id,
@@ -186,6 +199,7 @@ const App: React.FC = () => {
           project: t.project || '',
           difficulty: t.difficulty || 'Beginner',
           requirements: t.requirements || [],
+          submissionCount: countMap[t.id] ?? 0,
         }));
 
         setTasks(mappedTasks);
@@ -412,9 +426,15 @@ const App: React.FC = () => {
 
   /**
    * Handle task completion
-   * Clears active task and returns to task list
+   * Clears active task, marks it as done locally, and returns to task list
    */
   const handleCompleteTask = () => {
+    // Optimistically mark this task as completed so the badge shows immediately
+    if (activeTask) {
+      setCompletedTaskIds(prev =>
+        prev.includes(activeTask.id) ? prev : [...prev, activeTask.id]
+      );
+    }
     setActiveTask(null);
     setCurrentPage('tasks');
   };
@@ -687,9 +707,9 @@ const App: React.FC = () => {
         case 'dashboard':
           return <Dashboard onNavigate={setCurrentPage} />;
         case 'tasks':
-          return <TaskList onSelectTask={handleSelectTask} tasks={tasks} />;
+          return <TaskList onSelectTask={handleSelectTask} tasks={tasks} completedTaskIds={completedTaskIds} />;
         case 'execution':
-          if (!activeTask) return <TaskList onSelectTask={handleSelectTask} tasks={tasks} />;
+          if (!activeTask) return <TaskList onSelectTask={handleSelectTask} tasks={tasks} completedTaskIds={completedTaskIds} />;
           return (
             <TaskExecution
               task={activeTask}
