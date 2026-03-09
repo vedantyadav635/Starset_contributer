@@ -105,14 +105,20 @@ export const TaskExecution: React.FC<TaskExecutionProps> = ({ task, onBack, onCo
       };
 
       mediaRecorder.onstop = () => {
-        const audioBlob = new Blob(audioChunksRef.current, { type: 'audio/webm;codecs=opus' });
-        const url = URL.createObjectURL(audioBlob);
-        setAudioBlob(audioBlob);
+        const blob = new Blob(audioChunksRef.current, { type: 'audio/webm;codecs=opus' });
+        const url = URL.createObjectURL(blob);
+        setAudioBlob(blob);
         setAudioUrl(url);
 
-        console.log('🎵 Audio blob created:', audioBlob);
-        console.log('🎵 Audio URL:', url);
-        console.log('🎵 Audio chunks:', audioChunksRef.current.length);
+        // CRITICAL: Imperatively set src + call load() on the audio element.
+        // React updating src={audioUrl} in JSX does NOT trigger the browser to
+        // reload the audio source — you must do this manually.
+        if (audioRef.current) {
+          audioRef.current.src = url;
+          audioRef.current.load();
+        }
+
+        console.log(`🎵 Recording ready: ${audioChunksRef.current.length} chunks, ${(blob.size / 1024).toFixed(1)} KB`);
 
         // Stop all tracks
         stream.getTracks().forEach(track => track.stop());
@@ -141,28 +147,30 @@ export const TaskExecution: React.FC<TaskExecutionProps> = ({ task, onBack, onCo
   };
 
   const handlePlayAudio = async () => {
-    console.log('🔊 Play button clicked');
-    console.log('Audio URL:', audioUrl);
-    console.log('Audio Ref:', audioRef.current);
+    if (!audioRef.current) return;
 
-    if (audioUrl && audioRef.current) {
-      if (isPlaying) {
-        audioRef.current.pause();
-        audioRef.current.currentTime = 0;
-        setIsPlaying(false);
-        console.log('⏸️ Audio paused');
-      } else {
-        try {
-          await audioRef.current.play();
-          setIsPlaying(true);
-          console.log('▶️ Audio playing');
-        } catch (err) {
-          console.error('❌ Error playing audio:', err);
-          alert('Could not play audio. Error: ' + err);
+    if (isPlaying) {
+      audioRef.current.pause();
+      audioRef.current.currentTime = 0;
+      setIsPlaying(false);
+    } else {
+      // Ensure src is loaded — reapply in case ref wasn't ready during onstop
+      if (audioUrl && audioRef.current.src !== audioUrl) {
+        audioRef.current.src = audioUrl;
+        audioRef.current.load();
+      }
+      try {
+        await audioRef.current.play();
+        setIsPlaying(true);
+      } catch (err: any) {
+        console.error('❌ Error playing audio:', err);
+        // Try reloading the src and playing again
+        if (audioUrl) {
+          audioRef.current.src = audioUrl;
+          audioRef.current.load();
+          audioRef.current.play().then(() => setIsPlaying(true)).catch(console.error);
         }
       }
-    } else {
-      console.warn('⚠️ No audio URL or audio element not ready');
     }
   };
 
@@ -610,10 +618,9 @@ export const TaskExecution: React.FC<TaskExecutionProps> = ({ task, onBack, onCo
                         </div>
                         <div className="text-sm font-mono text-stone-500 font-medium">{formatTime(recordingTime)}</div>
                       </div>
-                      {/* Hidden audio element */}
+                      {/* Hidden audio element — src is set imperatively in onstop handler */}
                       <audio
                         ref={audioRef}
-                        src={audioUrl || undefined}
                         onEnded={() => setIsPlaying(false)}
                         className="hidden"
                       />
