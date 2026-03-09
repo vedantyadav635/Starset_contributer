@@ -45,6 +45,29 @@ export const TaskExecution: React.FC<TaskExecutionProps> = ({ task, onBack, onCo
 
   const timerRef = useRef<number | null>(null);
 
+  // Detect the best supported audio MIME type for this browser
+  const getSupportedMimeType = (): string => {
+    const types = [
+      'audio/webm;codecs=opus',
+      'audio/webm',
+      'audio/ogg;codecs=opus',
+      'audio/mp4',
+    ];
+    return types.find(t => MediaRecorder.isTypeSupported(t)) || '';
+  };
+
+  // When audioUrl changes (recording stops + React re-renders the <audio> element),
+  // imperatively set src + load(). This MUST be a useEffect because the <audio>
+  // element is conditionally rendered — it doesn't exist in the DOM until after
+  // React re-renders with hasRecorded=true, which happens after onstop fires.
+  useEffect(() => {
+    if (audioUrl && audioRef.current) {
+      audioRef.current.src = audioUrl;
+      audioRef.current.load();
+      console.log('🎵 Audio element loaded with src:', audioUrl);
+    }
+  }, [audioUrl]);
+
   // Clean up stream on unmount
   useEffect(() => {
     return () => {
@@ -91,9 +114,8 @@ export const TaskExecution: React.FC<TaskExecutionProps> = ({ task, onBack, onCo
       });
 
       audioChunksRef.current = [];
-      const mediaRecorder = new MediaRecorder(stream, {
-        mimeType: 'audio/webm;codecs=opus'
-      });
+      const mimeType = getSupportedMimeType();
+      const mediaRecorder = new MediaRecorder(stream, mimeType ? { mimeType } : undefined);
       mediaRecorderRef.current = mediaRecorder;
 
       mediaRecorder.ondataavailable = (event) => {
@@ -105,22 +127,11 @@ export const TaskExecution: React.FC<TaskExecutionProps> = ({ task, onBack, onCo
       };
 
       mediaRecorder.onstop = () => {
-        const blob = new Blob(audioChunksRef.current, { type: 'audio/webm;codecs=opus' });
+        const blob = new Blob(audioChunksRef.current, { type: mimeType || 'audio/webm' });
         const url = URL.createObjectURL(blob);
         setAudioBlob(blob);
-        setAudioUrl(url);
-
-        // CRITICAL: Imperatively set src + call load() on the audio element.
-        // React updating src={audioUrl} in JSX does NOT trigger the browser to
-        // reload the audio source — you must do this manually.
-        if (audioRef.current) {
-          audioRef.current.src = url;
-          audioRef.current.load();
-        }
-
-        console.log(`🎵 Recording ready: ${audioChunksRef.current.length} chunks, ${(blob.size / 1024).toFixed(1)} KB`);
-
-        // Stop all tracks
+        setAudioUrl(url); // triggers useEffect above after React re-renders
+        console.log(`🎵 Recording ready: ${audioChunksRef.current.length} chunks, ${(blob.size / 1024).toFixed(1)} KB, type=${blob.type}`);
         stream.getTracks().forEach(track => track.stop());
       };
 
