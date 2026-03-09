@@ -177,7 +177,30 @@ router.post("/audio", upload.single('audio'), async (req: Request, res: Response
             });
         }
 
-        // ── 2. Upload directly to RAW bucket ─────────────────────────────────
+        // ── 3. Run audio validation FIRST (synchronous — before any DB/B2 write) ──
+        // IMPORTANT: Must run synchronously so Render free-tier cannot kill it.
+        // Previously this ran in a setImmediate() background task which Render
+        // killed after the HTTP response was sent, leaving submissions stuck as
+        // "pending" forever. Now everything completes within one request lifecycle.
+        console.log(`🔬 Running validation for task=${taskId}, user=${userId}...`);
+        const validation = await validateAudio(audioFile.buffer, audioFile.mimetype, {
+            minDurationSeconds: 1.5,
+            maxDurationSeconds: 90,
+            minFileSizeBytes: 1_000,
+        });
+
+        console.log(`🎙️ Validation: passed=${validation.passed}, dur=${validation.durationSeconds.toFixed(2)}s`);
+
+        // ── 4. If validation fails, reject immediately (no upload needed) ─────
+        if (!validation.passed) {
+            console.log(`❌ Validation failed:`, validation.errors);
+            return res.status(422).json({
+                error: validation.errors[0] || 'Audio validation failed.',
+                validationErrors: validation.errors,
+            });
+        }
+
+        // ── 5. Upload to RAW bucket (validation passed) ───────────────────────
         const fileName = generateAudioFileName(userId, taskId);
         const rawResult = await uploadToBucket(
             audioFile.buffer,
@@ -187,21 +210,35 @@ router.post("/audio", upload.single('audio'), async (req: Request, res: Response
         );
         console.log(`✅ Uploaded to RAW bucket: ${rawResult.fileId}`);
 
-        // ── 3. Save to DB with status 'pending' (raw stage) ──────────────────
+        // ── 6. Copy RAW → FINAL (server-side, no re-download) ────────────────
+        console.log(`📋 Copying ${rawResult.fileId} from raw → final bucket...`);
+        let finalResult = rawResult; // fallback: use raw URL if copy fails
+        try {
+            finalResult = await copyBetweenBuckets(rawResult.fileId, fileName, 'final');
+            console.log(`✅ Copied to FINAL bucket: ${finalResult.fileId}`);
+        } catch (copyErr: any) {
+            console.warn(`⚠️ B2 copy to final failed, keeping raw URL: ${copyErr?.message}`);
+        }
+
+        // ── 7. Save to DB with final validated status (all in one write) ──────
         const { data: submission, error: dbError } = await supabase
             .from('submissions')
             .insert({
                 task_id: taskId,
                 user_id: userId,
-                audio_url: rawResult.url,           // raw URL (updated to final after validation)
-                raw_audio_url: rawResult.url,       // permanent raw reference
-                raw_file_id: rawResult.fileId,      // needed for server-side copy to final
+                audio_url: finalResult.url,
+                raw_audio_url: rawResult.url,
+                raw_file_id: rawResult.fileId,
+                final_file_id: finalResult.fileId !== rawResult.fileId ? finalResult.fileId : null,
                 file_size: audioFile.size,
                 mime_type: audioFile.mimetype,
-                status: 'pending_validation',
-                storage_stage: 'raw',
-                validation_status: 'pending',
+                duration_seconds: validation.durationSeconds || null,
+                status: 'pending_validation',   // awaiting admin review
+                storage_stage: finalResult.fileId !== rawResult.fileId ? 'final' : 'raw',
+                validation_status: 'auto_passed',
+                validation_errors: validation.warnings.length > 0 ? validation.warnings : null,
                 submitted_at: new Date().toISOString(),
+                validated_at: new Date().toISOString(),
             })
             .select()
             .single();
@@ -211,36 +248,28 @@ router.post("/audio", upload.single('audio'), async (req: Request, res: Response
             return res.status(500).json({ error: "Failed to save submission", details: dbError.message });
         }
 
-        // ── 4. Return success immediately so user isn't waiting ───────────────
-        res.status(201).json({
-            success: true,
-            message: "Audio submitted successfully. Validation in progress...",
-            submission: {
-                id: submission.id,
-                rawAudioUrl: rawResult.url,
-                status: 'pending_validation',
-                validationStatus: 'pending',
-            },
-        });
-
-        // ── 5. Run full validation pipeline + quota check in background ───────
+        // ── 8. Quota check in background (non-blocking, low-risk if it fails) ─
         setImmediate(() => {
-            runValidationPipeline(
-                submission.id,
-                audioFile.buffer,
-                audioFile.mimetype,
-                rawResult.fileId,
-                fileName,
-            ).catch(err => console.error('❌ Unhandled pipeline error:', err));
-
             checkAndDeleteTaskIfFull(taskId).catch(err =>
                 console.error('❌ Unhandled quota check error:', err)
             );
         });
 
+        // ── 9. Return success ─────────────────────────────────────────────────
+        return res.status(201).json({
+            success: true,
+            message: "Audio submitted and validated successfully.",
+            submission: {
+                id: submission.id,
+                audioUrl: finalResult.url,
+                status: 'pending_validation',
+                validationStatus: 'auto_passed',
+                durationSeconds: validation.durationSeconds,
+            },
+        });
+
     } catch (error: any) {
         console.error('❌ Submission error:', error?.message);
-        // Return the specific error reason so the user/admin can diagnose it
         const reason = error?.message || 'Unknown error';
         return res.status(500).json({
             error: reason.includes('B2') || reason.includes('upload')
