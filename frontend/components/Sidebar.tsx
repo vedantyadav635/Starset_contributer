@@ -10,8 +10,8 @@ import {
   PlusCircle,
   Settings,
   Users,
-  ChevronLeft,
-  ChevronRight,
+  PanelLeftClose,
+  PanelLeftOpen,
   Menu,
   ClipboardList
 } from 'lucide-react';
@@ -77,32 +77,37 @@ export const Sidebar: React.FC<SidebarProps> = ({
         />
       )}
 
+      {/* Floating re-open button — shown on desktop when sidebar is collapsed */}
+      {isCollapsed && (
+        <button
+          onClick={toggleSidebar}
+          className="hidden md:flex fixed left-4 top-4 z-50 h-9 w-9 items-center justify-center rounded-xl bg-white/80 dark:bg-zinc-900/80 backdrop-blur-md border border-zinc-200 dark:border-white/10 shadow-md hover:bg-zinc-100 dark:hover:bg-white/10 text-zinc-500 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-white transition-all duration-200 active:scale-95"
+          title="Open Sidebar"
+        >
+          <PanelLeftOpen className="h-4 w-4" />
+        </button>
+      )}
+
       <aside className={sidebarClasses}>
         <div className="flex flex-col h-full relative">
-          {/* Toggle Button */}
-          <button
-            onClick={toggleSidebar}
-            className={`
-              hidden md:flex absolute -right-4 top-32 h-8 w-8 items-center justify-center rounded-xl 
-              bg-white/80 dark:bg-zinc-900/80 backdrop-blur-md border border-zinc-200 dark:border-white/10 
-              shadow-[0_4px_12px_rgba(0,0,0,0.1)] dark:shadow-[0_4px_20px_rgba(0,0,0,0.4)] z-50 
-              hover:bg-blue-600 dark:hover:bg-blue-500 hover:text-white dark:hover:text-white 
-              transition-all duration-300 group hover:scale-110 active:scale-95
-            `}
-            title={isCollapsed ? "Expand Sidebar" : "Collapse Sidebar"}
-          >
-            {isCollapsed ? (
-              <ChevronRight className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-0.5" />
-            ) : (
-              <ChevronLeft className="h-4 w-4 transition-transform duration-300 group-hover:-translate-x-0.5" />
-            )}
-          </button>
 
-          {/* Header */}
-          <div className={`flex flex-col ${isCollapsed ? 'px-4' : 'px-8'} py-8 transition-all duration-300`}>
-            <div className={`flex items-center ${isCollapsed ? 'justify-center' : ''} mb-1`}>
-              <Logo className={`${isCollapsed ? 'h-12 w-12' : 'h-16 w-16'} transition-all duration-300`} />
-            </div>
+          {/* Header with inline close button — ChatGPT style */}
+          <div className={`flex items-center ${isCollapsed ? 'justify-center px-4' : 'justify-between px-5'} py-5 transition-all duration-300`}>
+            {!isCollapsed && (
+              <Logo className="h-14 w-14 transition-all duration-300" />
+            )}
+            {isCollapsed && (
+              <Logo className="h-12 w-12 transition-all duration-300" />
+            )}
+            {!isCollapsed && (
+              <button
+                onClick={toggleSidebar}
+                className="hidden md:flex h-8 w-8 items-center justify-center rounded-lg text-zinc-400 dark:text-zinc-500 hover:bg-zinc-100 dark:hover:bg-white/8 hover:text-zinc-900 dark:hover:text-white transition-all duration-200 active:scale-95"
+                title="Close Sidebar"
+              >
+                <PanelLeftClose className="h-5 w-5" />
+              </button>
+            )}
           </div>
 
           {/* Navigation */}
