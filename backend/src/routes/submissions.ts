@@ -240,9 +240,15 @@ router.post("/audio", upload.single('audio'), async (req: Request, res: Response
 
     } catch (error: any) {
         console.error('❌ Submission error:', error?.message);
+        // Return the specific error reason so the user/admin can diagnose it
+        const reason = error?.message || 'Unknown error';
         return res.status(500).json({
-            error: "Failed to process audio submission",
-            details: error.message,
+            error: reason.includes('B2') || reason.includes('upload')
+                ? `Storage upload failed. Please try again. (${reason})`
+                : reason.includes('authorize') || reason.includes('auth')
+                    ? 'Storage authentication failed. Please try again in a moment.'
+                    : `Submission failed: ${reason}`,
+            details: reason,
         });
     }
 });
