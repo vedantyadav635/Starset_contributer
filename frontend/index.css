@@ -13,31 +13,7 @@
   background-color: var(--foreground);
 }
 
-/* Hiding Default Browser Cursor only on devices with a mouse/hover capability */
-@media (hover: hover) and (pointer: fine) {
-  * {
-    cursor: none !important;
-  }
-  
-  input, textarea, button, a {
-    cursor: none !important;
-  }
-  
-  input, textarea {
-    cursor: text !important;
-  }
-}
 
-/* Ensure default cursor on touch devices */
-@media (pointer: coarse) {
-  * {
-    cursor: auto !important;
-  }
-  
-  button, a {
-    cursor: pointer !important;
-  }
-}
 
 /* Hide scrollbar utility */
 .no-scrollbar::-webkit-scrollbar {

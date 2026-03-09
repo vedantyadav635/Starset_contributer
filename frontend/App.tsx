@@ -34,7 +34,6 @@ import { API_URL } from './config/api';
 import { PublicPageType } from './components/PublicLayout';
 import { supabase } from "./supabaseClient"; // Supabase client for database operations
 import CompleteProfile from "./pages/CompleteProfile";
-import { SmoothCursor } from "@/components/ui/smooth-cursor";
 import { Button } from "./components/Button";
 
 // ============================================================================
@@ -988,7 +987,6 @@ const App: React.FC = () => {
   return (
     <>
       {renderMainContent()}
-      <SmoothCursor />
     </>
   );
 };
