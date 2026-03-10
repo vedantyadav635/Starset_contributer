@@ -56,17 +56,8 @@ export const TaskExecution: React.FC<TaskExecutionProps> = ({ task, onBack, onCo
     return types.find(t => MediaRecorder.isTypeSupported(t)) || '';
   };
 
-  // When audioUrl changes (recording stops + React re-renders the <audio> element),
-  // imperatively set src + load(). This MUST be a useEffect because the <audio>
-  // element is conditionally rendered — it doesn't exist in the DOM until after
-  // React re-renders with hasRecorded=true, which happens after onstop fires.
-  useEffect(() => {
-    if (audioUrl && audioRef.current) {
-      audioRef.current.src = audioUrl;
-      audioRef.current.load();
-      console.log('🎵 Audio element loaded with src:', audioUrl);
-    }
-  }, [audioUrl]);
+  // audioUrl is passed directly as a declarative src prop on the <audio> element.
+  // React keeps it in sync — no useEffect needed.
 
   // Clean up stream on unmount
   useEffect(() => {
@@ -82,11 +73,13 @@ export const TaskExecution: React.FC<TaskExecutionProps> = ({ task, onBack, onCo
   }, [audioUrl]);
 
   // 🔥 Background warm-up: ping the Render backend as soon as the task page opens
-  // so by the time the user records audio and clicks Submit, the backend is already awake.
+  // Track backend readiness so submit can skip waiting if already awake.
+  const backendReadyRef = useRef(false);
   useEffect(() => {
     import('../config/api').then(({ API_URL }) => {
-      fetch(`${API_URL}/health`).catch(() => {/* silent */ });
-      console.log('🔥 Background backend warm-up ping sent');
+      fetch(`${API_URL}/health`)
+        .then(r => { if (r.ok) backendReadyRef.current = true; })
+        .catch(() => {/* still waking up */ });
     });
   }, []);
 
@@ -165,22 +158,11 @@ export const TaskExecution: React.FC<TaskExecutionProps> = ({ task, onBack, onCo
       audioRef.current.currentTime = 0;
       setIsPlaying(false);
     } else {
-      // Ensure src is loaded — reapply in case ref wasn't ready during onstop
-      if (audioUrl && audioRef.current.src !== audioUrl) {
-        audioRef.current.src = audioUrl;
-        audioRef.current.load();
-      }
       try {
         await audioRef.current.play();
         setIsPlaying(true);
       } catch (err: any) {
         console.error('❌ Error playing audio:', err);
-        // Try reloading the src and playing again
-        if (audioUrl) {
-          audioRef.current.src = audioUrl;
-          audioRef.current.load();
-          audioRef.current.play().then(() => setIsPlaying(true)).catch(console.error);
-        }
       }
     }
   };
@@ -230,38 +212,29 @@ export const TaskExecution: React.FC<TaskExecutionProps> = ({ task, onBack, onCo
   };
 
   /**
-   * Wake up the Render backend if it's sleeping (free-tier cold start).
-   * Polls /health every 5 seconds for up to 3 minutes.
-   * Does NOT throw at the end — just lets the real request attempt anyway.
+   * Submit a fetch request with one retry if backend is cold-starting.
+   * Tries immediately, waits 15s on network failure, retries once.
+   * Max wait time: ~20s instead of the old 180s.
    */
-  const wakeUpBackend = async (): Promise<void> => {
-    const { API_URL } = await import('../config/api');
-    const maxAttempts = 36; // 36 × 5s = 180 seconds max wait
-    for (let i = 0; i < maxAttempts; i++) {
-      try {
-        const res = await fetch(`${API_URL}/health`, { signal: AbortSignal.timeout(5000) });
-        if (res.ok) {
-          console.log(`✅ Backend is awake (attempt ${i + 1})`);
-          return;
-        }
-      } catch {
-        // Still warming up, keep trying
-      }
-      console.log(`⏳ Waiting for backend... (${i + 1}/${maxAttempts})`);
-      await new Promise(r => setTimeout(r, 5000));
+  const fetchWithRetry = async (url: string, options: RequestInit): Promise<Response> => {
+    try {
+      const res = await fetch(url, { ...options, signal: AbortSignal.timeout(30000) });
+      return res;
+    } catch (err) {
+      // Network error — backend likely cold-starting. Wait 15s and retry once.
+      console.warn('⏳ Backend cold-starting, retrying in 15s...');
+      setSubmitStatus('Backend waking up (15s)...');
+      await new Promise(r => setTimeout(r, 15000));
+      setSubmitStatus('Retrying submission...');
+      return fetch(url, { ...options, signal: AbortSignal.timeout(60000) });
     }
-    // Don't throw — just proceed and let the actual submission request report any error
-    console.warn('⚠️ Backend may still be starting, attempting submission anyway...');
   };
 
   const handleSubmit = async () => {
     setIsSubmitting(true);
-    setSubmitStatus('Connecting to server...');
+    setSubmitStatus('Uploading...');
 
     try {
-      // Step 1: Wake the backend up first (handles Render free-tier cold start)
-      await wakeUpBackend();
-      setSubmitStatus('Uploading...');
 
       // Step 2: Get user ID from Supabase
       const { data: { user } } = await supabase.auth.getUser();
@@ -280,7 +253,7 @@ export const TaskExecution: React.FC<TaskExecutionProps> = ({ task, onBack, onCo
         formData.append('taskId', task.id);
         formData.append('userId', user.id);
 
-        const response = await fetch(API_ENDPOINTS.SUBMIT_AUDIO, {
+        const response = await fetchWithRetry(API_ENDPOINTS.SUBMIT_AUDIO, {
           method: 'POST',
           body: formData,
         });
@@ -308,7 +281,7 @@ export const TaskExecution: React.FC<TaskExecutionProps> = ({ task, onBack, onCo
         formData.append('taskId', task.id);
         formData.append('userId', user.id);
 
-        const response = await fetch(API_ENDPOINTS.SUBMIT_IMAGE, {
+        const response = await fetchWithRetry(API_ENDPOINTS.SUBMIT_IMAGE, {
           method: 'POST',
           body: formData,
         });
@@ -326,7 +299,7 @@ export const TaskExecution: React.FC<TaskExecutionProps> = ({ task, onBack, onCo
       else if (task.type === TaskType.IMAGE_LABELING ||
         task.type === TaskType.TEXT_ANNOTATION ||
         task.type === TaskType.SURVEY) {
-        const response = await fetch(API_ENDPOINTS.SUBMIT_TEXT, {
+        const response = await fetchWithRetry(API_ENDPOINTS.SUBMIT_TEXT, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
@@ -629,9 +602,10 @@ export const TaskExecution: React.FC<TaskExecutionProps> = ({ task, onBack, onCo
                         </div>
                         <div className="text-sm font-mono text-stone-500 font-medium">{formatTime(recordingTime)}</div>
                       </div>
-                      {/* Hidden audio element — src is set imperatively in onstop handler */}
+                      {/* Audio element — src passed declaratively so React keeps it in sync */}
                       <audio
                         ref={audioRef}
+                        src={audioUrl || undefined}
                         onEnded={() => setIsPlaying(false)}
                         className="hidden"
                       />
