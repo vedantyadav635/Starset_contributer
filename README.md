@@ -13,16 +13,15 @@ The **Starset Contributor Platform** is a specialized platform designed to strea
 
 ### Frontend
 - **React 18** + **TypeScript**
-- **Vite** for fast and optimized builds
-- **Tailwind CSS** for responsive, utility-first styling
-- **shadcn/ui** & **Lucide React** for modern UI components and icons
+- **Vite** for optimized builds
+- **Tailwind CSS** 
+- **shadcn/ui** & **Lucide React** 
 - **Supabase Client** for authentication & real-time data
 
 ### Backend
 - **Node.js** with **Express.js**
 - **TypeScript** for robust server-side logic
-- **Supabase (PostgreSQL)** for reliable database operations
-
+- **Supabase (PostgreSQL)** 
 ---
 
 ## 📂 Project Structure
