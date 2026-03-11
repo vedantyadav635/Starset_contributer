@@ -34,7 +34,7 @@ router.get("/", async (req: Request, res: Response) => {
                 rejection_reason,
                 submitted_at,
                 tasks:task_id ( title, type, prompt, compensation ),
-                profiles:user_id ( name, email )
+                profiles:user_id ( full_name, email_text )
             `)
             .order('submitted_at', { ascending: false })
             .limit(Number(limit));
@@ -81,7 +81,7 @@ router.get("/pending", async (_req: Request, res: Response) => {
                 validation_errors,
                 submitted_at,
                 tasks:task_id ( title, type, prompt, compensation ),
-                profiles:user_id ( name, email )
+                profiles:user_id ( full_name, email_text )
             `)
             .eq('status', 'pending_validation')
             .order('submitted_at', { ascending: true })

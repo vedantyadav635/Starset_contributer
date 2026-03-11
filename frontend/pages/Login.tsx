@@ -114,8 +114,8 @@ export const Login: React.FC<LoginProps> = ({
       {/* Header */}
       <nav className="fixed top-0 w-full z-50 border-b border-zinc-200/50 dark:border-white/5 bg-white/50 dark:bg-black/50 backdrop-blur-xl transition-all duration-300">
         <div className="max-w-7xl mx-auto px-4 md:px-6 h-14 md:h-16 flex items-center justify-between">
-          <div className="flex items-center gap-2 cursor-pointer group" onClick={onBackHome}>
-            <Logo className="h-10 w-10 md:h-14 md:w-14 transition-transform duration-500 group-hover:rotate-180" />
+          <div className="flex items-center gap-2 cursor-pointer" onClick={onBackHome}>
+            <Logo className="h-10 w-10 md:h-14 md:w-14" />
             <span className="font-bold text-xs md:text-sm tracking-[0.1em] text-zinc-900 dark:text-white uppercase">Starset</span>
           </div>
         </div>
@@ -169,7 +169,7 @@ export const Login: React.FC<LoginProps> = ({
                   type="email"
                   required
                   className="w-full pl-12 pr-4 py-3 border border-zinc-300 dark:border-white/10 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500 transition-all bg-white/50 dark:bg-black/20 text-zinc-900 dark:text-white placeholder-zinc-400 dark:placeholder-zinc-600"
-                  placeholder={isContributor ? "Work Email (name@starset.ai)" : "Admin ID (admin@starset.ai)"}
+                  placeholder="Email Address"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                 />

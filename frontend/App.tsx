@@ -23,7 +23,7 @@ import { ResetPassword } from './pages/ResetPassword';
 import { PageView, Task, UserRole, TaskType, TaskStatus } from './types';
 
 // Icon library - Lucide React icons
-import { Menu, User, MapPin, Globe, Shield, LayoutDashboard, Database, CreditCard, MoreHorizontal, CheckCircle2, ShieldAlert } from 'lucide-react';
+import { Menu, User, MapPin, Globe, Shield, LayoutDashboard, Database, CreditCard, MoreHorizontal, CheckCircle2, ShieldAlert, Clock } from 'lucide-react';
 
 // Always use dark mode — add class once at module load
 document.documentElement.classList.add('dark');
@@ -152,40 +152,25 @@ const App: React.FC = () => {
   }, []);
 
   /**
-   * EFFECT 1: Fetch all tasks directly from Supabase (bypasses backend)
-   * This avoids the Render free-tier sleep problem.
+   * EFFECT 1: Fetch tasks via Backend API (RLS-proof)
    */
   useEffect(() => {
     const fetchTasks = async () => {
       try {
-        const { data, error } = await supabase
-          .from('tasks')
-          .select('*')
-          .order('created_at', { ascending: false });
+        const { API_ENDPOINTS } = await import('./config/api');
+        const response = await fetch(API_ENDPOINTS.ADMIN_TASKS);
+        if (!response.ok) throw new Error('Failed to fetch tasks');
+        const data = await response.json();
 
-        if (error) throw error;
-
-        // Also fetch submission counts for all tasks
-        const taskIds = (data || []).map((t: any) => t.id);
-        let countMap: Record<string, number> = {};
-        if (taskIds.length > 0) {
-          const { data: submissionRows } = await supabase
-            .from('submissions')
-            .select('task_id')
-            .in('task_id', taskIds);
-          for (const row of submissionRows ?? []) {
-            countMap[row.task_id] = (countMap[row.task_id] || 0) + 1;
-          }
-        }
-
-        // Map snake_case DB columns to camelCase Task interface
+        // The admin endpoint returns tasks already ordered and with counts if possible
+        // But let's map it safely
         const mappedTasks: Task[] = (data || []).map((t: any) => ({
           id: t.id,
           title: t.title,
           type: t.type,
           compensation: t.compensation,
           currency: t.currency || 'INR',
-          estimatedTimeMin: t.estimated_time_min ?? t.estimatedTimeMin,
+          estimatedTimeSec: t.estimated_time_min || t.estimatedTimeSec || 0,
           status: t.status,
           language: t.language,
           instructions: t.instructions,
@@ -198,13 +183,13 @@ const App: React.FC = () => {
           project: t.project || '',
           difficulty: t.difficulty || 'Beginner',
           requirements: t.requirements || [],
-          submissionCount: countMap[t.id] ?? 0,
+          submissionCount: t.submission_count ?? 0,
         }));
 
         setTasks(mappedTasks);
-        console.log(`✅ Loaded ${mappedTasks.length} tasks from Supabase directly`);
+        console.log(`✅ Loaded ${mappedTasks.length} tasks via API`);
       } catch (err) {
-        console.error('Error fetching tasks from Supabase:', err);
+        console.error('Error fetching tasks via API:', err);
       }
     };
 
@@ -451,7 +436,7 @@ const App: React.FC = () => {
       type: newTask.type,
       compensation: newTask.compensation,
       currency: newTask.currency || 'INR',
-      estimatedTimeMin: newTask.estimated_time_min ?? newTask.estimatedTimeMin,
+      estimatedTimeSec: newTask.estimated_time_min ?? newTask.estimatedTimeSec,
       status: newTask.status,
       language: newTask.language,
       instructions: newTask.instructions,
@@ -585,7 +570,7 @@ const App: React.FC = () => {
 
             return (
               <div className="max-w-6xl mx-auto space-y-3 h-full flex flex-col justify-center pb-2">
-                {/* Admin Header Block */}
+                {/* Admin Header Section */}
                 <div className="flex flex-col md:flex-row items-center gap-5 bg-white dark:bg-[#09090b] rounded-3xl border border-stone-200 dark:border-white/5 p-4 shadow-lg relative overflow-hidden">
                   <div className="absolute top-0 right-0 w-32 h-32 bg-purple-500/5 rounded-full blur-3xl"></div>
 
@@ -629,24 +614,24 @@ const App: React.FC = () => {
                       Registry & System Data
                     </h3>
 
-                    <div className="grid grid-cols-2 gap-y-4 gap-x-8">
-                      <div className="space-y-0.5">
-                        <label className="text-[8px] font-black uppercase tracking-[0.2em] text-stone-400">Biological Role</label>
-                        <p className="text-sm font-black dark:text-white uppercase">{userProfile?.role_text || 'System Administrator'}</p>
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-y-8 gap-x-12">
+                      <div className="space-y-1.5">
+                        <label className="text-[9px] font-black uppercase tracking-[0.3em] text-stone-500">System Role</label>
+                        <p className="text-lg font-black text-white uppercase tracking-tight">{userProfile?.role_text || 'System Administrator'}</p>
                       </div>
-                      <div className="space-y-0.5">
-                        <label className="text-[8px] font-black uppercase tracking-[0.2em] text-stone-400">Security Clearance</label>
-                        <p className="text-sm font-black text-purple-500 uppercase">Level 5 (Restricted)</p>
+                      <div className="space-y-1.5">
+                        <label className="text-[9px] font-black uppercase tracking-[0.3em] text-stone-500">Security Clearance</label>
+                        <p className="text-lg font-black text-purple-500 uppercase tracking-tight">Level 5 (Encrypted)</p>
                       </div>
-                      <div className="space-y-0.5 min-w-0">
-                        <label className="text-[8px] font-black uppercase tracking-[0.2em] text-stone-400">Account Origin</label>
-                        <p className="text-sm font-black dark:text-white flex items-center gap-1.5 truncate uppercase">
-                          <MapPin className="h-3 w-3 text-purple-500" /> {userProfile?.created_at ? new Date(userProfile.created_at).toLocaleDateString() : 'ActiveSince_Deployment'}
+                      <div className="space-y-1.5">
+                        <label className="text-[9px] font-black uppercase tracking-[0.3em] text-stone-500">Registry Origin</label>
+                        <p className="text-lg font-black text-white flex items-center gap-2 uppercase tracking-tight">
+                          <MapPin className="h-4 w-4 text-purple-500" /> {userProfile?.created_at ? new Date(userProfile.created_at).toLocaleDateString() : 'ActiveSince_Deployment'}
                         </p>
                       </div>
-                      <div className="space-y-0.5 min-w-0">
-                        <label className="text-[8px] font-black uppercase tracking-[0.2em] text-stone-400">Primary Endpoint</label>
-                        <p className="text-sm font-black dark:text-white truncate lowercase opacity-80">{userProfile?.email || 'admin@starset.ai'}</p>
+                      <div className="space-y-1.5">
+                        <label className="text-[9px] font-black uppercase tracking-[0.3em] text-stone-500">Email Address</label>
+                        <p className="text-lg font-black text-white/80 lowercase truncate">{userProfile?.email || 'admin@starset.ai'}</p>
                       </div>
                     </div>
                   </div>
@@ -774,7 +759,7 @@ const App: React.FC = () => {
 
           return (
             <div className="max-w-6xl mx-auto space-y-3 h-full flex flex-col justify-center pb-2">
-              {/* Profile Header Block */}
+              {/* Profile Header Section */}
               <div className="flex flex-col md:flex-row items-center gap-5 bg-white dark:bg-[#09090b] rounded-3xl border border-stone-200 dark:border-white/5 p-4 shadow-lg relative overflow-hidden">
                 <div className="absolute top-0 right-0 w-32 h-32 bg-blue-500/5 rounded-full blur-3xl"></div>
 
@@ -810,63 +795,75 @@ const App: React.FC = () => {
               </div>
 
               {/* Info Grid */}
-              <div className="grid md:grid-cols-3 gap-3">
-                {/* Demographics */}
-                <div className="md:col-span-2 bg-white dark:bg-[#09090b] rounded-3xl border border-stone-200 dark:border-white/5 p-5 shadow-sm">
-                  <h3 className="text-[10px] font-black text-[#121212] dark:text-white mb-4 uppercase tracking-[0.2em] flex items-center gap-2 opacity-60">
-                    <User className="h-3 w-3 text-blue-600 dark:text-blue-400" />
-                    Biometric & Regional Data
-                  </h3>
+              <div className="grid md:grid-cols-3 gap-6">
+                {/* Biometric Analysis */}
+                <div className="md:col-span-2 bg-black/40 backdrop-blur-xl rounded-[2.5rem] border border-white/10 p-8 md:p-10 shadow-xl relative group">
+                  <div className="flex items-center justify-between mb-8">
+                    <h3 className="text-xs font-black text-white uppercase tracking-[0.4em] flex items-center gap-3">
+                      <User className="h-4 w-4 text-blue-500" />
+                      Biometric & Regional Profile
+                    </h3>
+                    <div className="h-px flex-1 bg-gradient-to-r from-blue-500/20 to-transparent ml-6"></div>
+                  </div>
 
-                  <div className="grid grid-cols-2 gap-y-4 gap-x-8">
-                    <div className="space-y-0.5">
-                      <label className="text-[8px] font-black uppercase tracking-[0.2em] text-stone-400">Biological Age</label>
-                      <p className="text-sm font-black dark:text-white uppercase">{userProfile?.age || 'Unspecified'}</p>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-y-8 gap-x-12">
+                    <div className="space-y-1.5 hover:translate-x-1 transition-transform">
+                      <label className="text-[9px] font-black uppercase tracking-[0.3em] text-stone-500">Age</label>
+                      <p className="text-lg font-black text-white uppercase tracking-tight">{userProfile?.age || 'Not Disclosed'}</p>
                     </div>
-                    <div className="space-y-0.5">
-                      <label className="text-[8px] font-black uppercase tracking-[0.2em] text-stone-400">Gender Identity</label>
-                      <p className="text-sm font-black dark:text-white uppercase">{userProfile?.gender || 'Unspecified'}</p>
+                    <div className="space-y-1.5 hover:translate-x-1 transition-transform">
+                      <label className="text-[9px] font-black uppercase tracking-[0.3em] text-stone-500">Gender</label>
+                      <p className="text-lg font-black text-white uppercase tracking-tight">{userProfile?.gender || 'Not Disclosed'}</p>
                     </div>
-                    <div className="space-y-0.5 min-w-0">
-                      <label className="text-[8px] font-black uppercase tracking-[0.2em] text-stone-400">Geo Location</label>
-                      <p className="text-sm font-black dark:text-white flex items-center gap-1.5 truncate uppercase">
-                        <MapPin className="h-3 w-3 text-blue-500" /> {userProfile?.city || 'City'}, {userProfile?.state || 'State'}
+                    <div className="space-y-1.5 hover:translate-x-1 transition-transform">
+                      <label className="text-[9px] font-black uppercase tracking-[0.3em] text-stone-500">Location</label>
+                      <p className="text-lg font-black text-white flex items-center gap-2 uppercase tracking-tight">
+                        <MapPin className="h-4 w-4 text-blue-500" /> {userProfile?.city || 'City'}, {userProfile?.state || 'State'}
                       </p>
                     </div>
-                    <div className="space-y-0.5 min-w-0">
-                      <label className="text-[8px] font-black uppercase tracking-[0.2em] text-stone-400">Validated Endpoint</label>
-                      <p className="text-sm font-black dark:text-white truncate lowercase opacity-80">{userProfile?.email || 'N/A'}</p>
+                    <div className="space-y-1.5 hover:translate-x-1 transition-transform">
+                      <label className="text-[9px] font-black uppercase tracking-[0.3em] text-stone-500">Email Address</label>
+                      <p className="text-lg font-black text-white/80 lowercase truncate">{userProfile?.email || 'N/A'}</p>
                     </div>
                   </div>
                 </div>
 
-                {/* Finance */}
-                <div className="bg-white dark:bg-[#09090b] rounded-3xl border border-stone-200 dark:border-white/5 p-5 shadow-sm">
-                  <h3 className="text-[10px] font-black text-[#121212] dark:text-white mb-4 uppercase tracking-[0.2em] flex items-center gap-2 opacity-60">
-                    <CreditCard className="h-3 w-3 text-emerald-600 dark:text-emerald-400" />
+                {/* Compensation Protocol */}
+                <div className="bg-black/40 backdrop-blur-xl rounded-[2.5rem] border border-white/10 p-8 md:p-10 shadow-xl group">
+                  <h3 className="text-xs font-black text-white mb-8 uppercase tracking-[0.4em] flex items-center gap-3">
+                    <CreditCard className="h-4 w-4 text-emerald-500" />
                     Compensation Hub
                   </h3>
 
-                  <div className="space-y-4">
-                    <div className="p-3 bg-stone-50 dark:bg-white/5 rounded-xl border border-stone-100 dark:border-white/5">
-                      <label className="text-[8px] font-black uppercase tracking-[0.2em] text-stone-400 mb-1 block">Active UPI Gateway</label>
-                      <p className="text-sm font-black text-blue-600 dark:text-blue-400 truncate tracking-tight">{userProfile?.upi_id || 'Not Linked'}</p>
+                  <div className="space-y-6">
+                    <div className="p-5 bg-white/5 rounded-2xl border border-white/5 group-hover:border-emerald-500/30 transition-all duration-500">
+                      <label className="text-[9px] font-black uppercase tracking-[0.3em] text-stone-500 mb-2 block">Active UPI Gateway</label>
+                      <p className="text-lg font-black text-emerald-500 truncate tracking-tighter drop-shadow-[0_0_10px_rgba(16,185,129,0.2)]">{userProfile?.upi_id || 'Not Assigned'}</p>
                     </div>
-                    <Button variant="secondary" size="sm" className="w-full text-[10px] font-black h-8 bg-zinc-100 hover:bg-zinc-200 dark:bg-white/10 dark:hover:bg-white/20 border-transparent transition-all uppercase tracking-widest" onClick={() => setCurrentPage('earnings')}>
-                      Reset Method
+                    <Button
+                      variant="secondary"
+                      className="w-full py-6 rounded-2xl text-[10px] font-black uppercase tracking-[0.3em] bg-white/5 hover:bg-white/10 border-white/10 hover:border-blue-500/50 transition-all duration-300"
+                      onClick={() => setCurrentPage('earnings')}
+                    >
+                      Reset Payment Method
                     </Button>
                   </div>
                 </div>
               </div>
 
-              {/* Small Danger Zone Footer */}
-              <div className="bg-red-50/20 dark:bg-red-950/5 rounded-2xl border border-red-100/50 dark:border-red-900/10 p-3 px-5 flex items-center justify-between">
-                <div className="flex items-center gap-3">
-                  <ShieldAlert className="h-3.5 w-3.5 text-red-600/40 dark:text-red-500/30" />
-                  <span className="text-[10px] font-bold text-red-700/50 dark:text-red-400/30 uppercase tracking-tighter">Emergency Account Termination Protocol</span>
+              {/* Security Alerts Section */}
+              <div className="bg-red-950/10 backdrop-blur-md rounded-3xl border border-red-900/20 p-6 flex flex-col md:flex-row items-center justify-between gap-6 px-10">
+                <div className="flex items-center gap-5">
+                  <div className="h-12 w-12 rounded-2xl bg-red-500/10 flex items-center justify-center border border-red-500/20">
+                    <ShieldAlert className="h-6 w-6 text-red-500 animate-pulse" />
+                  </div>
+                  <div className="text-center md:text-left">
+                    <h4 className="text-[10px] font-black text-red-500 uppercase tracking-[0.4em] mb-1">Account Termination Protocol</h4>
+                    <p className="text-xs font-bold text-stone-500">Initiating this action will permanently purge all data from the neural network.</p>
+                  </div>
                 </div>
                 <button
-                  className="text-[9px] font-black text-red-600/80 hover:text-red-700 hover:underline transition-colors uppercase tracking-widest"
+                  className="px-8 py-3 bg-red-500/10 hover:bg-red-500 text-red-500 hover:text-white border border-red-500/30 rounded-full text-[10px] font-black uppercase tracking-[0.2em] transition-all duration-300"
                   onClick={() => window.confirm("Terminate account? Contact support@starset.ai") && alert("Contact support.")}
                 >
                   Initiate Removal
@@ -932,16 +929,7 @@ const App: React.FC = () => {
                 {renderContent()}
               </div>
 
-              <footer className="mt-12 py-6 border-t border-zinc-200 dark:border-white/5 flex flex-col md:flex-row items-center justify-between gap-4 text-zinc-400 dark:text-zinc-600 text-xs">
-                <div className="flex items-center gap-2">
-                  <Logo className="h-12 w-12 opacity-70" />
-                  <span className="font-bold tracking-wider uppercase">Starset Intelligence</span>
-                </div>
-                <div className="flex items-center gap-6">
-                  <span className="hover:text-zinc-600 dark:hover:text-zinc-400 transition-colors cursor-pointer">System Status: Stable</span>
-                  <span className="font-mono opacity-50">v2.5.4</span>
-                </div>
-              </footer>
+
             </div>
           </main>
 

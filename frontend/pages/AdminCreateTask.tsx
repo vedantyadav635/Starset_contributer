@@ -14,7 +14,7 @@ export const AdminCreateTask: React.FC<AdminCreateTaskProps> = ({ onSave }) => {
     title: '',
     type: TaskType.AUDIO_COLLECTION,
     compensation: 100,
-    estimatedTimeMin: 2,
+    estimatedTimeSec: 20,
     language: 'English',
     project: '',
     difficulty: 'Beginner' as 'Beginner' | 'Intermediate' | 'Expert',
@@ -36,7 +36,7 @@ export const AdminCreateTask: React.FC<AdminCreateTaskProps> = ({ onSave }) => {
       type: formData.type,
       compensation: formData.compensation,
       currency: "INR",
-      estimated_time_min: formData.estimatedTimeMin,
+      estimated_time_min: formData.estimatedTimeSec,
       status: "AVAILABLE",
       language: formData.language,
       project: formData.project,
@@ -141,14 +141,14 @@ export const AdminCreateTask: React.FC<AdminCreateTaskProps> = ({ onSave }) => {
             />
           </div>
           <div className="space-y-2">
-            <label className="block text-xs font-bold uppercase tracking-wider text-stone-500">Est. Time (Min)</label>
+            <label className="block text-xs font-bold uppercase tracking-wider text-stone-500">Est. Time (Sec)</label>
             <input
               type="number"
               required
               min="1"
               className="w-full px-4 py-3 bg-[#FAF9F7] dark:bg-black/30 border border-stone-200 dark:border-white/10 rounded-lg outline-none text-zinc-900 dark:text-white"
-              value={formData.estimatedTimeMin}
-              onChange={e => setFormData({ ...formData, estimatedTimeMin: Number(e.target.value) })}
+              value={formData.estimatedTimeSec}
+              onChange={e => setFormData({ ...formData, estimatedTimeSec: Number(e.target.value) })}
             />
           </div>
         </div>
@@ -169,13 +169,17 @@ export const AdminCreateTask: React.FC<AdminCreateTaskProps> = ({ onSave }) => {
           </div>
           <div className="space-y-2">
             <label className="block text-xs font-bold uppercase tracking-wider text-stone-500">Language</label>
-            <input
-              required
+            <select
               className="w-full px-4 py-3 bg-[#FAF9F7] dark:bg-black/30 border border-stone-200 dark:border-white/10 rounded-lg outline-none text-zinc-900 dark:text-white"
-              placeholder="e.g. English (UK)"
               value={formData.language}
               onChange={e => setFormData({ ...formData, language: e.target.value })}
-            />
+            >
+              <option value="English">English</option>
+              <option value="Hindi">Hindi</option>
+              <option value="Spanish">Spanish</option>
+              <option value="French">French</option>
+              <option value="German">German</option>
+            </select>
           </div>
           <div className="space-y-2">
             <label className="block text-xs font-bold uppercase tracking-wider text-stone-500">Requirements (Comma sep.)</label>

@@ -16,10 +16,17 @@ function getBucket(stage: 'raw' | 'final' | 'processed'): BucketConfig {
         processed: { idKey: 'B2_PROCESSED_BUCKET_ID', nameKey: 'B2_PROCESSED_BUCKET_NAME' },
     };
     const { idKey, nameKey } = map[stage];
-    const bucketId = process.env[idKey];
-    const bucketName = process.env[nameKey];
+    let bucketId = process.env[idKey];
+    let bucketName = process.env[nameKey];
+
+    // Fallback for 'raw' stage to generic keys if specific ones are missing
+    if (stage === 'raw' && (!bucketId || !bucketName)) {
+        bucketId = bucketId || process.env.B2_BUCKET_ID;
+        bucketName = bucketName || process.env.B2_BUCKET_NAME;
+    }
+
     if (!bucketId || !bucketName) {
-        throw new Error(`Missing env vars for ${stage} bucket: ${idKey} and/or ${nameKey}`);
+        throw new Error(`Missing env vars for ${stage} bucket: ${idKey} and/or ${nameKey} (also checked generic B2_BUCKET_ID/NAME for raw stage)`);
     }
     return { bucketId, bucketName, clusterUrl: 'f003.backblazeb2.com' };
 }

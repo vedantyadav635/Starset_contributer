@@ -23,7 +23,7 @@ export interface Task {
   type: TaskType;
   compensation: number; // Was reward
   currency: string;
-  estimatedTimeMin: number;
+  estimatedTimeSec: number;
   status: TaskStatus;
   language: string;
   instructions: string;

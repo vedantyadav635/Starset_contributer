@@ -58,32 +58,40 @@ export const PublicLayout: React.FC<PublicLayoutProps> = ({
    ];
 
    return (
-      <div className="min-h-screen text-zinc-900 dark:text-white font-sans selection:bg-purple-500/30 selection:text-purple-200 overflow-x-hidden transition-colors duration-300">
+      <div className="min-h-screen text-zinc-900 dark:text-white font-sans selection:bg-purple-500/30 selection:text-purple-200 transition-colors duration-300">
 
-         {/* Global Background Grid & Stars */}
-         <div className="fixed inset-0 z-0 pointer-events-none">
-            <div className="absolute inset-0 bg-[linear-gradient(to_right,#8080800a_1px,transparent_1px),linear-gradient(to_bottom,#8080800a_1px,transparent_1px)] bg-[size:24px_24px] animate-grid-flow"></div>
-            <div className="absolute top-[-10%] left-[-10%] w-[500px] h-[500px] bg-purple-900/10 rounded-full blur-[120px]"></div>
-            <div className="absolute bottom-[-10%] right-[-10%] w-[500px] h-[500px] bg-blue-900/10 rounded-full blur-[120px]"></div>
-         </div>
+         {/* Global Background Gradient & Grid - Only on Home */}
+         {currentPage === 'home' ? (
+            <div className="fixed inset-0 z-0 pointer-events-none bg-[#020205]">
+               {/* Main Blue Gradient Background - More Seamless */}
+               <div className="absolute inset-0 bg-[radial-gradient(circle_at_20%_30%,_#0a1d3a_0%,_transparent_70%),radial-gradient(circle_at_80%_70%,_#050b18_0%,_transparent_70%),#020205] opacity-90"></div>
+
+               {/* Grid Pattern */}
+               <div className="absolute inset-0 bg-[linear-gradient(to_right,#ffffff03_1px,transparent_1px),linear-gradient(to_bottom,#ffffff03_1px,transparent_1px)] bg-[size:40px_40px]"></div>
+
+               {/* Animated Glows - Blue Focused */}
+               <div className="absolute top-[-10%] left-[-10%] w-[600px] h-[600px] bg-blue-600/10 rounded-full blur-[120px] animate-pulse"></div>
+               <div className="absolute bottom-[20%] right-[10%] w-[500px] h-[500px] bg-indigo-900/20 rounded-full blur-[100px] animate-pulse-glow"></div>
+               <div className="absolute top-[30%] right-[-5%] w-[400px] h-[400px] bg-blue-500/5 rounded-full blur-[80px]"></div>
+            </div>
+         ) : (
+            <div className="fixed inset-0 z-0 pointer-events-none bg-white dark:bg-[#050505]"></div>
+         )}
 
          {/* Navigation */}
          <nav
             className={`fixed top-0 w-full z-[100] transition-all duration-300 ease-in-out
              ${showNav ? 'translate-y-0' : '-translate-y-full'}
-             ${isScrolled
-                  ? 'border-b border-zinc-200/50 dark:border-white/5 bg-white/80 dark:bg-black/80 backdrop-blur-2xl'
-                  : 'border-transparent bg-transparent backdrop-blur-none'
+             ${currentPage === 'home'
+                  ? (isScrolled ? 'bg-transparent backdrop-blur-2xl' : 'bg-transparent backdrop-blur-none')
+                  : (isScrolled ? 'border-b border-zinc-200/50 dark:border-white/10 bg-white/80 dark:bg-zinc-950/80 backdrop-blur-2xl' : 'bg-transparent shadow-none')
                }`}
          >
             <div className="max-w-7xl mx-auto px-4 md:px-6 h-16 md:h-20 flex items-center justify-between">
 
                {/* Logo Section */}
-               <div className="flex items-center gap-2 md:gap-3 cursor-pointer group" onClick={() => onNavigate('home')}>
-                  <div className="relative">
-                     <div className="absolute inset-0 bg-blue-500/20 blur-lg rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
-                     <Logo className="h-12 w-12 md:h-16 md:w-16 relative z-10 transition-transform duration-500" />
-                  </div>
+               <div className="flex items-center gap-2 md:gap-3 cursor-pointer" onClick={() => onNavigate('home')}>
+                  <Logo className="h-12 w-12 md:h-16 md:w-16" />
                   <span className="font-bold text-base md:text-lg tracking-[0.1em] text-zinc-900 dark:text-white transition-colors font-mono uppercase whitespace-nowrap">Starset</span>
                </div>
 
@@ -136,7 +144,7 @@ export const PublicLayout: React.FC<PublicLayoutProps> = ({
                   </div>
                   <div className="mt-auto pb-10">
                      <div className="text-[10px] font-black text-zinc-400 uppercase tracking-[0.2em] mb-4 pl-2 opacity-60">Account System</div>
-                     <Button onClick={() => { onEnterApp(); setIsMobileMenuOpen(false); }} className="w-full h-16 text-xl font-black rounded-2xl shadow-xl bg-zinc-900 dark:bg-white text-white dark:text-black">
+                     <Button onClick={() => { onEnterApp(); setIsMobileMenuOpen(false); }} className="w-full h-16 text-xl font-black rounded-2xl shadow-xl bg-zinc-900 dark:bg-white !text-white dark:!text-black">
                         Access Terminal
                      </Button>
                   </div>
@@ -148,7 +156,8 @@ export const PublicLayout: React.FC<PublicLayoutProps> = ({
             {children}
          </main>
 
-         <footer className="border-t border-zinc-200 dark:border-white/5 bg-white dark:bg-black pt-16 pb-8 px-6 relative z-10">
+         {/* Footer - Restoration of border for non-home pages */}
+         <footer className={`${currentPage === 'home' ? '' : 'border-t border-zinc-200 dark:border-white/5 bg-white dark:bg-[#050505]'} pt-16 pb-8 px-6 relative z-10`}>
             <div className="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center text-xs text-zinc-500">
                <div className="flex items-center gap-2 mb-4 md:mb-0">
                   <Logo className="h-12 w-12" />

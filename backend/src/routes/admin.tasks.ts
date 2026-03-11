@@ -84,8 +84,25 @@ router.get("/", async (req, res) => {
       return res.status(500).json({ error: error.message });
     }
 
-    console.log(`✅ Fetched ${data?.length || 0} tasks`);
-    res.status(200).json(data || []);
+    const taskIds = data?.map((t: any) => t.id) || [];
+    let countMap: Record<string, number> = {};
+    if (taskIds.length > 0) {
+      const { data: counts } = await supabase
+        .from("submissions")
+        .select("task_id")
+        .in("task_id", taskIds);
+      for (const row of counts ?? []) {
+        countMap[row.task_id] = (countMap[row.task_id] || 0) + 1;
+      }
+    }
+
+    const tasksWithCounts = data?.map((t: any) => ({
+      ...t,
+      submission_count: countMap[t.id] ?? 0
+    })) || [];
+
+    console.log(`✅ Fetched ${tasksWithCounts.length} tasks with counts`);
+    res.status(200).json(tasksWithCounts);
 
   } catch (err) {
     console.error("🔥 Server crash:", err);

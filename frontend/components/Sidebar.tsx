@@ -64,7 +64,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
 
   const sidebarClasses = `
     fixed inset-y-0 left-0 z-50 ${isCollapsed ? 'w-24' : 'w-64'} bg-white/90 dark:bg-black/40 backdrop-blur-xl border-r border-zinc-200 dark:border-white/5 text-zinc-600 dark:text-zinc-400 transform transition-all duration-300 cubic-bezier(0.4, 0, 0.2, 1)
-    ${isMobileOpen ? 'translate-x-0' : '-translate-x-full'} md:translate-x-0 md:static md:inset-auto
+    ${isMobileOpen ? 'translate-x-0' : '-translate-x-full'} md:translate-x-0 md:static md:inset-auto flex flex-col h-full
   `;
 
   return (
@@ -77,37 +77,22 @@ export const Sidebar: React.FC<SidebarProps> = ({
         />
       )}
 
-      {/* Floating re-open button — shown on desktop when sidebar is collapsed */}
-      {isCollapsed && (
-        <button
-          onClick={toggleSidebar}
-          className="hidden md:flex fixed left-4 top-4 z-50 h-9 w-9 items-center justify-center rounded-xl bg-white/80 dark:bg-zinc-900/80 backdrop-blur-md border border-zinc-200 dark:border-white/10 shadow-md hover:bg-zinc-100 dark:hover:bg-white/10 text-zinc-500 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-white transition-all duration-200 active:scale-95"
-          title="Open Sidebar"
-        >
-          <PanelLeftOpen className="h-4 w-4" />
-        </button>
-      )}
-
       <aside className={sidebarClasses}>
         <div className="flex flex-col h-full relative">
 
-          {/* Header with inline close button — ChatGPT style */}
-          <div className={`flex items-center ${isCollapsed ? 'justify-center px-4' : 'justify-between px-5'} py-5 transition-all duration-300`}>
-            {!isCollapsed && (
-              <Logo className="h-14 w-14 transition-all duration-300" />
-            )}
-            {isCollapsed && (
-              <Logo className="h-12 w-12 transition-all duration-300" />
-            )}
-            {!isCollapsed && (
-              <button
-                onClick={toggleSidebar}
-                className="hidden md:flex h-8 w-8 items-center justify-center rounded-lg text-zinc-400 dark:text-zinc-500 hover:bg-zinc-100 dark:hover:bg-white/8 hover:text-zinc-900 dark:hover:text-white transition-all duration-200 active:scale-95"
-                title="Close Sidebar"
-              >
+          {/* Header with toggle button — logo removed per request */}
+          <div className={`flex items-center ${isCollapsed ? 'justify-center py-10 px-4' : 'justify-start py-6 px-6'} transition-all duration-300`}>
+            <button
+              onClick={toggleSidebar}
+              className="hidden md:flex h-10 w-10 items-center justify-center rounded-xl bg-zinc-100 dark:bg-white/10 border border-zinc-200 dark:border-white/10 text-zinc-500 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-white transition-all shadow-sm active:scale-95"
+              title={isCollapsed ? "Open Sidebar" : "Close Sidebar"}
+            >
+              {isCollapsed ? (
+                <PanelLeftOpen className="h-5 w-5" />
+              ) : (
                 <PanelLeftClose className="h-5 w-5" />
-              </button>
-            )}
+              )}
+            </button>
           </div>
 
           {/* Navigation */}
@@ -157,7 +142,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
               </div>
               {!isCollapsed && (
                 <>
-                  <div className="flex flex-col truncate">
+                  <div className="flex flex-col truncate flex-1">
                     <span className="text-sm font-bold text-zinc-900 dark:text-white truncate">
                       {user?.user_metadata?.full_name}
                     </span>

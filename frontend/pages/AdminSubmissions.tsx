@@ -25,7 +25,7 @@ interface Submission {
     reviewed_at: string | null;
     rejection_reason: string | null;
     tasks: { title: string; type: string; prompt: string; compensation: number } | null;
-    profiles: { name: string; email: string } | null;
+    profiles: { full_name: string; email_text: string } | null;
 }
 
 const REJECTION_REASONS = [
@@ -231,7 +231,7 @@ export const AdminSubmissions: React.FC = () => {
                                         <div className="flex items-center gap-2 mt-1">
                                             <User className="h-3 w-3 text-zinc-400" />
                                             <span className="text-xs text-zinc-500">
-                                                {sub.profiles?.name || sub.profiles?.email || sub.user_id.slice(0, 8)}
+                                                {sub.profiles?.full_name || sub.profiles?.email_text || sub.user_id.slice(0, 8)}
                                             </span>
                                             <span className="text-zinc-300 dark:text-zinc-700">•</span>
                                             <Clock className="h-3 w-3 text-zinc-400" />
@@ -293,8 +293,8 @@ export const AdminSubmissions: React.FC = () => {
                                                 <button
                                                     onClick={() => handlePlayAudio(sub)}
                                                     className={`h-12 w-12 rounded-full flex items-center justify-center shadow-sm transition-all border ${playingId === sub.id
-                                                            ? 'bg-blue-600 border-blue-500 text-white scale-95'
-                                                            : 'bg-white dark:bg-zinc-800 border-zinc-200 dark:border-white/10 text-zinc-700 dark:text-zinc-300 hover:border-blue-500 hover:text-blue-600'
+                                                        ? 'bg-blue-600 border-blue-500 text-white scale-95'
+                                                        : 'bg-white dark:bg-zinc-800 border-zinc-200 dark:border-white/10 text-zinc-700 dark:text-zinc-300 hover:border-blue-500 hover:text-blue-600'
                                                         }`}
                                                 >
                                                     {playingId === sub.id ? <Pause className="h-5 w-5" /> : <Play className="h-5 w-5 ml-0.5" />}
@@ -382,8 +382,8 @@ export const AdminSubmissions: React.FC = () => {
                                     <label
                                         key={reason}
                                         className={`flex items-center gap-3 p-3 rounded-xl border cursor-pointer transition-all ${rejectionReason === reason
-                                                ? 'border-red-400 dark:border-red-500 bg-red-50 dark:bg-red-900/10'
-                                                : 'border-zinc-200 dark:border-white/10 hover:border-zinc-300 dark:hover:border-white/20'
+                                            ? 'border-red-400 dark:border-red-500 bg-red-50 dark:bg-red-900/10'
+                                            : 'border-zinc-200 dark:border-white/10 hover:border-zinc-300 dark:hover:border-white/20'
                                             }`}
                                     >
                                         <input

@@ -62,8 +62,8 @@ export const TaskList: React.FC<TaskListProps> = ({ onSelectTask, tasks, userRol
             key={type}
             onClick={() => setFilterType(type)}
             className={`px-4 md:px-5 py-2 md:py-2.5 text-xs md:text-sm font-bold rounded-xl transition-all duration-300 whitespace-nowrap ${filterType === type
-                ? 'bg-zinc-900 dark:bg-white text-white dark:text-black shadow-lg scale-[1.02]'
-                : 'bg-transparent text-stone-500 hover:text-stone-900 dark:hover:text-white hover:bg-stone-100 dark:hover:bg-white/5'
+              ? 'bg-zinc-900 dark:bg-white text-white dark:text-black shadow-lg scale-[1.02]'
+              : 'bg-transparent text-stone-500 hover:text-stone-900 dark:hover:text-white hover:bg-stone-100 dark:hover:bg-white/5'
               }`}
           >
             {type === 'All' ? 'All Operations' : type}
@@ -135,10 +135,10 @@ export const TaskList: React.FC<TaskListProps> = ({ onSelectTask, tasks, userRol
                         <Globe className="h-3 w-3" /> {task.language}
                       </span>
                       <span className={`inline-flex items-center px-2.5 py-1 rounded-full text-[11px] font-bold uppercase tracking-wide border ${task.difficulty === 'Beginner'
-                          ? 'border-emerald-200 dark:border-emerald-700/40 text-emerald-600 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-900/10'
-                          : task.difficulty === 'Intermediate'
-                            ? 'border-amber-200 dark:border-amber-700/40 text-amber-600 dark:text-amber-400 bg-amber-50 dark:bg-amber-900/10'
-                            : 'border-red-200 dark:border-red-700/40 text-red-600 dark:text-red-400 bg-red-50 dark:bg-red-900/10'
+                        ? 'border-emerald-200 dark:border-emerald-700/40 text-emerald-600 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-900/10'
+                        : task.difficulty === 'Intermediate'
+                          ? 'border-amber-200 dark:border-amber-700/40 text-amber-600 dark:text-amber-400 bg-amber-50 dark:bg-amber-900/10'
+                          : 'border-red-200 dark:border-red-700/40 text-red-600 dark:text-red-400 bg-red-50 dark:bg-red-900/10'
                         }`}>
                         {task.difficulty}
                       </span>
@@ -203,7 +203,7 @@ export const TaskList: React.FC<TaskListProps> = ({ onSelectTask, tasks, userRol
                     <div className="flex items-center gap-3 mt-auto pt-1 flex-wrap">
                       <span className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-stone-50 dark:bg-white/5 border border-stone-200 dark:border-white/10 rounded-lg text-sm font-semibold text-[#121212] dark:text-white">
                         <Clock className="h-3.5 w-3.5 text-stone-400" />
-                        {task.estimatedTimeMin} min
+                        {task.estimatedTimeSec} sec
                       </span>
                       <span className="inline-flex items-center text-base font-black text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-900/20 px-4 py-1.5 rounded-lg border border-blue-100 dark:border-blue-800/50">
                         ₹{task.compensation.toFixed(2)}

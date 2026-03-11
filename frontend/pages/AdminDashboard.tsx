@@ -39,23 +39,20 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onNavigate, task
    const [tasks, setTasks] = useState<Task[]>([]);
    const [loading, setLoading] = useState(true);
 
-   // Fetch real stats directly from Supabase (bypasses sleeping backend)
+   // Fetch real stats from Backend API (uses service role, bypasses RLS)
    useEffect(() => {
       const fetchStats = async () => {
          try {
-            // Run all counts in parallel
-            const [usersRes, activeTasksRes, subsRes, deletedRes] = await Promise.all([
-               supabase.from('profiles').select('*', { count: 'exact', head: true }),
-               supabase.from('tasks').select('*', { count: 'exact', head: true }).in('status', ['AVAILABLE', 'Available', 'active', 'In Progress']),
-               supabase.from('submissions').select('*', { count: 'exact', head: true }),
-               supabase.from('tasks').select('*', { count: 'exact', head: true }).in('status', ['deleted', 'discarded', 'flagged']),
-            ]);
+            const { API_ENDPOINTS } = await import('../config/api');
+            const response = await fetch(API_ENDPOINTS.ADMIN_STATS);
+            if (!response.ok) throw new Error('Failed to fetch stats');
+            const data = await response.json();
 
             setStats({
-               totalUsers: usersRes.count || 0,
-               activeTasks: activeTasksRes.count || 0,
-               totalSubmissions: subsRes.count || 0,
-               deletedTasks: deletedRes.count || 0,
+               totalUsers: data.totalUsers || 0,
+               activeTasks: data.activeTasks || 0,
+               totalSubmissions: data.totalSubmissions || 0,
+               deletedTasks: data.deletedTasks || 0,
             });
          } catch (error) {
             console.error('Error fetching admin stats:', error);
