@@ -42,7 +42,6 @@ starset-contributer/
 │   │   ├── db/           # Database interactions
 │   │   └── server.ts     # Server entry point
 │   └── migrations/       # Database migrations
-└── netlify.toml          # Deployment configuration
 ```
 
 ---
