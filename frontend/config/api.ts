@@ -1,7 +1,16 @@
 // API Configuration
 // This file centralizes all API endpoints for easy configuration
 
-const API_URL = import.meta.env.VITE_API_URL || 'https://starset-contributer.onrender.com';
+// Sanitize and resolve the backend API URL.
+// If VITE_API_URL is empty, "/", or locally misconfigured, fallback to Render backend.
+let envApi = import.meta.env.VITE_API_URL;
+if (typeof envApi === 'string') envApi = envApi.trim();
+if (!envApi || envApi === '/' || envApi === '') {
+    envApi = 'https://starset-contributer.onrender.com';
+} else if (envApi.endsWith('/')) {
+    envApi = envApi.slice(0, -1); // remove trailing slash
+}
+const API_URL = envApi;
 
 export const API_ENDPOINTS = {
     // Admin endpoints
