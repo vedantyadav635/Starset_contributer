@@ -1,157 +1,136 @@
-# Starset Contributor Platform
+<div align="center">
+  <h1>🌟 Starset Contributor Platform</h1>
+  <p>A modern, full-stack web platform for scalable AI data contribution, task management, and data validation.</p>
+</div>
 
-A modern web platform for AI data contribution and task management.
+---
 
-## 🚀 Project Structure
+## 🚀 Overview
 
-```
-starset-contributor/
-├── components/          # Reusable UI components
-│   ├── Button.tsx
-│   ├── Logo.tsx
-│   ├── PublicLayout.tsx
-│   └── Sidebar.tsx
-├── pages/              # Application pages
-│   ├── About.tsx
-│   ├── AdminCreateTask.tsx
-│   ├── AdminDashboard.tsx
-│   ├── CompleteProfile.tsx
-│   ├── Contributors.tsx
-│   ├── Dashboard.tsx
-│   ├── Earnings.tsx
-│   ├── LandingPage.tsx
-│   ├── Login.tsx
-│   ├── Money.tsx
-│   ├── Signup.tsx
-│   ├── TaskExecution.tsx
-│   └── TaskList.tsx
-├── starset-backend/    # Express.js backend API
-│   └── src/
-│       ├── routes/
-│       ├── db/
-│       └── server.ts
-├── App.tsx             # Main application component
-├── types.ts            # TypeScript type definitions
-├── supabaseClient.ts   # Supabase configuration
-└── .archive/           # Archived files (SQL scripts, old docs)
-```
+The **Starset Contributor Platform** is a specialized platform designed to streamline the crowdsourcing of AI training data. It connects administrators managing data collection campaigns with contributors who execute these tasks to earn rewards. The platform supports various data types including audio recordings, image capture and labeling, text annotation, and surveys, complete with AI-powered validation systems.
 
 ## 📦 Tech Stack
 
 ### Frontend
-- **React** with TypeScript
-- **Vite** for fast development
-- **Tailwind CSS** for styling
-- **Lucide React** for icons
-- **Supabase** for authentication & database
+- **React 18** + **TypeScript**
+- **Vite** for fast and optimized builds
+- **Tailwind CSS** for responsive, utility-first styling
+- **shadcn/ui** & **Lucide React** for modern UI components and icons
+- **Supabase Client** for authentication & real-time data
 
 ### Backend
-- **Node.js** with Express
-- **TypeScript**
-- **Supabase** for database operations
+- **Node.js** with **Express.js**
+- **TypeScript** for robust server-side logic
+- **Supabase (PostgreSQL)** for reliable database operations
+
+---
+
+## 📂 Project Structure
+
+```text
+starset-contributer/
+├── frontend/             # React application frontend
+│   ├── components/       # Reusable UI components
+│   ├── pages/            # Page-level components
+│   ├── context/          # React context providers
+│   ├── lib/              # Utility functions and shared logic
+│   ├── App.tsx           # Main application routing
+│   ├── supabaseClient.ts # Supabase configuration
+│   └── types.ts          # TypeScript type definitions
+├── backend/              # Express.js API server
+│   ├── src/              # Backend source code
+│   │   ├── routes/       # API endpoints
+│   │   ├── db/           # Database interactions
+│   │   └── server.ts     # Server entry point
+│   └── migrations/       # Database migrations
+└── netlify.toml          # Deployment configuration
+```
+
+---
+
+## 🎯 Key Features
+
+### For Contributors
+- **Secure Authentication:** Easy signup, login, and profile management.
+- **Task Execution:** Participate in audio recording, image capture, text annotation, and more.
+- **Dashboard & Earnings:** Track task history, approvals, and money earned.
+
+### For Administrators
+- **Task Management:** Create, configure, cap submissions, and delete data collection tasks.
+- **Advanced Validation UI:** Review submissions through a comprehensive admin dashboard.
+- **Contributor Monitoring:** Monitor user activity and data quality.
+
+### Advanced Functionalities
+- 🎧 **Audio Validation System:** Client-side checks and server-side validation to ensure audio quality.
+- 🤖 **AI Complaint & Data Classification:** Automated routing and prioritization for multimedia submissions.
+- 🛡️ **Submission Caps:** Auto-enforce limits on tasks to prevent data overflow.
+- 🔐 **Enhanced Security:** CAPTCHA integration to prevent automated spam and abuse.
+
+---
 
 ## 🛠️ Setup & Installation
 
 ### Prerequisites
-- Node.js (v16 or higher)
+- [Node.js](https://nodejs.org/) (v16 or higher)
 - npm or yarn
-- Supabase account
+- A [Supabase](https://supabase.com/) account and project
 
-### Environment Variables
+### 1. Environment Variables
 
-Create a `.env` file in the root directory:
-
+Create `.env` inside the `frontend/` directory:
 ```env
 VITE_SUPABASE_URL=your_supabase_url
 VITE_SUPABASE_ANON_KEY=your_supabase_anon_key
+VITE_API_URL=http://localhost:3000
 ```
 
-Create a `.env` file in `starset-backend/`:
-
+Create `.env` inside the `backend/` directory:
 ```env
 SUPABASE_URL=your_supabase_url
 SUPABASE_SERVICE_KEY=your_supabase_service_key
+PORT=3000
 ```
 
-### Installation
-
-1. **Install frontend dependencies:**
+### 2. Frontend Setup
+Navigate to the frontend directory, install dependencies, and start the development server:
 ```bash
+cd frontend
 npm install
-```
-
-2. **Install backend dependencies:**
-```bash
-cd starset-backend
-npm install
-cd ..
-```
-
-### Running the Application
-
-1. **Start the backend server:**
-```bash
-cd starset-backend
 npm run dev
 ```
-Backend runs on `http://localhost:3000`
+*Frontend runs on http://localhost:5173 by default.*
 
-2. **Start the frontend (in a new terminal):**
+### 3. Backend Setup
+Navigate to the backend directory, install dependencies, and start the development server:
 ```bash
+cd backend
+npm install
 npm run dev
 ```
-Frontend runs on `http://localhost:5173`
+*Backend runs on http://localhost:3000 by default.*
 
-## 🎯 Features
+---
 
-### For Contributors
-- ✅ User authentication (signup/login)
-- ✅ Profile completion
-- ✅ Browse available tasks
-- ✅ Execute tasks (audio recording, image capture, text annotation)
-- ✅ Track earnings
-- ✅ View task history
+## 🔐 Authentication & Roles
 
-### For Admins
-- ✅ Admin dashboard
-- ✅ Create new tasks
-- ✅ View all tasks
-- ✅ Delete tasks
-- ✅ Monitor contributor activity
+The platform uses Supabase Authentication (Email/Password). 
+- **Contributor:** Regular user capable of browsing and executing tasks.
+- **Admin:** System administrator with privileges to manage campaigns and validate submissions.
 
-### Task Types
-- 🎤 **Audio Collection** - Record voice samples
-- 📷 **Image Collection** - Capture photos
-- 🏷️ **Image Labeling** - Annotate images
-- 📝 **Text Annotation** - Classify text
-- 📊 **Survey** - Answer questions
+---
 
-## 📝 Database Schema
+## 🚧 Roadmap & Future Enhancements
 
-### Tables
-- `profiles` - User profile information
-- `tasks` - Task definitions and metadata
+- [ ] Native cloud storage integration for efficient media uploads.
+- [ ] Integration with payment processing gateways.
+- [ ] Advanced analytics and visualization dashboard for admins.
+- [ ] Real-time notifications for task approvals and rejections.
+- [ ] React Native mobile application for on-the-go data contribution.
 
-## 🔐 Authentication
+---
 
-Uses Supabase Authentication with email/password.
+## 📄 License & Support
 
-### User Roles
-- `contributor` - Regular users who complete tasks
-- `admin` - Administrators who manage tasks
+**License:** Proprietary - All rights reserved.
 
-## 🚧 Future Enhancements
-
-- [ ] Cloud storage integration for audio/image uploads
-- [ ] Payment processing
-- [ ] Advanced analytics dashboard
-- [ ] Real-time notifications
-- [ ] Mobile app
-
-## 📄 License
-
-Proprietary - All rights reserved
-
-## 👥 Support
-
-For issues or questions, please contact the development team.
+For technical issues or questions, please contact the development team through the respective channels.
