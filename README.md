@@ -5,11 +5,11 @@
 
 ---
 
-## 🚀 Overview
+## Overview
 
 The **Starset Contributor Platform** is a specialized platform designed to streamline the crowdsourcing of AI training data. It connects administrators managing data collection campaigns with contributors who execute these tasks to earn rewards. The platform supports various data types including audio recordings, image capture and labeling, text annotation, and surveys, complete with AI-powered validation systems.
 
-## 📦 Tech Stack
+## Tech Stack
 
 ### Frontend
 - **React 18** + **TypeScript**
@@ -48,7 +48,7 @@ starset-contributer/
 
 ---
 
-## 🎯 Key Features
+## Key Features
 
 ### For Contributors
 - **Secure Authentication:** Easy signup, login, and profile management.
@@ -61,14 +61,14 @@ starset-contributer/
 - **Contributor Monitoring:** Monitor user activity and data quality.
 
 ### Advanced Functionalities
-- 🎧 **Audio Validation System:** Client-side checks and server-side validation to ensure audio quality.
-- 🤖 **AI Complaint & Data Classification:** Automated routing and prioritization for multimedia submissions.
-- 🛡️ **Submission Caps:** Auto-enforce limits on tasks to prevent data overflow.
-- 🔐 **Enhanced Security:** CAPTCHA integration to prevent automated spam and abuse.
+- **Audio Validation System:** Client-side checks and server-side validation to ensure audio quality.
+- **AI Complaint & Data Classification:** Automated routing and prioritization for multimedia submissions.
+- **Submission Caps:** Auto-enforce limits on tasks to prevent data overflow.
+- **Enhanced Security:** CAPTCHA integration to prevent automated spam and abuse.
 
 ---
 
-## 🛠️ Setup & Installation
+## Setup & Installation
 
 ### Prerequisites
 - [Node.js](https://nodejs.org/) (v16 or higher)
@@ -111,7 +111,7 @@ npm run dev
 
 ---
 
-## 🔐 Authentication & Roles
+## Authentication & Roles
 
 The platform uses Supabase Authentication (Email/Password). 
 - **Contributor:** Regular user capable of browsing and executing tasks.
@@ -119,7 +119,7 @@ The platform uses Supabase Authentication (Email/Password).
 
 ---
 
-## 🚧 Roadmap & Future Enhancements
+## Roadmap & Future Enhancements
 
 - [ ] Native cloud storage integration for efficient media uploads.
 - [ ] Integration with payment processing gateways.
@@ -129,7 +129,7 @@ The platform uses Supabase Authentication (Email/Password).
 
 ---
 
-## 📄 License & Support
+## License & Support
 
 **License:** Proprietary - All rights reserved.
 
