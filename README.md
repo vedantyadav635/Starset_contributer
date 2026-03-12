@@ -1,5 +1,5 @@
 <div align="center">
-  <h1>🌟 Starset Contributor Platform</h1>
+  <h1>Starset Contributor Platform</h1>
   <p>A modern, full-stack web platform for scalable AI data contribution, task management, and data validation.</p>
 </div>
 
