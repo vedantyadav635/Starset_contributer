@@ -11,14 +11,14 @@ The **Starset Contributor Platform** is a specialized platform designed to strea
 
 ## Tech Stack
 
-### Frontend
+### Client
 - **React 18** + **TypeScript**
 - **Vite** for optimized builds
 - **Tailwind CSS** 
 - **shadcn/ui** & **Lucide React** 
 - **Supabase Client** for authentication & real-time data
 
-### Backend
+### Server
 - **Node.js** with **Express.js**
 - **TypeScript** for robust server-side logic
 - **Supabase (PostgreSQL)** 
@@ -28,7 +28,7 @@ The **Starset Contributor Platform** is a specialized platform designed to strea
 
 ```text
 starset-contributer/
-├── frontend/             # React application frontend
+├── client/             # React application frontend
 │   ├── components/       # Reusable UI components
 │   ├── pages/            # Page-level components
 │   ├── context/          # React context providers
@@ -36,8 +36,8 @@ starset-contributer/
 │   ├── App.tsx           # Main application routing
 │   ├── supabaseClient.ts # Supabase configuration
 │   └── types.ts          # TypeScript type definitions
-├── backend/              # Express.js API server
-│   ├── src/              # Backend source code
+├── server/              # Express.js API server
+│   ├── src/              # Server source code
 │   │   ├── routes/       # API endpoints
 │   │   ├── db/           # Database interactions
 │   │   └── server.ts     # Server entry point
@@ -75,37 +75,37 @@ starset-contributer/
 
 ### 1. Environment Variables
 
-Create `.env` inside the `frontend/` directory:
+Create `.env` inside the `client/` directory:
 ```env
 VITE_SUPABASE_URL=your_supabase_url
 VITE_SUPABASE_ANON_KEY=your_supabase_anon_key
 VITE_API_URL=http://localhost:3000
 ```
 
-Create `.env` inside the `backend/` directory:
+Create `.env` inside the `server/` directory:
 ```env
 SUPABASE_URL=your_supabase_url
 SUPABASE_SERVICE_KEY=your_supabase_service_key
 PORT=3000
 ```
 
-### 2. Frontend Setup
-Navigate to the frontend directory, install dependencies, and start the development server:
+### 2. Client Setup
+Navigate to the client directory, install dependencies, and start the development server:
 ```bash
-cd frontend
+cd client
 npm install
 npm run dev
 ```
-*Frontend runs on http://localhost:5173 by default.*
+*Client runs on http://localhost:5173 by default.*
 
-### 3. Backend Setup
-Navigate to the backend directory, install dependencies, and start the development server:
+### 3. Server Setup
+Navigate to the server directory, install dependencies, and start the development server:
 ```bash
-cd backend
+cd server
 npm install
 npm run dev
 ```
-*Backend runs on http://localhost:3000 by default.*
+*Server runs on http://localhost:3000 by default.*
 
 ---
 
