@@ -1,23 +1,23 @@
-// React core imports
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, Suspense, lazy } from 'react';
 
-// Component imports - UI building blocks
-import { Sidebar } from './components/Sidebar';
-import { Dashboard } from './pages/Dashboard';
-import { TaskList } from './pages/TaskList';
-import { TaskExecution } from './pages/TaskExecution';
-import { Earnings } from './pages/Earnings';
-import { Login } from './pages/Login';
-import { Signup } from './pages/Signup';
-import { LandingPage } from './pages/LandingPage';
-import { About } from './pages/About';
-import { Contributors } from './pages/Contributors';
-import { Money } from './pages/Money';
-import { AdminCreateTask } from './pages/AdminCreateTask';
-import { AdminDashboard } from './pages/AdminDashboard';
-import { AdminSubmissions } from './pages/AdminSubmissions';
-import { ForgotPassword } from './pages/ForgotPassword';
-import { ResetPassword } from './pages/ResetPassword';
+// Lazy-loaded page components for better performance
+const Dashboard = lazy(() => import('./pages/Dashboard').then(m => ({ default: m.Dashboard })));
+const TaskList = lazy(() => import('./pages/TaskList').then(m => ({ default: m.TaskList })));
+const TaskExecution = lazy(() => import('./pages/TaskExecution').then(m => ({ default: m.TaskExecution })));
+const Earnings = lazy(() => import('./pages/Earnings').then(m => ({ default: m.Earnings })));
+const Login = lazy(() => import('./pages/Login').then(m => ({ default: m.Login })));
+const Signup = lazy(() => import('./pages/Signup').then(m => ({ default: m.Signup })));
+const LandingPage = lazy(() => import('./pages/LandingPage').then(m => ({ default: m.LandingPage })));
+const About = lazy(() => import('./pages/About').then(m => ({ default: m.About })));
+const Contributors = lazy(() => import('./pages/Contributors').then(m => ({ default: m.Contributors })));
+const Money = lazy(() => import('./pages/Money').then(m => ({ default: m.Money })));
+const CookiePolicy = lazy(() => import('./pages/CookiePolicy').then(m => ({ default: m.CookiePolicy })));
+const AdminCreateTask = lazy(() => import('./pages/AdminCreateTask').then(m => ({ default: m.AdminCreateTask })));
+const AdminDashboard = lazy(() => import('./pages/AdminDashboard').then(m => ({ default: m.AdminDashboard })));
+const AdminSubmissions = lazy(() => import('./pages/AdminSubmissions').then(m => ({ default: m.AdminSubmissions })));
+const ForgotPassword = lazy(() => import('./pages/ForgotPassword').then(m => ({ default: m.ForgotPassword })));
+const ResetPassword = lazy(() => import('./pages/ResetPassword').then(m => ({ default: m.ResetPassword })));
+const CompleteProfile = lazy(() => import('./pages/CompleteProfile').then(m => ({ default: m.default })));
 
 // Type definitions for TypeScript
 import { PageView, Task, UserRole, TaskType, TaskStatus } from './types';
@@ -33,7 +33,7 @@ import { Logo } from './components/Logo';
 import { API_URL } from './config/api';
 import { PublicPageType } from './components/PublicLayout';
 import { supabase } from "./supabaseClient"; // Supabase client for database operations
-import CompleteProfile from "./pages/CompleteProfile";
+import { Sidebar } from './components/Sidebar';
 import { Button } from "./components/Button";
 
 // ============================================================================
@@ -46,6 +46,16 @@ const INACTIVITY_LIMIT_MS = 15 * 60 * 1000; // 15 Minutes
 // Keep-alive ping interval: ping backend every 9 minutes to prevent Render free-tier sleep
 const KEEP_ALIVE_INTERVAL_MS = 9 * 60 * 1000; // 9 Minutes
 
+
+// Lighweight loading shim for Suspense
+const PageLoader = () => (
+  <div className="fixed inset-0 flex items-center justify-center bg-[#020205] z-[1000]">
+    <div className="relative">
+      <div className="h-12 w-12 rounded-full border-t-2 border-b-2 border-blue-500 animate-spin"></div>
+      <div className="absolute inset-0 h-12 w-12 rounded-full border-t-2 border-b-2 border-blue-500/20"></div>
+    </div>
+  </div>
+);
 
 // ============================================================================
 // MAIN APP COMPONENT
@@ -501,6 +511,8 @@ const App: React.FC = () => {
           return <Contributors onNavigate={handlePublicNavigate} onEnterApp={handleStartSignup} />;
         case 'money':
           return <Money onNavigate={handlePublicNavigate} onEnterApp={handleStartSignup} />;
+        case 'cookies':
+          return <CookiePolicy onNavigate={handlePublicNavigate} onEnterApp={handleEnterApp} />;
         default:
           return <LandingPage onNavigate={handlePublicNavigate} onEnterApp={handleEnterApp} onStartSignup={handleStartSignup} />;
       }
@@ -973,9 +985,9 @@ const App: React.FC = () => {
   };
 
   return (
-    <>
+    <Suspense fallback={<PageLoader />}>
       {renderMainContent()}
-    </>
+    </Suspense>
   );
 };
 
