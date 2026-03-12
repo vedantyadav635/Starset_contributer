@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
 import { Logo } from './Logo';
 import { Button } from './Button';
-import { Menu, Activity, Database, X } from 'lucide-react';
+import { Menu, Activity, Database, X, Twitter, Github, Linkedin, Mail } from 'lucide-react';
+import { CookieConsent } from './CookieConsent';
 
-export type PublicPageType = 'home' | 'about' | 'contributors' | 'money';
+export type PublicPageType = 'home' | 'about' | 'contributors' | 'money' | 'cookies';
 
 interface PublicLayoutProps {
    children: React.ReactNode;
@@ -60,32 +61,25 @@ export const PublicLayout: React.FC<PublicLayoutProps> = ({
    return (
       <div className="min-h-screen text-zinc-900 dark:text-white font-sans selection:bg-purple-500/30 selection:text-purple-200 transition-colors duration-300">
 
-         {/* Global Background Gradient & Grid - Only on Home */}
-         {currentPage === 'home' ? (
-            <div className="fixed inset-0 z-0 pointer-events-none bg-[#020205]">
-               {/* Main Blue Gradient Background - More Seamless */}
-               <div className="absolute inset-0 bg-[radial-gradient(circle_at_20%_30%,_#0a1d3a_0%,_transparent_70%),radial-gradient(circle_at_80%_70%,_#050b18_0%,_transparent_70%),#020205] opacity-90"></div>
+         {/* Global Background Gradient & Grid - Across all public pages */}
+         <div className="fixed inset-0 z-0 pointer-events-none bg-[#020205]">
+            {/* Main Blue Gradient Background - More Seamless */}
+            <div className="absolute inset-0 bg-[radial-gradient(circle_at_20%_30%,_#0a1d3a_0%,_transparent_70%),radial-gradient(circle_at_80%_70%,_#050b18_0%,_transparent_70%),#020205] opacity-90"></div>
 
-               {/* Grid Pattern */}
-               <div className="absolute inset-0 bg-[linear-gradient(to_right,#ffffff03_1px,transparent_1px),linear-gradient(to_bottom,#ffffff03_1px,transparent_1px)] bg-[size:40px_40px]"></div>
+            {/* Grid Pattern */}
+            <div className="absolute inset-0 bg-[linear-gradient(to_right,#ffffff03_1px,transparent_1px),linear-gradient(to_bottom,#ffffff03_1px,transparent_1px)] bg-[size:40px_40px]"></div>
 
-               {/* Animated Glows - Blue Focused */}
-               <div className="absolute top-[-10%] left-[-10%] w-[600px] h-[600px] bg-blue-600/10 rounded-full blur-[120px] animate-pulse"></div>
-               <div className="absolute bottom-[20%] right-[10%] w-[500px] h-[500px] bg-indigo-900/20 rounded-full blur-[100px] animate-pulse-glow"></div>
-               <div className="absolute top-[30%] right-[-5%] w-[400px] h-[400px] bg-blue-500/5 rounded-full blur-[80px]"></div>
-            </div>
-         ) : (
-            <div className="fixed inset-0 z-0 pointer-events-none bg-white dark:bg-[#050505]"></div>
-         )}
+            {/* Animated Glows - Blue Focused */}
+            <div className="absolute top-[-10%] left-[-10%] w-[600px] h-[600px] bg-blue-600/10 rounded-full blur-[120px] "></div>
+            <div className="absolute bottom-[20%] right-[10%] w-[500px] h-[500px] bg-indigo-900/20 rounded-full blur-[100px] -glow"></div>
+            <div className="absolute top-[30%] right-[-5%] w-[400px] h-[400px] bg-blue-500/5 rounded-full blur-[80px]"></div>
+         </div>
 
          {/* Navigation */}
          <nav
             className={`fixed top-0 w-full z-[100] transition-all duration-300 ease-in-out
              ${showNav ? 'translate-y-0' : '-translate-y-full'}
-             ${currentPage === 'home'
-                  ? (isScrolled ? 'bg-transparent backdrop-blur-2xl' : 'bg-transparent backdrop-blur-none')
-                  : (isScrolled ? 'border-b border-zinc-200/50 dark:border-white/10 bg-white/80 dark:bg-zinc-950/80 backdrop-blur-2xl' : 'bg-transparent shadow-none')
-               }`}
+             ${isScrolled ? 'bg-transparent backdrop-blur-2xl' : 'bg-transparent backdrop-blur-none'}`}
          >
             <div className="max-w-7xl mx-auto px-4 md:px-6 h-16 md:h-20 flex items-center justify-between">
 
@@ -156,20 +150,83 @@ export const PublicLayout: React.FC<PublicLayoutProps> = ({
             {children}
          </main>
 
-         {/* Footer - Restoration of border for non-home pages */}
-         <footer className={`${currentPage === 'home' ? '' : 'border-t border-zinc-200 dark:border-white/5 bg-white dark:bg-[#050505]'} pt-16 pb-8 px-6 relative z-10`}>
-            <div className="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center text-xs text-zinc-500">
-               <div className="flex items-center gap-2 mb-4 md:mb-0">
-                  <Logo className="h-12 w-12" />
-                  <span className="font-bold text-zinc-900 dark:text-white uppercase tracking-widest">Starset</span>
+         {/* Professional Footer */}
+         <footer className="pt-20 pb-10 px-6 relative z-10 border-t border-white/5 bg-[#020205]/40 backdrop-blur-xl mt-20">
+            <div className="max-w-7xl mx-auto">
+               <div className="grid grid-cols-1 md:grid-cols-4 gap-12 md:gap-8 mb-16">
+                  {/* Brand & Mission */}
+                  <div className="md:col-span-1 space-y-4">
+                     <div className="flex items-center gap-2 mb-4">
+                        <Logo className="h-10 w-10" />
+                        <span className="font-bold text-zinc-900 dark:text-white uppercase tracking-widest text-lg">Starset</span>
+                     </div>
+                     <p className="text-sm text-zinc-500 dark:text-zinc-400 leading-relaxed max-w-xs">
+                        Connecting real people with the world's smartest AI companies. Turn your spare time into income.
+                     </p>
+                     <div className="flex gap-4 pt-2">
+                        <a href="#" className="h-10 w-10 rounded-full bg-white/5 border border-white/10 flex items-center justify-center text-zinc-400 hover:text-white hover:bg-white/10 hover:border-white/20 transition-all">
+                           <Twitter className="h-4 w-4" />
+                        </a>
+                        <a href="#" className="h-10 w-10 rounded-full bg-white/5 border border-white/10 flex items-center justify-center text-zinc-400 hover:text-white hover:bg-white/10 hover:border-white/20 transition-all">
+                           <Github className="h-4 w-4" />
+                        </a>
+                        <a href="#" className="h-10 w-10 rounded-full bg-white/5 border border-white/10 flex items-center justify-center text-zinc-400 hover:text-white hover:bg-white/10 hover:border-white/20 transition-all">
+                           <Linkedin className="h-4 w-4" />
+                        </a>
+                     </div>
+                  </div>
+
+                  {/* Navigation */}
+                  <div className="space-y-4">
+                     <h3 className="font-bold text-zinc-900 dark:text-white mb-4 hidden md:block">Platform</h3>
+                     <ul className="space-y-3">
+                        {navLinks.map((item) => (
+                           <li key={item.id}>
+                              <button
+                                 onClick={() => onNavigate(item.id)}
+                                 className="text-sm text-zinc-500 hover:text-blue-500 transition-colors"
+                              >
+                                 {item.name}
+                              </button>
+                           </li>
+                        ))}
+                     </ul>
+                  </div>
+
+                  {/* Legal */}
+                  <div className="space-y-4">
+                     <h3 className="font-bold text-zinc-900 dark:text-white mb-4 hidden md:block">Legal</h3>
+                     <ul className="space-y-3">
+                        <li><a href="#" className="text-sm text-zinc-500 hover:text-blue-500 transition-colors">Terms of Service</a></li>
+                        <li><a href="#" className="text-sm text-zinc-500 hover:text-blue-500 transition-colors">Privacy Policy</a></li>
+                        <li><button onClick={() => onNavigate('cookies')} className="text-sm text-zinc-500 hover:text-blue-500 transition-colors">Cookie Policy</button></li>
+                        <li><a href="#" className="text-sm text-zinc-500 hover:text-blue-500 transition-colors">Acceptable Use</a></li>
+                     </ul>
+                  </div>
+
+                  {/* Help & Support */}
+                  <div className="space-y-4">
+                     <h3 className="font-bold text-zinc-900 dark:text-white mb-4 hidden md:block">Contact</h3>
+                     <ul className="space-y-3">
+                        <li><a href="#" className="text-sm text-zinc-500 hover:text-blue-500 transition-colors flex items-center gap-2"><Mail className="h-4 w-4" /> support@starset.ai</a></li>
+                        <li><a href="#" className="text-sm text-zinc-500 hover:text-blue-500 transition-colors">Help Center</a></li>
+                        <li><a href="#" className="text-sm text-zinc-500 hover:text-blue-500 transition-colors">Community Discord</a></li>
+                        <li className="pt-2">
+                           <Button onClick={onEnterApp} variant="outline" size="sm" className="w-full justify-center bg-transparent border-white/10 hover:bg-white/5">
+                              Login to Terminal
+                           </Button>
+                        </li>
+                     </ul>
+                  </div>
                </div>
-               <div className="flex gap-8">
-                  <span className="hover:text-black dark:hover:text-white cursor-pointer transition-colors">Terms of Service</span>
-                  <span className="hover:text-black dark:hover:text-white cursor-pointer transition-colors">Privacy Policy</span>
-                  <span className="hover:text-black dark:hover:text-white cursor-pointer transition-colors">Contact Support</span>
+
+               {/* Bottom Bar */}
+               <div className="pt-8 border-t border-zinc-200 dark:border-white/10 flex flex-col md:flex-row justify-between items-center gap-4 text-xs text-zinc-500">
+                  <p>&copy; {new Date().getFullYear()} Starset Inc. All rights reserved.</p>
                </div>
             </div>
          </footer>
+         <CookieConsent />
       </div >
    );
 };
