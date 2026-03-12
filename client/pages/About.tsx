@@ -21,8 +21,8 @@ export const About: React.FC<PageProps> = ({ onNavigate, onEnterApp }) => {
                </div>
 
                <div className="grid lg:grid-cols-3 gap-8 mt-20">
-                  <div className="bg-white dark:bg-zinc-900 p-8 rounded-2xl border border-zinc-200 dark:border-white/10 relative group hover:-translate-y-2 transition-transform duration-300">
-                     <div className="h-12 w-12 bg-blue-50 dark:bg-blue-900/20 rounded-xl flex items-center justify-center text-blue-600 dark:text-blue-400 mb-6 border border-blue-100 dark:border-blue-900/30">
+                  <div className="bg-white/5 dark:bg-zinc-900/50 backdrop-blur-sm p-8 rounded-2xl border border-zinc-200 dark:border-white/10 relative group hover:-translate-y-2 transition-transform duration-300">
+                     <div className="h-12 w-12 bg-blue-50/10 dark:bg-blue-900/20 rounded-xl flex items-center justify-center text-blue-600 dark:text-blue-400 mb-6 border border-blue-100 dark:border-blue-900/30">
                         <Network className="h-6 w-6" />
                      </div>
                      <h3 className="text-xl font-bold text-zinc-900 dark:text-white mb-2">We Connect You</h3>
@@ -31,8 +31,8 @@ export const About: React.FC<PageProps> = ({ onNavigate, onEnterApp }) => {
                      </p>
                   </div>
 
-                  <div className="bg-white dark:bg-zinc-900 p-8 rounded-2xl border border-zinc-200 dark:border-white/10 relative group hover:-translate-y-2 transition-transform duration-300">
-                     <div className="h-12 w-12 bg-purple-50 dark:bg-purple-900/20 rounded-xl flex items-center justify-center text-purple-600 dark:text-purple-400 mb-6 border border-purple-100 dark:border-purple-900/30">
+                  <div className="bg-white/5 dark:bg-zinc-900/50 backdrop-blur-sm p-8 rounded-2xl border border-zinc-200 dark:border-white/10 relative group hover:-translate-y-2 transition-transform duration-300">
+                     <div className="h-12 w-12 bg-purple-50/10 dark:bg-purple-900/20 rounded-xl flex items-center justify-center text-purple-600 dark:text-purple-400 mb-6 border border-purple-100 dark:border-purple-900/30">
                         <Brain className="h-6 w-6" />
                      </div>
                      <h3 className="text-xl font-bold text-zinc-900 dark:text-white mb-2">You Teach AI</h3>
@@ -41,8 +41,8 @@ export const About: React.FC<PageProps> = ({ onNavigate, onEnterApp }) => {
                      </p>
                   </div>
 
-                  <div className="bg-white dark:bg-zinc-900 p-8 rounded-2xl border border-zinc-200 dark:border-white/10 relative group hover:-translate-y-2 transition-transform duration-300">
-                     <div className="h-12 w-12 bg-emerald-50 dark:bg-emerald-900/20 rounded-xl flex items-center justify-center text-emerald-600 dark:text-emerald-400 mb-6 border border-emerald-100 dark:border-emerald-900/30">
+                  <div className="bg-white/5 dark:bg-zinc-900/50 backdrop-blur-sm p-8 rounded-2xl border border-zinc-200 dark:border-white/10 relative group hover:-translate-y-2 transition-transform duration-300">
+                     <div className="h-12 w-12 bg-emerald-50/10 dark:bg-emerald-900/20 rounded-xl flex items-center justify-center text-emerald-600 dark:text-emerald-400 mb-6 border border-emerald-100 dark:border-emerald-900/30">
                         <Sparkles className="h-6 w-6" />
                      </div>
                      <h3 className="text-xl font-bold text-zinc-900 dark:text-white mb-2">Better Future</h3>
@@ -52,11 +52,11 @@ export const About: React.FC<PageProps> = ({ onNavigate, onEnterApp }) => {
                   </div>
                </div>
 
-               <div className="mt-24 bg-zinc-50 dark:bg-white/5 rounded-3xl p-12 border border-zinc-200 dark:border-white/5">
+               <div className="mt-24 bg-black/5 dark:bg-white/5 backdrop-blur-md rounded-3xl p-12 border border-zinc-200 dark:border-white/5">
                   <h2 className="text-2xl font-bold mb-8 text-center">What You'll Be Working On</h2>
                   <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
                      {['Teaching Chatbots', 'Voice Recognition', 'Identifying Images', 'Rating AI Responses', 'Translating Text', 'Safety Checks'].map((cap) => (
-                        <div key={cap} className="flex items-center gap-3 p-4 bg-white dark:bg-black/40 rounded-lg border border-zinc-200 dark:border-white/10 shadow-sm">
+                        <div key={cap} className="flex items-center gap-3 p-4 bg-white/10 dark:bg-black/40 backdrop-blur-sm rounded-lg border border-zinc-200 dark:border-white/10 shadow-sm">
                            <ShieldCheck className="h-5 w-5 text-emerald-500" />
                            <span className="font-medium text-zinc-700 dark:text-zinc-200">{cap}</span>
                         </div>
