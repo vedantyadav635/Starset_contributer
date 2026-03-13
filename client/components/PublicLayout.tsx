@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
 import { Logo } from './Logo';
 import { Button } from './Button';
-import { Menu, Activity, Database, X, Twitter, Github, Linkedin, Mail } from 'lucide-react';
+import { Menu, Activity, Database, X, Linkedin, Mail } from 'lucide-react';
 import { CookieConsent } from './CookieConsent';
 
-export type PublicPageType = 'home' | 'about' | 'contributors' | 'money' | 'cookies';
+export type PublicPageType = 'home' | 'about' | 'contributors' | 'money' | 'cookies' | 'privacy' | 'terms' | 'acceptable-use';
 
 interface PublicLayoutProps {
    children: React.ReactNode;
@@ -165,11 +165,11 @@ export const PublicLayout: React.FC<PublicLayoutProps> = ({
                      </p>
                      <div className="flex gap-4 pt-2">
                         <a href="#" className="h-10 w-10 rounded-full bg-white/5 border border-white/10 flex items-center justify-center text-zinc-400 hover:text-white hover:bg-white/10 hover:border-white/20 transition-all">
-                           <Twitter className="h-4 w-4" />
+                           <svg viewBox="0 0 24 24" aria-hidden="true" className="h-4 w-4 fill-current">
+                              <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"></path>
+                           </svg>
                         </a>
-                        <a href="#" className="h-10 w-10 rounded-full bg-white/5 border border-white/10 flex items-center justify-center text-zinc-400 hover:text-white hover:bg-white/10 hover:border-white/20 transition-all">
-                           <Github className="h-4 w-4" />
-                        </a>
+
                         <a href="#" className="h-10 w-10 rounded-full bg-white/5 border border-white/10 flex items-center justify-center text-zinc-400 hover:text-white hover:bg-white/10 hover:border-white/20 transition-all">
                            <Linkedin className="h-4 w-4" />
                         </a>
@@ -197,10 +197,10 @@ export const PublicLayout: React.FC<PublicLayoutProps> = ({
                   <div className="space-y-4">
                      <h3 className="font-bold text-zinc-900 dark:text-white mb-4 hidden md:block">Legal</h3>
                      <ul className="space-y-3">
-                        <li><a href="#" className="text-sm text-zinc-500 hover:text-blue-500 transition-colors">Terms of Service</a></li>
-                        <li><a href="#" className="text-sm text-zinc-500 hover:text-blue-500 transition-colors">Privacy Policy</a></li>
+                        <li><button onClick={() => onNavigate('terms')} className="text-sm text-zinc-500 hover:text-blue-500 transition-colors">Terms of Service</button></li>
+                        <li><button onClick={() => onNavigate('privacy')} className="text-sm text-zinc-500 hover:text-blue-500 transition-colors">Privacy Policy</button></li>
                         <li><button onClick={() => onNavigate('cookies')} className="text-sm text-zinc-500 hover:text-blue-500 transition-colors">Cookie Policy</button></li>
-                        <li><a href="#" className="text-sm text-zinc-500 hover:text-blue-500 transition-colors">Acceptable Use</a></li>
+                        <li><button onClick={() => onNavigate('acceptable-use')} className="text-sm text-zinc-500 hover:text-blue-500 transition-colors">Acceptable Use</button></li>
                      </ul>
                   </div>
 
@@ -208,9 +208,9 @@ export const PublicLayout: React.FC<PublicLayoutProps> = ({
                   <div className="space-y-4">
                      <h3 className="font-bold text-zinc-900 dark:text-white mb-4 hidden md:block">Contact</h3>
                      <ul className="space-y-3">
-                        <li><a href="#" className="text-sm text-zinc-500 hover:text-blue-500 transition-colors flex items-center gap-2"><Mail className="h-4 w-4" /> support@starset.ai</a></li>
-                        <li><a href="#" className="text-sm text-zinc-500 hover:text-blue-500 transition-colors">Help Center</a></li>
-                        <li><a href="#" className="text-sm text-zinc-500 hover:text-blue-500 transition-colors">Community Discord</a></li>
+                        <li><a href="#" className="text-sm text-zinc-500 hover:text-blue-500 transition-colors flex items-center gap-2"><Mail className="h-4 w-4" /> support@starset.intelligence</a></li>
+
+
                         <li className="pt-2">
                            <Button onClick={onEnterApp} variant="outline" size="sm" className="w-full justify-center bg-transparent border-white/10 hover:bg-white/5">
                               Login to Terminal
@@ -222,7 +222,7 @@ export const PublicLayout: React.FC<PublicLayoutProps> = ({
 
                {/* Bottom Bar */}
                <div className="pt-8 border-t border-zinc-200 dark:border-white/10 flex flex-col md:flex-row justify-between items-center gap-4 text-xs text-zinc-500">
-                  <p>&copy; {new Date().getFullYear()} Starset Inc. All rights reserved.</p>
+                  <p>&copy; {new Date().getFullYear()} Starset Intelligence. All rights reserved.</p>
                </div>
             </div>
          </footer>

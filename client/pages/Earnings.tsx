@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Transaction } from '../types';
 import { Button } from '../components/Button';
-import { Download, CreditCard, Wallet, Plus, X, Smartphone, Landmark, Check, Inbox } from 'lucide-react';
+import { Download, CreditCard, Wallet, Plus, X, Smartphone, Landmark, Check, Inbox, AlertCircle } from 'lucide-react';
 import { supabase } from '../supabaseClient';
 
 export const Earnings: React.FC = () => {
@@ -91,6 +91,19 @@ export const Earnings: React.FC = () => {
         </Button>
       </div>
 
+      {/* Technical Issue Alert */}
+      <div className="bg-amber-500/10 border border-amber-500/20 rounded-2xl p-4 flex items-start gap-4 animate-pulse">
+        <div className="p-2 bg-amber-500/20 rounded-lg">
+          <AlertCircle className="h-5 w-5 text-amber-500" />
+        </div>
+        <div>
+          <h4 className="text-sm font-bold text-amber-500 uppercase tracking-wider">System Update</h4>
+          <p className="text-xs md:text-sm text-amber-600/80 dark:text-amber-400/80 mt-1 leading-relaxed">
+            We are currently facing a technical issue with our automated payout system. Due to this, all payments are being processed <span className="font-bold underline">manually</span> by our team to ensure your funds are delivered safely. We appreciate your patience.
+          </p>
+        </div>
+      </div>
+
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 md:gap-8">
         {/* Balance Card */}
         <div className="relative group perspective-1000 h-auto md:h-full min-h-[280px]">
@@ -139,7 +152,7 @@ export const Earnings: React.FC = () => {
                 </div>
                 <div className="flex justify-between text-[10px] text-zinc-500 font-mono">
                   <span>{userName}</span>
-                  <span>{transactions.length} Nodes</span>
+                  <span>{transactions.length} Records</span>
                 </div>
               </div>
             </div>
