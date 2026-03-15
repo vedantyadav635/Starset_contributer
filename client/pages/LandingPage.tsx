@@ -8,8 +8,6 @@ import { motion } from 'framer-motion';
 interface LandingPageProps {
    onEnterApp: () => void;
    onStartSignup: () => void;
-   isDark: boolean;
-   toggleTheme: () => void;
    onNavigate: (page: PublicPageType) => void;
 }
 
@@ -20,7 +18,7 @@ const Sparkle = ({ className }: { className?: string }) => (
    </svg>
 );
 
-export const LandingPage: React.FC<LandingPageProps> = ({ onEnterApp, onStartSignup, isDark, toggleTheme, onNavigate }) => {
+export const LandingPage: React.FC<LandingPageProps> = ({ onEnterApp, onStartSignup, onNavigate }) => {
    const [activeNodeCount, setActiveNodeCount] = useState(8432);
    const [openFaq, setOpenFaq] = useState<number | null>(null);
 
@@ -41,7 +39,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onEnterApp, onStartSig
    };
 
    return (
-      <PublicLayout currentPage="home" onNavigate={onNavigate} onEnterApp={onEnterApp} isDark={isDark} toggleTheme={toggleTheme}>
+      <PublicLayout currentPage="home" onNavigate={onNavigate} onEnterApp={onEnterApp}>
 
          {/* --- HERO SECTION --- */}
          <section className="relative z-10 pt-8 md:pt-12 pb-12 md:pb-24 px-4 md:px-6 overflow-hidden perspective-1000">
@@ -59,34 +57,34 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onEnterApp, onStartSig
                >
 
 
-                  <h1 className="text-4xl sm:text-6xl md:text-7xl lg:text-8xl font-extrabold tracking-tight leading-[1.1] text-zinc-900 dark:text-white relative drop-shadow-2xl px-2 sm:px-0">
+                  <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-extrabold tracking-[-0.03em] leading-[1.1] text-white relative drop-shadow-2xl px-2 sm:px-0">
                      Make Money <br />
-                     <span className="text-transparent bg-clip-text bg-gradient-to-r from-purple-600 via-blue-500 to-cyan-400 dark:from-purple-400 dark:via-blue-400 dark:to-cyan-300 bg-[length:200%_auto] ">
+                     <span className="text-transparent bg-clip-text bg-gradient-to-r from-purple-400 via-blue-400 to-cyan-300 bg-[length:200%_auto] ">
                         Teaching AI.
                      </span>
                   </h1>
 
-                  <p className="text-lg md:text-2xl text-zinc-600 dark:text-zinc-300 max-w-xl mx-auto lg:mx-0 leading-relaxed font-medium px-4 sm:px-0">
-                     Join 50,000+ contributors earning cash by completing simple tasks. <span className="text-zinc-900 dark:text-white">No coding required.</span>
+                  <p className="text-lg md:text-2xl text-zinc-300 max-w-xl mx-auto lg:mx-0 leading-relaxed font-medium px-4 sm:px-0">
+                     Join 50,000+ contributors earning cash by completing simple tasks. <span className="text-white font-bold">No coding required.</span>
                   </p>
 
                   <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start px-4 sm:px-0">
                      <div className="relative group w-full sm:w-auto hover:-translate-y-1 transition-transform">
-                        <div className="absolute -inset-1 bg-gradient-to-r from-purple-600 to-blue-600 rounded-lg blur opacity-40 group-hover:opacity-100 transition duration-500 "></div>
-                        <Button onClick={onStartSignup} size="lg" variant={isDark ? "black" : "black"} className="relative h-14 md:h-16 px-10 text-lg md:text-xl w-full sm:w-auto font-bold bg-zinc-900 text-white dark:bg-white dark:text-black dark:hover:bg-zinc-200 shadow-2xl">
+                        <div className="absolute -inset-1 bg-gradient-to-r from-blue-600 to-indigo-600 rounded-xl blur opacity-25 group-hover:opacity-60 transition duration-500 "></div>
+                        <Button onClick={onStartSignup} size="lg" variant="glow" className="relative h-14 md:h-16 px-10 text-lg md:text-xl w-full sm:w-auto font-bold shadow-2xl">
                            Start Earning <ArrowRight className="ml-2 h-6 w-6" />
                         </Button>
                      </div>
-                     <Button onClick={() => onNavigate('about')} size="lg" variant="ghost" className="h-14 md:h-16 px-8 text-lg md:text-xl border-2 border-zinc-200 dark:border-white/10 hover:border-zinc-400 dark:hover:border-white/30 w-full sm:w-auto hover:bg-zinc-100 dark:hover:bg-white/5 backdrop-blur-sm">
+                     <Button onClick={() => onNavigate('about')} size="lg" variant="ghost" className="h-14 md:h-16 px-8 text-lg md:text-xl border-2 border-white/10 hover:border-white/30 w-full sm:w-auto hover:bg-white/5 backdrop-blur-sm transition-all hover:shadow-xl hover:shadow-blue-500/10 active:scale-95">
                         How it Works
                      </Button>
                   </div>
 
                   <div className="flex flex-wrap justify-center lg:justify-start gap-6 pt-4 text-xs font-bold text-zinc-500 font-mono tracking-wider">
-                     <div className="flex items-center gap-2 bg-white/50 dark:bg-black/20 px-3 py-1 rounded-md border border-zinc-200 dark:border-white/5">
+                     <div className="flex items-center gap-2 bg-black/20 px-3 py-1.5 rounded-lg border border-white/5">
                         <ShieldCheck className="h-4 w-4 text-blue-500" /> SECURE PAYMENTS
                      </div>
-                     <div className="flex items-center gap-2 bg-white/50 dark:bg-black/20 px-3 py-1 rounded-md border border-zinc-200 dark:border-white/5">
+                     <div className="flex items-center gap-2 bg-black/20 px-3 py-1.5 rounded-lg border border-white/5">
                         <Lock className="h-4 w-4 text-blue-500" /> NO EXPERIENCE
                      </div>
                   </div>
@@ -299,7 +297,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onEnterApp, onStartSig
                className="max-w-7xl mx-auto"
             >
                <div className="text-center mb-6 md:mb-20 px-2">
-                  <h2 className="text-2xl sm:text-4xl md:text-6xl font-bold text-zinc-900 dark:text-white mb-2 md:mb-6 tracking-tight">Why Contribute?</h2>
+                  <h2 className="text-2xl sm:text-4xl md:text-6xl font-bold text-white mb-2 md:mb-6 tracking-tight">Why Contribute?</h2>
                   <p className="text-sm md:text-2xl text-zinc-500 max-w-3xl mx-auto">The most flexible and rewarding way to join the AI economy.</p>
                </div>
 
@@ -307,33 +305,33 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onEnterApp, onStartSig
                   {[
                      {
                         icon: Smartphone,
-                        color: "text-blue-500",
-                        bg: "bg-blue-50 dark:bg-blue-900/10",
+                        color: "text-blue-400",
+                        bg: "bg-blue-900/10",
                         title: "Work Anywhere",
                         desc: "Your phone is your office. Complete tasks while commuting, waiting in line, or relaxing at home."
                      },
                      {
                         icon: Zap,
                         color: "text-amber-500",
-                        bg: "bg-amber-50 dark:bg-amber-900/10",
+                        bg: "bg-amber-900/10",
                         title: "Instant Earnings",
                         desc: "Watch your balance grow in real-time. Withdraw funds immediately to your bank or wallet."
                      },
                      {
                         icon: ShieldCheck,
-                        color: "text-blue-500",
-                        bg: "bg-blue-50 dark:bg-blue-900/10",
+                        color: "text-emerald-500",
+                        bg: "bg-emerald-900/10",
                         title: "Trusted Platform",
                         desc: "SOC2 certified. Trusted by 50,000+ contributors. Your data and privacy are our priority."
                      }
                   ].map((feature, idx) => (
-                     <div key={idx} className="glass-card p-5 md:p-8 rounded-3xl hover:border-blue-500/30 transition-all duration-300 relative overflow-hidden group md:hover:-translate-y-2 hover:shadow-2xl flex-shrink-0 w-[80vw] sm:w-[340px] md:w-auto snap-center">
+                     <div key={idx} className="bg-white/5 backdrop-blur-md p-5 md:p-8 rounded-3xl border border-white/10 hover:border-blue-500/30 transition-all duration-300 relative overflow-hidden group md:hover:-translate-y-2 hover:shadow-2xl flex-shrink-0 w-[80vw] sm:w-[340px] md:w-auto snap-center shadow-sm">
                         <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-current to-transparent opacity-5 rounded-bl-full pointer-events-none transition-opacity group-hover:opacity-10" style={{ color: feature.color.replace('text-', '') }}></div>
                         <div className={`h-12 w-12 md:h-16 md:w-16 ${feature.bg} rounded-2xl flex items-center justify-center mb-5 md:mb-8 group-hover:scale-110 transition-transform duration-300 shadow-inner`}>
                            <feature.icon className={`h-5 w-5 md:h-8 md:w-8 ${feature.color}`} />
                         </div>
-                        <h3 className="text-lg md:text-2xl font-bold text-zinc-900 dark:text-white mb-2 md:mb-4">{feature.title}</h3>
-                        <p className="text-sm md:text-lg text-zinc-600 dark:text-zinc-400 leading-relaxed">{feature.desc}</p>
+                        <h3 className="text-lg md:text-2xl font-bold text-white mb-2 md:mb-4">{feature.title}</h3>
+                        <p className="text-sm md:text-lg text-zinc-400 leading-relaxed">{feature.desc}</p>
                      </div>
                   ))}
                </div>
@@ -353,57 +351,57 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onEnterApp, onStartSig
             >
                <div className="flex flex-col md:flex-row justify-between items-start md:items-end mb-6 md:mb-16 gap-3 md:gap-6">
                   <div>
-                     <span className="text-purple-600 dark:text-purple-400 font-bold uppercase tracking-widest text-xs mb-1 md:mb-3 block">Task Types</span>
-                     <h2 className="text-2xl md:text-5xl font-bold text-zinc-900 dark:text-white">What Will You Do?</h2>
+                     <span className="text-purple-400 font-bold uppercase tracking-widest text-xs mb-1 md:mb-3 block">Task Types</span>
+                     <h2 className="text-2xl md:text-5xl font-bold text-white">What Will You Do?</h2>
                   </div>
-                  <Button onClick={() => onNavigate('contributors')} variant="outline" className="dark:text-white dark:border-white/20 w-full md:w-auto h-10 md:h-12 px-6 md:px-8 text-sm">See All Tasks</Button>
+                  <button onClick={() => onNavigate('contributors')} className="flex items-center justify-center px-6 md:px-8 h-10 md:h-12 bg-transparent text-white border border-white/20 rounded-md hover:bg-white/5 transition-colors text-sm">See All Tasks</button>
                </div>
 
                <div className="flex overflow-x-auto pt-10 pb-8 gap-6 snap-x snap-mandatory no-scrollbar -mx-4 px-4 md:grid md:grid-cols-2 lg:grid-cols-3 md:mx-0 md:px-0">
                   {/* Task Card 1 */}
-                  <div className="group bg-white/5 dark:bg-white/5 backdrop-blur-md p-1 rounded-3xl border border-white/10 hover:border-blue-500/50 hover:shadow-2xl hover:shadow-blue-500/10 transition-all duration-300 md:hover:-translate-y-2 flex-shrink-0 w-[82vw] sm:w-[350px] md:w-auto snap-center">
+                  <div className="group bg-white/5 backdrop-blur-md p-1 rounded-3xl border border-white/10 hover:border-blue-500/50 hover:shadow-2xl hover:shadow-blue-500/10 transition-all duration-300 md:hover:-translate-y-2 flex-shrink-0 w-[82vw] sm:w-[350px] md:w-auto snap-center">
                      <div className="bg-transparent rounded-[22px] p-4 md:p-6 h-full flex flex-col">
-                        <div className="h-24 md:h-48 bg-blue-50 dark:bg-blue-900/10 rounded-2xl mb-3 md:mb-6 flex items-center justify-center relative overflow-hidden">
+                        <div className="h-24 md:h-48 bg-blue-900/10 rounded-2xl mb-3 md:mb-6 flex items-center justify-center relative overflow-hidden">
                            <div className="absolute inset-0 bg-gradient-to-tr from-blue-500/10 to-transparent"></div>
-                           <Mic className="h-10 w-10 md:h-16 md:w-16 text-blue-600 dark:text-blue-400 group-hover:scale-110 transition-transform duration-500 drop-shadow-lg" />
-                           <div className="absolute bottom-2 right-2 md:bottom-4 md:right-4 bg-white/90 dark:bg-black/90 px-2 md:px-3 py-1 md:py-1.5 rounded-lg text-xs font-bold shadow-lg border border-zinc-100 dark:border-white/10 backdrop-blur-sm">Avg: ₹150/hr</div>
+                           <Mic className="h-10 w-10 md:h-16 md:w-16 text-blue-400 group-hover:scale-110 transition-transform duration-500 drop-shadow-lg" />
+                           <div className="absolute bottom-2 right-2 md:bottom-4 md:right-4 bg-black/90 px-2 md:px-3 py-1 md:py-1.5 rounded-lg text-xs font-bold shadow-lg border border-white/10 backdrop-blur-sm">Avg: ₹150/hr</div>
                         </div>
-                        <h3 className="text-lg md:text-2xl font-bold text-zinc-900 dark:text-white mb-1 md:mb-2">Audio Recording</h3>
+                        <h3 className="text-lg md:text-2xl font-bold text-white mb-1 md:mb-2">Audio Recording</h3>
                         <p className="text-sm md:text-base text-zinc-500 mb-3 md:mb-6 flex-1">Read short phrases or record conversations to help AI understand speech.</p>
                         <div className="flex flex-wrap gap-2 mt-auto">
-                           <span className="px-3 py-1 bg-zinc-100 dark:bg-white/5 rounded-md text-[10px] uppercase font-bold text-zinc-600 dark:text-zinc-400 border border-zinc-200 dark:border-white/10">Voice Assistant</span>
+                           <span className="px-3 py-1 bg-white/5 rounded-md text-[10px] uppercase font-bold text-zinc-400 border border-white/10">Voice Assistant</span>
                         </div>
                      </div>
                   </div>
 
                   {/* Task Card 2 */}
-                  <div className="group bg-white/5 dark:bg-white/5 backdrop-blur-md p-1 rounded-3xl border border-white/10 hover:border-purple-500/50 hover:shadow-2xl hover:shadow-purple-500/10 transition-all duration-300 md:hover:-translate-y-2 flex-shrink-0 w-[82vw] sm:w-[350px] md:w-auto snap-center">
+                  <div className="group bg-white/5 backdrop-blur-md p-1 rounded-3xl border border-white/10 hover:border-purple-500/50 hover:shadow-2xl hover:shadow-purple-500/10 transition-all duration-300 md:hover:-translate-y-2 flex-shrink-0 w-[82vw] sm:w-[350px] md:w-auto snap-center">
                      <div className="bg-transparent rounded-[22px] p-4 md:p-6 h-full flex flex-col">
-                        <div className="h-24 md:h-48 bg-purple-50 dark:bg-purple-900/10 rounded-2xl mb-3 md:mb-6 flex items-center justify-center relative overflow-hidden">
+                        <div className="h-24 md:h-48 bg-purple-900/10 rounded-2xl mb-3 md:mb-6 flex items-center justify-center relative overflow-hidden">
                            <div className="absolute inset-0 bg-gradient-to-tr from-purple-500/10 to-transparent"></div>
-                           <ImageIcon className="h-10 w-10 md:h-16 md:w-16 text-purple-600 dark:text-purple-400 group-hover:scale-110 transition-transform duration-500 drop-shadow-lg" />
-                           <div className="absolute bottom-2 right-2 md:bottom-4 md:right-4 bg-white/90 dark:bg-black/90 px-2 md:px-3 py-1 md:py-1.5 rounded-lg text-xs font-bold shadow-lg border border-zinc-100 dark:border-white/10 backdrop-blur-sm">Avg: ₹120/hr</div>
+                           <ImageIcon className="h-10 w-10 md:h-16 md:w-16 text-purple-400 group-hover:scale-110 transition-transform duration-500 drop-shadow-lg" />
+                           <div className="absolute bottom-2 right-2 md:bottom-4 md:right-4 bg-black/90 px-2 md:px-3 py-1 md:py-1.5 rounded-lg text-xs font-bold shadow-lg border border-white/10 backdrop-blur-sm">Avg: ₹120/hr</div>
                         </div>
-                        <h3 className="text-lg md:text-2xl font-bold text-zinc-900 dark:text-white mb-1 md:mb-2">Image Annotation</h3>
+                        <h3 className="text-lg md:text-2xl font-bold text-white mb-1 md:mb-2">Image Annotation</h3>
                         <p className="text-sm md:text-base text-zinc-500 mb-3 md:mb-6 flex-1">Draw boxes around objects or describe images to train computer vision.</p>
                         <div className="flex flex-wrap gap-2 mt-auto">
-                           <span className="px-3 py-1 bg-zinc-100 dark:bg-white/5 rounded-md text-[10px] uppercase font-bold text-zinc-600 dark:text-zinc-400 border border-zinc-200 dark:border-white/10">Self-Driving</span>
+                           <span className="px-3 py-1 bg-white/5 rounded-md text-[10px] uppercase font-bold text-zinc-400 border border-white/10">Self-Driving</span>
                         </div>
                      </div>
                   </div>
 
                   {/* Task Card 3 */}
-                  <div className="group bg-white/5 dark:bg-white/5 backdrop-blur-md p-1 rounded-3xl border border-white/10 hover:border-blue-500/50 hover:shadow-2xl hover:shadow-blue-500/10 transition-all duration-300 md:hover:-translate-y-2 flex-shrink-0 w-[82vw] sm:w-[350px] md:w-auto snap-center">
+                  <div className="group bg-white/5 backdrop-blur-md p-1 rounded-3xl border border-white/10 hover:border-blue-500/50 hover:shadow-2xl hover:shadow-blue-500/10 transition-all duration-300 md:hover:-translate-y-2 flex-shrink-0 w-[82vw] sm:w-[350px] md:w-auto snap-center">
                      <div className="bg-transparent rounded-[22px] p-4 md:p-6 h-full flex flex-col">
-                        <div className="h-24 md:h-48 bg-blue-50 dark:bg-blue-900/10 rounded-2xl mb-3 md:mb-6 flex items-center justify-center relative overflow-hidden">
+                        <div className="h-24 md:h-48 bg-blue-900/10 rounded-2xl mb-3 md:mb-6 flex items-center justify-center relative overflow-hidden">
                            <div className="absolute inset-0 bg-gradient-to-tr from-blue-500/10 to-transparent"></div>
-                           <MessageSquare className="h-10 w-10 md:h-16 md:w-16 text-blue-600 dark:text-blue-400 group-hover:scale-110 transition-transform duration-500 drop-shadow-lg" />
-                           <div className="absolute bottom-2 right-2 md:bottom-4 md:right-4 bg-white/90 dark:bg-black/90 px-2 md:px-3 py-1 md:py-1.5 rounded-lg text-xs font-bold shadow-lg border border-zinc-100 dark:border-white/10 backdrop-blur-sm">Avg: ₹100/hr</div>
+                           <MessageSquare className="h-10 w-10 md:h-16 md:w-16 text-blue-400 group-hover:scale-110 transition-transform duration-500 drop-shadow-lg" />
+                           <div className="absolute bottom-2 right-2 md:bottom-4 md:right-4 bg-black/90 px-2 md:px-3 py-1 md:py-1.5 rounded-lg text-xs font-bold shadow-lg border border-white/10 backdrop-blur-sm">Avg: ₹100/hr</div>
                         </div>
-                        <h3 className="text-lg md:text-2xl font-bold text-zinc-900 dark:text-white mb-1 md:mb-2">Text & Logic</h3>
+                        <h3 className="text-lg md:text-2xl font-bold text-white mb-1 md:mb-2">Text & Logic</h3>
                         <p className="text-sm md:text-base text-zinc-500 mb-3 md:mb-6 flex-1">Rate chatbot responses, write creative stories, or solve logic puzzles.</p>
                         <div className="flex flex-wrap gap-2 mt-auto">
-                           <span className="px-3 py-1 bg-zinc-100 dark:bg-white/5 rounded-md text-[10px] uppercase font-bold text-zinc-600 dark:text-zinc-400 border border-zinc-200 dark:border-white/10">RLHF</span>
+                           <span className="px-3 py-1 bg-white/5 rounded-md text-[10px] uppercase font-bold text-zinc-400 border border-white/10">RLHF</span>
                         </div>
                      </div>
                   </div>
@@ -424,7 +422,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onEnterApp, onStartSig
                className="max-w-7xl mx-auto relative z-10"
             >
                <div className="text-center mb-6 md:mb-20 px-2">
-                  <h2 className="text-2xl sm:text-4xl md:text-5xl font-bold text-zinc-900 dark:text-white mb-2 md:mb-6">Start Earning in Minutes</h2>
+                  <h2 className="text-2xl sm:text-4xl md:text-5xl font-bold text-white mb-2 md:mb-6">Start Earning in Minutes</h2>
                   <p className="text-sm md:text-xl text-zinc-500">No complex onboarding. Just create an account and go.</p>
                </div>
 
@@ -438,18 +436,18 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onEnterApp, onStartSig
                      { step: "03", title: "Execute", desc: "Follow the instructions and submit your work." },
                      { step: "04", title: "Get Paid", desc: "Earnings hit your wallet instantly after approval." }
                   ].map((item, i) => (
-                     <div key={i} className="flex flex-col items-center text-center bg-white/5 dark:bg-white/5 backdrop-blur-md p-4 md:p-8 rounded-2xl md:rounded-3xl border border-white/10 hover:-translate-y-2 transition-transform duration-300 flex-shrink-0 w-[58vw] sm:w-[240px] md:w-auto snap-center">
+                     <div key={i} className="flex flex-col items-center text-center bg-white/5 backdrop-blur-md p-4 md:p-8 rounded-2xl md:rounded-3xl border border-white/10 hover:-translate-y-2 transition-transform duration-300 flex-shrink-0 w-[58vw] sm:w-[240px] md:w-auto snap-center">
                         <div className="h-11 w-11 md:h-20 md:w-20 bg-blue-500/10 rounded-full border-2 md:border-4 border-blue-500/20 flex items-center justify-center text-base md:text-2xl font-black text-white shadow-[0_0_20px_rgba(59,130,246,0.2)] mb-3 md:mb-6 z-10">
                            {item.step}
                         </div>
-                        <h3 className="text-sm md:text-xl font-bold text-zinc-900 dark:text-white mb-1 md:mb-3">{item.title}</h3>
+                        <h3 className="text-sm md:text-xl font-bold text-white mb-1 md:mb-3">{item.title}</h3>
                         <p className="text-xs md:text-base text-zinc-500 leading-relaxed font-medium">{item.desc}</p>
                      </div>
                   ))}
                </div>
 
                <div className="hidden md:block text-center mt-6 md:mt-20 px-4">
-                  <Button onClick={onStartSignup} size="lg" className="rounded-full px-8 md:px-12 h-12 md:h-16 text-base md:text-xl bg-[#121212] dark:bg-white text-white dark:text-white hover:scale-105 transition-transform w-full md:w-auto shadow-2xl">Create Free Account</Button>
+                  <Button onClick={onStartSignup} size="lg" className="rounded-full px-8 md:px-12 h-12 md:h-16 text-base md:text-xl bg-white text-black hover:scale-105 transition-transform w-full md:w-auto shadow-2xl">Create Free Account</Button>
                </div>
             </motion.div>
          </section>
@@ -485,7 +483,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onEnterApp, onStartSig
                         initial: "S"
                      }
                   ].map((story, i) => (
-                     <div key={i} className="bg-white/5 dark:bg-white/5 backdrop-blur-md p-5 md:p-8 rounded-3xl border border-white/5 hover:border-white/10 transition-colors flex-shrink-0 w-[82vw] sm:w-[350px] md:w-auto snap-center">
+                     <div key={i} className="bg-white/5 backdrop-blur-md p-5 md:p-8 rounded-3xl border border-white/5 hover:border-white/10 transition-colors flex-shrink-0 w-[82vw] sm:w-[350px] md:w-auto snap-center">
                         <div className="flex gap-1 text-amber-400 mb-3 md:mb-6">
                            {[...Array(5)].map((_, i) => <Star key={i} className="h-4 w-4 fill-current" />)}
                         </div>
@@ -514,7 +512,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onEnterApp, onStartSig
                transition={{ duration: 0.8 }}
                className="max-w-3xl mx-auto px-4 md:px-6"
             >
-               <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-center text-white mb-10 md:mb-16">Frequently Asked Questions</h2>
+               <h2 className="text-2xl sm:text-3xl md:text-4xl font-black text-center text-white mb-10 md:mb-16 tracking-tight">Frequently Asked Questions</h2>
                <div className="space-y-3 md:space-y-4">
                   {[
                      { q: "Do I need any special skills?", a: "No special skills are required for most tasks. If you can speak, type, or identify objects in images, you can contribute. Some advanced tasks might require specific language proficiency." },
@@ -522,7 +520,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onEnterApp, onStartSig
                      { q: "When do I get paid?", a: "We process payments daily. Once your work is validated (usually within 24 hours), you can withdraw funds immediately to your UPI or Bank Account." },
                      { q: "Is my data safe?", a: "Yes. We are SOC2 certified and prioritize data privacy. Your personal information is never shared with clients—only the anonymized data you explicitly contribute." }
                   ].map((faq, i) => (
-                     <div key={i} className="bg-white/5 backdrop-blur-md rounded-2xl border border-white/10 overflow-hidden">
+                     <div key={i} className="bg-white/5 backdrop-blur-xl rounded-2xl border border-white/10 overflow-hidden hover:border-blue-500/30 transition-all">
                         <button
                            onClick={() => toggleFaq(i)}
                            className="w-full px-4 md:px-6 py-4 md:py-5 text-left flex items-center justify-between text-white font-bold hover:bg-white/5 transition-colors text-sm md:text-base gap-3"
@@ -531,7 +529,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onEnterApp, onStartSig
                            <ChevronDown className={`h-5 w-5 text-zinc-500 transition-transform flex-shrink-0 ${openFaq === i ? 'rotate-180' : ''}`} />
                         </button>
                         {openFaq === i && (
-                           <div className="px-4 md:px-6 pb-4 md:pb-6 text-sm md:text-base text-zinc-400 leading-relaxed animate-in slide-in-from-top-2">
+                           <div className="px-4 md:px-6 pb-4 md:pb-6 text-sm md:text-base text-zinc-400 leading-relaxed animate-in fade-in slide-in-from-top-2 duration-300">
                               {faq.a}
                            </div>
                         )}
@@ -547,37 +545,34 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onEnterApp, onStartSig
             <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-blue-500/10 rounded-full blur-[120px] animate-pulse"></div>
 
             <div className="max-w-5xl mx-auto text-center relative z-10 transform-style-3d">
-               <div className="inline-flex items-center gap-2 px-4 md:px-6 py-2 rounded-full bg-white/5 border border-white/10 text-[10px] md:text-sm font-medium text-indigo-300 mb-8 md:mb-10 backdrop-blur-sm ">
+               <div className="inline-flex items-center gap-2 px-4 md:px-6 py-2 rounded-full bg-white/5 border border-white/10 text-[10px] md:text-sm font-bold text-indigo-300 mb-8 md:mb-14 shadow-sm">
                   <TrendingUp className="h-4 w-4 md:h-5 md:w-5" /> HIGH DEMAND FOR NEW CONTRIBUTORS
                </div>
 
-               <h2 className="text-3xl sm:text-5xl md:text-8xl font-black mb-6 md:mb-10 text-white tracking-tighter leading-none drop-shadow-[0_0_30px_rgba(255,255,255,0.2)] px-2">
+               <h2 className="text-3xl sm:text-5xl md:text-8xl font-black mb-6 md:mb-10 text-white tracking-tighter leading-[0.9] drop-shadow-[0_0_30px_rgba(255,255,255,0.2)] px-2">
                   Your <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 via-indigo-400 to-purple-400">Digital Wallet</span> <br />
                   Is Waiting.
                </h2>
 
-               <p className="text-sm sm:text-base md:text-2xl text-zinc-400 mb-10 md:mb-16 max-w-2xl mx-auto leading-relaxed px-4 md:px-6">
+               <p className="text-sm sm:text-base md:text-2xl text-zinc-400 mb-10 md:mb-16 max-w-2xl mx-auto leading-relaxed px-4 md:px-6 font-medium">
                   Join the workforce of tomorrow. Start earning real money for simple digital tasks today. No interviews, no resume, just results.
                </p>
 
-               <div className="flex flex-col sm:flex-row gap-4 md:gap-6 justify-center items-center px-4 md:px-6">
+               <div className="flex flex-col sm:flex-row gap-4 md:gap-8 justify-center items-center px-4 md:px-6">
                   <button
                      onClick={onStartSignup}
-                     className="group relative px-8 md:px-10 py-4 md:py-5 bg-white text-black font-black text-lg md:text-2xl rounded-full hover:scale-105 transition-all duration-300 shadow-[0_0_60px_rgba(255,255,255,0.2)] w-full sm:w-auto hover:shadow-[0_0_80px_rgba(255,255,255,0.4)]"
+                     className="group relative px-10 md:px-14 py-5 md:py-6 bg-white text-black font-black text-lg md:text-2xl rounded-2xl hover:scale-105 transition-all duration-300 shadow-[0_0_60px_rgba(255,255,255,0.2)] w-full sm:w-auto overflow-hidden hover:bg-zinc-100"
                   >
-                     Start Earning Now
-                     <div className="absolute -inset-1 bg-gradient-to-r from-blue-400 to-purple-400 rounded-full blur opacity-20 group-hover:opacity-40 transition duration-200"></div>
+                     <span className="relative z-10">Start Earning Now</span>
+                     <div className="absolute inset-0 bg-gradient-to-r from-blue-600 to-indigo-600 opacity-0 group-hover:opacity-10 transition-opacity"></div>
                   </button>
 
-                  <button onClick={() => onNavigate('money')} className="text-zinc-400 hover:text-white font-bold text-sm md:text-lg flex items-center gap-2 transition-colors hover:underline decoration-blue-500 underline-offset-4 py-2">
-                     View Payment Rates <ArrowRight className="h-4 w-4 md:h-5 md:w-5" />
+                  <button onClick={() => onNavigate('money')} className="text-zinc-400 hover:text-white font-black text-sm md:text-xl flex items-center gap-2 transition-all hover:translate-x-1 py-2">
+                     View Payouts <ArrowRight className="h-5 w-5 md:h-6 md:w-6 text-blue-500" />
                   </button>
                </div>
-
-
             </div>
          </section>
-
       </PublicLayout>
    );
 };
