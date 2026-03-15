@@ -1,4 +1,5 @@
 import React, { useState, useEffect, Suspense, lazy } from 'react';
+import { useLocation, useNavigate, Routes, Route, Navigate } from 'react-router-dom';
 
 // Lazy-loaded page components for better performance
 const Dashboard = lazy(() => import('./pages/Dashboard').then(m => ({ default: m.Dashboard })));
@@ -27,9 +28,6 @@ import { PageView, Task, UserRole, TaskType, TaskStatus } from './types';
 
 // Icon library - Lucide React icons
 import { Menu, User, MapPin, Globe, Shield, LayoutDashboard, Database, CreditCard, MoreHorizontal, CheckCircle2, ShieldAlert, Clock } from 'lucide-react';
-
-// Always use dark mode — add class once at module load
-document.documentElement.classList.add('dark');
 
 // Custom components and utilities
 import { Logo } from './components/Logo';
@@ -80,6 +78,50 @@ const App: React.FC = () => {
   const [isMobileNavOpen, setIsMobileNavOpen] = useState(false); // Mobile navigation menu state
   const [activeTask, setActiveTask] = useState<Task | null>(null); // Currently selected task for execution
   const [userProfile, setUserProfile] = useState<any>(null); // User profile data from database
+
+  const navigate = useNavigate();
+  const location = useLocation();
+
+  // --------------------------------------------------------------------------
+  // URL SYNC - Makes back button work
+  // --------------------------------------------------------------------------
+  useEffect(() => {
+    const path = location.pathname;
+
+    // Auth modes
+    if (path === '/login') {
+      setViewMode('app');
+      setAuthMode('login');
+    } else if (path === '/signup') {
+      setViewMode('app');
+      setAuthMode('signup');
+    } else if (path === '/forgot-password') {
+      setViewMode('app');
+      setAuthMode('forgot-password');
+    } else if (path === '/reset-password') {
+      setViewMode('app');
+      setAuthMode('reset-password');
+    }
+    // App/Dashboard routes
+    else if (path.startsWith('/dashboard')) {
+      if (isAuthenticated) {
+        setViewMode('app');
+        // Extract specific page if any, e.g., /dashboard/tasks
+        const parts = path.split('/');
+        if (parts[2]) {
+          setCurrentPage(parts[2] as PageView);
+        } else {
+          setCurrentPage(userRole === 'admin' ? 'admin-dashboard' : 'dashboard');
+        }
+      }
+    }
+    // Public routes
+    else {
+      setViewMode('public');
+      const page = path.substring(1) || 'home';
+      setPublicPage(page as PublicPageType);
+    }
+  }, [location.pathname, isAuthenticated, userRole]);
 
   // Global Data State - Tasks loaded from backend
   const [tasks, setTasks] = useState<Task[]>([]); // Array of all tasks
@@ -307,8 +349,7 @@ const App: React.FC = () => {
    * Switches to app view mode and shows login form
    */
   const handleEnterApp = () => {
-    setAuthMode('login');
-    setViewMode('app');
+    navigate('/login');
   };
 
   /**
@@ -316,20 +357,22 @@ const App: React.FC = () => {
    * Switches to app view mode and shows signup form
    */
   const handleStartSignup = () => {
-    setAuthMode('signup');
-    setViewMode('app');
-  }
+    navigate('/signup');
+  };
 
   /**
    * Exit the app and return to public landing page
    * Resets all navigation state and clears authentication
    */
   const handleExitApp = () => {
-    setViewMode('public');
-    setPublicPage('home');
-    setCurrentPage('dashboard');
+    navigate('/');
     setIsAuthenticated(false);
   };
+
+  // Ensure dark mode is active by default
+  useEffect(() => {
+    document.documentElement.classList.add('dark');
+  }, []);
 
   /**
    * Handle user login after authentication
@@ -418,7 +461,7 @@ const App: React.FC = () => {
    */
   const handleSelectTask = (task: Task) => {
     setActiveTask(task);
-    setCurrentPage('execution');
+    navigate('/dashboard/execution');
   };
 
   /**
@@ -433,7 +476,7 @@ const App: React.FC = () => {
       );
     }
     setActiveTask(null);
-    setCurrentPage('tasks');
+    navigate('/dashboard/tasks');
   };
 
   /**
@@ -500,28 +543,36 @@ const App: React.FC = () => {
    * @param page - The public page to navigate to (home, about, contributors, money)
    */
   const handlePublicNavigate = (page: PublicPageType) => {
-    setPublicPage(page);
+    navigate(page === 'home' ? '/' : `/${page}`);
     window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+  const handleAppNavigate = (page: PageView) => {
+    navigate(`/dashboard/${page}`);
   };
 
   // Render logic
   const renderMainContent = () => {
     if (viewMode === 'public') {
+      const publicProps = {
+        onNavigate: handlePublicNavigate,
+        onEnterApp: handleEnterApp
+      };
+
       switch (publicPage) {
         case 'about':
-          return <About onNavigate={handlePublicNavigate} onEnterApp={handleEnterApp} />;
+          return <About {...publicProps} />;
         case 'contributors':
-          return <Contributors onNavigate={handlePublicNavigate} onEnterApp={handleStartSignup} />;
+          return <Contributors {...publicProps} onEnterApp={handleStartSignup} />;
         case 'money':
-          return <Money onNavigate={handlePublicNavigate} onEnterApp={handleStartSignup} />;
+          return <Money {...publicProps} onEnterApp={handleStartSignup} />;
         case 'cookies':
-          return <CookiePolicy onNavigate={handlePublicNavigate} onEnterApp={handleEnterApp} />;
+          return <CookiePolicy {...publicProps} />;
         case 'privacy':
-          return <PrivacyPolicy onNavigate={handlePublicNavigate} onEnterApp={handleEnterApp} />;
+          return <PrivacyPolicy {...publicProps} />;
         case 'terms':
-          return <TermsOfService onNavigate={handlePublicNavigate} onEnterApp={handleEnterApp} />;
+          return <TermsOfService {...publicProps} />;
         case 'acceptable-use':
-          return <AcceptableUse onNavigate={handlePublicNavigate} onEnterApp={handleEnterApp} />;
+          return <AcceptableUse {...publicProps} />;
         default:
           return <LandingPage onNavigate={handlePublicNavigate} onEnterApp={handleEnterApp} onStartSignup={handleStartSignup} />;
       }
@@ -570,7 +621,7 @@ const App: React.FC = () => {
       if (userRole === 'admin') {
         switch (currentPage) {
           case 'admin-dashboard':
-            return <AdminDashboard onNavigate={setCurrentPage} tasks={tasks} />;
+            return <AdminDashboard onNavigate={handleAppNavigate} tasks={tasks} />;
           case 'admin-create-task':
             return <AdminCreateTask onSave={handleCreateTask} />;
           case 'admin-submissions':
@@ -592,24 +643,24 @@ const App: React.FC = () => {
             return (
               <div className="max-w-6xl mx-auto space-y-3 h-full flex flex-col justify-center pb-2">
                 {/* Admin Header Section */}
-                <div className="flex flex-col md:flex-row items-center gap-5 bg-white dark:bg-[#09090b] rounded-3xl border border-stone-200 dark:border-white/5 p-4 shadow-lg relative overflow-hidden">
+                <div className="flex flex-col md:flex-row items-center gap-5 bg-[#09090b] rounded-3xl border border-white/5 p-4 shadow-lg relative overflow-hidden">
                   <div className="absolute top-0 right-0 w-32 h-32 bg-purple-500/5 rounded-full blur-3xl"></div>
 
-                  <div className="relative h-16 w-16 bg-gradient-to-br from-purple-500 to-indigo-600 rounded-full flex items-center justify-center text-xl font-black text-white border-2 border-white dark:border-zinc-900 shadow-inner flex-shrink-0">
+                  <div className="relative h-16 w-16 bg-gradient-to-br from-purple-500 to-indigo-600 rounded-full flex items-center justify-center text-xl font-black text-white border-2 border-zinc-900 shadow-inner flex-shrink-0">
                     {userProfile?.full_name?.charAt(0) || userProfile?.email?.charAt(0) || 'A'}
-                    <div className="absolute bottom-0 right-0 h-4 w-4 bg-emerald-500 border-2 border-white dark:border-zinc-900 rounded-full shadow-lg"></div>
+                    <div className="absolute bottom-0 right-0 h-4 w-4 bg-emerald-500 border-2 border-zinc-900 rounded-full shadow-lg"></div>
                   </div>
 
                   <div className="flex-1 min-w-0 text-center md:text-left">
                     <div className="flex flex-col md:flex-row md:items-center gap-2 mb-0.5">
-                      <h1 className="text-xl font-black text-[#121212] dark:text-white truncate">
+                      <h1 className="text-xl font-black text-white truncate">
                         {userProfile?.full_name || 'Administrator'}
                       </h1>
-                      <span className="inline-flex items-center px-2 py-0.5 rounded-full text-[9px] font-black bg-purple-100 dark:bg-purple-900/30 text-purple-600 dark:text-purple-400 w-fit mx-auto md:mx-0 uppercase tracking-tighter">
+                      <span className="inline-flex items-center px-2 py-0.5 rounded-full text-[9px] font-black bg-purple-900/30 text-purple-400 w-fit mx-auto md:mx-0 uppercase tracking-tighter">
                         Admin ID: #{userProfile?.id?.slice(0, 8) || '0xAF'}
                       </span>
                     </div>
-                    <div className="flex items-center justify-center md:justify-start gap-4 text-stone-500 dark:text-stone-400 text-[10px] font-bold uppercase tracking-wider">
+                    <div className="flex items-center justify-center md:justify-start gap-4 text-stone-400 text-[10px] font-bold uppercase tracking-wider">
                       <span className="flex items-center gap-1.5 text-purple-500">
                         <Shield className="h-3 w-3" /> Level 5 Clearance
                       </span>
@@ -617,11 +668,11 @@ const App: React.FC = () => {
                     </div>
                   </div>
 
-                  <div className="bg-stone-50 dark:bg-white/5 border border-stone-200 dark:border-white/5 rounded-2xl p-3 px-6 text-center shadow-inner">
+                  <div className="bg-white/5 border border-white/5 rounded-2xl p-3 px-6 text-center shadow-inner">
                     <div className="text-[9px] font-black uppercase tracking-widest text-stone-400 mb-1">Starset Reputation</div>
                     <div className="flex items-baseline justify-center gap-1">
                       <span className="text-2xl font-black text-emerald-500">{userProfile?.trust_score || 100}</span>
-                      <span className="text-[10px] text-stone-400 dark:text-stone-500 font-bold">/100</span>
+                      <span className="text-[10px] text-stone-500 font-bold">/100</span>
                     </div>
                   </div>
                 </div>
@@ -629,9 +680,9 @@ const App: React.FC = () => {
                 {/* Info Grid */}
                 <div className="grid md:grid-cols-3 gap-3">
                   {/* Registry Details */}
-                  <div className="md:col-span-2 bg-white dark:bg-[#09090b] rounded-3xl border border-stone-200 dark:border-white/5 p-5 shadow-sm">
-                    <h3 className="text-[10px] font-black text-[#121212] dark:text-white mb-4 uppercase tracking-[0.2em] flex items-center gap-2 opacity-60">
-                      <Database className="h-3 w-3 text-purple-600 dark:text-purple-400" />
+                  <div className="md:col-span-2 bg-[#09090b] rounded-3xl border border-white/5 p-5 shadow-sm">
+                    <h3 className="text-[10px] font-black text-white mb-4 uppercase tracking-[0.2em] flex items-center gap-2 opacity-60">
+                      <Database className="h-3 w-3 text-purple-400" />
                       Registry & System Data
                     </h3>
 
@@ -658,9 +709,9 @@ const App: React.FC = () => {
                   </div>
 
                   {/* Permissions */}
-                  <div className="bg-white dark:bg-[#09090b] rounded-3xl border border-stone-200 dark:border-white/5 p-5 shadow-sm">
-                    <h3 className="text-[10px] font-black text-[#121212] dark:text-white mb-3 uppercase tracking-[0.2em] flex items-center gap-2 opacity-60">
-                      <Shield className="h-3 w-3 text-purple-600 dark:text-purple-400" />
+                  <div className="bg-[#09090b] rounded-3xl border border-white/5 p-5 shadow-sm">
+                    <h3 className="text-[10px] font-black text-white mb-3 uppercase tracking-[0.2em] flex items-center gap-2 opacity-60">
+                      <Shield className="h-3 w-3 text-purple-400" />
                       Privileges
                     </h3>
 
@@ -671,7 +722,7 @@ const App: React.FC = () => {
                         'Payout Validation',
                         'System Config'
                       ].map((perm, i) => (
-                        <div key={i} className="flex items-center gap-2 p-1.5 bg-stone-50 dark:bg-white/5 rounded-lg border border-stone-100 dark:border-white/5">
+                        <div key={i} className="flex items-center gap-2 p-1.5 bg-white/5 rounded-lg border border-white/5">
                           <CheckCircle2 className="h-3 w-3 text-emerald-500 flex-shrink-0" />
                           <span className="text-[9px] font-black uppercase tracking-tight opacity-80">{perm}</span>
                         </div>
@@ -681,10 +732,10 @@ const App: React.FC = () => {
                 </div>
 
                 {/* Small Danger Zone Footer */}
-                <div className="bg-red-50/20 dark:bg-red-950/5 rounded-2xl border border-red-100/50 dark:border-red-900/10 p-3 px-5 flex items-center justify-between">
+                <div className="bg-red-950/5 rounded-2xl border border-red-900/10 p-3 px-5 flex items-center justify-between">
                   <div className="flex items-center gap-3">
-                    <ShieldAlert className="h-3.5 w-3.5 text-red-600/40 dark:text-red-500/30" />
-                    <span className="text-[10px] font-bold text-red-700/50 dark:text-red-400/30 uppercase tracking-tighter">System Access Resignation Protocol</span>
+                    <ShieldAlert className="h-3.5 w-3.5 text-red-500/30" />
+                    <span className="text-[10px] font-bold text-red-400/30 uppercase tracking-tighter">System Access Resignation Protocol</span>
                   </div>
                   <button
                     className="text-[9px] font-black text-red-600/80 hover:text-red-700 hover:underline transition-colors uppercase tracking-widest"
@@ -696,7 +747,7 @@ const App: React.FC = () => {
               </div>
             );
           default:
-            return <AdminDashboard onNavigate={setCurrentPage} tasks={tasks} />;
+            return <AdminDashboard onNavigate={handleAppNavigate} tasks={tasks} />;
         }
       }
 
@@ -710,7 +761,7 @@ const App: React.FC = () => {
             }}
           />;
         case 'dashboard':
-          return <Dashboard onNavigate={setCurrentPage} />;
+          return <Dashboard onNavigate={handleAppNavigate} />;
         case 'tasks':
           return <TaskList onSelectTask={handleSelectTask} tasks={tasks} completedTaskIds={completedTaskIds} />;
         case 'execution':
@@ -726,47 +777,47 @@ const App: React.FC = () => {
           return <Earnings />;
         case 'guidelines':
           return (
-            <div className="bg-white/70 dark:bg-black/40 backdrop-blur-md p-6 md:p-10 rounded-2xl border border-stone-200 dark:border-white/10 shadow-sm max-w-4xl">
-              <h1 className="text-2xl md:text-3xl font-bold mb-8 text-[#121212] dark:text-white">Quality Guidelines</h1>
-              <p className="mb-8 text-base md:text-lg text-stone-600 dark:text-stone-300 leading-relaxed">Strict adherence to these guidelines is required for payout. Violations may result in account suspension.</p>
+            <div className="bg-black/40 backdrop-blur-md p-6 md:p-10 rounded-2xl border border-white/10 shadow-sm max-w-4xl">
+              <h1 className="text-2xl md:text-3xl font-bold mb-8 text-white">Quality Guidelines</h1>
+              <p className="mb-8 text-base md:text-lg text-zinc-300 leading-relaxed">Strict adherence to these guidelines is required for payout. Violations may result in account suspension.</p>
               <div className="grid md:grid-cols-2 gap-6">
-                <div className="p-6 md:p-8 bg-[#FAF9F7]/80 dark:bg-white/5 rounded-xl border border-stone-200 dark:border-white/10">
-                  <h3 className="font-bold text-[#121212] dark:text-white mb-3 text-lg">Audio</h3>
-                  <p className="text-stone-600 dark:text-stone-400 leading-relaxed">No background noise (TV, fans, other people). Clear pronunciation required. Use a headset if possible.</p>
+                <div className="p-6 md:p-8 bg-white/5 rounded-xl border border-white/10">
+                  <h3 className="font-bold text-white mb-3 text-lg">Audio</h3>
+                  <p className="text-zinc-400 leading-relaxed">No background noise (TV, fans, other people). Clear pronunciation required. Use a headset if possible.</p>
                 </div>
-                <div className="p-6 md:p-8 bg-[#FAF9F7]/80 dark:bg-white/5 rounded-xl border border-stone-200 dark:border-white/10">
-                  <h3 className="font-bold text-[#121212] dark:text-white mb-3 text-lg">Text</h3>
-                  <p className="text-stone-600 dark:text-stone-400 leading-relaxed">Proper grammar and spelling are required unless colloquialisms are explicitly requested.</p>
+                <div className="p-6 md:p-8 bg-white/5 rounded-xl border border-white/10">
+                  <h3 className="font-bold text-white mb-3 text-lg">Text</h3>
+                  <p className="text-zinc-400 leading-relaxed">Proper grammar and spelling are required unless colloquialisms are explicitly requested.</p>
                 </div>
               </div>
             </div>
           );
         case 'support':
           return (
-            <div className="bg-white/70 dark:bg-black/40 backdrop-blur-md p-6 md:p-10 rounded-2xl border border-stone-200 dark:border-white/10 shadow-sm max-w-3xl">
-              <h1 className="text-2xl md:text-3xl font-bold mb-4 text-[#121212] dark:text-white">Support</h1>
-              <p className="text-stone-600 dark:text-stone-300 mb-10 text-lg">Need help? Submit a ticket below.</p>
+            <div className="bg-black/40 backdrop-blur-md p-6 md:p-10 rounded-2xl border border-white/10 shadow-sm max-w-3xl">
+              <h1 className="text-2xl md:text-3xl font-bold mb-4 text-white">Support</h1>
+              <p className="text-zinc-300 mb-10 text-lg">Need help? Submit a ticket below.</p>
               <form className="space-y-8">
                 <div>
-                  <label className="block text-sm font-bold text-stone-700 dark:text-stone-300 mb-2 uppercase tracking-wide">Issue Type</label>
-                  <select className="w-full border-stone-200 dark:border-white/10 rounded-xl p-4 border bg-[#FAF9F7]/50 dark:bg-white/5 focus:bg-white dark:focus:bg-black focus:ring-2 focus:ring-teal-500/20 focus:border-[#0f766e] transition-all outline-none text-base text-zinc-900 dark:text-white">
-                    <option>Payment Issue</option>
-                    <option>Task Bug</option>
-                    <option>Account Question</option>
-                    <option>Other</option>
+                  <label className="block text-sm font-bold text-zinc-300 mb-2 uppercase tracking-wide">Issue Type</label>
+                  <select className="w-full border-white/10 rounded-xl p-4 border bg-white/5 focus:bg-black focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all outline-none text-base text-white">
+                    <option className="bg-zinc-900">Payment Issue</option>
+                    <option className="bg-zinc-900">Task Bug</option>
+                    <option className="bg-zinc-900">Account Question</option>
+                    <option className="bg-zinc-900">Other</option>
                   </select>
                 </div>
                 <div>
-                  <label className="block text-sm font-bold text-stone-700 dark:text-stone-300 mb-2 uppercase tracking-wide">Description</label>
+                  <label className="block text-sm font-bold text-zinc-300 mb-2 uppercase tracking-wide">Description</label>
                   <textarea
                     required
                     placeholder="Please describe your issue in detail..."
-                    className="w-full border-stone-200 dark:border-white/10 rounded-xl p-4 border h-40 bg-[#FAF9F7]/50 dark:bg-white/5 focus:bg-white dark:focus:bg-black focus:ring-2 focus:ring-teal-500/20 focus:border-[#0f766e] transition-all resize-none outline-none text-base text-zinc-900 dark:text-white"
+                    className="w-full border-white/10 rounded-xl p-4 border h-40 bg-white/5 focus:bg-black focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all resize-none outline-none text-base text-white"
                   ></textarea>
                 </div>
                 <button
                   type="submit"
-                  className="bg-[#0f766e] text-white px-8 py-4 rounded-xl font-medium shadow-lg shadow-teal-900/10 hover:shadow-teal-900/20 hover:-translate-y-0.5 transition-all text-lg w-full md:w-auto"
+                  className="bg-blue-600 text-white px-8 py-4 rounded-xl font-bold shadow-lg shadow-blue-500/10 hover:shadow-blue-500/20 hover:-translate-y-0.5 transition-all text-lg w-full md:w-auto"
                   onClick={(e) => {
                     const form = (e.target as HTMLButtonElement).form;
                     if (form && form.checkValidity()) {
@@ -905,18 +956,18 @@ const App: React.FC = () => {
             </div>
           );
         default:
-          return <Dashboard onNavigate={setCurrentPage} />;
+          return <Dashboard onNavigate={handleAppNavigate} />;
       }
     };
 
     // Authenticated App Structure
     return (
-      <div className="flex h-[100dvh] bg-transparent text-[#121212] dark:text-white font-sans selection:bg-teal-100 selection:text-teal-900 overflow-hidden">
+      <div className="flex h-[100dvh] bg-zinc-50 dark:bg-[#020205] text-[#121212] dark:text-white font-sans selection:bg-blue-100 selection:text-blue-900 overflow-hidden transition-colors duration-300">
         {/* Desktop Sidebar - Hidden on Mobile */}
         <div className="hidden md:block h-full">
           <Sidebar
             currentPage={currentPage}
-            onNavigate={setCurrentPage}
+            onNavigate={handleAppNavigate}
             isMobileOpen={isMobileNavOpen}
             setIsMobileOpen={setIsMobileNavOpen}
             onLogout={handleLogout}
@@ -927,10 +978,10 @@ const App: React.FC = () => {
 
         <div className="flex-1 flex flex-col h-full overflow-hidden relative">
           {/* Mobile Header - Visible only on Mobile */}
-          <header className="md:hidden bg-white/90 dark:bg-black/90 backdrop-blur-md border-b border-stone-200 dark:border-white/10 h-16 flex items-center justify-between px-4 flex-shrink-0 z-30 relative">
+          <header className="md:hidden bg-white/90 dark:bg-black/95 backdrop-blur-md border-b border-stone-200 dark:border-white/10 h-16 flex items-center justify-between px-4 flex-shrink-0 z-30 relative">
             <div className="flex items-center gap-2">
-              <Logo className="h-14 w-14" />
-              <span className="font-bold text-base text-[#121212] dark:text-white tracking-[0.1em] uppercase whitespace-nowrap">STARSET</span>
+              <Logo className="h-10 w-10" />
+              <span className="font-extrabold text-base text-[#121212] dark:text-white tracking-[0.1em] uppercase whitespace-nowrap">STARSET</span>
             </div>
             <div className="flex items-center gap-3">
               <button
@@ -946,7 +997,7 @@ const App: React.FC = () => {
           <div className="md:hidden">
             <Sidebar
               currentPage={currentPage}
-              onNavigate={setCurrentPage}
+              onNavigate={handleAppNavigate}
               isMobileOpen={isMobileNavOpen}
               setIsMobileOpen={setIsMobileNavOpen}
               onLogout={handleLogout}
@@ -956,20 +1007,24 @@ const App: React.FC = () => {
           </div>
 
           {/* Main Content Scrollable Area */}
-          <main className="flex-1 overflow-y-auto p-4 md:p-10 scroll-smooth pb-24 md:pb-10">
-            <div className="max-w-[1600px] mx-auto min-h-full flex flex-col">
+          <main className="flex-1 overflow-y-auto p-4 md:p-10 scroll-smooth pb-24 md:pb-10 relative">
+            {/* Background Accent Glows */}
+            <div className="fixed inset-0 pointer-events-none overflow-hidden opacity-50 dark:opacity-100">
+              <div className="absolute top-[-10%] right-[-10%] w-[40%] h-[40%] bg-blue-500/10 dark:bg-blue-500/5 rounded-full blur-[120px]"></div>
+              <div className="absolute bottom-[-10%] left-[-10%] w-[40%] h-[40%] bg-purple-500/10 dark:bg-purple-500/5 rounded-full blur-[120px]"></div>
+            </div>
+
+            <div className="max-w-[1600px] mx-auto min-h-full flex flex-col relative z-10">
               <div className="flex-1">
                 {renderContent()}
               </div>
-
-
             </div>
           </main>
 
           {/* Mobile Bottom Navigation */}
           <div className="md:hidden absolute bottom-0 left-0 w-full bg-white dark:bg-black border-t border-stone-200 dark:border-white/10 px-6 py-3 flex justify-between items-center z-40 safe-area-bottom">
             <button
-              onClick={() => setCurrentPage('dashboard')}
+              onClick={() => handleAppNavigate('dashboard')}
               className={`flex flex-col items-center gap-1 transition-colors ${currentPage === 'dashboard' ? 'text-blue-600 dark:text-blue-500' : 'text-stone-400'}`}
             >
               <LayoutDashboard className="h-6 w-6" strokeWidth={currentPage === 'dashboard' ? 2.5 : 2} />
@@ -977,7 +1032,7 @@ const App: React.FC = () => {
             </button>
 
             <button
-              onClick={() => setCurrentPage('tasks')}
+              onClick={() => handleAppNavigate('tasks')}
               className={`flex flex-col items-center gap-1 transition-colors ${currentPage === 'tasks' || currentPage === 'execution' ? 'text-blue-600 dark:text-blue-500' : 'text-stone-400'}`}
             >
               <Database className="h-6 w-6" strokeWidth={currentPage === 'tasks' || currentPage === 'execution' ? 2.5 : 2} />
@@ -985,7 +1040,7 @@ const App: React.FC = () => {
             </button>
 
             <button
-              onClick={() => setCurrentPage('earnings')}
+              onClick={() => handleAppNavigate('earnings')}
               className={`flex flex-col items-center gap-1 transition-colors ${currentPage === 'earnings' ? 'text-blue-600 dark:text-blue-500' : 'text-stone-400'}`}
             >
               <CreditCard className="h-6 w-6" strokeWidth={currentPage === 'earnings' ? 2.5 : 2} />
@@ -993,7 +1048,7 @@ const App: React.FC = () => {
             </button>
 
             <button
-              onClick={() => setCurrentPage('account')}
+              onClick={() => handleAppNavigate('account')}
               className={`flex flex-col items-center gap-1 transition-colors ${currentPage === 'account' ? 'text-blue-600 dark:text-blue-500' : 'text-stone-400'}`}
             >
               <User className="h-6 w-6" strokeWidth={currentPage === 'account' ? 2.5 : 2} />
