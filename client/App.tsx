@@ -12,6 +12,9 @@ const About = lazy(() => import('./pages/About').then(m => ({ default: m.About }
 const Contributors = lazy(() => import('./pages/Contributors').then(m => ({ default: m.Contributors })));
 const Money = lazy(() => import('./pages/Money').then(m => ({ default: m.Money })));
 const CookiePolicy = lazy(() => import('./pages/CookiePolicy').then(m => ({ default: m.CookiePolicy })));
+const PrivacyPolicy = lazy(() => import('./pages/PrivacyPolicy').then(m => ({ default: m.PrivacyPolicy })));
+const TermsOfService = lazy(() => import('./pages/TermsOfService').then(m => ({ default: m.TermsOfService })));
+const AcceptableUse = lazy(() => import('./pages/AcceptableUse').then(m => ({ default: m.AcceptableUse })));
 const AdminCreateTask = lazy(() => import('./pages/AdminCreateTask').then(m => ({ default: m.AdminCreateTask })));
 const AdminDashboard = lazy(() => import('./pages/AdminDashboard').then(m => ({ default: m.AdminDashboard })));
 const AdminSubmissions = lazy(() => import('./pages/AdminSubmissions').then(m => ({ default: m.AdminSubmissions })));
@@ -513,6 +516,12 @@ const App: React.FC = () => {
           return <Money onNavigate={handlePublicNavigate} onEnterApp={handleStartSignup} />;
         case 'cookies':
           return <CookiePolicy onNavigate={handlePublicNavigate} onEnterApp={handleEnterApp} />;
+        case 'privacy':
+          return <PrivacyPolicy onNavigate={handlePublicNavigate} onEnterApp={handleEnterApp} />;
+        case 'terms':
+          return <TermsOfService onNavigate={handlePublicNavigate} onEnterApp={handleEnterApp} />;
+        case 'acceptable-use':
+          return <AcceptableUse onNavigate={handlePublicNavigate} onEnterApp={handleEnterApp} />;
         default:
           return <LandingPage onNavigate={handlePublicNavigate} onEnterApp={handleEnterApp} onStartSignup={handleStartSignup} />;
       }
@@ -602,7 +611,7 @@ const App: React.FC = () => {
                     </div>
                     <div className="flex items-center justify-center md:justify-start gap-4 text-stone-500 dark:text-stone-400 text-[10px] font-bold uppercase tracking-wider">
                       <span className="flex items-center gap-1.5 text-purple-500">
-                        <Shield className="h-3 w-3" /> Level 5 Clearance Node
+                        <Shield className="h-3 w-3" /> Level 5 Clearance
                       </span>
                       <span>• Last Sync: {formatLastLogin()}</span>
                     </div>
@@ -679,7 +688,7 @@ const App: React.FC = () => {
                   </div>
                   <button
                     className="text-[9px] font-black text-red-600/80 hover:text-red-700 hover:underline transition-colors uppercase tracking-widest"
-                    onClick={() => window.confirm("Terminate admin access? Contact root@starset.ai") && alert("Contact root.")}
+                    onClick={() => window.confirm("Terminate admin access? Contact root@starset.intelligence") && alert("Contact root.")}
                   >
                     Initiate Removal
                   </button>
@@ -744,13 +753,31 @@ const App: React.FC = () => {
                     <option>Payment Issue</option>
                     <option>Task Bug</option>
                     <option>Account Question</option>
+                    <option>Other</option>
                   </select>
                 </div>
                 <div>
                   <label className="block text-sm font-bold text-stone-700 dark:text-stone-300 mb-2 uppercase tracking-wide">Description</label>
-                  <textarea className="w-full border-stone-200 dark:border-white/10 rounded-xl p-4 border h-40 bg-[#FAF9F7]/50 dark:bg-white/5 focus:bg-white dark:focus:bg-black focus:ring-2 focus:ring-teal-500/20 focus:border-[#0f766e] transition-all resize-none outline-none text-base text-zinc-900 dark:text-white"></textarea>
+                  <textarea
+                    required
+                    placeholder="Please describe your issue in detail..."
+                    className="w-full border-stone-200 dark:border-white/10 rounded-xl p-4 border h-40 bg-[#FAF9F7]/50 dark:bg-white/5 focus:bg-white dark:focus:bg-black focus:ring-2 focus:ring-teal-500/20 focus:border-[#0f766e] transition-all resize-none outline-none text-base text-zinc-900 dark:text-white"
+                  ></textarea>
                 </div>
-                <button className="bg-[#0f766e] text-white px-8 py-4 rounded-xl font-medium shadow-lg shadow-teal-900/10 hover:shadow-teal-900/20 hover:-translate-y-0.5 transition-all text-lg w-full md:w-auto">Submit Ticket</button>
+                <button
+                  type="submit"
+                  className="bg-[#0f766e] text-white px-8 py-4 rounded-xl font-medium shadow-lg shadow-teal-900/10 hover:shadow-teal-900/20 hover:-translate-y-0.5 transition-all text-lg w-full md:w-auto"
+                  onClick={(e) => {
+                    const form = (e.target as HTMLButtonElement).form;
+                    if (form && form.checkValidity()) {
+                      e.preventDefault();
+                      alert("Support ticket submitted. Our team will contact you shortly.");
+                      form.reset();
+                    }
+                  }}
+                >
+                  Submit Ticket
+                </button>
               </form>
             </div>
           );
@@ -786,24 +813,18 @@ const App: React.FC = () => {
                       {userProfile?.full_name || 'Contributor'}
                     </h1>
                     <span className="inline-flex items-center px-2 py-0.5 rounded-full text-[9px] font-black bg-blue-100 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400 w-fit mx-auto md:mx-0 uppercase">
-                      Node ID: #{userProfile?.contributor_id || '101'}
+                      User ID: #{userProfile?.contributor_id || '101'}
                     </span>
                   </div>
                   <div className="flex items-center justify-center md:justify-start gap-4 text-stone-500 dark:text-stone-400 text-[10px] font-bold uppercase tracking-wider">
                     <span className="flex items-center gap-1.5 text-emerald-500">
-                      <Shield className="h-3 w-3" /> Active Security Node
+                      <Shield className="h-3 w-3" /> Verified Contributor
                     </span>
-                    <span>• Sync Date: {formatDate(userProfile?.created_at)}</span>
+                    <span>• Joined Date: {formatDate(userProfile?.created_at)}</span>
                   </div>
                 </div>
 
-                <div className="bg-stone-50 dark:bg-white/5 border border-stone-200 dark:border-white/5 rounded-2xl p-3 px-6 text-center shadow-inner">
-                  <div className="text-[9px] font-black uppercase tracking-widest text-stone-400 mb-1">Starset Reputation</div>
-                  <div className="flex items-baseline justify-center gap-1">
-                    <span className="text-2xl font-black text-emerald-500">{userProfile?.trust_score || 100}</span>
-                    <span className="text-[10px] text-stone-400 dark:text-stone-500 font-bold">/100</span>
-                  </div>
-                </div>
+
               </div>
 
               {/* Info Grid */}
@@ -849,7 +870,7 @@ const App: React.FC = () => {
 
                   <div className="space-y-6">
                     <div className="p-5 bg-white/5 rounded-2xl border border-white/5 group-hover:border-emerald-500/30 transition-all duration-500">
-                      <label className="text-[9px] font-black uppercase tracking-[0.3em] text-stone-500 mb-2 block">Active UPI Gateway</label>
+                      <label className="text-[9px] font-black uppercase tracking-[0.3em] text-stone-500 mb-2 block">Active UPI ID</label>
                       <p className="text-lg font-black text-emerald-500 truncate tracking-tighter drop-shadow-[0_0_10px_rgba(16,185,129,0.2)]">{userProfile?.upi_id || 'Not Assigned'}</p>
                     </div>
                     <Button
@@ -870,8 +891,8 @@ const App: React.FC = () => {
                     <ShieldAlert className="h-6 w-6 text-red-500 animate-pulse" />
                   </div>
                   <div className="text-center md:text-left">
-                    <h4 className="text-[10px] font-black text-red-500 uppercase tracking-[0.4em] mb-1">Account Termination Protocol</h4>
-                    <p className="text-xs font-bold text-stone-500">Initiating this action will permanently purge all data from the neural network.</p>
+                    <h4 className="text-[10px] font-black text-red-500 uppercase tracking-[0.4em] mb-1">Account Termination</h4>
+                    <p className="text-xs font-bold text-stone-500">Initiating this action will permanently delete your acount from our database.</p>
                   </div>
                 </div>
                 <button
