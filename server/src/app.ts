@@ -9,6 +9,8 @@ import submissions from "./routes/submissions";
 import userSubmissions from "./routes/user.submissions";
 import userStats from "./routes/user.stats";
 
+import { requireAuth, requireAdmin } from "./middleware/requireAuth";
+
 const app = express();
 
 // ✅ CORS MIDDLEWARE - Allow all origins (API is protected via Supabase auth)
@@ -28,13 +30,16 @@ app.get("/health", (_req, res) => {
   res.json({ status: "ok" });
 });
 
-// ✅ Routes
-app.use("/admin/tasks", adminTasks);
-app.use("/admin/stats", adminStats);
-app.use("/admin/submissions", adminSubmissions);
-app.use("/contributor/tasks", contributorTasks);
-app.use("/submissions", submissions);
-app.use("/user/submissions", userSubmissions);
-app.use("/user/stats", userStats);
+// ✅ SECURE ROUTES
+// Admin routes: Require valid token AND admin role
+app.use("/admin/tasks", requireAuth, requireAdmin, adminTasks);
+app.use("/admin/stats", requireAuth, requireAdmin, adminStats);
+app.use("/admin/submissions", requireAuth, requireAdmin, adminSubmissions);
+
+// Contributor/User routes: Require valid token
+app.use("/contributor/tasks", requireAuth, contributorTasks);
+app.use("/submissions", requireAuth, submissions);
+app.use("/user/submissions", requireAuth, userSubmissions);
+app.use("/user/stats", requireAuth, userStats);
 
 export default app;

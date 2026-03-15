@@ -213,7 +213,8 @@ const App: React.FC = () => {
     const fetchTasks = async () => {
       try {
         const { API_ENDPOINTS } = await import('./config/api');
-        const response = await fetch(API_ENDPOINTS.ADMIN_TASKS);
+        const { fetchApi } = await import('./lib/api');
+        const response = await fetchApi(API_ENDPOINTS.ADMIN_TASKS);
         if (!response.ok) throw new Error('Failed to fetch tasks');
         const data = await response.json();
 
