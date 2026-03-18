@@ -113,6 +113,15 @@ export const TaskExecution: React.FC<TaskExecutionProps> = ({ task, onBack, onCo
       mediaRecorder.onstop = () => {
         const actualMimeType = mediaRecorder.mimeType || suggestedMimeType || 'audio/webm';
         const blob = new Blob(audioChunksRef.current, { type: actualMimeType });
+
+        if (blob.size === 0) {
+          console.error("❌ Recorded blob is empty!");
+          alert("No audio data was captured. Please check your microphone settings and try again.");
+          setHasRecorded(false);
+          setIsRecording(false);
+          return;
+        }
+
         const url = URL.createObjectURL(blob);
 
         setAudioBlob(blob);
@@ -153,13 +162,20 @@ export const TaskExecution: React.FC<TaskExecutionProps> = ({ task, onBack, onCo
 
     if (isPlaying) {
       audioRef.current.pause();
+      setIsPlaying(false);
     } else {
       try {
+        // Reset to start and ensure volume is max
+        audioRef.current.currentTime = 0;
+        audioRef.current.volume = 1.0;
+
         const playPromise = audioRef.current.play();
         if (playPromise !== undefined) {
           playPromise.catch(error => {
             console.error("❌ Playback failed:", error);
             setIsPlaying(false);
+            // Fallback: If direct play fails, it might be a user gesture issue or codec issue
+            alert("Playback failed. Please try again or check your browser's audio permissions.");
           });
         }
       } catch (err: any) {
@@ -683,6 +699,7 @@ export const TaskExecution: React.FC<TaskExecutionProps> = ({ task, onBack, onCo
         onError={(e) => console.error("🎵 Audio Element Error:", e)}
         className="hidden"
         preload="auto"
+        playsInline
       />
     </div>
   );
