@@ -36,7 +36,7 @@ export const CookieConsent: React.FC = () => {
                     transition={{ type: 'spring', damping: 25, stiffness: 200 }}
                     className="fixed bottom-6 left-6 right-6 md:left-auto md:right-8 md:max-w-md z-[100]"
                 >
-                    <div className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-white/10 rounded-2xl shadow-2xl p-6 backdrop-blur-xl relative overflow-hidden group">
+                    <div className="bg-zinc-900/90 border border-white/10 rounded-2xl shadow-2xl p-6 backdrop-blur-xl relative overflow-hidden group">
                         {/* Subtle glow effect */}
                         <div className="absolute -top-10 -right-10 w-32 h-32 bg-blue-500/10 rounded-full blur-3xl group-hover:bg-blue-500/20 transition-colors duration-500" />
 
@@ -46,16 +46,16 @@ export const CookieConsent: React.FC = () => {
                             </div>
 
                             <div className="flex-1">
-                                <h3 className="text-lg font-bold text-zinc-900 dark:text-white mb-2 flex items-center justify-between">
+                                <h3 className="text-lg font-bold text-white mb-2 flex items-center justify-between">
                                     Cookie Notice
                                     <button
                                         onClick={() => setIsVisible(false)}
-                                        className="text-zinc-400 hover:text-zinc-600 dark:hover:text-zinc-200 transition-colors"
+                                        className="text-zinc-500 hover:text-white transition-colors"
                                     >
                                         <X className="h-4 w-4" />
                                     </button>
                                 </h3>
-                                <p className="text-sm text-zinc-600 dark:text-zinc-400 leading-relaxed mb-6">
+                                <p className="text-sm text-zinc-400 leading-relaxed mb-6 font-medium">
                                     We use cookies to enhance your experience, analyze site traffic, and for security. By continuing to visit this site you agree to our use of cookies.
                                 </p>
 
@@ -63,7 +63,7 @@ export const CookieConsent: React.FC = () => {
                                     <Button
                                         variant="primary"
                                         size="sm"
-                                        className="flex-1 justify-center bg-blue-600 hover:bg-blue-700 text-white border-none shadow-sm shadow-blue-500/20"
+                                        className="flex-1 justify-center bg-blue-600 hover:bg-blue-700 text-white border-none shadow-lg shadow-blue-500/20"
                                         onClick={handleAccept}
                                     >
                                         Accept Data
@@ -71,7 +71,7 @@ export const CookieConsent: React.FC = () => {
                                     <Button
                                         variant="outline"
                                         size="sm"
-                                        className="flex-1 justify-center bg-transparent border-zinc-200 dark:border-white/10 hover:bg-zinc-100 dark:hover:bg-white/5"
+                                        className="flex-1 justify-center bg-white/5 border-white/10 hover:bg-white/10 text-white"
                                         onClick={handleDecline}
                                     >
                                         Decline

@@ -21,54 +21,54 @@ export const AcceptableUse: React.FC<PageProps> = ({ onNavigate, onEnterApp }) =
                             <ShieldAlert className="h-4 w-4" />
                             Safety Standards
                         </div>
-                        <h1 className="text-4xl md:text-6xl font-bold text-zinc-900 dark:text-white mb-6">
+                        <h1 className="text-4xl md:text-6xl font-bold text-white mb-6">
                             Acceptable Use Policy
                         </h1>
-                        <p className="text-zinc-600 dark:text-zinc-400 text-xl">
+                        <p className="text-zinc-400 text-xl">
                             Our standards for ensuring a high-quality and safe environment for all contributors.
                         </p>
                     </div>
 
                     <div className="space-y-12">
                         {/* Core Principle */}
-                        <section className="bg-white/5 dark:bg-zinc-900/50 backdrop-blur-md rounded-3xl border border-zinc-200 dark:border-white/10 p-8 md:p-10 shadow-xl">
-                            <h2 className="text-2xl font-bold text-zinc-900 dark:text-white mb-4 flex items-center gap-3">
+                        <section className="bg-zinc-900/50 backdrop-blur-md rounded-3xl border border-white/10 p-8 md:p-10 shadow-xl">
+                            <h2 className="text-2xl font-bold text-white mb-4 flex items-center gap-3">
                                 <Zap className="h-6 w-6 text-amber-500" />
                                 Core Objective
                             </h2>
-                            <p className="text-zinc-600 dark:text-zinc-400 leading-relaxed">
+                            <p className="text-zinc-400 leading-relaxed">
                                 The Starset terminal is designed to train the world's most advanced AI models. To achieve this, every contribution must be authentic, human-generated, and of the highest quality. This policy outlines the behaviors that are strictly prohibited on our platform.
                             </p>
                         </section>
 
                         {/* Prohibited Behaviors */}
                         <div className="grid md:grid-cols-2 gap-6">
-                            <div className="bg-white/5 dark:bg-zinc-900/50 backdrop-blur-md rounded-3xl border border-zinc-200 dark:border-white/10 p-8 shadow-lg">
-                                <h3 className="text-xl font-bold text-zinc-900 dark:text-white mb-4 flex items-center gap-3">
+                            <div className="bg-zinc-900/50 backdrop-blur-md rounded-3xl border border-white/10 p-8 shadow-lg">
+                                <h3 className="text-xl font-bold text-white mb-4 flex items-center gap-3">
                                     <Ban className="h-5 w-5 text-red-500" />
                                     Automation & AI
                                 </h3>
-                                <p className="text-sm text-zinc-600 dark:text-zinc-400 leading-relaxed">
+                                <p className="text-sm text-zinc-400 leading-relaxed">
                                     The use of bots, scripts, or other AI systems to complete tasks is strictly forbidden. We collect biometric and behavioral data to ensure all work is done by real humans.
                                 </p>
                             </div>
 
-                            <div className="bg-white/5 dark:bg-zinc-900/50 backdrop-blur-md rounded-3xl border border-zinc-200 dark:border-white/10 p-8 shadow-lg">
-                                <h3 className="text-xl font-bold text-zinc-900 dark:text-white mb-4 flex items-center gap-3">
+                            <div className="bg-zinc-900/50 backdrop-blur-md rounded-3xl border border-white/10 p-8 shadow-lg">
+                                <h3 className="text-xl font-bold text-white mb-4 flex items-center gap-3">
                                     <MessageSquareWarning className="h-5 w-5 text-zinc-400" />
                                     Harmful Content
                                 </h3>
-                                <p className="text-sm text-zinc-600 dark:text-zinc-400 leading-relaxed">
+                                <p className="text-sm text-zinc-400 leading-relaxed">
                                     Do not submit content that is illegal, hateful, or intentionally misleading. Any attempt to "jailbreak" or "poison" AI training datasets will result in an immediate permanent ban.
                                 </p>
                             </div>
                         </div>
 
                         {/* Allowed Actions */}
-                        <section className="bg-white/5 dark:bg-zinc-900/50 backdrop-blur-md rounded-[2.5rem] border border-zinc-200 dark:border-white/10 p-10 shadow-2xl overflow-hidden relative group">
+                        <section className="bg-zinc-900/50 backdrop-blur-md rounded-[2.5rem] border border-white/10 p-10 shadow-2xl overflow-hidden relative group">
                             <div className="absolute top-0 right-0 w-32 h-32 bg-emerald-500/5 rounded-full blur-3xl group-hover:bg-emerald-500/10 transition-colors duration-500" />
 
-                            <h2 className="text-2xl font-bold text-zinc-900 dark:text-white mb-8">What We Expect</h2>
+                            <h2 className="text-2xl font-bold text-white mb-8">What We Expect</h2>
                             <ul className="space-y-6">
                                 {[
                                     { title: "Authenticity", desc: "Every task should reflect your genuine, honest input." },
@@ -79,8 +79,8 @@ export const AcceptableUse: React.FC<PageProps> = ({ onNavigate, onEnterApp }) =
                                     <li key={idx} className="flex gap-4 group/item">
                                         <CheckCircle className="h-6 w-6 text-emerald-500 shrink-0 mt-1" />
                                         <div>
-                                            <h4 className="font-bold text-zinc-900 dark:text-white mb-1">{item.title}</h4>
-                                            <p className="text-sm text-zinc-600 dark:text-zinc-400">{item.desc}</p>
+                                            <h4 className="font-bold text-white mb-1">{item.title}</h4>
+                                            <p className="text-sm text-zinc-400">{item.desc}</p>
                                         </div>
                                     </li>
                                 ))}
@@ -88,12 +88,12 @@ export const AcceptableUse: React.FC<PageProps> = ({ onNavigate, onEnterApp }) =
                         </section>
 
                         {/* Enforcement */}
-                        <section className="bg-white/5 dark:bg-zinc-900/50 backdrop-blur-md rounded-3xl border border-zinc-200 dark:border-white/10 p-8 md:p-10 shadow-xl">
-                            <h2 className="text-2xl font-bold text-zinc-900 dark:text-white mb-6 flex items-center gap-3">
+                        <section className="bg-zinc-900/50 backdrop-blur-md rounded-3xl border border-white/10 p-8 md:p-10 shadow-xl">
+                            <h2 className="text-2xl font-bold text-white mb-6 flex items-center gap-3">
                                 <Fingerprint className="h-6 w-6 text-blue-500" />
                                 Enforcement & Monitoring
                             </h2>
-                            <p className="text-zinc-600 dark:text-zinc-400 text-sm leading-relaxed mb-6">
+                            <p className="text-zinc-400 text-sm leading-relaxed mb-6">
                                 We utilize a combination of algorithmic quality scores, manual review, and behavioral analysis to identify violations. We reserve the right to:
                             </p>
                             <div className="grid gap-4 text-sm">
@@ -112,8 +112,8 @@ export const AcceptableUse: React.FC<PageProps> = ({ onNavigate, onEnterApp }) =
                         {/* Reporting */}
                         <section className="text-center bg-zinc-900/40 rounded-3xl p-10 border border-white/5">
                             <ShieldAlert className="h-10 w-10 text-zinc-500 mx-auto mb-6" />
-                            <h2 className="text-2xl font-bold text-zinc-900 dark:text-white mb-4">Report a Violation</h2>
-                            <p className="text-zinc-600 dark:text-zinc-400 max-w-2xl mx-auto leading-relaxed">
+                            <h2 className="text-2xl font-bold text-white mb-4">Report a Violation</h2>
+                            <p className="text-zinc-400 max-w-2xl mx-auto leading-relaxed">
                                 If you spot suspicious activity or believe a task contains inappropriate content, please report it immediately to compliance@starset.intelligence.
                             </p>
                             <div className="mt-8 pt-8 border-t border-white/5">

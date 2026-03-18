@@ -34,11 +34,11 @@ export const TaskList: React.FC<TaskListProps> = ({ onSelectTask, tasks, userRol
 
   const getTypeColors = (type: TaskType) => {
     switch (type) {
-      case TaskType.AUDIO_COLLECTION: return 'bg-blue-50 dark:bg-blue-900/20 text-blue-700 dark:text-blue-300 border-blue-200 dark:border-blue-800/50';
-      case TaskType.IMAGE_COLLECTION: return 'bg-pink-50 dark:bg-pink-900/20 text-pink-700 dark:text-pink-300 border-pink-200 dark:border-pink-800/50';
-      case TaskType.TEXT_ANNOTATION: return 'bg-violet-50 dark:bg-violet-900/20 text-violet-700 dark:text-violet-300 border-violet-200 dark:border-violet-800/50';
-      case TaskType.IMAGE_LABELING: return 'bg-purple-50 dark:bg-purple-900/20 text-purple-700 dark:text-purple-300 border-purple-200 dark:border-purple-800/50';
-      default: return 'bg-orange-50 dark:bg-orange-900/20 text-orange-700 dark:text-orange-300 border-orange-200 dark:border-orange-800/50';
+      case TaskType.AUDIO_COLLECTION: return 'bg-blue-900/20 text-blue-300 border-blue-800/50';
+      case TaskType.IMAGE_COLLECTION: return 'bg-pink-900/20 text-pink-300 border-pink-800/50';
+      case TaskType.TEXT_ANNOTATION: return 'bg-violet-900/20 text-violet-300 border-violet-800/50';
+      case TaskType.IMAGE_LABELING: return 'bg-purple-900/20 text-purple-300 border-purple-800/50';
+      default: return 'bg-orange-900/20 text-orange-300 border-orange-800/50';
     }
   };
 
@@ -47,23 +47,23 @@ export const TaskList: React.FC<TaskListProps> = ({ onSelectTask, tasks, userRol
 
       {/* Page Header */}
       <div className="flex flex-col gap-1">
-        <h1 className="text-3xl font-bold text-[#121212] dark:text-white tracking-tight">
+        <h1 className="text-3xl font-bold text-white tracking-tight">
           {userRole === 'admin' ? 'Task Registry' : 'Active Projects'}
         </h1>
-        <p className="text-stone-500 text-base">
+        <p className="text-zinc-500 text-base">
           {userRole === 'admin' ? 'Manage global task distribution and status.' : 'Select a task from available corporate campaigns.'}
         </p>
       </div>
 
       {/* Filters */}
-      <div className="bg-white dark:bg-white/5 p-1.5 rounded-2xl border border-stone-200 dark:border-white/10 shadow-sm flex flex-wrap gap-1 overflow-x-auto no-scrollbar">
+      <div className="bg-white/5 p-1.5 rounded-2xl border border-white/10 shadow-sm flex flex-wrap gap-1 overflow-x-auto no-scrollbar">
         {(['All', TaskType.AUDIO_COLLECTION, TaskType.IMAGE_COLLECTION, TaskType.TEXT_ANNOTATION, TaskType.IMAGE_LABELING, TaskType.SURVEY] as string[]).map((type) => (
           <button
             key={type}
             onClick={() => setFilterType(type)}
             className={`px-4 md:px-5 py-2 md:py-2.5 text-xs md:text-sm font-bold rounded-xl transition-all duration-300 whitespace-nowrap ${filterType === type
-              ? 'bg-zinc-900 dark:bg-white text-white dark:text-black shadow-lg scale-[1.02]'
-              : 'bg-transparent text-stone-500 hover:text-stone-900 dark:hover:text-white hover:bg-stone-100 dark:hover:bg-white/5'
+              ? 'bg-white text-black shadow-lg scale-[1.02]'
+              : 'bg-transparent text-stone-500 hover:text-white hover:bg-white/5'
               }`}
           >
             {type === 'All' ? 'All Operations' : type}
@@ -86,12 +86,12 @@ export const TaskList: React.FC<TaskListProps> = ({ onSelectTask, tasks, userRol
             return (
               <div
                 key={task.id}
-                className={`group relative bg-white dark:bg-zinc-900 rounded-2xl border transition-all duration-300 overflow-hidden
+                className={`group relative bg-zinc-900 rounded-2xl border transition-all duration-300 overflow-hidden
                   ${isCompleted
-                    ? 'opacity-60 cursor-not-allowed border-stone-200 dark:border-white/10'
+                    ? 'opacity-60 cursor-not-allowed border-white/10'
                     : userRole === 'contributor'
-                      ? 'cursor-pointer border-stone-200 dark:border-white/10 hover:border-blue-400 dark:hover:border-blue-500 hover:shadow-xl hover:shadow-blue-500/5 hover:-translate-y-0.5'
-                      : 'border-stone-200 dark:border-white/10'
+                      ? 'cursor-pointer border-white/10 hover:border-blue-500 hover:shadow-xl hover:shadow-blue-500/5 hover:-translate-y-0.5'
+                      : 'border-white/10'
                   }`}
                 onClick={() => userRole === 'contributor' && !isCompleted && onSelectTask(task)}
               >
@@ -99,13 +99,13 @@ export const TaskList: React.FC<TaskListProps> = ({ onSelectTask, tasks, userRol
 
                   {/* Left: Image panel (only if imageUrl exists) */}
                   {task.imageUrl && (
-                    <div className="w-full md:w-56 h-44 md:h-auto bg-stone-100 dark:bg-white/5 flex-shrink-0 relative overflow-hidden">
+                    <div className="w-full md:w-56 h-44 md:h-auto bg-white/5 flex-shrink-0 relative overflow-hidden">
                       <img
                         src={task.imageUrl}
                         alt=""
                         className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
                       />
-                      <div className="absolute inset-0 bg-gradient-to-r from-transparent to-black/10 dark:to-black/30" />
+                      <div className="absolute inset-0 bg-gradient-to-r from-transparent to-black/30" />
                       {task.project && task.project !== 'NA' && (
                         <div className="absolute bottom-3 left-3 bg-black/60 backdrop-blur-md text-white px-2.5 py-1 rounded-md text-[10px] font-bold uppercase tracking-wider">
                           {task.project}
@@ -131,14 +131,14 @@ export const TaskList: React.FC<TaskListProps> = ({ onSelectTask, tasks, userRol
                         {getTaskIcon(task.type as TaskType)}
                         {task.type}
                       </span>
-                      <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-[11px] font-bold uppercase tracking-wide bg-stone-100 dark:bg-white/10 text-stone-600 dark:text-stone-300 border border-stone-200 dark:border-white/10">
+                      <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-[11px] font-bold uppercase tracking-wide bg-white/10 text-stone-300 border border-white/10">
                         <Globe className="h-3 w-3" /> {task.language}
                       </span>
                       <span className={`inline-flex items-center px-2.5 py-1 rounded-full text-[11px] font-bold uppercase tracking-wide border ${task.difficulty === 'Beginner'
-                        ? 'border-emerald-200 dark:border-emerald-700/40 text-emerald-600 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-900/10'
+                        ? 'border-emerald-700/40 text-emerald-400 bg-emerald-900/10'
                         : task.difficulty === 'Intermediate'
-                          ? 'border-amber-200 dark:border-amber-700/40 text-amber-600 dark:text-amber-400 bg-amber-50 dark:bg-amber-900/10'
-                          : 'border-red-200 dark:border-red-700/40 text-red-600 dark:text-red-400 bg-red-50 dark:bg-red-900/10'
+                          ? 'border-amber-700/40 text-amber-400 bg-amber-900/10'
+                          : 'border-red-700/40 text-red-400 bg-red-900/10'
                         }`}>
                         {task.difficulty}
                       </span>
@@ -154,14 +154,14 @@ export const TaskList: React.FC<TaskListProps> = ({ onSelectTask, tasks, userRol
                       {userRole === 'admin' && (
                         <div className="ml-auto flex items-center gap-2">
                           <button
-                            className="h-8 w-8 flex items-center justify-center rounded-lg bg-stone-100 dark:bg-white/10 hover:bg-stone-200 dark:hover:bg-white/20 text-stone-500 dark:text-stone-400 transition-colors"
+                            className="h-8 w-8 flex items-center justify-center rounded-lg bg-white/10 hover:bg-white/20 text-stone-400 transition-colors"
                             title="Edit task"
                             onClick={e => e.stopPropagation()}
                           >
                             <Edit className="h-3.5 w-3.5" />
                           </button>
                           <button
-                            className="h-8 w-8 flex items-center justify-center rounded-lg bg-red-50 dark:bg-red-900/20 hover:bg-red-100 dark:hover:bg-red-900/40 text-red-500 border border-red-100 dark:border-red-800/40 transition-colors"
+                            className="h-8 w-8 flex items-center justify-center rounded-lg bg-red-900/20 hover:bg-red-900/40 text-red-500 border border-red-800/40 transition-colors"
                             title="Delete task"
                             onClick={(e) => {
                               e.stopPropagation();
@@ -178,7 +178,7 @@ export const TaskList: React.FC<TaskListProps> = ({ onSelectTask, tasks, userRol
 
                     {/* Title — no clamp, always fully visible */}
                     <div>
-                      <h3 className="text-lg md:text-xl font-bold text-[#121212] dark:text-white group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors leading-snug">
+                      <h3 className="text-lg md:text-xl font-bold text-white group-hover:text-blue-400 transition-colors leading-snug">
                         {task.title}
                       </h3>
                       {task.project && task.project !== 'NA' && !task.imageUrl && (
@@ -192,7 +192,7 @@ export const TaskList: React.FC<TaskListProps> = ({ onSelectTask, tasks, userRol
                         <div className="flex items-center gap-2 flex-wrap">
                           <span className="text-xs text-stone-400 uppercase tracking-wide font-bold">Requires:</span>
                           {task.requirements.filter(r => r && r !== 'NA').map((req, i) => (
-                            <span key={i} className="inline-flex items-center px-2 py-0.5 bg-stone-100 dark:bg-white/10 text-stone-600 dark:text-stone-300 rounded-md text-xs font-semibold">
+                            <span key={i} className="inline-flex items-center px-2 py-0.5 bg-white/10 text-stone-300 rounded-md text-xs font-semibold">
                               {req}
                             </span>
                           ))}
@@ -201,11 +201,11 @@ export const TaskList: React.FC<TaskListProps> = ({ onSelectTask, tasks, userRol
 
                     {/* Bottom row: time, payout, quota, CTA */}
                     <div className="flex items-center gap-3 mt-auto pt-1 flex-wrap">
-                      <span className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-stone-50 dark:bg-white/5 border border-stone-200 dark:border-white/10 rounded-lg text-sm font-semibold text-[#121212] dark:text-white">
+                      <span className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-white/5 border border-white/10 rounded-lg text-sm font-semibold text-white">
                         <Clock className="h-3.5 w-3.5 text-stone-400" />
                         {task.estimatedTimeSec} sec
                       </span>
-                      <span className="inline-flex items-center text-base font-black text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-900/20 px-4 py-1.5 rounded-lg border border-blue-100 dark:border-blue-800/50">
+                      <span className="inline-flex items-center text-base font-black text-blue-400 bg-blue-900/20 px-4 py-1.5 rounded-lg border border-blue-800/50">
                         ₹{task.compensation.toFixed(2)}
                       </span>
 
@@ -218,7 +218,7 @@ export const TaskList: React.FC<TaskListProps> = ({ onSelectTask, tasks, userRol
                             </span>
                             <span className="text-[10px] text-stone-400 font-mono">{used}/{MAX}</span>
                           </div>
-                          <div className="h-1.5 bg-stone-200 dark:bg-white/10 rounded-full overflow-hidden">
+                          <div className="h-1.5 bg-white/10 rounded-full overflow-hidden">
                             <div
                               className={`h-full rounded-full transition-all duration-500 ${isCritical ? 'bg-red-500' : isLow ? 'bg-amber-500' : 'bg-emerald-500'}`}
                               style={{ width: `${pct}%` }}
@@ -230,8 +230,8 @@ export const TaskList: React.FC<TaskListProps> = ({ onSelectTask, tasks, userRol
                       {/* Contributor CTA arrow */}
                       {userRole === 'contributor' && !isCompleted && (
                         <div className="ml-auto opacity-0 group-hover:opacity-100 transition-all duration-300 translate-x-2 group-hover:translate-x-0 hidden md:block">
-                          <div className="h-9 w-9 rounded-full bg-zinc-900 dark:bg-white flex items-center justify-center shadow-lg">
-                            <ChevronRight className="h-5 w-5 text-white dark:text-black" />
+                          <div className="h-9 w-9 rounded-full bg-white flex items-center justify-center shadow-lg">
+                            <ChevronRight className="h-5 w-5 text-black" />
                           </div>
                         </div>
                       )}
@@ -242,13 +242,13 @@ export const TaskList: React.FC<TaskListProps> = ({ onSelectTask, tasks, userRol
             );
           })
         ) : (
-          <div className="flex flex-col items-center justify-center py-24 bg-white dark:bg-white/5 rounded-2xl border border-dashed border-stone-300 dark:border-white/10">
-            <div className="h-20 w-20 bg-stone-50 dark:bg-white/10 rounded-full flex items-center justify-center mb-6">
+          <div className="flex flex-col items-center justify-center py-24 bg-white/5 rounded-2xl border border-dashed border-white/10">
+            <div className="h-20 w-20 bg-white/10 rounded-full flex items-center justify-center mb-6">
               <Filter className="h-10 w-10 text-stone-400" />
             </div>
-            <h3 className="text-xl font-bold text-[#121212] dark:text-white">No active campaigns</h3>
+            <h3 className="text-xl font-bold text-white">No active campaigns</h3>
             <p className="text-stone-500 mt-2 text-base">Try adjusting your filters or come back later.</p>
-            <Button variant="secondary" className="mt-6 bg-white dark:bg-white/5 text-zinc-900 dark:text-white border-zinc-200 dark:border-white/10" onClick={() => setFilterType('All')}>
+            <Button variant="secondary" className="mt-6 bg-white/5 text-white border-white/10" onClick={() => setFilterType('All')}>
               Clear Filters
             </Button>
           </div>

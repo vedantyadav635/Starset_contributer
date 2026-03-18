@@ -98,9 +98,9 @@ export const ForgotPassword: React.FC<ForgotPasswordProps> = ({
     };
 
     return (
-        <div className="min-h-screen flex flex-col items-center justify-center p-4 relative overflow-hidden">
+        <div className="min-h-screen flex flex-col items-center justify-center p-4 relative overflow-hidden bg-black text-white">
             {/* HEADER */}
-            <nav className="fixed top-0 w-full z-50 border-b border-zinc-200/50 dark:border-white/5 bg-white/50 dark:bg-black/50 backdrop-blur-xl">
+            <nav className="fixed top-0 w-full z-50 border-b border-white/5 bg-black/50 backdrop-blur-xl">
                 <div className="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
                     <div
                         className="flex items-center gap-2 cursor-pointer"
@@ -117,7 +117,7 @@ export const ForgotPassword: React.FC<ForgotPasswordProps> = ({
             <div className="w-full max-w-md z-10 pt-20">
                 <div className="mb-8 text-center">
                     <div className="flex justify-center mb-4">
-                        <div className="h-16 w-16 rounded-2xl flex items-center justify-center border backdrop-blur-md">
+                        <div className="h-16 w-16 rounded-2xl flex items-center justify-center border border-white/10 backdrop-blur-md">
                             {isContributor ? (
                                 <Mail className="h-8 w-8 text-teal-500" />
                             ) : (
@@ -136,21 +136,21 @@ export const ForgotPassword: React.FC<ForgotPasswordProps> = ({
                     </p>
                 </div>
 
-                <div className="bg-white/60 dark:bg-zinc-900/40 backdrop-blur-xl p-8 rounded-2xl border shadow-xl">
+                <div className="bg-zinc-900/40 backdrop-blur-xl p-8 rounded-2xl border border-white/10 shadow-xl">
                     {/* Success State */}
                     {success ? (
                         <div className="text-center space-y-4">
                             <div className="flex justify-center">
-                                <div className="h-16 w-16 rounded-full bg-emerald-50 dark:bg-emerald-900/20 flex items-center justify-center">
+                                <div className="h-16 w-16 rounded-full bg-emerald-900/20 flex items-center justify-center">
                                     <CheckCircle2 className="h-8 w-8 text-emerald-500" />
                                 </div>
                             </div>
-                            <h2 className="text-lg font-bold text-zinc-900 dark:text-white">
+                            <h2 className="text-lg font-bold text-white">
                                 Check Your Email
                             </h2>
-                            <p className="text-sm text-zinc-500 dark:text-zinc-400 leading-relaxed">
+                            <p className="text-sm text-zinc-400 leading-relaxed">
                                 If an account exists for{" "}
-                                <span className="font-semibold text-zinc-700 dark:text-zinc-300">
+                                <span className="font-semibold text-zinc-300">
                                     {email}
                                 </span>
                                 , we've sent a password reset link. Check your inbox and spam
@@ -169,7 +169,7 @@ export const ForgotPassword: React.FC<ForgotPasswordProps> = ({
                                         setSuccess(false);
                                         setEmail("");
                                     }}
-                                    className="text-xs text-zinc-400 hover:text-zinc-600 dark:hover:text-zinc-300 transition-colors"
+                                    className="text-xs text-zinc-400 hover:text-zinc-300 transition-colors"
                                 >
                                     Didn't receive it? Try again
                                 </button>
@@ -179,7 +179,7 @@ export const ForgotPassword: React.FC<ForgotPasswordProps> = ({
                         <>
                             {/* Error Message */}
                             {error && (
-                                <div className="mb-4 p-3 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg flex items-center gap-2 text-red-600 dark:text-red-400 text-sm">
+                                <div className="mb-4 p-3 bg-red-900/20 border border-red-800 rounded-lg flex items-center gap-2 text-red-400 text-sm">
                                     <AlertCircle className="h-4 w-4 flex-shrink-0" />
                                     {error}
                                 </div>
@@ -188,7 +188,7 @@ export const ForgotPassword: React.FC<ForgotPasswordProps> = ({
                             {/* Reset Form */}
                             <form onSubmit={handleResetPassword} className="space-y-4">
                                 <div>
-                                    <label className="block text-xs font-bold uppercase mb-2 text-zinc-600 dark:text-zinc-400">
+                                    <label className="block text-xs font-bold uppercase mb-2 text-zinc-400">
                                         {isContributor ? "Work Email" : "Admin Email"}
                                     </label>
                                     <div className="relative">
@@ -202,7 +202,7 @@ export const ForgotPassword: React.FC<ForgotPasswordProps> = ({
                                         <input
                                             type="email"
                                             required
-                                            className="w-full pl-12 pr-4 py-3 rounded-lg border bg-white/50 dark:bg-black/20 text-zinc-900 dark:text-white placeholder-zinc-400 focus:ring-2 focus:ring-teal-500/20 focus:border-teal-600 outline-none transition-all"
+                                            className="w-full pl-12 pr-4 py-3 rounded-lg border border-white/10 bg-black/20 text-white placeholder-zinc-400 focus:ring-2 focus:ring-teal-500/20 focus:border-teal-600 outline-none transition-all"
                                             placeholder={
                                                 isContributor
                                                     ? "name@starset.ai"
@@ -224,11 +224,11 @@ export const ForgotPassword: React.FC<ForgotPasswordProps> = ({
                             </form>
 
                             {/* Back to Login */}
-                            <div className="pt-4 border-t mt-4 text-center space-y-3">
+                            <div className="pt-4 border-t border-white/5 mt-4 text-center space-y-3">
                                 <button
                                     type="button"
                                     onClick={onBackToLogin}
-                                    className="text-xs text-blue-600 dark:text-blue-400 font-bold hover:underline flex items-center justify-center gap-1 w-full"
+                                    className="text-xs text-blue-400 font-bold hover:underline flex items-center justify-center gap-1 w-full"
                                 >
                                     <ArrowLeft className="h-3 w-3" /> Back to Login
                                 </button>
@@ -236,7 +236,7 @@ export const ForgotPassword: React.FC<ForgotPasswordProps> = ({
                                 <button
                                     type="button"
                                     onClick={toggleMode}
-                                    className="text-[10px] uppercase tracking-widest font-bold text-zinc-400 flex items-center justify-center gap-2 w-full hover:text-zinc-600 dark:hover:text-zinc-300 transition-colors"
+                                    className="text-[10px] uppercase tracking-widest font-bold text-zinc-400 flex items-center justify-center gap-2 w-full hover:text-zinc-300 transition-colors"
                                 >
                                     {isContributor ? (
                                         <>

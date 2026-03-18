@@ -208,14 +208,33 @@ const App: React.FC = () => {
 
   /**
    * EFFECT 1: Fetch tasks via Backend API (RLS-proof)
+   * Fetches different endpoints based on user role (Admin vs Contributor)
+   * Re-runs when authentication state or user role changes.
    */
   useEffect(() => {
     const fetchTasks = async () => {
+      // Don't fetch if not authenticated to avoid noisy 401/403 console errors
+      if (!isAuthenticated) {
+        setTasks([]);
+        return;
+      }
+
       try {
         const { API_ENDPOINTS } = await import('./config/api');
         const { fetchApi } = await import('./lib/api');
-        const response = await fetchApi(API_ENDPOINTS.ADMIN_TASKS);
-        if (!response.ok) throw new Error('Failed to fetch tasks');
+
+        // Choose endpoint based on role: Admin gets all tasks, Contributor gets only available ones
+        const endpoint = userRole === 'admin'
+          ? API_ENDPOINTS.ADMIN_TASKS
+          : API_ENDPOINTS.CONTRIBUTOR_TASKS;
+
+        console.log(`📡 Fetching tasks for active session [Role: ${userRole}]...`);
+        const response = await fetchApi(endpoint);
+
+        if (!response.ok) {
+          throw new Error(`Failed to fetch tasks: ${response.status} ${response.statusText}`);
+        }
+
         const data = await response.json();
 
         // The admin endpoint returns tasks already ordered and with counts if possible
@@ -243,14 +262,14 @@ const App: React.FC = () => {
         }));
 
         setTasks(mappedTasks);
-        console.log(`✅ Loaded ${mappedTasks.length} tasks via API`);
+        console.log(`✅ Loaded ${mappedTasks.length} tasks via API (${userRole} view)`);
       } catch (err) {
         console.error('Error fetching tasks via API:', err);
       }
     };
 
     fetchTasks();
-  }, []);
+  }, [isAuthenticated, userRole]);
 
   /**
    * EFFECT: Fetch user's completed tasks directly from Supabase

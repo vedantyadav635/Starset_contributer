@@ -22,8 +22,8 @@ export const ResetPassword: React.FC<ResetPasswordProps> = ({
     onBackHome,
 }) => {
     const [password, setPassword] = useState("");
-    const [confirmPassword, setConfirmPassword] = useState(""); 
-    const [showPassword, setShowPassword] = useState(false);    
+    const [confirmPassword, setConfirmPassword] = useState("");
+    const [showPassword, setShowPassword] = useState(false);
     const [showConfirmPassword, setShowConfirmPassword] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
@@ -99,9 +99,9 @@ export const ResetPassword: React.FC<ResetPasswordProps> = ({
     const strength = getStrengthLabel();
 
     return (
-        <div className="min-h-screen flex flex-col items-center justify-center p-4 relative overflow-hidden">
+        <div className="min-h-screen flex flex-col items-center justify-center p-4 relative overflow-hidden bg-black text-white">
             {/* HEADER */}
-            <nav className="fixed top-0 w-full z-50 border-b border-zinc-200/50 dark:border-white/5 bg-white/50 dark:bg-black/50 backdrop-blur-xl">
+            <nav className="fixed top-0 w-full z-50 border-b border-white/5 bg-black/50 backdrop-blur-xl">
                 <div className="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
                     <div
                         className="flex items-center gap-2 cursor-pointer"
@@ -118,7 +118,7 @@ export const ResetPassword: React.FC<ResetPasswordProps> = ({
             <div className="w-full max-w-md z-10 pt-20">
                 <div className="mb-8 text-center">
                     <div className="flex justify-center mb-4">
-                        <div className="h-16 w-16 rounded-2xl flex items-center justify-center border backdrop-blur-md">
+                        <div className="h-16 w-16 rounded-2xl flex items-center justify-center border border-white/10 backdrop-blur-md">
                             <ShieldCheck className="h-8 w-8 text-teal-500" />
                         </div>
                     </div>
@@ -129,19 +129,19 @@ export const ResetPassword: React.FC<ResetPasswordProps> = ({
                     </p>
                 </div>
 
-                <div className="bg-white/60 dark:bg-zinc-900/40 backdrop-blur-xl p-8 rounded-2xl border shadow-xl">
+                <div className="bg-zinc-900/40 backdrop-blur-xl p-8 rounded-2xl border border-white/10 shadow-xl">
                     {/* Success State */}
                     {success ? (
                         <div className="text-center space-y-4">
                             <div className="flex justify-center">
-                                <div className="h-16 w-16 rounded-full bg-emerald-50 dark:bg-emerald-900/20 flex items-center justify-center">
+                                <div className="h-16 w-16 rounded-full bg-emerald-900/20 flex items-center justify-center">
                                     <CheckCircle2 className="h-8 w-8 text-emerald-500" />
                                 </div>
                             </div>
-                            <h2 className="text-lg font-bold text-zinc-900 dark:text-white">
+                            <h2 className="text-lg font-bold text-white">
                                 Password Updated!
                             </h2>
-                            <p className="text-sm text-zinc-500 dark:text-zinc-400 leading-relaxed">
+                            <p className="text-sm text-zinc-400 leading-relaxed">
                                 Your password has been successfully reset. You can now log in
                                 with your new password.
                             </p>
@@ -158,7 +158,7 @@ export const ResetPassword: React.FC<ResetPasswordProps> = ({
                         <>
                             {/* Error Message */}
                             {error && (
-                                <div className="mb-4 p-3 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg flex items-center gap-2 text-red-600 dark:text-red-400 text-sm">
+                                <div className="mb-4 p-3 bg-red-900/20 border border-red-800 rounded-lg flex items-center gap-2 text-red-400 text-sm">
                                     <AlertCircle className="h-4 w-4 flex-shrink-0" />
                                     {error}
                                 </div>
@@ -168,7 +168,7 @@ export const ResetPassword: React.FC<ResetPasswordProps> = ({
                             <form onSubmit={handleResetPassword} className="space-y-4">
                                 {/* New Password */}
                                 <div>
-                                    <label className="block text-xs font-bold uppercase mb-2 text-zinc-600 dark:text-zinc-400">
+                                    <label className="block text-xs font-bold uppercase mb-2 text-zinc-400">
                                         New Password
                                     </label>
                                     <div className="relative">
@@ -178,7 +178,7 @@ export const ResetPassword: React.FC<ResetPasswordProps> = ({
                                         <input
                                             type={showPassword ? "text" : "password"}
                                             required
-                                            className="w-full pl-12 pr-12 py-3 rounded-lg border bg-zinc-900/60 text-white placeholder-zinc-400 focus:ring-2 focus:ring-teal-500/20 focus:border-teal-600 outline-none transition-all"
+                                            className="w-full pl-12 pr-12 py-3 rounded-lg border border-white/10 bg-zinc-900/60 text-white placeholder-zinc-400 focus:ring-2 focus:ring-teal-500/20 focus:border-teal-600 outline-none transition-all"
                                             placeholder="Enter new password"
                                             value={password}
                                             onChange={(e) => setPassword(e.target.value)}
@@ -212,8 +212,8 @@ export const ResetPassword: React.FC<ResetPasswordProps> = ({
                                                     <div
                                                         key={level}
                                                         className={`h-1 flex-1 rounded-full transition-all duration-300 ${level <= passwordStrength
-                                                                ? strength.bg
-                                                                : "bg-zinc-200 dark:bg-zinc-700"
+                                                            ? strength.bg
+                                                            : "bg-zinc-700"
                                                             }`}
                                                     />
                                                 ))}
@@ -229,8 +229,8 @@ export const ResetPassword: React.FC<ResetPasswordProps> = ({
                                                     <div
                                                         key={idx}
                                                         className={`text-[10px] flex items-center gap-1 ${req.check
-                                                                ? "text-emerald-500"
-                                                                : "text-zinc-400"
+                                                            ? "text-emerald-500"
+                                                            : "text-zinc-400"
                                                             }`}
                                                     >
                                                         {req.check ? (
@@ -248,7 +248,7 @@ export const ResetPassword: React.FC<ResetPasswordProps> = ({
 
                                 {/* Confirm Password */}
                                 <div>
-                                    <label className="block text-xs font-bold uppercase mb-2 text-zinc-600 dark:text-zinc-400">
+                                    <label className="block text-xs font-bold uppercase mb-2 text-zinc-400">
                                         Confirm Password
                                     </label>
                                     <div className="relative">
@@ -258,11 +258,11 @@ export const ResetPassword: React.FC<ResetPasswordProps> = ({
                                         <input
                                             type={showConfirmPassword ? "text" : "password"}
                                             required
-                                            className={`w-full pl-12 pr-12 py-3 rounded-lg border bg-zinc-900/60 text-white placeholder-zinc-400 focus:ring-2 focus:ring-teal-500/20 outline-none transition-all ${confirmPassword.length > 0
-                                                    ? password === confirmPassword
-                                                        ? "border-emerald-500 focus:border-emerald-500"
-                                                        : "border-red-500 focus:border-red-500"
-                                                    : "focus:border-teal-600"
+                                            className={`w-full pl-12 pr-12 py-3 rounded-lg border border-white/10 bg-zinc-900/60 text-white placeholder-zinc-400 focus:ring-2 focus:ring-teal-500/20 outline-none transition-all ${confirmPassword.length > 0
+                                                ? password === confirmPassword
+                                                    ? "border-emerald-500 focus:border-emerald-500"
+                                                    : "border-red-500 focus:border-red-500"
+                                                : "focus:border-teal-600"
                                                 }`}
                                             placeholder="Confirm new password"
                                             value={confirmPassword}
