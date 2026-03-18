@@ -100,13 +100,14 @@ export async function uploadToBucket(
 
         return { url, fileId, fileName };
     } catch (err: any) {
+        const b2Error = err?.response?.data?.message || err?.response?.data?.code || err.message;
         if (attempt < 3) {
             const delay = (attempt + 1) * 3000; // 3s, 6s, 9s
-            console.warn(`⚠️ Upload to ${stage} failed (attempt ${attempt + 1}/3), retrying in ${delay}ms:`, err?.message);
+            console.warn(`⚠️ Upload to ${stage} failed (attempt ${attempt + 1}/3), retrying in ${delay}ms:`, b2Error);
             await sleep(delay);
             return uploadToBucket(buffer, fileName, contentType, stage, attempt + 1);
         }
-        throw new Error(`B2 upload to ${stage} bucket failed after 3 attempts: ${err?.message}`);
+        throw new Error(`B2 upload to ${stage} bucket failed after 3 attempts: ${b2Error}`);
     }
 }
 
@@ -156,5 +157,9 @@ export async function uploadToB2(
 export function generateAudioFileName(userId: string, taskId: string): string {
     const timestamp = Date.now();
     const randomSuffix = Math.random().toString(36).substring(2, 8);
-    return `audio/${userId}/${taskId}_${timestamp}_${randomSuffix}.webm`;
+    // B2 filenames are case-sensitive and must be URL-encoded in headers.
+    // We encode the components but keep the '/' separators.
+    const safeUserId = encodeURIComponent(userId);
+    const safeTaskId = encodeURIComponent(taskId);
+    return `audio/${safeUserId}/${safeTaskId}_${timestamp}_${randomSuffix}.webm`;
 }
