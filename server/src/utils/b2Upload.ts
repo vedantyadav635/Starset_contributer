@@ -6,7 +6,6 @@ const B2 = require('backblaze-b2');
 interface BucketConfig {
     bucketId: string;
     bucketName: string;
-    clusterUrl: string; // e.g. "f003.backblazeb2.com"
 }
 
 function getBucket(stage: 'raw' | 'final' | 'processed'): BucketConfig {
@@ -16,23 +15,28 @@ function getBucket(stage: 'raw' | 'final' | 'processed'): BucketConfig {
         processed: { idKey: 'B2_PROCESSED_BUCKET_ID', nameKey: 'B2_PROCESSED_BUCKET_NAME' },
     };
     const { idKey, nameKey } = map[stage];
-    let bucketId = process.env[idKey];
-    let bucketName = process.env[nameKey];
+    let bucketId = (process.env[idKey] || '').trim();
+    let bucketName = (process.env[nameKey] || '').trim();
 
     // Fallback for 'raw' stage to generic keys if specific ones are missing
     if (stage === 'raw' && (!bucketId || !bucketName)) {
-        bucketId = bucketId || process.env.B2_BUCKET_ID;
-        bucketName = bucketName || process.env.B2_BUCKET_NAME;
+        bucketId = (process.env.B2_BUCKET_ID || '').trim();
+        bucketName = (process.env.B2_BUCKET_NAME || '').trim();
     }
 
     if (!bucketId || !bucketName) {
-        throw new Error(`Missing env vars for ${stage} bucket: ${idKey} and/or ${nameKey} (also checked generic B2_BUCKET_ID/NAME for raw stage)`);
+        throw new Error(`Missing env vars for ${stage} bucket: ${idKey} and/or ${nameKey} (also checked generic B2_BUCKET_ID/NAME for RAW stage)`);
     }
-    return { bucketId, bucketName, clusterUrl: 'f003.backblazeb2.com' };
+    return { bucketId, bucketName };
 }
 
-function buildPublicUrl(bucket: BucketConfig, fileName: string): string {
-    return `https://${bucket.clusterUrl}/file/${bucket.bucketName}/${fileName}`;
+/** 
+ * Build public URL for a file.
+ * We use the downloadUrl from the B2 authorization response so it works across regions (US/EU).
+ */
+function buildPublicUrl(downloadUrl: string, bucketName: string, fileName: string): string {
+    // b2.downloadUrl is like "https://f003.backblazeb2.com"
+    return `${downloadUrl}/file/${bucketName}/${fileName}`;
 }
 
 /** Sleep for a given number of milliseconds */
@@ -42,8 +46,8 @@ function sleep(ms: number): Promise<void> {
 
 /** Create a fresh, authenticated B2 client — with retry */
 async function createB2Client(attempt = 0): Promise<any> {
-    const keyId = process.env.B2_APPLICATION_KEY_ID;
-    const appKey = process.env.B2_APPLICATION_KEY;
+    const keyId = (process.env.B2_APPLICATION_KEY_ID || '').trim();
+    const appKey = (process.env.B2_APPLICATION_KEY || '').trim();
     if (!keyId || !appKey) throw new Error('Missing B2_APPLICATION_KEY_ID or B2_APPLICATION_KEY');
     const b2 = new B2({ applicationKeyId: keyId, applicationKey: appKey });
     try {
@@ -95,7 +99,7 @@ export async function uploadToBucket(
         });
 
         const fileId = uploadResp.data.fileId;
-        const url = buildPublicUrl(bucket, fileName);
+        const url = buildPublicUrl(b2.downloadUrl, bucket.bucketName, fileName);
         console.log(`✅ Uploaded to ${stage}: fileId=${fileId}`);
 
         return { url, fileId, fileName };
@@ -132,7 +136,7 @@ export async function copyBetweenBuckets(
     });
 
     const newFileId = copyResp.data.fileId;
-    const url = buildPublicUrl(destBucket, destinationFileName);
+    const url = buildPublicUrl(b2.downloadUrl, destBucket.bucketName, destinationFileName);
     console.log(`✅ Copied to ${destinationStage}: fileId=${newFileId}`);
 
     return { url, fileId: newFileId, fileName: destinationFileName };
