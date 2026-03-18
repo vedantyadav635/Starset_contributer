@@ -87,27 +87,27 @@ const CompleteProfile: React.FC<CompleteProfileProps> = ({ onComplete }) => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center p-4 bg-[#FAF9F7] dark:bg-[#0a0a0a]">
+    <div className="min-h-screen flex items-center justify-center p-4 bg-[#0a0a0a]">
       <div className="w-full max-w-2xl">
         {/* Header */}
         <div className="text-center mb-8 animate-in fade-in duration-700">
-          <div className="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-br from-blue-500 to-indigo-500 rounded-2xl mb-4 shadow-lg shadow-blue-500/20 dark:shadow-blue-500/30">
+          <div className="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-br from-blue-500 to-indigo-500 rounded-2xl mb-4 shadow-lg shadow-blue-500/30">
             <User className="h-8 w-8 text-white" />
           </div>
-          <h1 className="text-3xl md:text-4xl font-bold text-[#121212] dark:text-white mb-2">
+          <h1 className="text-3xl md:text-4xl font-bold text-white mb-2">
             Complete Your Profile
           </h1>
-          <p className="text-stone-600 dark:text-stone-400 text-lg">
+          <p className="text-stone-400 text-lg">
             Just a few more details to get you started
           </p>
         </div>
 
         {/* Form Card */}
-        <div className="bg-white dark:bg-zinc-900 rounded-3xl shadow-xl border border-stone-200 dark:border-white/10 p-8 md:p-10 animate-in slide-in-from-bottom duration-700">
+        <div className="bg-zinc-900 rounded-3xl shadow-xl border border-white/10 p-8 md:p-10 animate-in slide-in-from-bottom duration-700">
           <form onSubmit={handleSubmit} className="space-y-6">
             {/* Error Message */}
             {error && (
-              <div className="bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-xl p-4 text-red-700 dark:text-red-400 text-sm animate-in fade-in duration-300">
+              <div className="bg-red-900/20 border border-red-800 rounded-xl p-4 text-red-400 text-sm animate-in fade-in duration-300">
                 {error}
               </div>
             )}
@@ -116,14 +116,14 @@ const CompleteProfile: React.FC<CompleteProfileProps> = ({ onComplete }) => {
             <div className="grid md:grid-cols-2 gap-6">
               {/* Age */}
               <div className="space-y-2">
-                <label className="flex items-center gap-2 text-sm font-bold text-stone-700 dark:text-stone-300 uppercase tracking-wide">
+                <label className="flex items-center gap-2 text-sm font-bold text-stone-300 uppercase tracking-wide">
                   <Calendar className="h-4 w-4 text-blue-500" />
                   Age
                 </label>
                 <input
                   type="number"
                   placeholder="Enter your age"
-                  className="w-full px-4 py-3.5 border border-stone-300 dark:border-white/20 rounded-xl bg-stone-50 dark:bg-white/5 focus:bg-white dark:focus:bg-black/50 focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 dark:focus:border-blue-400 transition-all outline-none text-base text-zinc-900 dark:text-white placeholder:text-stone-400 dark:placeholder:text-stone-500"
+                  className="w-full px-4 py-3.5 border border-white/20 rounded-xl bg-white/5 focus:bg-black/50 focus:ring-2 focus:ring-blue-500/20 focus:border-blue-400 transition-all outline-none text-base text-white placeholder:text-stone-500"
                   value={age}
                   onChange={(e) => setAge(e.target.value)}
                   min="18"
@@ -134,12 +134,12 @@ const CompleteProfile: React.FC<CompleteProfileProps> = ({ onComplete }) => {
 
               {/* Gender */}
               <div className="space-y-2">
-                <label className="flex items-center gap-2 text-sm font-bold text-stone-700 dark:text-stone-300 uppercase tracking-wide">
+                <label className="flex items-center gap-2 text-sm font-bold text-stone-300 uppercase tracking-wide">
                   <Users className="h-4 w-4 text-blue-500" />
                   Gender
                 </label>
                 <select
-                  className="w-full px-4 py-3.5 border border-stone-300 dark:border-white/20 rounded-xl bg-stone-50 dark:bg-white/5 focus:bg-white dark:focus:bg-black/50 focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 dark:focus:border-blue-400 transition-all outline-none text-base text-zinc-900 dark:text-white"
+                  className="w-full px-4 py-3.5 border border-white/20 rounded-xl bg-white/5 focus:bg-black/50 focus:ring-2 focus:ring-blue-500/20 focus:border-blue-400 transition-all outline-none text-base text-white"
                   value={gender}
                   onChange={(e) => setGender(e.target.value)}
                   required
@@ -157,14 +157,14 @@ const CompleteProfile: React.FC<CompleteProfileProps> = ({ onComplete }) => {
             <div className="grid md:grid-cols-2 gap-6">
               {/* City */}
               <div className="space-y-2">
-                <label className="flex items-center gap-2 text-sm font-bold text-stone-700 dark:text-stone-300 uppercase tracking-wide">
+                <label className="flex items-center gap-2 text-sm font-bold text-stone-300 uppercase tracking-wide">
                   <MapPin className="h-4 w-4 text-blue-500" />
                   City
                 </label>
                 <input
                   type="text"
                   placeholder="e.g., Mumbai"
-                  className="w-full px-4 py-3.5 border border-stone-300 dark:border-white/20 rounded-xl bg-stone-50 dark:bg-white/5 focus:bg-white dark:focus:bg-black/50 focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 dark:focus:border-blue-400 transition-all outline-none text-base text-zinc-900 dark:text-white placeholder:text-stone-400 dark:placeholder:text-stone-500"
+                  className="w-full px-4 py-3.5 border border-white/20 rounded-xl bg-white/5 focus:bg-black/50 focus:ring-2 focus:ring-blue-500/20 focus:border-blue-400 transition-all outline-none text-base text-white placeholder:text-stone-500"
                   value={city}
                   onChange={(e) => setCity(e.target.value)}
                   required
@@ -173,14 +173,14 @@ const CompleteProfile: React.FC<CompleteProfileProps> = ({ onComplete }) => {
 
               {/* State */}
               <div className="space-y-2">
-                <label className="flex items-center gap-2 text-sm font-bold text-stone-700 dark:text-stone-300 uppercase tracking-wide">
+                <label className="flex items-center gap-2 text-sm font-bold text-stone-300 uppercase tracking-wide">
                   <MapPin className="h-4 w-4 text-blue-500" />
                   State
                 </label>
                 <input
                   type="text"
                   placeholder="e.g., Maharashtra"
-                  className="w-full px-4 py-3.5 border border-stone-300 dark:border-white/20 rounded-xl bg-stone-50 dark:bg-white/5 focus:bg-white dark:focus:bg-black/50 focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 dark:focus:border-blue-400 transition-all outline-none text-base text-zinc-900 dark:text-white placeholder:text-stone-400 dark:placeholder:text-stone-500"
+                  className="w-full px-4 py-3.5 border border-white/20 rounded-xl bg-white/5 focus:bg-black/50 focus:ring-2 focus:ring-blue-500/20 focus:border-blue-400 transition-all outline-none text-base text-white placeholder:text-stone-500"
                   value={state}
                   onChange={(e) => setState(e.target.value)}
                   required
@@ -190,19 +190,19 @@ const CompleteProfile: React.FC<CompleteProfileProps> = ({ onComplete }) => {
 
             {/* UPI ID */}
             <div className="space-y-2">
-              <label className="flex items-center gap-2 text-sm font-bold text-stone-700 dark:text-stone-300 uppercase tracking-wide">
+              <label className="flex items-center gap-2 text-sm font-bold text-stone-300 uppercase tracking-wide">
                 <CreditCard className="h-4 w-4 text-purple-500" />
                 UPI ID
               </label>
               <input
                 type="text"
                 placeholder="yourname@upi"
-                className="w-full px-4 py-3.5 border border-stone-300 dark:border-white/20 rounded-xl bg-stone-50 dark:bg-white/5 focus:bg-white dark:focus:bg-black/50 focus:ring-2 focus:ring-purple-500/20 focus:border-purple-500 dark:focus:border-purple-400 transition-all outline-none text-base text-zinc-900 dark:text-white placeholder:text-stone-400 dark:placeholder:text-stone-500"
+                className="w-full px-4 py-3.5 border border-white/20 rounded-xl bg-white/5 focus:bg-black/50 focus:ring-2 focus:ring-purple-500/20 focus:border-purple-400 transition-all outline-none text-base text-white placeholder:text-stone-500"
                 value={upiId}
                 onChange={(e) => setUpiId(e.target.value)}
                 required
               />
-              <p className="text-xs text-stone-500 dark:text-stone-400 mt-1 ml-1">
+              <p className="text-xs text-stone-400 mt-1 ml-1">
                 This will be used for payment processing
               </p>
             </div>
@@ -211,7 +211,7 @@ const CompleteProfile: React.FC<CompleteProfileProps> = ({ onComplete }) => {
             <button
               type="submit"
               disabled={loading}
-              className="w-full bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-bold py-4 px-6 rounded-xl shadow-lg shadow-blue-500/30 hover:shadow-blue-500/50 hover:-translate-y-0.5 transition-all duration-200 text-lg disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none mt-8"
+              className="w-full bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-bold py-4 px-6 rounded-xl shadow-lg shadow-blue-500/50 hover:-translate-y-0.5 transition-all duration-200 text-lg disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none mt-8"
             >
               {loading ? (
                 <span className="flex items-center justify-center gap-2">
@@ -228,8 +228,8 @@ const CompleteProfile: React.FC<CompleteProfileProps> = ({ onComplete }) => {
           </form>
 
           {/* Info Footer */}
-          <div className="mt-8 pt-6 border-t border-stone-200 dark:border-white/10">
-            <p className="text-center text-sm text-stone-500 dark:text-stone-400">
+          <div className="mt-8 pt-6 border-t border-white/10">
+            <p className="text-center text-sm text-stone-400">
               🔒 Your information is secure and will only be used for verification and payments
             </p>
           </div>

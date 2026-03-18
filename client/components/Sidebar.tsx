@@ -63,7 +63,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
   const navItems = userRole === 'admin' ? adminNavItems : contributorNavItems;
 
   const sidebarClasses = `
-    fixed inset-y-0 left-0 z-50 ${isCollapsed ? 'w-24' : 'w-64'} bg-white/90 dark:bg-black/40 backdrop-blur-xl border-r border-zinc-200 dark:border-white/5 text-zinc-600 dark:text-zinc-400 transform transition-all duration-300 cubic-bezier(0.4, 0, 0.2, 1)
+    fixed inset-y-0 left-0 z-50 ${isCollapsed ? 'w-24' : 'w-64'} bg-black/40 backdrop-blur-xl border-r border-white/5 text-zinc-400 transform transition-all duration-300 cubic-bezier(0.4, 0, 0.2, 1)
     ${isMobileOpen ? 'translate-x-0' : '-translate-x-full'} md:translate-x-0 md:static md:inset-auto flex flex-col h-full
   `;
 
@@ -72,7 +72,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
       {/* Mobile Overlay */}
       {isMobileOpen && (
         <div
-          className="fixed inset-0 bg-zinc-900/50 backdrop-blur-sm z-40 md:hidden transition-opacity"
+          className="fixed inset-0 bg-black/60 backdrop-blur-sm z-40 md:hidden transition-opacity"
           onClick={() => setIsMobileOpen(false)}
         />
       )}
@@ -84,7 +84,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
           <div className="flex items-center justify-start py-8 px-4">
             <button
               onClick={toggleSidebar}
-              className="h-10 w-10 ml-3 flex items-center justify-center rounded-xl bg-zinc-100 dark:bg-white/10 text-zinc-500 hover:text-white transition-all shadow-sm active:scale-95"
+              className="h-10 w-10 ml-3 flex items-center justify-center rounded-xl bg-white/10 text-zinc-500 hover:text-white transition-all shadow-sm active:scale-95"
               title={isCollapsed ? "Open Sidebar" : "Close Sidebar"}
             >
               {isCollapsed ? (
@@ -111,8 +111,8 @@ export const Sidebar: React.FC<SidebarProps> = ({
                     w-full flex items-center transition-all duration-300 group relative
                     pl-[22px] py-3.5 text-sm font-bold rounded-2xl
                     ${isActive
-                      ? 'bg-blue-600 dark:bg-blue-500 text-white shadow-[0_10px_20px_-5px_rgba(37,99,235,0.4)]'
-                      : 'hover:bg-zinc-100 dark:hover:bg-white/5 text-zinc-500 dark:text-zinc-500 hover:text-zinc-900 dark:hover:text-white'}
+                      ? 'bg-blue-500 text-white shadow-[0_10px_20px_-5px_rgba(37,99,235,0.4)]'
+                      : 'hover:bg-white/5 text-zinc-500 hover:text-white'}
                   `}
                   title={isCollapsed ? item.label : ''}
                 >
@@ -130,9 +130,9 @@ export const Sidebar: React.FC<SidebarProps> = ({
           </nav>
 
           {/* User Status */}
-          <div className="border-t border-zinc-200 dark:border-white/5 bg-zinc-50/50 dark:bg-transparent px-4 py-6 space-y-4 overflow-hidden">
+          <div className="border-t border-white/5 bg-transparent px-4 py-6 space-y-4 overflow-hidden">
             <div className="flex items-center">
-              <div className={`h-10 w-10 ml-3 flex-shrink-0 rounded-lg border border-zinc-200 dark:border-white/5 flex items-center justify-center shadow-sm ${userRole === 'admin' ? 'bg-purple-100 dark:bg-purple-900/20 text-purple-600' : 'bg-white dark:bg-white/10 text-zinc-900 dark:text-white'}`}>
+              <div className={`h-10 w-10 ml-3 flex-shrink-0 rounded-lg border border-white/5 flex items-center justify-center shadow-sm ${userRole === 'admin' ? 'bg-purple-900/20 text-purple-400' : 'bg-white/10 text-white'}`}>
                 {userRole === 'admin' ? (
                   <ShieldAlert className="h-5 w-5" />
                 ) : (
@@ -140,7 +140,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
                 )}
               </div>
               <div className={`flex flex-col truncate flex-1 ml-4 transition-all duration-300 ${isCollapsed ? 'opacity-0 w-0' : 'opacity-100 w-auto'}`}>
-                <span className="text-sm font-black text-zinc-900 dark:text-white truncate uppercase tracking-tight">
+                <span className="text-sm font-black text-white truncate uppercase tracking-tight">
                   {user?.user_metadata?.full_name || 'Contributor'}
                 </span>
                 <span className="text-[10px] text-zinc-500 truncate font-mono uppercase">
@@ -150,7 +150,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
             </div>
             <button
               onClick={onLogout}
-              className="w-full flex items-center transition-all duration-300 group pl-[22px] py-3 text-sm font-bold text-zinc-500 hover:text-red-600 dark:hover:text-red-400 hover:bg-red-50 dark:hover:bg-red-500/10 rounded-xl border border-transparent hover:border-red-100 dark:hover:border-red-500/20"
+              className="w-full flex items-center transition-all duration-300 group pl-[22px] py-3 text-sm font-bold text-zinc-500 hover:text-red-400 hover:bg-red-500/10 rounded-xl border border-transparent hover:border-red-500/20"
               title={isCollapsed ? 'Disconnect' : ''}
             >
               <Power className="h-5 w-5 mr-4 flex-shrink-0" />

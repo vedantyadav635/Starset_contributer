@@ -15,24 +15,24 @@ export const Button: React.FC<ButtonProps> = ({
   disabled,
   ...props
 }) => {
-  const baseStyle = "inline-flex items-center justify-center font-medium transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-white dark:focus:ring-offset-black disabled:opacity-50 disabled:cursor-not-allowed rounded-lg active:scale-[0.96] active:translate-y-0.5 relative overflow-hidden group";
+  const baseStyle = "inline-flex items-center justify-center font-medium transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-black disabled:opacity-50 disabled:cursor-not-allowed rounded-lg active:scale-[0.96] active:translate-y-0.5 relative overflow-hidden group";
 
   const variants = {
     // Primary: Elegant Blue with 3D layers
-    primary: "bg-gradient-to-b from-[#3b82f6] to-[#2563eb] text-white hover:from-[#60a5fa] hover:to-[#3b82f6] shadow-[0_4px_0_#1e40af,0_10px_15px_-3px_rgba(59,130,246,0.3)] active:shadow-none hover:-translate-y-0.5 border-t border-white/20",
+    primary: "bg-gradient-to-b from-[#3b82f6] to-[#2563eb] text-white hover:from-[#60a5fa] hover:to-[#3b82f6] shadow-[0_4px_0_#1e40af,0_10px_15px_-3px_rgba(37,99,235,0.2)] active:shadow-none hover:-translate-y-0.5 border-t border-white/20",
 
     // Glow: High impact CTA
-    glow: "bg-white text-black hover:bg-zinc-100 shadow-[0_0_20px_rgba(255,255,255,0.4)] border border-white hover:border-zinc-200 font-bold hover:-translate-y-1 hover:shadow-[0_0_30px_rgba(255,255,255,0.6)]",
+    glow: "bg-white text-black hover:bg-zinc-100 shadow-[0_0_20px_rgba(255,255,255,0.4)] border border-white font-bold hover:-translate-y-1 hover:shadow-[0_0_30px_rgba(255,255,255,0.6)]",
 
-    black: "bg-zinc-900 text-white hover:bg-zinc-800 border border-zinc-800 shadow-lg hover:shadow-xl hover:-translate-y-0.5 dark:bg-white dark:text-black dark:hover:bg-zinc-200",
+    black: "bg-white text-black hover:bg-zinc-200 border border-zinc-800 shadow-lg hover:shadow-xl hover:-translate-y-0.5",
 
-    secondary: "bg-white/10 backdrop-blur-md text-zinc-900 dark:text-white border border-zinc-200 dark:border-white/10 hover:bg-white/20 shadow-sm hover:shadow-md",
+    secondary: "bg-white/10 backdrop-blur-md text-white border border-white/10 hover:bg-white/20 shadow-sm hover:shadow-md",
 
     danger: "bg-red-500/10 text-red-500 hover:bg-red-500/20 border border-red-500/20",
 
-    ghost: "text-zinc-500 hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-white hover:bg-black/5 dark:hover:bg-white/5",
+    ghost: "text-zinc-400 hover:text-white hover:bg-white/5",
 
-    outline: "bg-transparent border border-zinc-300 dark:border-zinc-700 text-zinc-700 dark:text-zinc-300 hover:border-zinc-500 hover:text-zinc-900 dark:hover:text-white hover:shadow-[0_0_15px_rgba(255,255,255,0.1)]"
+    outline: "bg-transparent border border-zinc-700 text-zinc-300 hover:border-zinc-500 hover:text-white hover:shadow-[0_0_15px_rgba(255,255,255,0.1)]"
   };
 
   const sizes = {

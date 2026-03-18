@@ -121,15 +121,15 @@ export const Dashboard: React.FC<DashboardProps> = ({ onNavigate }) => {
     <div className="space-y-6 animate-in fade-in duration-500">
 
       {/* Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-6 border-b border-zinc-200 dark:border-white/10">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-6 border-b border-white/10">
         <div>
-          <h1 className="text-2xl font-bold text-zinc-900 dark:text-white tracking-tight">Dashboard</h1>
+          <h1 className="text-2xl font-bold text-white tracking-tight">Dashboard</h1>
           <p className="text-zinc-500 text-sm mt-1">
             Welcome back, {userName}
           </p>
         </div>
         <div className="flex items-center gap-3">
-          <Button variant="secondary" onClick={() => onNavigate('tasks')} size="sm" className="bg-white border-zinc-200 text-zinc-900 hover:bg-zinc-50 dark:bg-white/10 dark:text-white dark:border-white/10 dark:hover:bg-white/20">
+          <Button variant="secondary" onClick={() => onNavigate('tasks')} size="sm" className="bg-white/10 text-white border-white/10 hover:bg-white/20">
             View Data Tasks
           </Button>
           <Button onClick={() => onNavigate('earnings')} size="sm" variant="black">
@@ -141,14 +141,14 @@ export const Dashboard: React.FC<DashboardProps> = ({ onNavigate }) => {
       {/* KPI Stats - Real Data */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
         {statCards.map((stat, idx) => (
-          <div key={idx} className="bg-white dark:bg-zinc-900 p-6 md:p-7 rounded-[2rem] border border-stone-200 dark:border-white/10 shadow-sm transition-all hover:shadow-lg hover:scale-[1.02] duration-300 group">
+          <div key={idx} className="bg-zinc-900 p-6 md:p-7 rounded-[2rem] border border-white/10 shadow-sm transition-all hover:shadow-lg hover:scale-[1.02] duration-300 group">
             <div className="flex items-center justify-between mb-6">
-              <div className={`p-3 rounded-2xl transition-colors ${stat.label === 'Acceptance' ? 'bg-blue-50 dark:bg-blue-900/20 text-blue-600' : stat.label === 'Accepted' ? 'bg-emerald-50 dark:bg-emerald-900/20 text-emerald-600' : stat.label === 'In Review' ? 'bg-amber-50 dark:bg-amber-900/20 text-amber-600' : 'bg-purple-50 dark:bg-purple-900/20 text-purple-600'}`}>
+              <div className={`p-3 rounded-2xl transition-colors ${stat.label === 'Acceptance' ? 'bg-blue-900/20 text-blue-400' : stat.label === 'Accepted' ? 'bg-emerald-900/20 text-emerald-400' : stat.label === 'In Review' ? 'bg-amber-900/20 text-amber-400' : 'bg-purple-900/20 text-purple-400'}`}>
                 <stat.icon className="h-6 w-6" />
               </div>
               <span className="text-[10px] font-black text-zinc-400 uppercase tracking-[0.2em]">{stat.label}</span>
             </div>
-            <div className="text-3xl md:text-4xl font-black text-zinc-900 dark:text-white mb-2 tracking-tight group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">{stat.value}</div>
+            <div className="text-3xl md:text-4xl font-black text-white mb-2 tracking-tight group-hover:text-blue-400 transition-colors">{stat.value}</div>
             <div className="text-xs font-bold text-zinc-500 uppercase tracking-widest">{stat.sub}</div>
           </div>
         ))}
@@ -156,7 +156,7 @@ export const Dashboard: React.FC<DashboardProps> = ({ onNavigate }) => {
 
       {/* Quick Actions */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-8">
-        <div className="bg-zinc-900 text-white rounded-[2.5rem] p-8 md:p-10 relative overflow-hidden group cursor-pointer" onClick={() => onNavigate('tasks')}>
+        <div className="bg-zinc-900 text-white rounded-[2.5rem] border border-white/10 p-8 md:p-10 relative overflow-hidden group cursor-pointer" onClick={() => onNavigate('tasks')}>
           <div className="absolute top-0 right-0 w-[60%] h-full bg-gradient-to-l from-blue-600/20 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700"></div>
           <div className="relative z-10">
             <div className="h-14 w-14 bg-white/10 rounded-2xl flex items-center justify-center text-blue-400 mb-6 group-hover:scale-110 transition-transform duration-500">
@@ -170,15 +170,15 @@ export const Dashboard: React.FC<DashboardProps> = ({ onNavigate }) => {
           </div>
         </div>
 
-        <div className="bg-white dark:bg-zinc-900 rounded-[2.5rem] border border-stone-200 dark:border-white/10 p-8 md:p-10 relative overflow-hidden group cursor-pointer" onClick={() => onNavigate('earnings')}>
-          <div className="absolute top-0 right-0 w-[60%] h-full bg-gradient-to-l from-emerald-600/5 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700"></div>
+        <div className="bg-zinc-900 rounded-[2.5rem] border border-white/10 p-8 md:p-10 relative overflow-hidden group cursor-pointer" onClick={() => onNavigate('earnings')}>
+          <div className="absolute top-0 right-0 w-[60%] h-full bg-gradient-to-l from-emerald-600/10 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700"></div>
           <div className="relative z-10">
-            <div className="h-14 w-14 bg-emerald-50 dark:bg-emerald-900/20 rounded-2xl flex items-center justify-center text-emerald-600 dark:text-emerald-400 mb-6 group-hover:scale-110 transition-transform duration-500">
+            <div className="h-14 w-14 bg-emerald-900/20 rounded-2xl flex items-center justify-center text-emerald-400 mb-6 group-hover:scale-110 transition-transform duration-500">
               <BarChart3 className="h-7 w-7" />
             </div>
-            <h3 className="text-2xl font-black mb-2 tracking-tight text-zinc-900 dark:text-white">Financial Yield</h3>
-            <p className="text-stone-500 dark:text-stone-400 font-medium mb-6">Track your contribution rewards.</p>
-            <div className="inline-flex items-center text-sm font-black uppercase tracking-widest text-emerald-600 dark:text-emerald-400 group-hover:translate-x-2 transition-transform">
+            <h3 className="text-2xl font-black mb-2 tracking-tight text-white">Financial Yield</h3>
+            <p className="text-stone-400 font-medium mb-6">Track your contribution rewards.</p>
+            <div className="inline-flex items-center text-sm font-black uppercase tracking-widest text-emerald-400 group-hover:translate-x-2 transition-transform">
               View Audit <ArrowRight className="ml-2 h-4 w-4" />
             </div>
           </div>
