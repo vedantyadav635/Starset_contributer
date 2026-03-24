@@ -62,6 +62,7 @@ export const Signup: React.FC<SignupProps> = ({ onLogin, onSwitchToLogin, onBack
         .upsert({
           id: data.user.id,
           full_name: name,
+          email_text: email, // Add this for admin join
           role: "contributor",
           profile_completed: false,
           trust_score: 100

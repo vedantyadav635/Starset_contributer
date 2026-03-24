@@ -87,12 +87,19 @@ router.get("/", async (req, res) => {
     const taskIds = data?.map((t: any) => t.id) || [];
     let countMap: Record<string, number> = {};
     if (taskIds.length > 0) {
-      const { data: counts } = await supabase
-        .from("submissions")
-        .select("task_id")
-        .in("task_id", taskIds);
-      for (const row of counts ?? []) {
-        countMap[row.task_id] = (countMap[row.task_id] || 0) + 1;
+      try {
+        const { data: counts, error: countError } = await supabase
+          .from("submissions")
+          .select("task_id")
+          .in("task_id", taskIds);
+
+        if (!countError) {
+          for (const row of counts ?? []) {
+            countMap[row.task_id] = (countMap[row.task_id] || 0) + 1;
+          }
+        }
+      } catch (err) {
+        console.error("⚠️ Error fetching submission counts:", err);
       }
     }
 
