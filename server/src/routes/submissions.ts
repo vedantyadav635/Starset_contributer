@@ -70,6 +70,28 @@ const upload = multer({
     },
 });
 
+import * as mm from 'music-metadata';
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Technical Audio Metadata Extraction
+// ─────────────────────────────────────────────────────────────────────────────
+async function getTechnicalMetadata(buffer: Buffer, mimeType: string) {
+    try {
+        const metadata = await mm.parseBuffer(buffer, mimeType);
+        return {
+            sampleRate: metadata.format.sampleRate,
+            channels: metadata.format.numberOfChannels,
+            bitsPerSample: metadata.format.bitsPerSample,
+            encoding: metadata.format.codec,
+            bitRate: metadata.format.bitrate,
+            container: metadata.format.container
+        };
+    } catch (err) {
+        console.warn('⚠️ Could not extract technical metadata:', (err as any).message);
+        return null;
+    }
+}
+
 // ─────────────────────────────────────────────────────────────────────────────
 // Background validation pipeline
 // Runs AFTER the HTTP response has been sent to the user.
@@ -87,6 +109,9 @@ async function runValidationPipeline(
     console.log(`🔬 [PIPELINE] Starting validation for submission ${submissionId}`);
 
     try {
+        // ── 0. Get technical metadata ─────────────────────────────────────
+        const techInfo = await getTechnicalMetadata(buffer, mimeType);
+
         // ── Step 1: Full audio validation ────────────────────────────────────
         const validation = await validateAudio(buffer, mimeType, {
             minDurationSeconds: 1.5,
@@ -107,6 +132,7 @@ async function runValidationPipeline(
                     validated_at: new Date().toISOString(),
                     duration_seconds: validation.durationSeconds || null,
                     storage_stage: 'raw',
+                    technical_metadata: techInfo,
                 })
                 .eq('id', submissionId);
             console.log(`📝 [PIPELINE] DB updated: validation failed`);
@@ -128,6 +154,7 @@ async function runValidationPipeline(
                 audio_url: finalResult.url,         // final bucket URL
                 final_file_id: finalResult.fileId,  // for admin approve pipeline
                 storage_stage: 'final',
+                technical_metadata: techInfo,
             })
             .eq('id', submissionId);
 

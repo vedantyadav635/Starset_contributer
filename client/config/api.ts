@@ -21,6 +21,7 @@ export const API_ENDPOINTS = {
     ADMIN_SUBMISSIONS_PENDING: `${API_URL}/admin/submissions/pending`,
     APPROVE_SUBMISSION: (id: string) => `${API_URL}/admin/submissions/${id}/approve`,
     REJECT_SUBMISSION: (id: string) => `${API_URL}/admin/submissions/${id}/reject`,
+    EXPORT_METADATA: (taskId: string) => `${API_URL}/admin/export/${taskId}`,
 
     // Contributor endpoints
     CONTRIBUTOR_TASKS: `${API_URL}/contributor/tasks`,

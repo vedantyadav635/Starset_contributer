@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Task, TaskType, UserRole } from '../types';
 import { Button } from '../components/Button';
-import { Clock, Globe, Filter, ChevronRight, Edit3, Image as ImageIcon, CheckCircle2, Camera, Trash2, Edit, BadgeCheck, Mic } from 'lucide-react';
+import { Clock, Globe, Filter, ChevronRight, Edit3, Image as ImageIcon, CheckCircle2, Camera, Trash2, Edit, BadgeCheck, Mic, FileAudio } from 'lucide-react';
 
 interface TaskListProps {
   onSelectTask: (task: Task) => void;
@@ -153,6 +153,36 @@ export const TaskList: React.FC<TaskListProps> = ({ onSelectTask, tasks, userRol
                       {/* Admin actions */}
                       {userRole === 'admin' && (
                         <div className="ml-auto flex items-center gap-2">
+                          <button
+                            className="h-8 w-8 flex items-center justify-center rounded-lg bg-blue-600/20 hover:bg-blue-600/40 text-blue-400 border border-blue-500/40 transition-colors"
+                            title="Export Metadata (JSON)"
+                            onClick={async (e) => {
+                              e.stopPropagation();
+                              try {
+                                const { fetchApi } = await import('../lib/api');
+                                const { API_ENDPOINTS } = await import('../config/api');
+                                const res = await fetchApi(API_ENDPOINTS.EXPORT_METADATA(task.id));
+                                if (res.ok) {
+                                  const blob = await res.blob();
+                                  const url = window.URL.createObjectURL(blob);
+                                  const a = document.createElement('a');
+                                  a.href = url;
+                                  a.download = `task_${task.id}_metadata.json`;
+                                  document.body.appendChild(a);
+                                  a.click();
+                                  document.body.removeChild(a);
+                                  window.URL.revokeObjectURL(url);
+                                } else {
+                                  alert('Export failed for this task.');
+                                }
+                              } catch (err) {
+                                console.error('Export failed:', err);
+                                alert('An error occurred during export.');
+                              }
+                            }}
+                          >
+                            <FileAudio className="h-3.5 w-3.5" />
+                          </button>
                           <button
                             className="h-8 w-8 flex items-center justify-center rounded-lg bg-white/10 hover:bg-white/20 text-stone-400 transition-colors"
                             title="Edit task"
