@@ -8,6 +8,7 @@ import contributorTasks from "./routes/contributor.tasks";
 import submissions from "./routes/submissions";
 import userSubmissions from "./routes/user.submissions";
 import userStats from "./routes/user.stats";
+import adminExport from "./routes/admin.export";
 
 import { requireAuth, requireAdmin } from "./middleware/requireAuth";
 
@@ -35,6 +36,7 @@ app.get("/health", (_req, res) => {
 app.use("/admin/tasks", requireAuth, requireAdmin, adminTasks);
 app.use("/admin/stats", requireAuth, requireAdmin, adminStats);
 app.use("/admin/submissions", requireAuth, requireAdmin, adminSubmissions);
+app.use("/admin/export", requireAuth, requireAdmin, adminExport);
 
 // Contributor/User routes: Require valid token
 app.use("/contributor/tasks", requireAuth, contributorTasks);
