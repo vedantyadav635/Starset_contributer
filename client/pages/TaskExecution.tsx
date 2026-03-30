@@ -262,6 +262,7 @@ export const TaskExecution: React.FC<TaskExecutionProps> = ({ task, onBack, onCo
         formData.append('audio', audioBlob, 'recording.webm');
         formData.append('taskId', task.id);
         formData.append('userId', user.id);
+        formData.append('duration', recordingTime.toString());
 
         const response = await fetchWithRetry(API_ENDPOINTS.SUBMIT_AUDIO, {
           method: 'POST',

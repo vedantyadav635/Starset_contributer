@@ -182,7 +182,7 @@ async function runValidationPipeline(
 // ─────────────────────────────────────────────────────────────────────────────
 router.post("/audio", upload.single('audio'), async (req: Request, res: Response) => {
     try {
-        const { taskId, userId } = req.body;
+        const { taskId, userId, duration } = req.body;
         const audioFile = req.file;
 
         if (!taskId || !userId) {
@@ -192,7 +192,9 @@ router.post("/audio", upload.single('audio'), async (req: Request, res: Response
             return res.status(400).json({ error: "No audio file provided" });
         }
 
-        console.log(`📤 Audio received: task=${taskId}, user=${userId}, size=${(audioFile.size / 1024).toFixed(1)} KB`);
+        // Parse client-side duration if provided
+        const clientDuration = duration ? parseFloat(duration) : null;
+        console.log(`📤 Audio received: task=${taskId}, user=${userId}, duration(client)=${clientDuration}s, size=${(audioFile.size / 1024).toFixed(1)} KB`);
 
         // ── 1. Duplicate-submission guard ────────────────────────────────────────────
         if (await checkAlreadySubmitted(taskId, userId)) {
@@ -219,7 +221,9 @@ router.post("/audio", upload.single('audio'), async (req: Request, res: Response
             minFileSizeBytes: 1_000,
         });
 
-        console.log(`🎙️ Validation: passed=${validation.passed}, dur=${validation.durationSeconds.toFixed(2)}s`);
+        // Compute final duration (prefer client duration if it's within sanity limits)
+        const finalDuration = (clientDuration && clientDuration > 0) ? clientDuration : validation.durationSeconds;
+        console.log(`🎙️ Validation: passed=${validation.passed}, dur(final)=${finalDuration?.toFixed(2)}s`);
 
         // ── 4. If validation fails, reject immediately (no upload needed) ─────
         if (!validation.passed) {
@@ -262,7 +266,7 @@ router.post("/audio", upload.single('audio'), async (req: Request, res: Response
                 final_file_id: finalResult.fileId !== rawResult.fileId ? finalResult.fileId : null,
                 file_size: audioFile.size,
                 mime_type: audioFile.mimetype,
-                duration_seconds: validation.durationSeconds || null,
+                duration_seconds: finalDuration || null,
                 status: 'pending_validation',   // awaiting admin review
                 storage_stage: finalResult.fileId !== rawResult.fileId ? 'final' : 'raw',
                 validation_status: 'auto_passed',
