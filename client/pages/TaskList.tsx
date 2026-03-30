@@ -173,7 +173,9 @@ export const TaskList: React.FC<TaskListProps> = ({ onSelectTask, tasks, userRol
                                   document.body.removeChild(a);
                                   window.URL.revokeObjectURL(url);
                                 } else {
-                                  alert('Export failed for this task.');
+                                  const errData = await res.json().catch(() => null);
+                                  console.error('Export failed:', res.status, errData);
+                                  alert(errData?.details || errData?.error || 'Export failed for this task.');
                                 }
                               } catch (err) {
                                 console.error('Export failed:', err);
