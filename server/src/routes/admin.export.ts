@@ -32,17 +32,7 @@ router.get("/:taskId", async (req: Request, res: Response) => {
         //    Try approved first, fall back to all statuses
         let { data: submissions, error: subError } = await supabase
             .from('submissions')
-            .select(`
-                id,
-                user_id,
-                audio_url,
-                image_url,
-                text_content,
-                duration_seconds,
-                technical_metadata,
-                status,
-                submitted_at
-            `)
+            .select('*')
             .eq('task_id', taskId)
             .eq('status', 'approved');
 
@@ -58,17 +48,7 @@ router.get("/:taskId", async (req: Request, res: Response) => {
         if (!submissions || submissions.length === 0) {
             const { data: allSubs, error: allSubError } = await supabase
                 .from('submissions')
-                .select(`
-                    id,
-                    user_id,
-                    audio_url,
-                    image_url,
-                    text_content,
-                    duration_seconds,
-                    technical_metadata,
-                    status,
-                    submitted_at
-                `)
+                .select('*')
                 .eq('task_id', taskId)
                 .in('status', ['pending_validation', 'approved']);
 
