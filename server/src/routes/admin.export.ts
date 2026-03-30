@@ -136,11 +136,11 @@ router.get("/:taskId", async (req: Request, res: Response) => {
 
             return {
                 sl_no: index + 1,
-                speechFile: (speechFile || "").toLowerCase(),
+                speechFile: (speechFile || "").toLowerCase().substring(0, 8),
                 transcription: task.prompt || "",
                 speechMode: "Read",
                 status: sub.status,
-                speakerUniqueId: (profile.id || sub.user_id || "unknown").toLowerCase(),
+                speakerUniqueId: (profile.id || sub.user_id || "unknown").toLowerCase().substring(0, 8),
 
                 speakerInfo: {
                     age: profile.age || null,
