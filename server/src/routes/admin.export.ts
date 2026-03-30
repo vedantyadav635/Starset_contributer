@@ -81,32 +81,47 @@ router.get("/:taskId", async (req: Request, res: Response) => {
         const profileMap: Record<string, any> = {};
         (profiles || []).forEach((p: any) => { profileMap[p.id] = p; });
 
-        // 4. Map to export format
-        const exportData = submissions.map((sub: any, index: number) => {
+        // 4. Map to export format (Async to allow on-the-fly duration calculation for old records)
+        const exportData = await Promise.all(submissions.map(async (sub: any, index: number) => {
             const tech = sub.technical_metadata || {};
             const profile = profileMap[sub.user_id] || {};
-
-            // Extract filename from URL
             const fileUrl = sub.audio_url || sub.image_url || '';
             const speechFile = fileUrl ? fileUrl.split('/').pop() : 'unknown';
 
-            // Audio duration: prefer duration_seconds > 0, fallback to tech.durationSeconds
-            const rawDuration = (sub.duration_seconds && sub.duration_seconds > 0)
+            // ── DURATION CALCULATION ──
+            // 1. Try DB field (duration_seconds)
+            // 2. Try technical_metadata backup
+            // 3. IF STILL 0/NULL: Fetch file and calculate on-the-fly (Fixes old recordings)
+            let rawDuration = (sub.duration_seconds && sub.duration_seconds > 0)
                 ? sub.duration_seconds
                 : (tech.durationSeconds || 0);
+
+            if (!rawDuration && fileUrl && fileUrl.includes('.webm')) {
+                try {
+                    const mm = await import('music-metadata');
+                    const response = await fetch(fileUrl);
+                    if (response.ok) {
+                        const buffer = await response.arrayBuffer();
+                        const metadata = await mm.parseBuffer(Buffer.from(buffer));
+                        rawDuration = metadata.format.duration || 0;
+                        console.log(`⏱️ Auto-calculated duration for ${speechFile}: ${rawDuration.toFixed(2)}s`);
+                    }
+                } catch (e) {
+                    console.warn(`⚠️ Failed to auto-calculate duration for ${speechFile}`);
+                }
+            }
+
             const callDuration = rawDuration ? Math.round(rawDuration * 100) / 100 : 0;
 
-            // Smart Language Detection: 
-            // 1. Check if transcription has Devanagari (Hindi) characters
-            // 2. Fallback to task language
+            // ── SCRIPT DETECTION ──
             const hasHindiChars = /[\u0900-\u097F]/.test(task.prompt || "");
             const dominantScript = hasHindiChars ? "hindi" : (task.language?.toLowerCase() || "unknown");
 
             return {
                 sl_no: index + 1,
-                speechFile: speechFile,
+                speechFile,
                 transcription: task.prompt || "",
-                callDuration: callDuration,
+                callDuration,
                 speechMode: "Read",
                 topic: task.project || "General",
                 status: sub.status,
@@ -116,9 +131,7 @@ router.get("/:taskId", async (req: Request, res: Response) => {
                     samplingFrequencyHz: tech.sampleRate || 16000,
                     bitsPerSample: tech.bitsPerSample || 16
                 },
-                languageDetails: {
-                    dominantScript: dominantScript
-                },
+                languageDetails: { dominantScript },
                 audioFormat: {
                     encoding: tech.encoding || "PCM",
                     bitwidth: tech.bitsPerSample || 16,
@@ -132,7 +145,7 @@ router.get("/:taskId", async (req: Request, res: Response) => {
                     state: profile.state || null
                 }
             };
-        });
+        }));
 
         // 5. Send as downloadable JSON
         res.setHeader('Content-Type', 'application/json');
