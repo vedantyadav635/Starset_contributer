@@ -90,11 +90,18 @@ router.get("/:taskId", async (req: Request, res: Response) => {
             const fileUrl = sub.audio_url || sub.image_url || '';
             const speechFile = fileUrl ? fileUrl.split('/').pop() : 'unknown';
 
+            // Audio duration: prefer duration_seconds from DB, fallback to technical_metadata
+            const rawDuration = sub.duration_seconds || tech.durationSeconds || 0;
+            const callDuration = rawDuration ? Math.round(rawDuration * 100) / 100 : 0;
+
+            // Language → dominantScript mapping (hindi → hindi, english → english, etc.)
+            const dominantScript = task.language?.toLowerCase() || "unknown";
+
             return {
                 sl_no: index + 1,
                 speechFile: speechFile,
                 transcription: task.prompt || "",
-                callDuration: sub.duration_seconds || 0,
+                callDuration: callDuration,
                 speechMode: "Read",
                 topic: task.project || "General",
                 status: sub.status,
@@ -105,7 +112,7 @@ router.get("/:taskId", async (req: Request, res: Response) => {
                     bitsPerSample: tech.bitsPerSample || 16
                 },
                 languageDetails: {
-                    dominantScript: task.language?.toLowerCase() || "unknown"
+                    dominantScript: dominantScript
                 },
                 audioFormat: {
                     encoding: tech.encoding || "PCM",

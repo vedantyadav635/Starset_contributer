@@ -84,7 +84,8 @@ async function getTechnicalMetadata(buffer: Buffer, mimeType: string) {
             bitsPerSample: metadata.format.bitsPerSample,
             encoding: metadata.format.codec,
             bitRate: metadata.format.bitrate,
-            container: metadata.format.container
+            container: metadata.format.container,
+            durationSeconds: metadata.format.duration || null
         };
     } catch (err) {
         console.warn('⚠️ Could not extract technical metadata:', (err as any).message);
