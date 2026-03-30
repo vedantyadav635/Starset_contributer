@@ -122,32 +122,57 @@ router.get("/:taskId", async (req: Request, res: Response) => {
             const hasHindiChars = /[\u0900-\u097F]/.test(task.prompt || "");
             const dominantScript = hasHindiChars ? "hindi" : (task.language?.toLowerCase() || "unknown");
 
+            // ── AGE GROUP CALCULATION ──
+            const age = profile.age || 0;
+            let ageGroup = "Unknown";
+            if (age > 0) {
+                if (age < 18) ageGroup = "Below 18";
+                else if (age <= 25) ageGroup = "18-25";
+                else if (age <= 35) ageGroup = "26-35";
+                else if (age <= 45) ageGroup = "36-45";
+                else if (age <= 60) ageGroup = "46-60";
+                else ageGroup = "60+";
+            }
+
             return {
                 sl_no: index + 1,
                 speechFile,
                 transcription: task.prompt || "",
-                callDuration,
                 speechMode: "Read",
-                topic: task.project || "General",
                 status: sub.status,
                 speakerUniqueId: profile.id || sub.user_id || "unknown",
-                recordingDetails: {
-                    channel: tech.channels === 1 ? "Mono" : "Stereo",
-                    samplingFrequencyHz: tech.sampleRate || 16000,
-                    bitsPerSample: tech.bitsPerSample || 16
-                },
-                languageDetails: { dominantScript },
-                audioFormat: {
-                    encoding: tech.encoding || "PCM",
-                    bitwidth: tech.bitsPerSample || 16,
-                    samplingFrequency: `${(tech.sampleRate || 16000) / 1000} KHz`
-                },
+
                 speakerInfo: {
-                    name: profile.full_name || "unknown",
-                    gender: profile.gender === "Male" ? "M" : profile.gender === "Female" ? "F" : "O",
                     age: profile.age || null,
+                    ageGroup,
+                    gender: profile.gender === "Male" ? "M" : profile.gender === "Female" ? "F" : "O",
                     city: profile.city || null,
                     state: profile.state || null
+                },
+
+                recordingDetails: {
+                    channel: tech.channels === 1 ? "Mono" : "Stereo",
+                    samplingRateHz: tech.sampleRate || 16000,
+                    bitsPerSample: tech.bitsPerSample || 16,
+                    durationSec: callDuration,
+                    acousticEnvironment: "indoor_quiet",
+                    microphoneType: "mobile_smartphone"
+                },
+
+                consent: {
+                    recordedForAi: true,
+                    rightsForCommercialUse: true,
+                    usedForGlobalDataset: true,
+                    anonymized: true
+                },
+
+                tags: {
+                    domain: task.project || "personal_conversation",
+                    scenario: (task.title || "").toLowerCase().replace(/\s+/g, '_'),
+                    languageMix: dominantScript === "hindi" ? "pure_hindi" : (task.language || "pure_english"),
+                    speakerRole: "caller",
+                    emotion: "neutral",
+                    promptType: "conversational_call"
                 }
             };
         }));
