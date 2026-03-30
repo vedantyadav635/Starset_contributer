@@ -90,12 +90,17 @@ router.get("/:taskId", async (req: Request, res: Response) => {
             const fileUrl = sub.audio_url || sub.image_url || '';
             const speechFile = fileUrl ? fileUrl.split('/').pop() : 'unknown';
 
-            // Audio duration: prefer duration_seconds from DB, fallback to technical_metadata
-            const rawDuration = sub.duration_seconds || tech.durationSeconds || 0;
+            // Audio duration: prefer duration_seconds > 0, fallback to tech.durationSeconds
+            const rawDuration = (sub.duration_seconds && sub.duration_seconds > 0)
+                ? sub.duration_seconds
+                : (tech.durationSeconds || 0);
             const callDuration = rawDuration ? Math.round(rawDuration * 100) / 100 : 0;
 
-            // Language → dominantScript mapping (hindi → hindi, english → english, etc.)
-            const dominantScript = task.language?.toLowerCase() || "unknown";
+            // Smart Language Detection: 
+            // 1. Check if transcription has Devanagari (Hindi) characters
+            // 2. Fallback to task language
+            const hasHindiChars = /[\u0900-\u097F]/.test(task.prompt || "");
+            const dominantScript = hasHindiChars ? "hindi" : (task.language?.toLowerCase() || "unknown");
 
             return {
                 sl_no: index + 1,
