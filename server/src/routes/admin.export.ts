@@ -5,7 +5,8 @@ const router = Router();
 
 /**
  * GET /admin/export/:taskId
- * Export all approved submissions for a task in the specified metadata format
+ * Export all approved submissions for a task in the specified metadata format.
+ * Falls back to pending_validation if no approved submissions exist.
  */
 router.get("/:taskId", async (req: Request, res: Response) => {
     try {
@@ -15,7 +16,7 @@ router.get("/:taskId", async (req: Request, res: Response) => {
             return res.status(400).json({ error: "Task ID is required" });
         }
 
-        // Fetch task details for transcription and topic
+        // 1. Fetch task details
         const { data: task, error: taskError } = await supabase
             .from('tasks')
             .select('*')
@@ -23,51 +24,101 @@ router.get("/:taskId", async (req: Request, res: Response) => {
             .single();
 
         if (taskError || !task) {
-            return res.status(404).json({ error: "Task not found" });
+            console.error('❌ Export: Task not found', taskError);
+            return res.status(404).json({ error: "Task not found", details: taskError?.message });
         }
 
-        // Fetch all approved submissions with profile data
-        const { data: submissions, error: subError } = await supabase
+        // 2. Fetch submissions (without profile join to avoid relationship errors)
+        //    Try approved first, fall back to all statuses
+        let { data: submissions, error: subError } = await supabase
             .from('submissions')
             .select(`
                 id,
+                user_id,
                 audio_url,
+                image_url,
+                text_content,
                 duration_seconds,
                 technical_metadata,
-                submitted_at,
-                profiles:user_id (
-                    id,
-                    full_name,
-                    gender,
-                    age,
-                    city,
-                    state
-                )
+                status,
+                submitted_at
             `)
             .eq('task_id', taskId)
             .eq('status', 'approved');
 
         if (subError) {
-            console.error('❌ Export error:', subError);
-            return res.status(500).json({ error: "Failed to fetch submissions for export" });
+            console.error('❌ Export: Error fetching approved submissions:', subError);
+            return res.status(500).json({
+                error: "Failed to fetch submissions for export",
+                details: subError.message
+            });
         }
 
-        // Map to requested format
-        const exportData = (submissions || []).map((sub: any, index: number) => {
+        // If no approved submissions, fetch all submissions for this task
+        if (!submissions || submissions.length === 0) {
+            const { data: allSubs, error: allSubError } = await supabase
+                .from('submissions')
+                .select(`
+                    id,
+                    user_id,
+                    audio_url,
+                    image_url,
+                    text_content,
+                    duration_seconds,
+                    technical_metadata,
+                    status,
+                    submitted_at
+                `)
+                .eq('task_id', taskId)
+                .in('status', ['pending_validation', 'approved']);
+
+            if (allSubError) {
+                console.error('❌ Export: Error fetching all submissions:', allSubError);
+                return res.status(500).json({
+                    error: "Failed to fetch submissions for export",
+                    details: allSubError.message
+                });
+            }
+
+            submissions = allSubs;
+        }
+
+        if (!submissions || submissions.length === 0) {
+            // Return an empty export file instead of an error
+            res.setHeader('Content-Type', 'application/json');
+            res.setHeader('Content-Disposition', `attachment; filename=task_${taskId}_metadata.json`);
+            return res.status(200).send(JSON.stringify([], null, 2));
+        }
+
+        // 3. Fetch profiles separately for all unique user IDs
+        const userIds = [...new Set(submissions.map((s: any) => s.user_id))];
+        const { data: profiles } = await supabase
+            .from('profiles')
+            .select('id, full_name, gender, age, city, state')
+            .in('id', userIds);
+
+        // Build a lookup map: userId → profile
+        const profileMap: Record<string, any> = {};
+        (profiles || []).forEach((p: any) => { profileMap[p.id] = p; });
+
+        // 4. Map to export format
+        const exportData = submissions.map((sub: any, index: number) => {
             const tech = sub.technical_metadata || {};
-            const profile = sub.profiles || {};
+            const profile = profileMap[sub.user_id] || {};
 
             // Extract filename from URL
-            const speechFile = sub.audio_url ? sub.audio_url.split('/').pop() : 'unknown.wav';
+            const fileUrl = sub.audio_url || sub.image_url || '';
+            const speechFile = fileUrl ? fileUrl.split('/').pop() : 'unknown';
 
             return {
                 sl_no: index + 1,
                 speechFile: speechFile,
                 transcription: task.prompt || "",
                 callDuration: sub.duration_seconds || 0,
-                speechMode: "Read", // Default as seen in example
+                speechMode: "Read",
                 topic: task.project || "General",
-                speakerUniqueId: profile.id || "unknown",
+                status: sub.status,
+                speakerUniqueId: profile.id || sub.user_id || "unknown",
                 recordingDetails: {
                     channel: tech.channels === 1 ? "Mono" : "Stereo",
                     samplingFrequencyHz: tech.sampleRate || 16000,
@@ -82,12 +133,16 @@ router.get("/:taskId", async (req: Request, res: Response) => {
                     samplingFrequency: `${(tech.sampleRate || 16000) / 1000} KHz`
                 },
                 speakerInfo: {
-                    gender: profile.gender === "Male" ? "M" : profile.gender === "Female" ? "F" : "O"
+                    name: profile.full_name || "unknown",
+                    gender: profile.gender === "Male" ? "M" : profile.gender === "Female" ? "F" : "O",
+                    age: profile.age || null,
+                    city: profile.city || null,
+                    state: profile.state || null
                 }
             };
         });
 
-        // Set headers for JSON file download
+        // 5. Send as downloadable JSON
         res.setHeader('Content-Type', 'application/json');
         res.setHeader('Content-Disposition', `attachment; filename=task_${taskId}_metadata.json`);
 
@@ -95,7 +150,10 @@ router.get("/:taskId", async (req: Request, res: Response) => {
 
     } catch (error: any) {
         console.error('🔥 Export crash:', error);
-        return res.status(500).json({ error: "Internal server error during export" });
+        return res.status(500).json({
+            error: "Internal server error during export",
+            details: error?.message
+        });
     }
 });
 
