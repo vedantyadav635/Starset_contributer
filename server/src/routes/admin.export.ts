@@ -97,6 +97,7 @@ router.get("/:taskId", async (req: Request, res: Response) => {
                 : (tech.durationSeconds || 0);
 
             if (!rawDuration && fileUrl && fileUrl.includes('.webm')) {
+                console.log(`🔍 [EXPORT] Missing duration for ${speechFile}. Attempting on-the-fly calculation...`);
                 try {
                     const mm = await import('music-metadata');
                     const response = await fetch(fileUrl);
@@ -104,11 +105,15 @@ router.get("/:taskId", async (req: Request, res: Response) => {
                         const buffer = await response.arrayBuffer();
                         const metadata = await mm.parseBuffer(Buffer.from(buffer));
                         rawDuration = metadata.format.duration || 0;
-                        console.log(`⏱️ Auto-calculated duration for ${speechFile}: ${rawDuration.toFixed(2)}s`);
+                        console.log(`⏱️ [EXPORT] Success: ${speechFile} = ${rawDuration.toFixed(2)}s`);
+                    } else {
+                        console.error(`❌ [EXPORT] Fetch failed for ${speechFile}: ${response.status} ${response.statusText}`);
                     }
-                } catch (e) {
-                    console.warn(`⚠️ Failed to auto-calculate duration for ${speechFile}`);
+                } catch (e: any) {
+                    console.error(`⚠️ [EXPORT] Parser error for ${speechFile}:`, e?.message || e);
                 }
+            } else if (!rawDuration) {
+                console.log(`⚠️ [EXPORT] Skip: no duration found and file is not .webm or URL is missing: ${speechFile}`);
             }
 
             const callDuration = rawDuration ? Math.round(rawDuration * 100) / 100 : 0;
