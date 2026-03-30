@@ -97,7 +97,6 @@ router.get("/:taskId", async (req: Request, res: Response) => {
                 : (tech.durationSeconds || 0);
 
             if (!rawDuration && fileUrl && fileUrl.includes('.webm')) {
-                console.log(`🔍 [EXPORT] Missing duration for ${speechFile}. Attempting on-the-fly calculation...`);
                 try {
                     const mm = await import('music-metadata');
                     const response = await fetch(fileUrl);
@@ -105,18 +104,14 @@ router.get("/:taskId", async (req: Request, res: Response) => {
                         const buffer = await response.arrayBuffer();
                         const metadata = await mm.parseBuffer(Buffer.from(buffer));
                         rawDuration = metadata.format.duration || 0;
-                        console.log(`⏱️ [EXPORT] Success: ${speechFile} = ${rawDuration.toFixed(2)}s`);
                     } else {
-                        console.error(`❌ [EXPORT] Fetch failed for ${speechFile}: ${response.status} ${response.statusText}`);
                     }
                 } catch (e: any) {
-                    console.error(`⚠️ [EXPORT] Parser error for ${speechFile}:`, e?.message || e);
                 }
             } else if (!rawDuration) {
-                console.log(`⚠️ [EXPORT] Skip: no duration found and file is not .webm or URL is missing: ${speechFile}`);
             }
 
-            const callDuration = rawDuration ? Math.round(rawDuration * 100) / 100 : 0;
+            const callDuration = rawDuration || 0;
 
             // ── SCRIPT DETECTION ──
             const hasHindiChars = /[\u0900-\u097F]/.test(task.prompt || "");
@@ -155,8 +150,6 @@ router.get("/:taskId", async (req: Request, res: Response) => {
                     samplingRateHz: tech.sampleRate || 16000,
                     bitsPerSample: tech.bitsPerSample || 16,
                     durationSec: callDuration,
-                    acousticEnvironment: "indoor_quiet",
-                    microphoneType: "mobile_smartphone"
                 },
 
                 consent: {
@@ -170,9 +163,14 @@ router.get("/:taskId", async (req: Request, res: Response) => {
                     domain: task.project || "personal_conversation",
                     scenario: (task.title || "").toLowerCase().replace(/\s+/g, '_'),
                     languageMix: dominantScript === "hindi" ? "pure_hindi" : (task.language || "pure_english"),
-                    speakerRole: "caller",
-                    emotion: "neutral",
-                    promptType: "conversational_call"
+                    emotion: (() => {
+                        const text = (task.prompt || "").toLowerCase();
+                        if (/खुश|बढ़िया|शानदार|happy|great|excellent|good|joy/.test(text)) return "happy";
+                        if (/गुस्सा|बेवकूफ|angry|stupid|idiot|hate|wrong/.test(text)) return "angry";
+                        if (/दुख|बुरा|परेशान|sad|bad|unhappy|sorry/.test(text)) return "sad";
+                        if (/अचानक|हैरान|surprise|shock|wow|unexpected/.test(text)) return "surprised";
+                        return "neutral";
+                    })(),
                 }
             };
         }));
