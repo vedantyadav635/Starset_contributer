@@ -5,6 +5,8 @@ import {
   AlertCircle,
   Shield,
   User,
+  Eye,
+  EyeOff,
   Lock,
   Key,
   Sun,
@@ -33,6 +35,7 @@ export const Login: React.FC<LoginProps> = ({
   const [password, setPassword] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [showPassword, setShowPassword] = useState(false);
 
   const { login, user } = useAuth();
   const [loginMode, setLoginMode] = useState<UserRole>("contributor");
@@ -163,13 +166,24 @@ export const Login: React.FC<LoginProps> = ({
               <div className="relative group">
                 <Lock className="absolute top-3.5 left-4 h-5 w-5 text-zinc-400 group-focus-within:text-blue-500 transition-colors" />
                 <input
-                  type="password"
+                  type={showPassword ? "text" : "password"}
                   required
-                  className="w-full pl-12 pr-4 py-3 border border-white/10 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500 transition-all bg-black/20 text-white placeholder-zinc-600"
+                  className="w-full pl-12 pr-12 py-3 border border-white/10 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500 transition-all bg-black/20 text-white placeholder-zinc-600"
                   placeholder="Password"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                 />
+                <button
+                  type="button"
+                  onClick={() => setShowPassword(!showPassword)}
+                  className="absolute top-3.5 right-4 text-zinc-400 hover:text-white transition-colors"
+                >
+                  {showPassword ? (
+                    <EyeOff className="h-5 w-5" />
+                  ) : (
+                    <Eye className="h-5 w-5" />
+                  )}
+                </button>
               </div>
             </div>
 
