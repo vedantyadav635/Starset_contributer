@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Button } from '../components/Button';
-import { ArrowRight, User, Mail, Lock, Globe, Check, Sun, Moon } from 'lucide-react';
+import { ArrowRight, User, Mail, Lock, Eye, EyeOff, Globe, Check, Sun, Moon } from 'lucide-react';
 import { Logo } from '../components/Logo';
 import { supabase } from "../supabaseClient";
 
@@ -20,6 +20,7 @@ export const Signup: React.FC<SignupProps> = ({ onLogin, onSwitchToLogin, onBack
     email: '',
     password: ''
   });
+  const [showPassword, setShowPassword] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -149,13 +150,24 @@ export const Signup: React.FC<SignupProps> = ({ onLogin, onSwitchToLogin, onBack
               <div className="relative group">
                 <Lock className="absolute top-3.5 left-4 h-5 w-5 text-zinc-400 group-focus-within:text-blue-500 transition-colors" />
                 <input
-                  type="password"
+                  type={showPassword ? "text" : "password"}
                   required
-                  className="w-full pl-12 pr-4 py-3 border border-white/10 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500 transition-all bg-black/20 text-white placeholder-zinc-600"
+                  className="w-full pl-12 pr-12 py-3 border border-white/10 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500 transition-all bg-black/20 text-white placeholder-zinc-600"
                   placeholder="Create Password"
                   value={formData.password}
                   onChange={(e) => setFormData({ ...formData, password: e.target.value })}
                 />
+                <button
+                  type="button"
+                  onClick={() => setShowPassword(!showPassword)}
+                  className="absolute top-3.5 right-4 text-zinc-400 hover:text-white transition-colors"
+                >
+                  {showPassword ? (
+                    <EyeOff className="h-5 w-5" />
+                  ) : (
+                    <Eye className="h-5 w-5" />
+                  )}
+                </button>
               </div>
             </div>
 
