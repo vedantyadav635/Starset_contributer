@@ -4,7 +4,7 @@ import { Button } from './Button';
 import { Menu, Activity, Database, X, Linkedin, Mail, Sun, Moon } from 'lucide-react';
 import { CookieConsent } from './CookieConsent';
 
-export type PublicPageType = 'home' | 'about' | 'contributors' | 'money' | 'cookies' | 'privacy' | 'terms' | 'acceptable-use';
+export type PublicPageType = 'home' | 'about' | 'contributors' | 'money';
 
 interface PublicLayoutProps {
    children: React.ReactNode;
@@ -77,38 +77,46 @@ export const PublicLayout: React.FC<PublicLayoutProps> = ({
 
          {/* Navigation */}
          <nav
-            className={`fixed top-0 w-full z-[100] transition-all duration-300 ease-in-out
-             ${showNav ? 'translate-y-0' : '-translate-y-full'}
-             ${isScrolled ? 'bg-transparent backdrop-blur-2xl' : 'bg-transparent backdrop-blur-none'}`}
+            className={`fixed top-0 w-full z-[100] transition-transform duration-300 ease-in-out bg-transparent pt-6
+             ${showNav ? 'translate-y-0' : '-translate-y-full'}`}
          >
-            <div className="max-w-7xl mx-auto px-4 md:px-6 h-14 md:h-16 flex items-center justify-between">
+            <div className="max-w-7xl mx-auto px-4 md:px-6 flex items-center justify-between relative">
 
+               {/* Left: Logo */}
                <div className="flex items-center gap-2 md:gap-3 cursor-pointer group" onClick={() => onNavigate('home')}>
                   <Logo className="h-10 w-10 md:h-14 md:w-14 transition-transform duration-300 group-hover:scale-110" />
-                  <span className="font-extrabold text-base md:text-lg tracking-[0.05em] text-white transition-colors uppercase whitespace-nowrap">Starset</span>
+                  <span className="font-extrabold text-lg md:text-xl tracking-[0.05em] text-white transition-colors uppercase whitespace-nowrap">Starset</span>
                </div>
 
-               {/* Desktop Center Navigation */}
-               <div className="hidden lg:flex items-center gap-1">
-                  {navLinks.map((item) => (
-                     <button
-                        key={item.id}
-                        onClick={() => onNavigate(item.id)}
-                        className={`px-4 py-2 text-sm font-medium transition-all duration-200 rounded-full ${currentPage === item.id ? 'bg-white/10 text-white' : 'text-zinc-400 hover:text-white hover:bg-white/5'}`}
-                     >
-                        {item.name}
-                     </button>
-                  ))}
+               {/* Right: Floating Capsule (Desktop) */}
+               <div className="hidden lg:flex items-center bg-white/5 backdrop-blur-xl border border-white/10 rounded-full p-1.5 shadow-2xl">
+                  {/* Links */}
+                  <div className="flex items-center pl-6 pr-4 gap-6">
+                     {navLinks.map((item) => (
+                        <button
+                           key={item.id}
+                           onClick={() => onNavigate(item.id)}
+                           className={`text-[11px] font-black tracking-widest uppercase transition-all duration-200 ${currentPage === item.id ? 'text-white' : 'text-zinc-400 hover:text-white'}`}
+                        >
+                           {item.name}
+                        </button>
+                     ))}
+                  </div>
+
+                  {/* Button */}
+                  <Button onClick={onEnterApp} className="bg-white text-black hover:bg-zinc-200 !rounded-full px-7 shadow-[0_0_20px_rgba(255,255,255,0.1)] transition-all text-[11px] font-black tracking-widest uppercase h-10 border-0">
+                     Start Earning
+                  </Button>
                </div>
 
-               {/* Right Actions */}
-               <div className="flex items-center gap-2 md:gap-3">
-                  <Button onClick={onEnterApp} size="sm" variant="glow" className="rounded-full px-3 md:px-6 shadow-none hover:shadow-lg transition-all text-[10px] md:text-sm h-8 md:h-10">
+               {/* Right Actions (Mobile) */}
+               <div className="flex items-center gap-2 md:gap-3 lg:hidden">
+                  <Button onClick={onEnterApp} size="sm" className="bg-white text-black hover:bg-zinc-200 !rounded-full px-4 shadow-[0_0_15px_rgba(255,255,255,0.1)] transition-all text-xs font-bold h-9">
                      Start Earning
                   </Button>
 
                   <button
-                     className="lg:hidden text-white p-2 hover:bg-white/5 rounded-full transition-colors"
+                     className="text-white p-2 hover:bg-white/5 rounded-full transition-colors"
                      onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
                      aria-label="Toggle Menu"
                   >
@@ -152,7 +160,7 @@ export const PublicLayout: React.FC<PublicLayoutProps> = ({
          {/* Professional Footer */}
          <footer className="pt-20 pb-10 px-6 relative z-10 border-t border-white/5 bg-[#020205]/40 backdrop-blur-xl mt-20">
             <div className="max-w-7xl mx-auto">
-               <div className="grid grid-cols-1 md:grid-cols-4 gap-12 md:gap-8 mb-16">
+               <div className="grid grid-cols-1 md:grid-cols-3 gap-12 md:gap-8 mb-16">
                   <div className="md:col-span-1 space-y-4 text-center md:text-left">
                      <div className="flex items-center justify-center md:justify-start gap-3 mb-4 group cursor-pointer" onClick={() => onNavigate('home')}>
                         <Logo className="h-10 w-10 transition-transform duration-300 group-hover:scale-110" />
@@ -191,16 +199,7 @@ export const PublicLayout: React.FC<PublicLayoutProps> = ({
                      </ul>
                   </div>
 
-                  {/* Legal */}
-                  <div className="space-y-4">
-                     <h3 className="font-bold text-white mb-4 hidden md:block">Legal</h3>
-                     <ul className="space-y-3">
-                        <li><button onClick={() => onNavigate('terms')} className="text-sm text-zinc-400 hover:text-blue-400 transition-colors">Terms of Service</button></li>
-                        <li><button onClick={() => onNavigate('privacy')} className="text-sm text-zinc-400 hover:text-blue-400 transition-colors">Privacy Policy</button></li>
-                        <li><button onClick={() => onNavigate('cookies')} className="text-sm text-zinc-400 hover:text-blue-400 transition-colors">Cookie Policy</button></li>
-                        <li><button onClick={() => onNavigate('acceptable-use')} className="text-sm text-zinc-400 hover:text-blue-400 transition-colors">Acceptable Use</button></li>
-                     </ul>
-                  </div>
+
 
                   {/* Help & Support */}
                   <div className="space-y-4">

@@ -158,12 +158,25 @@ export async function uploadToB2(
 // ─────────────────────────────────────────────────────────────────────────────
 // Filename generators
 // ─────────────────────────────────────────────────────────────────────────────
-export function generateAudioFileName(userId: string, taskId: string): string {
+export function generateAudioFileName(userId: string, taskId: string, language?: string): string {
     const timestamp = Date.now();
     const randomSuffix = Math.random().toString(36).substring(2, 8);
     // B2 filenames are case-sensitive and must be URL-encoded in headers.
     // We encode the components but keep the '/' separators.
     const safeUserId = encodeURIComponent(userId);
     const safeTaskId = encodeURIComponent(taskId);
-    return `audio/${safeUserId}/${safeTaskId}_${timestamp}_${randomSuffix}.webm`;
+
+    let prefix = 'audio';
+    if (language) {
+        const lowerLang = language.toLowerCase().trim();
+        if (lowerLang.includes('hindi')) {
+            prefix = 'audio/hindi audio';
+        } else if (lowerLang.includes('english')) {
+            prefix = 'audio/english audio';
+        } else {
+            prefix = `audio/${lowerLang} audio`;
+        }
+    }
+
+    return `${prefix}/${safeUserId}/${safeTaskId}_${timestamp}_${randomSuffix}.webm`;
 }

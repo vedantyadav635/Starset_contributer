@@ -20,6 +20,185 @@ body {
   color: #ffffff;
 }
 
+html.light {
+  color-scheme: light;
+  --foreground: #172033;
+  --background: #f6f8fc;
+  --surface: #ffffff;
+  --surface-soft: rgba(255, 255, 255, 0.78);
+  --surface-muted: #eef4ff;
+  --border: rgba(30, 41, 59, 0.12);
+  --heading: #0f172a;
+  --muted: #64748b;
+  --muted-strong: #475569;
+}
+
+html.light body {
+  background:
+    radial-gradient(circle at 14% 8%, rgba(59, 130, 246, 0.14), transparent 32%),
+    radial-gradient(circle at 88% 22%, rgba(16, 185, 129, 0.12), transparent 28%),
+    linear-gradient(180deg, #fbfdff 0%, #f5f8fd 44%, #eef4fb 100%);
+  color: var(--foreground);
+}
+
+html.light ::selection {
+  background-color: rgba(37, 99, 235, 0.18);
+  color: #0f172a;
+}
+
+html.light [class~="bg-[#020205]"],
+html.light [class~="bg-[#020205]/40"],
+html.light [class~="bg-[#09090b]"] {
+  background: transparent !important;
+}
+
+html.light [class*="#0a1d3a"] {
+  background-image:
+    radial-gradient(circle at 18% 22%, rgba(59, 130, 246, 0.18) 0%, transparent 42%),
+    radial-gradient(circle at 84% 70%, rgba(20, 184, 166, 0.12) 0%, transparent 38%),
+    linear-gradient(180deg, #fbfdff 0%, #f3f7fc 100%) !important;
+}
+
+html.light [class*="#ffffff03"] {
+  background-image:
+    linear-gradient(to right, rgba(15, 23, 42, 0.055) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(15, 23, 42, 0.055) 1px, transparent 1px) !important;
+}
+
+html.light [class~="bg-zinc-900"],
+html.light [class~="bg-zinc-900/40"],
+html.light [class~="bg-zinc-900/50"],
+html.light [class~="bg-zinc-900/60"],
+html.light [class~="bg-zinc-900/80"],
+html.light [class~="bg-zinc-900/90"],
+html.light [class~="bg-zinc-900/95"] {
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.96), rgba(248, 251, 255, 0.92)) !important;
+  box-shadow: 0 18px 48px -32px rgba(15, 23, 42, 0.34) !important;
+}
+
+html.light [class~="bg-zinc-800"] {
+  background-color: #e6edf7 !important;
+}
+
+html.light [class~="bg-white/5"],
+html.light [class~="bg-white/10"],
+html.light [class~="bg-white/20"],
+html.light [class~="bg-black/20"],
+html.light [class~="bg-black/30"],
+html.light [class~="bg-black/40"] {
+  background-color: var(--surface-soft) !important;
+}
+
+html.light nav[class~="bg-black/50"],
+html.light header[class~="bg-black/95"] {
+  background-color: rgba(255, 255, 255, 0.86) !important;
+}
+
+html.light [class~="min-h-screen"][class~="bg-black"] {
+  background:
+    radial-gradient(circle at top left, rgba(59, 130, 246, 0.14), transparent 34%),
+    linear-gradient(180deg, #fbfdff 0%, #f3f7fc 100%) !important;
+}
+
+html.light [class~="bg-black/60"],
+html.light [class~="bg-black/50"] {
+  background-color: rgba(15, 23, 42, 0.48) !important;
+}
+
+html.light [class~="bg-black/90"] {
+  background-color: rgba(15, 23, 42, 0.9) !important;
+  color: #ffffff !important;
+}
+
+html.light [class~="border-white/5"],
+html.light [class~="border-white/10"],
+html.light [class~="border-white/20"],
+html.light [class~="border-zinc-700"],
+html.light [class~="border-zinc-800"] {
+  border-color: var(--border) !important;
+}
+
+html.light [class~="text-white"] {
+  color: var(--heading) !important;
+}
+
+html.light [class~="text-zinc-300"],
+html.light [class~="text-stone-300"] {
+  color: var(--muted-strong) !important;
+}
+
+html.light [class~="text-zinc-400"],
+html.light [class~="text-zinc-500"],
+html.light [class~="text-zinc-600"],
+html.light [class~="text-zinc-700"],
+html.light [class~="text-stone-400"],
+html.light [class~="text-stone-500"] {
+  color: var(--muted) !important;
+}
+
+html.light [class~="bg-blue-500"][class~="text-white"],
+html.light [class~="bg-blue-600"][class~="text-white"],
+html.light [class~="bg-blue-700"][class~="text-white"],
+html.light [class~="bg-emerald-500"][class~="text-white"],
+html.light [class~="bg-emerald-600"][class~="text-white"],
+html.light [class~="bg-red-500"][class~="text-white"],
+html.light [class~="bg-red-600"][class~="text-white"],
+html.light [class~="bg-purple-600"][class~="text-white"],
+html.light [class~="bg-blue-500"] [class~="text-white"],
+html.light [class~="bg-blue-600"] [class~="text-white"],
+html.light [class~="bg-emerald-500"] [class~="text-white"],
+html.light [class~="bg-red-600"] [class~="text-white"],
+html.light [class~="bg-purple-600"] [class~="text-white"],
+html.light [class~="bg-black/60"][class~="text-white"],
+html.light [class~="bg-black/90"][class~="text-white"] {
+  color: #ffffff !important;
+}
+
+html.light [class~="hover:text-white"]:hover {
+  color: var(--heading) !important;
+}
+
+html.light [class~="hover:bg-white/5"]:hover,
+html.light [class~="hover:bg-white/10"]:hover,
+html.light [class~="hover:bg-white/20"]:hover {
+  background-color: var(--surface-muted) !important;
+}
+
+html.light [class~="hover:border-white/20"]:hover,
+html.light [class~="hover:border-white/30"]:hover {
+  border-color: rgba(37, 99, 235, 0.28) !important;
+}
+
+html.light input,
+html.light textarea,
+html.light select {
+  background-color: rgba(255, 255, 255, 0.94) !important;
+  border-color: var(--border) !important;
+  color: var(--heading) !important;
+}
+
+html.light [class~="focus:bg-black"]:focus,
+html.light [class~="focus:bg-black/50"]:focus {
+  background-color: #ffffff !important;
+}
+
+html.light input::placeholder,
+html.light textarea::placeholder {
+  color: #94a3b8 !important;
+}
+
+html.light option {
+  background-color: #ffffff;
+  color: var(--heading);
+}
+
+html.light .glass,
+html.light .glass-card {
+  background: rgba(255, 255, 255, 0.78);
+  border-color: var(--border);
+  box-shadow: 0 18px 48px -30px rgba(15, 23, 42, 0.32);
+}
+
 
 
 /* Hide scrollbar utility */
@@ -31,4 +210,34 @@ body {
   scrollbar-width: none;
 }
 
+@keyframes shimmer {
+  100% {
+    transform: translateX(200%) skewX(12deg);
+  }
+}
 
+@keyframes spin-slower {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes reverse-spin-slow {
+  from {
+    transform: rotate(360deg);
+  }
+  to {
+    transform: rotate(0deg);
+  }
+}
+
+.animate-spin-slower {
+  animation: spin-slower 20s linear infinite;
+}
+
+.animate-reverse-spin-slow {
+  animation: reverse-spin-slow 15s linear infinite;
+}
