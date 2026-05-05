@@ -235,7 +235,21 @@ router.post("/audio", upload.single('audio'), async (req: Request, res: Response
         }
 
         // ── 5. Upload to RAW bucket (validation passed) ───────────────────────
-        const fileName = generateAudioFileName(userId, taskId);
+        // Fetch task language to determine folder name
+        const { data: taskData, error: taskError } = await supabase
+            .from('tasks')
+            .select('language')
+            .eq('id', taskId)
+            .single();
+
+        if (taskError) {
+            console.error(`⚠️ [LANGUAGE_FETCH] Error fetching task ${taskId}:`, taskError.message);
+        }
+
+        const taskLanguage = taskData?.language?.trim();
+        console.log(`🌐 [SUBMISSION] Task language: "${taskLanguage}" for taskId: ${taskId}`);
+
+        const fileName = generateAudioFileName(userId, taskId, taskLanguage);
         const rawResult = await uploadToBucket(
             audioFile.buffer,
             fileName,

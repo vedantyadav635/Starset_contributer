@@ -12,10 +12,6 @@ const LandingPage = lazy(() => import('./pages/LandingPage').then(m => ({ defaul
 const About = lazy(() => import('./pages/About').then(m => ({ default: m.About })));
 const Contributors = lazy(() => import('./pages/Contributors').then(m => ({ default: m.Contributors })));
 const Money = lazy(() => import('./pages/Money').then(m => ({ default: m.Money })));
-const CookiePolicy = lazy(() => import('./pages/CookiePolicy').then(m => ({ default: m.CookiePolicy })));
-const PrivacyPolicy = lazy(() => import('./pages/PrivacyPolicy').then(m => ({ default: m.PrivacyPolicy })));
-const TermsOfService = lazy(() => import('./pages/TermsOfService').then(m => ({ default: m.TermsOfService })));
-const AcceptableUse = lazy(() => import('./pages/AcceptableUse').then(m => ({ default: m.AcceptableUse })));
 const AdminCreateTask = lazy(() => import('./pages/AdminCreateTask').then(m => ({ default: m.AdminCreateTask })));
 const AdminDashboard = lazy(() => import('./pages/AdminDashboard').then(m => ({ default: m.AdminDashboard })));
 const AdminSubmissions = lazy(() => import('./pages/AdminSubmissions').then(m => ({ default: m.AdminSubmissions })));
@@ -36,6 +32,7 @@ import { PublicPageType } from './components/PublicLayout';
 import { supabase } from "./supabaseClient"; // Supabase client for database operations
 import { Sidebar } from './components/Sidebar';
 import { Button } from "./components/Button";
+import { ThemeToggle } from './components/ThemeToggle';
 
 // ============================================================================
 // CONSTANTS
@@ -50,7 +47,7 @@ const KEEP_ALIVE_INTERVAL_MS = 9 * 60 * 1000; // 9 Minutes
 
 // Lighweight loading shim for Suspense
 const PageLoader = () => (
-  <div className="fixed inset-0 flex items-center justify-center bg-[#020205] z-[1000]">
+  <div className="fixed inset-0 flex items-center justify-center bg-white dark:bg-[#020205] z-[1000]">
     <div className="relative">
       <div className="h-12 w-12 rounded-full border-t-2 border-b-2 border-blue-500 animate-spin"></div>
       <div className="absolute inset-0 h-12 w-12 rounded-full border-t-2 border-b-2 border-blue-500/20"></div>
@@ -389,11 +386,6 @@ const App: React.FC = () => {
     setIsAuthenticated(false);
   };
 
-  // Ensure dark mode is active by default
-  useEffect(() => {
-    document.documentElement.classList.add('dark');
-  }, []);
-
   /**
    * Handle user login after authentication
    * 
@@ -572,6 +564,15 @@ const App: React.FC = () => {
 
   // Render logic
   const renderMainContent = () => {
+    const renderAuthView = (content: React.ReactNode) => (
+      <>
+        <div className="fixed right-4 top-4 z-[200]">
+          <ThemeToggle />
+        </div>
+        {content}
+      </>
+    );
+
     if (viewMode === 'public') {
       const publicProps = {
         onNavigate: handlePublicNavigate,
@@ -585,14 +586,6 @@ const App: React.FC = () => {
           return <Contributors {...publicProps} onEnterApp={handleStartSignup} />;
         case 'money':
           return <Money {...publicProps} onEnterApp={handleStartSignup} />;
-        case 'cookies':
-          return <CookiePolicy {...publicProps} />;
-        case 'privacy':
-          return <PrivacyPolicy {...publicProps} />;
-        case 'terms':
-          return <TermsOfService {...publicProps} />;
-        case 'acceptable-use':
-          return <AcceptableUse {...publicProps} />;
         default:
           return <LandingPage onNavigate={handlePublicNavigate} onEnterApp={handleEnterApp} onStartSignup={handleStartSignup} />;
       }
@@ -600,7 +593,7 @@ const App: React.FC = () => {
 
     if (!isAuthenticated) {
       if (authMode === 'forgot-password') {
-        return (
+        return renderAuthView(
           <ForgotPassword
             onBackToLogin={() => setAuthMode('login')}
             onBackHome={handleExitApp}
@@ -608,7 +601,7 @@ const App: React.FC = () => {
         );
       }
       if (authMode === 'reset-password') {
-        return (
+        return renderAuthView(
           <ResetPassword
             onBackToLogin={() => {
               setAuthMode('login');
@@ -618,7 +611,7 @@ const App: React.FC = () => {
         );
       }
       if (authMode === 'signup') {
-        return (
+        return renderAuthView(
           <Signup
             onLogin={() => handleLogin('contributor')}
             onSwitchToLogin={() => setAuthMode('login')}
@@ -626,7 +619,7 @@ const App: React.FC = () => {
           />
         );
       }
-      return (
+      return renderAuthView(
         <Login
           onLogin={handleLogin}
           onSwitchToSignup={() => setAuthMode('signup')}
@@ -1004,6 +997,7 @@ const App: React.FC = () => {
               <span className="font-extrabold text-base text-[#121212] dark:text-white tracking-[0.1em] uppercase whitespace-nowrap">STARSET</span>
             </div>
             <div className="flex items-center gap-3">
+              <ThemeToggle />
               <button
                 onClick={() => setIsMobileNavOpen(true)}
                 className="p-2 text-stone-600 dark:text-stone-300 hover:bg-stone-100 dark:hover:bg-white/10 rounded-lg transition-colors"

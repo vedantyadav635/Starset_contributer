@@ -16,7 +16,7 @@ export const About: React.FC<PageProps> = ({ onNavigate, onEnterApp }) => {
                   <span className="text-blue-400 font-bold uppercase tracking-widest text-xs mb-2 block">Our Story</span>
                   <h1 className="text-4xl md:text-6xl font-bold text-white mb-6">Humans Teaching Machines</h1>
                   <p className="text-zinc-400 max-w-3xl mx-auto text-xl leading-relaxed">
-                     AI isn't magic—it learns from people like you. Starset connects real people with the world's smartest AI companies. You provide the knowledge, and the AI gets smarter.
+                     AI isn't magic—it learns from people like you. Starset connects real people with the world's smartest AI companies. You provide the knowledge, and the AI gets smarter. 
                   </p>
                </div>
 

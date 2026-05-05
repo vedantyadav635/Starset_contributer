@@ -42,9 +42,19 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onEnterApp, onStartSig
       <PublicLayout currentPage="home" onNavigate={onNavigate} onEnterApp={onEnterApp}>
 
          {/* --- HERO SECTION --- */}
-         <section className="relative z-10 pt-8 md:pt-12 pb-12 md:pb-24 px-4 md:px-6 overflow-hidden perspective-1000">
-            {/* Abstract Background Shapes — desktop only to avoid mobile GPU drain */}
-            <div className="hidden md:block absolute top-0 left-1/2 -translate-x-1/2 w-[1000px] h-[600px] bg-gradient-to-b from-blue-500/10 to-transparent rounded-[100%] blur-[80px] -z-10 pointer-events-none"></div>
+         <section className="relative z-10 -mt-20 pt-28 md:pt-32 pb-12 md:pb-24 px-4 md:px-6 overflow-hidden perspective-1000">
+            {/* Abstract Background Shapes */}
+            <div className="hidden md:block absolute -top-40 left-1/2 -translate-x-1/2 w-[1200px] h-[800px] bg-gradient-to-b from-blue-600/15 via-purple-600/10 to-transparent rounded-[100%] blur-[100px] -z-10 pointer-events-none mix-blend-screen"></div>
+            <motion.div 
+               animate={{ y: [0, -20, 0], opacity: [0.3, 0.5, 0.3] }} 
+               transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
+               className="absolute top-20 left-[10%] w-72 h-72 bg-blue-500/20 rounded-full blur-[100px] -z-10 pointer-events-none"
+            />
+            <motion.div 
+               animate={{ y: [0, 20, 0], opacity: [0.3, 0.6, 0.3] }} 
+               transition={{ duration: 10, repeat: Infinity, ease: "easeInOut", delay: 1 }}
+               className="absolute bottom-20 right-[10%] w-96 h-96 bg-purple-500/20 rounded-full blur-[120px] -z-10 pointer-events-none"
+            />
 
             <div className="max-w-7xl mx-auto grid lg:grid-cols-2 gap-12 lg:gap-8 items-center relative z-20">
 
@@ -57,11 +67,19 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onEnterApp, onStartSig
                >
 
 
-                  <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-extrabold tracking-[-0.03em] leading-[1.1] text-white relative drop-shadow-2xl px-2 sm:px-0">
-                     Make Money <br />
-                     <span className="text-transparent bg-clip-text bg-gradient-to-r from-purple-400 via-blue-400 to-cyan-300 bg-[length:200%_auto] ">
-                        Teaching AI.
+                  <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-extrabold tracking-[-0.04em] leading-[1.05] text-white relative px-2 sm:px-0">
+                     <span className="relative inline-block">
+                        Make Money
+                        <div className="absolute -inset-2 bg-gradient-to-r from-blue-500/20 to-purple-500/20 blur-xl -z-10"></div>
                      </span>
+                     <br />
+                     <motion.span 
+                        animate={{ backgroundPosition: ['0% 50%', '100% 50%', '0% 50%'] }}
+                        transition={{ duration: 5, repeat: Infinity, ease: 'linear' }}
+                        className="text-transparent bg-clip-text bg-gradient-to-r from-indigo-400 via-purple-400 to-cyan-400 bg-[length:200%_auto] inline-block pb-2 drop-shadow-lg"
+                     >
+                        Teaching AI.
+                     </motion.span>
                   </h1>
 
                   <p className="text-lg md:text-2xl text-zinc-300 max-w-xl mx-auto lg:mx-0 leading-relaxed font-medium px-4 sm:px-0">
@@ -69,25 +87,18 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onEnterApp, onStartSig
                   </p>
 
                   <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start px-4 sm:px-0">
-                     <div className="relative group w-full sm:w-auto hover:-translate-y-1 transition-transform">
-                        <div className="absolute -inset-1 bg-gradient-to-r from-blue-600 to-indigo-600 rounded-xl blur opacity-25 group-hover:opacity-60 transition duration-500 "></div>
-                        <Button onClick={onStartSignup} size="lg" variant="glow" className="relative h-14 md:h-16 px-10 text-lg md:text-xl w-full sm:w-auto font-bold shadow-2xl">
-                           Start Earning <ArrowRight className="ml-2 h-6 w-6" />
+                     <div className="relative group w-full sm:w-auto hover:-translate-y-1 transition-transform duration-300">
+                        <div className="absolute -inset-1.5 bg-gradient-to-r from-blue-600 via-purple-600 to-cyan-500 rounded-xl blur-lg opacity-40 group-hover:opacity-80 transition duration-500 animate-pulse"></div>
+                        <Button onClick={onStartSignup} size="lg" className="relative h-14 md:h-16 px-10 text-lg md:text-xl w-full sm:w-auto font-bold shadow-2xl bg-white text-black hover:bg-zinc-100 border-0 rounded-xl overflow-hidden group">
+                           <span className="relative z-10 flex items-center">Start Earning <ArrowRight className="ml-2 h-6 w-6 group-hover:translate-x-1 transition-transform" /></span>
+                           <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/40 to-transparent -translate-x-full group-hover:animate-[shimmer_1.5s_infinite] skew-x-12"></div>
                         </Button>
                      </div>
-                     <Button onClick={() => onNavigate('about')} size="lg" variant="ghost" className="h-14 md:h-16 px-8 text-lg md:text-xl border-2 border-white/10 hover:border-white/30 w-full sm:w-auto hover:bg-white/5 backdrop-blur-sm transition-all hover:shadow-xl hover:shadow-blue-500/10 active:scale-95">
+                     <Button onClick={() => onNavigate('about')} size="lg" variant="ghost" className="h-14 md:h-16 px-8 text-lg md:text-xl border-2 border-white/10 hover:border-white/30 w-full sm:w-auto bg-white/5 hover:bg-white/10 backdrop-blur-md transition-all hover:shadow-[0_0_20px_rgba(255,255,255,0.1)] active:scale-95 rounded-xl">
                         How it Works
                      </Button>
                   </div>
 
-                  <div className="flex flex-wrap justify-center lg:justify-start gap-6 pt-4 text-xs font-bold text-zinc-500 font-mono tracking-wider">
-                     <div className="flex items-center gap-2 bg-black/20 px-3 py-1.5 rounded-lg border border-white/5">
-                        <ShieldCheck className="h-4 w-4 text-blue-500" /> SECURE PAYMENTS
-                     </div>
-                     <div className="flex items-center gap-2 bg-black/20 px-3 py-1.5 rounded-lg border border-white/5">
-                        <Lock className="h-4 w-4 text-blue-500" /> NO EXPERIENCE
-                     </div>
-                  </div>
                </motion.div>
 
                {/* Right Column: Nexus Visual - Hidden on mobile */}
@@ -216,51 +227,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onEnterApp, onStartSig
             </div>
          </section>
 
-         {/* --- LIVE PAYOUTS TICKER --- */}
-         <section className="relative overflow-hidden" style={{ contain: 'layout paint' }}>
-            {/* Reduced from 20 to 10 ticker items for mobile performance */}
 
-            <div className="relative py-10 overflow-hidden z-20">
-               <div className="absolute inset-0 bg-transparent z-10 pointer-events-none"></div>
-               {/* Reduced from 20 to 10 ticker items for mobile performance */}
-               <div className="flex animate-marquee-infinite whitespace-nowrap w-fit">
-                  {/* Set 1 */}
-                  <div className="flex gap-6 pr-6">
-                     {[...Array(10)].map((_, i) => (
-                        <div key={i} className="flex items-center gap-3 bg-white/5 border border-white/5 rounded-full pl-2 pr-6 py-2 backdrop-blur-sm hover:bg-white/10 transition-colors cursor-default">
-                           <div className={`h-10 w-10 rounded-full flex items-center justify-center font-bold text-xs text-white shadow-lg bg-gradient-to-br ${['from-purple-500 to-indigo-600', 'from-blue-500 to-cyan-500', 'from-sky-500 to-blue-600', 'from-orange-500 to-red-500', 'from-pink-500 to-rose-500'][i % 5]
-                              }`}>
-                              {['MK', 'JD', 'AS', 'TR', 'PL', 'RS', 'BW', 'NK', 'ML', 'TH'][i % 10]}
-                           </div>
-                           <div className="flex flex-col">
-                              <div className="text-white text-sm font-bold flex items-center gap-1">
-                                 Just Paid <span className="text-blue-400">₹{[320, 540, 210, 780, 450, 890, 120, 670, 310, 950][i % 10]}</span>
-                              </div>
-                              <span className="text-[10px] text-zinc-500 font-medium uppercase tracking-wide">via UPI &bull; {[3, 12, 27, 8, 45, 2, 19, 31, 5, 14][i % 10]}m ago</span>
-                           </div>
-                        </div>
-                     ))}
-                  </div>
-                  {/* Set 2 (Identical Copy) */}
-                  <div className="flex gap-6 pr-6">
-                     {[...Array(10)].map((_, i) => (
-                        <div key={`dup-${i}`} className="flex items-center gap-3 bg-white/5 border border-white/5 rounded-full pl-2 pr-6 py-2 backdrop-blur-sm cursor-default">
-                           <div className={`h-10 w-10 rounded-full flex items-center justify-center font-bold text-xs text-white shadow-lg bg-gradient-to-br ${['from-purple-500 to-indigo-600', 'from-blue-500 to-cyan-500', 'from-sky-500 to-blue-600', 'from-orange-500 to-red-500', 'from-pink-500 to-rose-500'][i % 5]
-                              }`}>
-                              {['MK', 'JD', 'AS', 'TR', 'PL', 'RS', 'BW', 'NK', 'ML', 'TH'][i % 10]}
-                           </div>
-                           <div className="flex flex-col">
-                              <div className="text-white text-sm font-bold flex items-center gap-1">
-                                 Just Paid <span className="text-blue-400">₹{[320, 540, 210, 780, 450, 890, 120, 670, 310, 950][i % 10]}</span>
-                              </div>
-                              <span className="text-[10px] text-zinc-500 font-medium uppercase tracking-wide">via UPI &bull; {[3, 12, 27, 8, 45, 2, 19, 31, 5, 14][i % 10]}m ago</span>
-                           </div>
-                        </div>
-                     ))}
-                  </div>
-               </div>
-            </div>
-         </section>
 
          {/* --- STATS SECTION (REPLACES TELEMETRY) --- */}
          <section className="py-14 md:py-20 relative overflow-hidden">

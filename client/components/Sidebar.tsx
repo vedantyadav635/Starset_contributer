@@ -18,6 +18,7 @@ import {
 import { PageView, UserRole } from '../types';
 import { Logo } from './Logo';
 import { useAuth } from '../context/AuthContext';
+import { ThemeToggle } from './ThemeToggle';
 
 interface SidebarProps {
   currentPage: PageView;
@@ -81,10 +82,10 @@ export const Sidebar: React.FC<SidebarProps> = ({
         <div className="flex flex-col h-full relative">
 
           {/* Simplified Toggle — Locked to 48px center axis */}
-          <div className="flex items-center justify-start py-8 px-4">
+          <div className={`flex items-center py-6 px-4 gap-3 ${isCollapsed ? 'flex-col justify-center' : 'justify-between'}`}>
             <button
               onClick={toggleSidebar}
-              className="h-10 w-10 ml-3 flex items-center justify-center rounded-xl bg-white/10 text-zinc-500 hover:text-white transition-all shadow-sm active:scale-95"
+              className="h-10 w-10 flex items-center justify-center rounded-xl bg-white/10 text-zinc-500 hover:text-white transition-all shadow-sm active:scale-95"
               title={isCollapsed ? "Open Sidebar" : "Close Sidebar"}
             >
               {isCollapsed ? (
@@ -93,6 +94,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
                 <PanelLeftClose className="h-5 w-5" />
               )}
             </button>
+            <ThemeToggle />
           </div>
 
           {/* Navigation */}
