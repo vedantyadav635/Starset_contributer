@@ -91,18 +91,7 @@ export const Earnings: React.FC = () => {
         </Button>
       </div>
 
-      {/* Technical Issue Alert */}
-      <div className="bg-amber-500/10 border border-amber-500/20 rounded-2xl p-4 flex items-start gap-4 animate-pulse">
-        <div className="p-2 bg-amber-500/20 rounded-lg">
-          <AlertCircle className="h-5 w-5 text-amber-500" />
-        </div>
-        <div>
-          <h4 className="text-sm font-bold text-amber-500 uppercase tracking-wider">System Update</h4>
-          <p className="text-xs md:text-sm text-amber-400/80 mt-1 leading-relaxed">
-            We are currently facing a technical issue with our automated payout system. Due to this, all payments are being processed <span className="font-bold underline">manually</span> by our team to ensure your funds are delivered safely. We appreciate your patience.
-          </p>
-        </div>
-      </div>
+
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 md:gap-8">
         {/* Balance Card */}

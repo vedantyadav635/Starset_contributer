@@ -148,7 +148,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onEnterApp, onStartSig
                      </div>
 
                      {/* Left Node: YOU */}
-                     <div className="relative z-10 flex flex-col items-center gap-4 group">
+                     <div className="relative z-10 flex flex-col items-center group">
                         <div className="w-16 h-16 lg:w-20 lg:h-20 rounded-2xl bg-[#0a0a0a] border border-blue-500/50 flex items-center justify-center shadow-[0_0_40px_rgba(59,130,246,0.3)] group-hover:shadow-[0_0_60px_rgba(59,130,246,0.5)] transition-all duration-300 relative overflow-hidden">
                            <div className="absolute inset-0 bg-blue-500/10 animate-pulse"></div>
                            <div className="relative z-10 flex flex-col items-center">
@@ -158,7 +158,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onEnterApp, onStartSig
                            {/* Scan line effect */}
                            <div className="absolute top-0 left-0 w-full h-1 bg-blue-400/50 blur-sm " style={{ animationDuration: '2s', animationIterationCount: 'infinite' }}></div>
                         </div>
-                        <div className="px-3 py-1 bg-blue-950/50 border border-blue-500/30 rounded-full text-[10px] font-bold text-blue-400 tracking-widest uppercase shadow-[0_0_20px_rgba(59,130,246,0.2)]">
+                        <div className="absolute top-[calc(100%+16px)] px-3 py-1 bg-blue-950/50 border border-blue-500/30 rounded-full text-[10px] font-bold text-blue-400 tracking-widest uppercase shadow-[0_0_20px_rgba(59,130,246,0.2)] whitespace-nowrap">
                            YOU
                         </div>
                      </div>
@@ -204,7 +204,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onEnterApp, onStartSig
                      </div>
 
                      {/* Right Node: SMART AI */}
-                     <div className="relative z-10 flex flex-col items-center gap-4 group">
+                     <div className="relative z-10 flex flex-col items-center group">
                         <div className="w-16 h-16 lg:w-20 lg:h-20 rounded-2xl bg-[#0a0a0a] border border-purple-500/50 flex items-center justify-center shadow-[0_0_40px_rgba(168,85,247,0.3)] group-hover:shadow-[0_0_60px_rgba(168,85,247,0.5)] transition-all duration-300 relative overflow-hidden">
                            <div className="absolute inset-0 bg-purple-500/10 animate-pulse" style={{ animationDelay: '1s' }}></div>
                            <Cpu className="w-6 h-6 lg:w-8 lg:h-8 text-purple-400 relative z-10" />
@@ -216,7 +216,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onEnterApp, onStartSig
                               <div className="absolute left-1/2 top-0 w-px h-full bg-purple-500/50"></div>
                            </div>
                         </div>
-                        <div className="px-3 py-1 bg-purple-950/50 border border-purple-500/30 rounded-full text-[10px] font-bold text-purple-400 tracking-widest uppercase shadow-[0_0_20px_rgba(168,85,247,0.2)]">
+                        <div className="absolute top-[calc(100%+16px)] px-3 py-1 bg-purple-950/50 border border-purple-500/30 rounded-full text-[10px] font-bold text-purple-400 tracking-widest uppercase shadow-[0_0_20px_rgba(168,85,247,0.2)] whitespace-nowrap">
                            SMART AI
                         </div>
                      </div>

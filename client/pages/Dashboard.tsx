@@ -132,9 +132,6 @@ export const Dashboard: React.FC<DashboardProps> = ({ onNavigate }) => {
           <Button variant="secondary" onClick={() => onNavigate('tasks')} size="sm" className="bg-white/10 text-white border-white/10 hover:bg-white/20">
             View Data Tasks
           </Button>
-          <Button onClick={() => onNavigate('earnings')} size="sm" variant="black">
-            Compensation Details
-          </Button>
         </div>
       </div>
 
@@ -155,7 +152,7 @@ export const Dashboard: React.FC<DashboardProps> = ({ onNavigate }) => {
       </div>
 
       {/* Quick Actions */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-8">
+      <div className="grid grid-cols-1 gap-6 mt-8">
         <div className="bg-zinc-900 text-white rounded-[2.5rem] border border-white/10 p-8 md:p-10 relative overflow-hidden group cursor-pointer" onClick={() => onNavigate('tasks')}>
           <div className="absolute top-0 right-0 w-[60%] h-full bg-gradient-to-l from-blue-600/20 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700"></div>
           <div className="relative z-10">
@@ -166,20 +163,6 @@ export const Dashboard: React.FC<DashboardProps> = ({ onNavigate }) => {
             <p className="text-stone-400 font-medium mb-6">Contribute high-quality data to the network.</p>
             <div className="inline-flex items-center text-sm font-black uppercase tracking-widest text-blue-400 group-hover:translate-x-2 transition-transform">
               Launch Terminal <ArrowRight className="ml-2 h-4 w-4" />
-            </div>
-          </div>
-        </div>
-
-        <div className="bg-zinc-900 rounded-[2.5rem] border border-white/10 p-8 md:p-10 relative overflow-hidden group cursor-pointer" onClick={() => onNavigate('earnings')}>
-          <div className="absolute top-0 right-0 w-[60%] h-full bg-gradient-to-l from-emerald-600/10 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700"></div>
-          <div className="relative z-10">
-            <div className="h-14 w-14 bg-emerald-900/20 rounded-2xl flex items-center justify-center text-emerald-400 mb-6 group-hover:scale-110 transition-transform duration-500">
-              <BarChart3 className="h-7 w-7" />
-            </div>
-            <h3 className="text-2xl font-black mb-2 tracking-tight text-white">Financial Yield</h3>
-            <p className="text-stone-400 font-medium mb-6">Track your contribution rewards.</p>
-            <div className="inline-flex items-center text-sm font-black uppercase tracking-widest text-emerald-400 group-hover:translate-x-2 transition-transform">
-              View Audit <ArrowRight className="ml-2 h-4 w-4" />
             </div>
           </div>
         </div>
