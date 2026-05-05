@@ -161,15 +161,15 @@ export const PublicLayout: React.FC<PublicLayoutProps> = ({
          <footer className="pt-20 pb-10 px-6 relative z-10 border-t border-white/5 bg-[#020205]/40 backdrop-blur-xl mt-20">
             <div className="max-w-7xl mx-auto">
                <div className="grid grid-cols-1 md:grid-cols-3 gap-12 md:gap-8 mb-16">
-                  <div className="md:col-span-1 space-y-4 text-center md:text-left">
-                     <div className="flex items-center justify-center md:justify-start gap-3 mb-4 group cursor-pointer" onClick={() => onNavigate('home')}>
+                  <div className="md:col-span-1 space-y-4 text-center md:text-left flex flex-col items-center md:items-start">
+                     <div className="flex items-center gap-3 mb-4 group cursor-pointer" onClick={() => onNavigate('home')}>
                         <Logo className="h-10 w-10 transition-transform duration-300 group-hover:scale-110" />
                         <span className="font-extrabold text-white uppercase tracking-wider text-sm">Starset</span>
                      </div>
-                     <p className="text-sm text-zinc-400 leading-relaxed max-w-xs transition-colors">
+                     <p className="text-sm text-zinc-400 leading-relaxed max-w-xs mx-auto md:mx-0 transition-colors">
                         Connecting real people with the world's smartest AI companies. Turn your spare time into income.
                      </p>
-                     <div className="flex justify-center md:justify-start gap-4 pt-2">
+                     <div className="flex gap-4 pt-2">
                         <a href="#" className="h-10 w-10 rounded-full bg-white/5 border border-white/10 flex items-center justify-center text-zinc-400 hover:text-white hover:bg-white/10 hover:border-blue-500/50 transition-all">
                            <svg viewBox="0 0 24 24" aria-hidden="true" className="h-4 w-4 fill-current">
                               <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"></path>
@@ -183,8 +183,8 @@ export const PublicLayout: React.FC<PublicLayoutProps> = ({
                   </div>
 
                   {/* Navigation */}
-                  <div className="space-y-4">
-                     <h3 className="font-bold text-white mb-4 hidden md:block">Platform</h3>
+                  <div className="space-y-4 text-center md:text-left">
+                     <h3 className="font-bold text-white mb-4">Platform</h3>
                      <ul className="space-y-3">
                         {navLinks.map((item) => (
                            <li key={item.id}>
@@ -199,16 +199,13 @@ export const PublicLayout: React.FC<PublicLayoutProps> = ({
                      </ul>
                   </div>
 
-
-
                   {/* Help & Support */}
-                  <div className="space-y-4">
-                     <h3 className="font-bold text-white mb-4 hidden md:block">Contact</h3>
-                     <ul className="space-y-3">
-                        <li><a href="#" className="text-sm text-zinc-400 hover:text-blue-400 flex items-center gap-2 transition-colors"><Mail className="h-4 w-4" /> support@starset.intelligence</a></li>
+                  <div className="space-y-4 text-center md:text-left flex flex-col items-center md:items-start">
+                     <h3 className="font-bold text-white mb-4">Contact</h3>
+                     <ul className="space-y-3 w-full max-w-[200px] md:max-w-none flex flex-col items-center md:items-start">
+                        <li><a href="#" className="text-sm text-zinc-400 hover:text-blue-400 flex items-center justify-center md:justify-start gap-2 transition-colors"><Mail className="h-4 w-4" /> support@starset.intelligence</a></li>
 
-
-                        <li className="pt-2">
+                        <li className="pt-2 w-full">
                            <Button onClick={onEnterApp} variant="outline" size="sm" className="w-full justify-center bg-transparent border-white/10 hover:bg-white/5 text-white">
                               Login to Terminal
                            </Button>
