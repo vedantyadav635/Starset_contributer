@@ -1,0 +1,21 @@
+{
+  "name": "Starset Intelligence",
+  "short_name": "Starset",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#020205",
+  "theme_color": "#2563eb",
+  "icons": [
+    {
+      "src": "/logo.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "/logo.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ],
+  "description": "Starset Intelligence: The world's most innovative AI data community."
+}

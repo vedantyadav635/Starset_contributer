@@ -394,62 +394,131 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onEnterApp, onStartSig
                transition={{ duration: 0.8 }}
                className="max-w-7xl mx-auto relative z-10"
             >
-               <div className="flex flex-col md:flex-row justify-between items-start md:items-end mb-6 md:mb-16 gap-3 md:gap-6">
-                  <div>
-                     <span className="text-purple-400 font-bold uppercase tracking-widest text-xs mb-1 md:mb-3 block">Task Types</span>
-                     <h2 className="text-2xl md:text-5xl font-bold text-white">What Will You Do?</h2>
+               <div className="flex flex-col md:flex-row justify-between items-start md:items-end mb-12 md:mb-20 gap-6">
+                  <div className="max-w-2xl">
+                     <span className="text-blue-600 dark:text-blue-400 font-black uppercase tracking-widest text-[10px] mb-3 block">Contributor Journey</span>
+                     <h2 className="text-4xl md:text-6xl font-black text-slate-900 dark:text-white tracking-tighter leading-tight">
+                        What Will <br className="md:hidden" /> You Do?
+                     </h2>
                   </div>
-                  <button onClick={() => onNavigate('contributors')} className="flex items-center justify-center px-6 md:px-8 h-10 md:h-12 bg-transparent text-white border border-white/20 rounded-md hover:bg-white/5 transition-colors text-sm">See All Tasks</button>
+                  <Button 
+                     variant="outline"
+                     onClick={() => onNavigate('contributors')} 
+                     className="btn-pill h-12 md:h-14 px-8 border-slate-200 dark:border-white/10 dark:text-white hover:bg-slate-50 dark:hover:bg-white/5"
+                  >
+                     Explore All Tasks
+                  </Button>
                </div>
 
-               <div className="flex overflow-x-auto pt-10 pb-8 gap-6 snap-x snap-mandatory no-scrollbar -mx-4 px-4 md:grid md:grid-cols-2 lg:grid-cols-3 md:mx-0 md:px-0">
-                  {/* Task Card 1 */}
-                  <div className="group bg-white/5 backdrop-blur-md p-1 rounded-3xl border border-white/10 hover:border-blue-500/50 hover:shadow-2xl hover:shadow-blue-500/10 transition-all duration-300 md:hover:-translate-y-2 flex-shrink-0 w-[82vw] sm:w-[350px] md:w-auto snap-center">
-                     <div className="bg-transparent rounded-[22px] p-4 md:p-6 h-full flex flex-col">
-                        <div className="h-24 md:h-48 bg-blue-900/10 rounded-2xl mb-3 md:mb-6 flex items-center justify-center relative overflow-hidden">
-                           <div className="absolute inset-0 bg-gradient-to-tr from-blue-500/10 to-transparent"></div>
-                           <Mic className="h-10 w-10 md:h-16 md:w-16 text-blue-400 group-hover:scale-110 transition-transform duration-500 drop-shadow-lg" />
-                           <div className="absolute bottom-2 right-2 md:bottom-4 md:right-4 bg-slate-900 dark:bg-black/90 px-2 md:px-3 py-1 md:py-1.5 rounded-lg text-[10px] md:text-xs font-bold shadow-lg border border-white/10 backdrop-blur-sm text-white">Avg: ₹150/hr</div>
+               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                  {/* Task Card 1: Audio */}
+                  <motion.div 
+                     whileHover={{ y: -5 }}
+                     className="bg-white dark:bg-zinc-900 rounded-[32px] p-8 border border-slate-200 dark:border-white/10 shadow-luel group cursor-pointer"
+                  >
+                     <div className="h-56 bg-slate-50 dark:bg-zinc-950 rounded-2xl mb-8 flex items-center justify-center relative overflow-hidden">
+                        <div className="absolute inset-0 bg-luel-dots opacity-20"></div>
+                        
+                        {/* Audio Waveform Animation */}
+                        <div className="flex items-end gap-1 h-12">
+                           {[...Array(8)].map((_, i) => (
+                              <motion.div
+                                 key={i}
+                                 animate={{ 
+                                    height: [10, Math.random() * 40 + 10, 10]
+                                 }}
+                                 transition={{ 
+                                    duration: 1, 
+                                    repeat: Infinity, 
+                                    delay: i * 0.1 
+                                 }}
+                                 className="w-1.5 bg-blue-500 rounded-full"
+                              />
+                           ))}
                         </div>
-                        <h3 className="text-lg md:text-2xl font-bold text-white mb-1 md:mb-2">Audio Recording</h3>
-                        <p className="text-sm md:text-base text-zinc-500 mb-3 md:mb-6 flex-1">Read short phrases or record conversations to help AI understand speech.</p>
-                        <div className="flex flex-wrap gap-2 mt-auto">
-                           <span className="px-3 py-1 bg-white/5 rounded-md text-[10px] uppercase font-bold text-zinc-400 border border-white/10">Voice Assistant</span>
-                        </div>
-                     </div>
-                  </div>
 
-                  {/* Task Card 2 */}
-                  <div className="group bg-white/5 backdrop-blur-md p-1 rounded-3xl border border-white/10 hover:border-purple-500/50 hover:shadow-2xl hover:shadow-purple-500/10 transition-all duration-300 md:hover:-translate-y-2 flex-shrink-0 w-[82vw] sm:w-[350px] md:w-auto snap-center">
-                     <div className="bg-transparent rounded-[22px] p-4 md:p-6 h-full flex flex-col">
-                        <div className="h-24 md:h-48 bg-purple-900/10 rounded-2xl mb-3 md:mb-6 flex items-center justify-center relative overflow-hidden">
-                           <div className="absolute inset-0 bg-gradient-to-tr from-purple-500/10 to-transparent"></div>
-                           <ImageIcon className="h-10 w-10 md:h-16 md:w-16 text-purple-400 group-hover:scale-110 transition-transform duration-500 drop-shadow-lg" />
-                           <div className="absolute bottom-2 right-2 md:bottom-4 md:right-4 bg-slate-900 dark:bg-black/90 px-2 md:px-3 py-1 md:py-1.5 rounded-lg text-[10px] md:text-xs font-bold shadow-lg border border-white/10 backdrop-blur-sm text-white">Avg: ₹120/hr</div>
-                        </div>
-                        <h3 className="text-lg md:text-2xl font-bold text-white mb-1 md:mb-2">Image Annotation</h3>
-                        <p className="text-sm md:text-base text-zinc-500 mb-3 md:mb-6 flex-1">Draw boxes around objects or describe images to train computer vision.</p>
-                        <div className="flex flex-wrap gap-2 mt-auto">
-                           <span className="px-3 py-1 bg-white/5 rounded-md text-[10px] uppercase font-bold text-zinc-400 border border-white/10">Self-Driving</span>
+                        <div className="absolute top-4 right-4 bg-white dark:bg-zinc-900 px-3 py-1.5 rounded-full text-[10px] font-black shadow-sm border border-slate-100 dark:border-white/5 text-slate-900 dark:text-white">
+                           Avg: ₹150/hr
                         </div>
                      </div>
-                  </div>
+                     <h3 className="text-2xl font-black text-slate-900 dark:text-white mb-3 tracking-tight">Audio Recording</h3>
+                     <p className="text-base text-slate-500 dark:text-zinc-400 mb-8 leading-relaxed">
+                        Read short phrases or record conversations to help AI understand speech across languages.
+                     </p>
+                     <div className="flex items-center gap-2">
+                        <span className="px-4 py-1.5 bg-slate-50 dark:bg-white/5 rounded-full text-[10px] font-black text-slate-500 dark:text-zinc-500 uppercase tracking-widest border border-slate-100 dark:border-white/5">
+                           Voice Assistant
+                        </span>
+                     </div>
+                  </motion.div>
 
-                  {/* Task Card 3 */}
-                  <div className="group bg-white/5 backdrop-blur-md p-1 rounded-3xl border border-white/10 hover:border-blue-500/50 hover:shadow-2xl hover:shadow-blue-500/10 transition-all duration-300 md:hover:-translate-y-2 flex-shrink-0 w-[82vw] sm:w-[350px] md:w-auto snap-center">
-                     <div className="bg-transparent rounded-[22px] p-4 md:p-6 h-full flex flex-col">
-                        <div className="h-24 md:h-48 bg-blue-900/10 rounded-2xl mb-3 md:mb-6 flex items-center justify-center relative overflow-hidden">
-                           <div className="absolute inset-0 bg-gradient-to-tr from-blue-500/10 to-transparent"></div>
-                           <MessageSquare className="h-10 w-10 md:h-16 md:w-16 text-blue-400 group-hover:scale-110 transition-transform duration-500 drop-shadow-lg" />
-                           <div className="absolute bottom-2 right-2 md:bottom-4 md:right-4 bg-slate-900 dark:bg-black/90 px-2 md:px-3 py-1 md:py-1.5 rounded-lg text-[10px] md:text-xs font-bold shadow-lg border border-white/10 backdrop-blur-sm text-white">Avg: ₹100/hr</div>
+                  {/* Task Card 2: Image */}
+                  <motion.div 
+                     whileHover={{ y: -5 }}
+                     className="bg-white dark:bg-zinc-900 rounded-[32px] p-8 border border-slate-200 dark:border-white/10 shadow-luel group cursor-pointer"
+                  >
+                     <div className="h-56 bg-slate-50 dark:bg-zinc-950 rounded-2xl mb-8 flex items-center justify-center relative overflow-hidden">
+                        <div className="absolute inset-0 bg-luel-dots opacity-20"></div>
+                        
+                        {/* Bounding Box Visual */}
+                        <div className="relative w-24 h-24 border-2 border-dashed border-indigo-300 dark:border-indigo-500/30 rounded-lg">
+                           <motion.div 
+                              animate={{ 
+                                 top: ["10%", "50%", "20%"],
+                                 left: ["10%", "30%", "60%"],
+                                 width: ["40%", "60%", "30%"],
+                                 height: ["30%", "20%", "50%"]
+                              }}
+                              transition={{ duration: 4, repeat: Infinity }}
+                              className="absolute bg-indigo-500/20 border border-indigo-500 rounded-sm"
+                           />
+                           <ImageIcon className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 h-8 w-8 text-indigo-500/40" />
                         </div>
-                        <h3 className="text-lg md:text-2xl font-bold text-white mb-1 md:mb-2">Text & Logic</h3>
-                        <p className="text-sm md:text-base text-zinc-500 mb-3 md:mb-6 flex-1">Rate chatbot responses, write creative stories, or solve logic puzzles.</p>
-                        <div className="flex flex-wrap gap-2 mt-auto">
-                           <span className="px-3 py-1 bg-white/5 rounded-md text-[10px] uppercase font-bold text-zinc-400 border border-white/10">RLHF</span>
+
+                        <div className="absolute top-4 right-4 bg-white dark:bg-zinc-900 px-3 py-1.5 rounded-full text-[10px] font-black shadow-sm border border-slate-100 dark:border-white/5 text-slate-900 dark:text-white">
+                           Avg: ₹120/hr
                         </div>
                      </div>
-                  </div>
+                     <h3 className="text-2xl font-black text-slate-900 dark:text-white mb-3 tracking-tight">Image Annotation</h3>
+                     <p className="text-base text-slate-500 dark:text-zinc-400 mb-8 leading-relaxed">
+                        Draw boxes around objects or describe scenes to train computer vision for autonomous systems.
+                     </p>
+                     <div className="flex items-center gap-2">
+                        <span className="px-4 py-1.5 bg-slate-50 dark:bg-white/5 rounded-full text-[10px] font-black text-slate-500 dark:text-zinc-500 uppercase tracking-widest border border-slate-100 dark:border-white/5">
+                           Self-Driving
+                        </span>
+                     </div>
+                  </motion.div>
+
+                  {/* Task Card 3: Text */}
+                  <motion.div 
+                     whileHover={{ y: -5 }}
+                     className="bg-white dark:bg-zinc-900 rounded-[32px] p-8 border border-slate-200 dark:border-white/10 shadow-luel group cursor-pointer"
+                  >
+                     <div className="h-56 bg-slate-50 dark:bg-zinc-950 rounded-2xl mb-8 flex items-center justify-center relative overflow-hidden">
+                        <div className="absolute inset-0 bg-luel-dots opacity-20"></div>
+                        
+                        {/* Typing Animation Visual */}
+                        <div className="w-32 space-y-2">
+                           <motion.div animate={{ width: ["40%", "100%", "60%"] }} transition={{ duration: 2, repeat: Infinity }} className="h-1.5 bg-violet-500/30 rounded-full" />
+                           <motion.div animate={{ width: ["80%", "30%", "90%"] }} transition={{ duration: 2, repeat: Infinity, delay: 0.5 }} className="h-1.5 bg-violet-500/50 rounded-full" />
+                           <motion.div animate={{ width: ["20%", "70%", "40%"] }} transition={{ duration: 2, repeat: Infinity, delay: 1 }} className="h-1.5 bg-violet-500/20 rounded-full" />
+                        </div>
+
+                        <div className="absolute top-4 right-4 bg-white dark:bg-zinc-900 px-3 py-1.5 rounded-full text-[10px] font-black shadow-sm border border-slate-100 dark:border-white/5 text-slate-900 dark:text-white">
+                           Avg: ₹100/hr
+                        </div>
+                     </div>
+                     <h3 className="text-2xl font-black text-slate-900 dark:text-white mb-3 tracking-tight">Text & Logic</h3>
+                     <p className="text-base text-slate-500 dark:text-zinc-400 mb-8 leading-relaxed">
+                        Rate chatbot responses, write creative stories, or solve complex logic puzzles for LLMs.
+                     </p>
+                     <div className="flex items-center gap-2">
+                        <span className="px-4 py-1.5 bg-slate-50 dark:bg-white/5 rounded-full text-[10px] font-black text-slate-500 dark:text-zinc-500 uppercase tracking-widest border border-slate-100 dark:border-white/5">
+                           RLHF
+                        </span>
+                     </div>
+                  </motion.div>
                </div>
             </motion.div>
          </section>
