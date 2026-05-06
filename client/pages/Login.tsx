@@ -107,7 +107,7 @@ export const Login: React.FC<LoginProps> = ({
   };
 
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center p-4 font-sans relative overflow-hidden bg-[#020205]">
+    <div className="min-h-screen flex flex-col items-center justify-center p-4 font-sans relative overflow-hidden bg-slate-50 dark:bg-[#020205]">
 
       {/* Background Ambience */}
       <div className="absolute top-[-20%] left-[-10%] w-[400px] md:w-[600px] h-[400px] md:h-[600px] bg-blue-600/10 rounded-full blur-[80px] md:blur-[100px] animate-blob"></div>
@@ -135,7 +135,7 @@ export const Login: React.FC<LoginProps> = ({
           </p>
         </div>
 
-        <div className="bg-zinc-900/40 backdrop-blur-xl p-6 md:p-8 rounded-2xl md:rounded-3xl border border-white/10 shadow-2xl mx-1 md:mx-0">
+        <div className="bg-white dark:bg-zinc-900/40 backdrop-blur-xl p-6 md:p-8 rounded-2xl md:rounded-3xl border border-slate-200 dark:border-white/10 shadow-lg dark:shadow-2xl mx-1 md:mx-0">
           {error && (
             <div className="mb-4 p-3 bg-red-900/20 border border-red-200 rounded-lg flex items-center gap-2 text-red-600 text-sm">
               <AlertCircle className="h-4 w-4" />
@@ -156,7 +156,7 @@ export const Login: React.FC<LoginProps> = ({
                 <input
                   type="email"
                   required
-                  className="w-full pl-12 pr-4 py-3 border border-white/10 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500 transition-all bg-black/20 text-white placeholder-zinc-600"
+                  className="w-full pl-12 pr-4 py-3 border border-slate-200 dark:border-white/10 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500 transition-all bg-slate-50 dark:bg-black/20 text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-zinc-600"
                   placeholder="Email Address"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
@@ -168,7 +168,7 @@ export const Login: React.FC<LoginProps> = ({
                 <input
                   type={showPassword ? "text" : "password"}
                   required
-                  className="w-full pl-12 pr-12 py-3 border border-white/10 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500 transition-all bg-black/20 text-white placeholder-zinc-600"
+                  className="w-full pl-12 pr-12 py-3 border border-slate-200 dark:border-white/10 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500 transition-all bg-slate-50 dark:bg-black/20 text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-zinc-600"
                   placeholder="Password"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
@@ -176,7 +176,7 @@ export const Login: React.FC<LoginProps> = ({
                 <button
                   type="button"
                   onClick={() => setShowPassword(!showPassword)}
-                  className="absolute top-3.5 right-4 text-zinc-400 hover:text-white transition-colors"
+                  className="absolute top-3.5 right-4 text-zinc-400 hover:text-slate-900 dark:hover:text-white transition-colors"
                 >
                   {showPassword ? (
                     <EyeOff className="h-5 w-5" />
@@ -192,7 +192,7 @@ export const Login: React.FC<LoginProps> = ({
                 <button
                   type="button"
                   onClick={onForgotPassword}
-                  className="text-xs text-blue-400 hover:text-blue-300 font-medium hover:underline transition-colors"
+                  className="text-xs text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 font-medium hover:underline transition-colors"
                 >
                   Forgot Password?
                 </button>
@@ -203,17 +203,17 @@ export const Login: React.FC<LoginProps> = ({
               Continue <ArrowRight className="ml-2 h-4 w-4" />
             </Button>
 
-            <div className="pt-4 border-t border-white/10 mt-6 text-center space-y-4">
+            <div className="pt-4 border-t border-slate-200 dark:border-white/10 mt-6 text-center space-y-4">
               {isContributor && (
-                <div className="text-sm text-zinc-500">
-                  New contributor? <button type="button" onClick={onSwitchToSignup} className="text-blue-400 hover:text-blue-300 transition-colors font-bold ml-1">Create Account</button>
+                <div className="text-sm text-slate-500 dark:text-zinc-500">
+                  New contributor? <button type="button" onClick={onSwitchToSignup} className="text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 transition-colors font-bold ml-1">Create Account</button>
                 </div>
               )}
 
               <button
                 type="button"
                 onClick={toggleLoginMode}
-                className="text-[10px] uppercase tracking-widest font-black text-zinc-400 hover:text-zinc-300 transition-colors flex items-center justify-center gap-2 w-full"
+                className="text-[10px] uppercase tracking-widest font-black text-slate-500 dark:text-zinc-400 hover:text-slate-900 dark:hover:text-zinc-200 transition-colors flex items-center justify-center gap-2 w-full"
               >
                 {isContributor ? (
                   <>

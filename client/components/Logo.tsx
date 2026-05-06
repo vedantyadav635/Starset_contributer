@@ -15,8 +15,8 @@ export const Logo: React.FC<LogoProps> = ({ className = "h-10 w-10" }) => {
     <img
       src="/logo.png"
       alt="Starset Logo"
-      className={className}
-      style={{ objectFit: 'contain', mixBlendMode: 'lighten' }}
+      className={`${className} mix-blend-multiply dark:mix-blend-lighten`}
+      style={{ objectFit: 'contain' }}
       draggable={false}
     />
   );

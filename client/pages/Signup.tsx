@@ -100,7 +100,7 @@ export const Signup: React.FC<SignupProps> = ({ onLogin, onSwitchToLogin, onBack
 
 
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center p-4 font-sans relative overflow-hidden bg-[#020205]">
+    <div className="min-h-screen flex flex-col items-center justify-center p-4 font-sans relative overflow-hidden bg-slate-50 dark:bg-[#020205]">
 
       {/* Background Ambience */}
       <div className="absolute top-[-20%] left-[-10%] w-[400px] md:w-[600px] h-[400px] md:h-[600px] bg-blue-600/10 rounded-full blur-[80px] md:blur-[100px] animate-blob"></div>
@@ -118,7 +118,7 @@ export const Signup: React.FC<SignupProps> = ({ onLogin, onSwitchToLogin, onBack
           <p className="text-zinc-400 text-xs md:text-sm px-4">Join the network to start earning from data contributions.</p>
         </div>
 
-        <div className="bg-zinc-900/40 backdrop-blur-2xl p-6 md:p-8 rounded-2xl md:rounded-3xl border border-white/10 shadow-2xl mx-1 md:mx-0">
+        <div className="bg-white dark:bg-zinc-900/40 backdrop-blur-2xl p-6 md:p-8 rounded-2xl md:rounded-3xl border border-slate-200 dark:border-white/10 shadow-lg dark:shadow-2xl mx-1 md:mx-0">
           <form onSubmit={handleSubmit} className="space-y-5">
 
             <div className="space-y-4">
@@ -127,7 +127,7 @@ export const Signup: React.FC<SignupProps> = ({ onLogin, onSwitchToLogin, onBack
                 <input
                   type="text"
                   required
-                  className="w-full pl-12 pr-4 py-3 border border-white/10 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500 transition-all bg-black/20 text-white placeholder-zinc-600"
+                  className="w-full pl-12 pr-4 py-3 border border-slate-200 dark:border-white/10 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500 transition-all bg-slate-50 dark:bg-black/20 text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-zinc-600"
                   placeholder="Full Name"
                   value={formData.name}
                   onChange={(e) => setFormData({ ...formData, name: e.target.value })}
@@ -139,7 +139,7 @@ export const Signup: React.FC<SignupProps> = ({ onLogin, onSwitchToLogin, onBack
                 <input
                   type="email"
                   required
-                  className="w-full pl-12 pr-4 py-3 border border-white/10 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500 transition-all bg-black/20 text-white placeholder-zinc-600"
+                  className="w-full pl-12 pr-4 py-3 border border-slate-200 dark:border-white/10 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500 transition-all bg-slate-50 dark:bg-black/20 text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-zinc-600"
                   placeholder="Email Address"
                   value={formData.email}
                   onChange={(e) => setFormData({ ...formData, email: e.target.value })}
@@ -152,7 +152,7 @@ export const Signup: React.FC<SignupProps> = ({ onLogin, onSwitchToLogin, onBack
                 <input
                   type={showPassword ? "text" : "password"}
                   required
-                  className="w-full pl-12 pr-12 py-3 border border-white/10 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500 transition-all bg-black/20 text-white placeholder-zinc-600"
+                  className="w-full pl-12 pr-12 py-3 border border-slate-200 dark:border-white/10 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500 transition-all bg-slate-50 dark:bg-black/20 text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-zinc-600"
                   placeholder="Create Password"
                   value={formData.password}
                   onChange={(e) => setFormData({ ...formData, password: e.target.value })}
@@ -160,7 +160,7 @@ export const Signup: React.FC<SignupProps> = ({ onLogin, onSwitchToLogin, onBack
                 <button
                   type="button"
                   onClick={() => setShowPassword(!showPassword)}
-                  className="absolute top-3.5 right-4 text-zinc-400 hover:text-white transition-colors"
+                  className="absolute top-3.5 right-4 text-zinc-400 hover:text-slate-900 dark:hover:text-white transition-colors"
                 >
                   {showPassword ? (
                     <EyeOff className="h-5 w-5" />
@@ -175,8 +175,8 @@ export const Signup: React.FC<SignupProps> = ({ onLogin, onSwitchToLogin, onBack
               <div className="flex items-center h-5">
                 <input id="terms" type="checkbox" required className="w-4 h-4 rounded border-zinc-300 text-blue-600 focus:ring-blue-500" />
               </div>
-              <label htmlFor="terms" className="text-xs text-zinc-400">
-                I agree to the <a href="#" className="underline hover:text-blue-500">Contributor Agreement</a> and <a href="#" className="underline hover:text-blue-500">Privacy Policy</a>.
+              <label htmlFor="terms" className="text-xs text-slate-500 dark:text-zinc-400">
+                I agree to the <a href="#" className="underline text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300">Contributor Agreement</a> and <a href="#" className="underline text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300">Privacy Policy</a>.
               </label>
             </div>
 
@@ -184,8 +184,8 @@ export const Signup: React.FC<SignupProps> = ({ onLogin, onSwitchToLogin, onBack
               Create Account <ArrowRight className="ml-2 h-4 w-4" />
             </Button>
 
-            <div className="text-sm text-center text-zinc-500 mt-6 leading-relaxed">
-              Already have an ID? <button type="button" onClick={onSwitchToLogin} className="text-blue-400 hover:text-blue-300 transition-colors font-bold ml-1">Log In</button>
+            <div className="text-sm text-center text-slate-500 dark:text-zinc-500 mt-6 leading-relaxed">
+              Already have an ID? <button type="button" onClick={onSwitchToLogin} className="text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 transition-colors font-bold ml-1">Log In</button>
             </div>
           </form>
         </div>

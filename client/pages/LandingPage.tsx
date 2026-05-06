@@ -1,9 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { Button } from '../components/Button';
-import { ArrowRight, Activity, Database, Server, Zap, Globe, ShieldCheck, Lock, Smartphone, Banknote, Mic, Image as ImageIcon, MessageSquare, CheckCircle2, ChevronDown, Play, Star, TrendingUp, Users, Cpu, FileText } from 'lucide-react';
+import { ArrowRight, Activity, Database, Server, Zap, Globe, ShieldCheck, Lock, Smartphone, Banknote, Mic, Image as ImageIcon, MessageSquare, CheckCircle2, ChevronDown, Play, Star, TrendingUp, Users, Cpu, FileText, Sparkles, Brain, Network, MousePointer2 } from 'lucide-react';
 import { PublicLayout, PublicPageType } from '../components/PublicLayout';
-import { BrainCircuit } from 'lucide-react';
-import { motion } from 'framer-motion';
+import { motion, useMotionValue, useSpring, useTransform } from 'framer-motion';
 
 interface LandingPageProps {
    onEnterApp: () => void;
@@ -17,6 +16,137 @@ const Sparkle = ({ className }: { className?: string }) => (
       <path d="M12 0L14.59 9.41L24 12L14.59 14.59L12 24L9.41 14.59L0 12L9.41 9.41L12 0Z" fill="currentColor" />
    </svg>
 );
+
+const EcosystemVisual = () => {
+   return (
+      <div className="relative w-full max-w-[600px] h-[500px] flex items-center justify-center">
+         {/* Background World Map Graphic (Simplified dots) */}
+         <div className="absolute inset-0 opacity-20 dark:opacity-40 mask-fade-out">
+            <svg viewBox="0 0 800 400" className="w-full h-full text-slate-300 dark:text-zinc-700">
+               <circle cx="200" cy="150" r="2" fill="currentColor" />
+               <circle cx="300" cy="180" r="2" fill="currentColor" />
+               <circle cx="450" cy="120" r="2" fill="currentColor" />
+               <circle cx="600" cy="220" r="2" fill="currentColor" />
+               <circle cx="150" cy="280" r="2" fill="currentColor" />
+               <circle cx="550" cy="100" r="2" fill="currentColor" />
+            </svg>
+         </div>
+
+         {/* Neural Merge Connection Lines - Hidden on Mobile */}
+         <svg className="absolute inset-0 w-full h-full pointer-events-none overflow-visible hidden md:block">
+            <motion.path 
+               d="M 180 180 Q 300 250 400 300" 
+               stroke="url(#pulseGradient)" 
+               strokeWidth="2" 
+               fill="none"
+               strokeDasharray="10 10"
+               animate={{ strokeDashoffset: [0, -100] }}
+               transition={{ duration: 10, repeat: Infinity, ease: "linear" }}
+               className="opacity-40"
+            />
+            <defs>
+               <linearGradient id="pulseGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                  <stop offset="0%" stopColor="#6366f1" />
+                  <stop offset="100%" stopColor="#3b82f6" />
+               </linearGradient>
+            </defs>
+         </svg>
+
+         {/* Floating Cards Stack */}
+         <div className="relative w-full h-full flex flex-col justify-center items-center gap-6 perspective-1000">
+            
+            {/* Card 1: Audio Task */}
+            <motion.div
+               initial={{ x: -100, opacity: 0 }}
+               animate={{ x: 0, opacity: 1 }}
+               transition={{ duration: 0.8, delay: 0.2 }}
+               whileHover={{ y: -5, scale: 1.02 }}
+               whileTap={{ scale: 0.98 }}
+               className="w-full max-w-[320px] md:w-80 bg-white dark:bg-zinc-900 rounded-3xl p-6 border border-slate-200 dark:border-white/10 shadow-luel z-10 md:-rotate-3 md:hover:rotate-0 transition-transform cursor-pointer group"
+            >
+               <div className="flex items-center gap-4 mb-4">
+                  <div className="w-12 h-12 rounded-2xl bg-indigo-50 dark:bg-indigo-500/10 flex items-center justify-center group-hover:bg-indigo-500 group-hover:text-white transition-colors">
+                     <Mic className="w-6 h-6 text-indigo-600 group-hover:text-white" />
+                  </div>
+                  <div>
+                     <div className="text-[10px] font-black text-indigo-600 uppercase tracking-widest group-hover:text-indigo-400 transition-colors">New Task</div>
+                     <div className="font-bold text-slate-900 dark:text-white">Audio Collection</div>
+                  </div>
+               </div>
+               
+               <div className="flex items-end gap-1 h-8 mb-4">
+                  {[0.4, 0.7, 0.5, 0.9, 0.6, 0.8, 0.4, 0.6, 0.9, 0.7].map((h, i) => (
+                     <motion.div 
+                        key={i}
+                        animate={{ height: [`${h * 100}%`, `${(1-h) * 100}%`, `${h * 100}%`] }}
+                        transition={{ duration: 1.5, repeat: Infinity, delay: i * 0.1 }}
+                        className="flex-1 bg-indigo-500/30 dark:bg-indigo-500/50 rounded-full"
+                     />
+                  ))}
+               </div>
+
+               <div className="flex justify-between items-center text-xs">
+                  <span className="text-slate-500">Earn up to</span>
+                  <span className="font-black text-slate-900 dark:text-white text-lg">₹85.00</span>
+               </div>
+            </motion.div>
+
+            {/* Card 2: Processing (Middle) */}
+            <motion.div
+               initial={{ scale: 0.8, opacity: 0 }}
+               animate={{ scale: 1, opacity: 1 }}
+               transition={{ duration: 0.8, delay: 0.4 }}
+               whileHover={{ scale: 1.05 }}
+               whileTap={{ scale: 0.95 }}
+               className="w-full max-w-[320px] md:w-80 bg-white/80 dark:bg-zinc-900/80 backdrop-blur-md rounded-3xl p-6 border border-slate-200 dark:border-white/10 shadow-luel z-20"
+            >
+               <div className="flex items-center justify-between mb-4">
+                  <div className="flex items-center gap-3">
+                     <div className="w-2 h-2 rounded-full bg-amber-500 animate-pulse"></div>
+                     <span className="text-[10px] font-black text-slate-500 uppercase tracking-widest">Neural Processing</span>
+                  </div>
+                  <Cpu className="w-4 h-4 text-slate-400 animate-spin-slow" />
+               </div>
+               <div className="space-y-3">
+                  <div className="flex items-center gap-3">
+                     <div className="w-8 h-8 rounded-lg bg-slate-100 dark:bg-white/5 flex items-center justify-center">
+                        <Network className="w-4 h-4 text-indigo-500" />
+                     </div>
+                     <div className="text-[10px] font-bold text-slate-700 dark:text-zinc-300">Model Learning In Progress</div>
+                  </div>
+                  <div className="flex items-center gap-3">
+                     <div className="w-8 h-8 rounded-lg bg-slate-100 dark:bg-white/5 flex items-center justify-center">
+                        <Brain className="w-4 h-4 text-blue-500" />
+                     </div>
+                     <div className="text-[10px] font-bold text-slate-700 dark:text-zinc-300">Accuracy Verified: 99.8%</div>
+                  </div>
+               </div>
+            </motion.div>
+
+            {/* Card 3: Payment (Bottom Right) */}
+            <motion.div
+               initial={{ x: 100, opacity: 0 }}
+               animate={{ x: 0, opacity: 1 }}
+               transition={{ duration: 0.8, delay: 0.6 }}
+               whileHover={{ y: 5, scale: 1.02 }}
+               whileTap={{ scale: 0.98 }}
+               className="w-full max-w-[320px] md:w-80 bg-white dark:bg-zinc-900 rounded-3xl p-6 border border-slate-200 dark:border-white/10 shadow-luel z-10 md:rotate-3 md:hover:rotate-0 transition-transform cursor-pointer group"
+            >
+               <div className="flex items-center justify-between mb-4">
+                  <span className="text-[10px] font-black text-emerald-600 uppercase tracking-widest group-hover:text-emerald-400 transition-colors">Payment Sent</span>
+                  <Banknote className="w-5 h-5 text-emerald-500 group-hover:scale-110 transition-transform" />
+               </div>
+               <div className="text-3xl font-black text-slate-900 dark:text-white mb-1 tracking-tight">₹1,240.50</div>
+               <div className="text-[10px] text-slate-500 font-bold mb-4">AVAILABLE BALANCE</div>
+               <Button className="w-full h-10 rounded-xl bg-slate-900 dark:bg-white text-white dark:text-black font-bold text-xs uppercase tracking-widest group-hover:bg-blue-600 group-hover:text-white transition-colors">
+                  Withdraw to UPI
+               </Button>
+            </motion.div>
+
+         </div>
+      </div>
+   );
+};
 
 export const LandingPage: React.FC<LandingPageProps> = ({ onEnterApp, onStartSignup, onNavigate }) => {
    const [activeNodeCount, setActiveNodeCount] = useState(8432);
@@ -41,187 +171,135 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onEnterApp, onStartSig
    return (
       <PublicLayout currentPage="home" onNavigate={onNavigate} onEnterApp={onEnterApp}>
 
-         {/* --- HERO SECTION --- */}
-         <section className="relative z-10 -mt-20 pt-28 md:pt-32 pb-12 md:pb-24 px-4 md:px-6 overflow-hidden perspective-1000">
-            {/* Abstract Background Shapes */}
-            <div className="hidden md:block absolute -top-40 left-1/2 -translate-x-1/2 w-[1200px] h-[800px] bg-gradient-to-b from-blue-600/15 via-purple-600/10 to-transparent rounded-[100%] blur-[100px] -z-10 pointer-events-none mix-blend-screen"></div>
+         {/* --- PREMIUM 3D BACKGROUND (Desktop Only) --- */}
+         <div className="absolute inset-0 overflow-hidden pointer-events-none hidden lg:block">
+            {/* 3D Abstract Image with Parallax */}
             <motion.div 
-               animate={{ y: [0, -20, 0], opacity: [0.3, 0.5, 0.3] }} 
-               transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
-               className="absolute top-20 left-[10%] w-72 h-72 bg-blue-500/20 rounded-full blur-[100px] -z-10 pointer-events-none"
-            />
-            <motion.div 
-               animate={{ y: [0, 20, 0], opacity: [0.3, 0.6, 0.3] }} 
-               transition={{ duration: 10, repeat: Infinity, ease: "easeInOut", delay: 1 }}
-               className="absolute bottom-20 right-[10%] w-96 h-96 bg-purple-500/20 rounded-full blur-[120px] -z-10 pointer-events-none"
+               style={{ 
+                  backgroundImage: 'url("/premium_3d_bg.png")',
+                  backgroundSize: 'cover',
+                  backgroundPosition: 'center',
+                  scale: 1.1
+               }}
+               animate={{ 
+                  rotateX: [0, 1, -1, 0],
+                  rotateY: [0, -1, 1, 0],
+               }}
+               transition={{ 
+                  duration: 20, 
+                  repeat: Infinity, 
+                  ease: "linear" 
+               }}
+               className="absolute inset-0 opacity-40 dark:opacity-30 blur-[1px]"
             />
 
-            <div className="max-w-7xl mx-auto grid lg:grid-cols-2 gap-12 lg:gap-8 items-center relative z-20">
+            {/* Deep Perspective Grid */}
+            <div className="absolute inset-0 [perspective:1000px]">
+               <div className="absolute inset-0 bg-luel-dots opacity-20 [transform:rotateX(60deg)_translateZ(-200px)_scale(2)]" />
+            </div>
 
-               {/* Left Column: Text Content */}
+            {/* Cinematic Lighting */}
+            <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-b from-blue-500/10 via-transparent to-transparent" />
+            <div className="absolute bottom-0 left-0 w-full h-1/2 bg-gradient-to-t from-slate-50 dark:from-[#020205] to-transparent" />
+         </div>
+
+         <section className="relative z-10 -mt-20 pt-36 pb-32 px-4 md:px-6 overflow-hidden">
+            {/* Luel Dotted Background (Mobile/Backup) */}
+            <div className="absolute inset-0 bg-luel-dots opacity-40 -z-20 pointer-events-none lg:hidden"></div>
+            
+            <div className="max-w-7xl mx-auto grid lg:grid-cols-2 gap-20 items-center relative z-20">
+               
+               {/* Left Side Content */}
                <motion.div
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  transition={{ duration: 0.8 }}
-                  className="text-center lg:text-left space-y-8"
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 1 }}
+                  className="text-center lg:text-left"
                >
-
-
-                  <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-extrabold tracking-[-0.04em] leading-[1.05] text-white relative px-2 sm:px-0">
-                     <span className="relative inline-block">
-                        Make Money
-                        <div className="absolute -inset-2 bg-gradient-to-r from-blue-500/20 to-purple-500/20 blur-xl -z-10"></div>
+                  {/* Status Badge */}
+                  <div className="inline-flex items-center gap-2.5 px-4 py-2 rounded-full bg-white dark:bg-zinc-900 border border-slate-200 dark:border-white/10 shadow-sm mb-10">
+                     <div className="h-2 w-2 rounded-full bg-emerald-500 animate-pulse"></div>
+                     <span className="text-xs font-black text-slate-600 dark:text-zinc-400 tracking-tight">
+                        {activeNodeCount.toLocaleString()} contributors earning live today
                      </span>
-                     <br />
+                  </div>
+
+                  <motion.h1 
+                     initial={{ y: 20, opacity: 0 }}
+                     animate={{ y: 0, opacity: 1 }}
+                     transition={{ duration: 0.8, delay: 0.4 }}
+                     className="text-6xl md:text-8xl font-black text-slate-900 dark:text-white leading-[1] md:leading-[0.95] tracking-tighter mb-8"
+                  >
                      <motion.span 
-                        animate={{ backgroundPosition: ['0% 50%', '100% 50%', '0% 50%'] }}
-                        transition={{ duration: 5, repeat: Infinity, ease: 'linear' }}
-                        className="text-transparent bg-clip-text bg-gradient-to-r from-indigo-400 via-purple-400 to-cyan-400 bg-[length:200%_auto] inline-block pb-2 drop-shadow-lg"
+                        initial={{ opacity: 0, x: -20 }}
+                        animate={{ opacity: 1, x: 0 }}
+                        transition={{ delay: 0.5 }}
+                        className="inline-block"
                      >
-                        Teaching AI.
+                        Earn cash.
                      </motion.span>
-                  </h1>
+                     <br className="hidden md:block" />
+                     <motion.span 
+                        initial={{ opacity: 0, x: 20 }}
+                        animate={{ opacity: 1, x: 0 }}
+                        transition={{ delay: 0.7 }}
+                        className="bg-gradient-to-r from-blue-600 via-indigo-600 to-violet-600 bg-clip-text text-transparent animate-gradient-swipe drop-shadow-[0_0_15px_rgba(37,99,235,0.2)]"
+                     >
+                        Teach AI.
+                     </motion.span>
+                  </motion.h1>
 
-                  <p className="text-lg md:text-2xl text-zinc-300 max-w-xl mx-auto lg:mx-0 leading-relaxed font-medium px-4 sm:px-0">
-                     Join 50,000+ contributors earning cash by completing simple tasks. <span className="text-white font-bold">No coding required.</span>
-                  </p>
+                  <motion.p 
+                     initial={{ y: 20, opacity: 0 }}
+                     animate={{ y: 0, opacity: 1 }}
+                     transition={{ duration: 0.8, delay: 0.5 }}
+                     className="text-base md:text-xl text-slate-500 dark:text-zinc-400 max-w-2xl mx-auto mb-10 leading-relaxed px-4"
+                  >
+                     Join the world's most innovative data community. Turn your daily moments into valuable training data for the next generation of intelligence.
+                  </motion.p>
 
-                  <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start px-4 sm:px-0">
-                     <div className="relative group w-full sm:w-auto hover:-translate-y-1 transition-transform duration-300">
-                        <div className="absolute -inset-1.5 bg-gradient-to-r from-blue-600 via-purple-600 to-cyan-500 rounded-xl blur-lg opacity-40 group-hover:opacity-80 transition duration-500 animate-pulse"></div>
-                        <Button onClick={onStartSignup} size="lg" className="relative h-14 md:h-16 px-10 text-lg md:text-xl w-full sm:w-auto font-bold shadow-2xl bg-white text-black hover:bg-zinc-100 border-0 rounded-xl overflow-hidden group">
-                           <span className="relative z-10 flex items-center">Start Earning <ArrowRight className="ml-2 h-6 w-6 group-hover:translate-x-1 transition-transform" /></span>
-                           <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/40 to-transparent -translate-x-full group-hover:animate-[shimmer_1.5s_infinite] skew-x-12"></div>
-                        </Button>
-                     </div>
-                     <Button onClick={() => onNavigate('about')} size="lg" variant="ghost" className="h-14 md:h-16 px-8 text-lg md:text-xl border-2 border-white/10 hover:border-white/30 w-full sm:w-auto bg-white/5 hover:bg-white/10 backdrop-blur-md transition-all hover:shadow-[0_0_20px_rgba(255,255,255,0.1)] active:scale-95 rounded-xl">
+                  <motion.div 
+                     initial={{ y: 20, opacity: 0 }}
+                     animate={{ y: 0, opacity: 1 }}
+                     transition={{ duration: 0.8, delay: 0.6 }}
+                     className="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-4 px-4"
+                  >
+                     <Button 
+                        onClick={() => onNavigate('signup')}
+                        className="btn-pill w-full sm:w-auto h-14 md:h-16 px-8 md:px-12 text-base md:text-xl bg-blue-600 hover:bg-blue-700 !text-white border-none flex items-center justify-center"
+                     >
+                        Start Contributing
+                     </Button>
+                     <Button 
+                        variant="outline"
+                        className="btn-pill w-full sm:w-auto h-14 md:h-16 px-8 md:px-12 text-base md:text-xl border-2 border-slate-200 dark:border-white/10 dark:text-white hover:bg-slate-50 dark:hover:bg-white/5 flex items-center justify-center"
+                     >
                         How it Works
                      </Button>
-                  </div>
+                  </motion.div>
 
+                  {/* Trust Badges */}
+                  <div className="mt-16 pt-10 border-t border-slate-200 dark:border-white/5 flex flex-wrap justify-center lg:justify-start gap-10 opacity-40 grayscale hover:grayscale-0 transition-all">
+                     <div className="flex items-center gap-2 font-black text-slate-900 dark:text-white">
+                        <ShieldCheck className="h-5 w-5" /> SOC2 COMPLIANT
+                     </div>
+                     <div className="flex items-center gap-2 font-black text-slate-900 dark:text-white">
+                        <Lock className="h-5 w-5" /> 256-BIT SECURE
+                     </div>
+                     <div className="flex items-center gap-2 font-black text-slate-900 dark:text-white">
+                        <Globe className="h-5 w-5" /> GLOBAL ACCESS
+                     </div>
+                  </div>
                </motion.div>
 
-               {/* Right Column: Nexus Visual - Hidden on mobile */}
+               {/* Right Side Visual */}
                <motion.div
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  transition={{ duration: 0.8, delay: 0.2 }}
-                  className="relative h-[300px] lg:h-[600px] w-full items-center justify-center select-none perspective-2000 mt-12 lg:mt-0 hidden lg:flex"
+                  initial={{ opacity: 0, x: 50 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ duration: 1, delay: 0.2 }}
+                  className="relative flex items-center justify-center lg:justify-end"
                >
-
-                  {/* Background Glow for Visual */}
-                  <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[300px] lg:w-[500px] h-[300px] lg:h-[500px] bg-blue-500/10 rounded-full blur-[80px] "></div>
-
-                  {/* Main Container */}
-                  <div className="relative w-full h-full flex items-center justify-between max-w-[500px] lg:max-w-[800px] mx-auto scale-90 lg:scale-100 transform-style-3d hover:rotate-y-12 transition-transform duration-700">
-
-                     {/* Connecting Path Background */}
-                     <div className="absolute top-1/2 left-[10%] right-[10%] h-[1px] bg-blue-500/10 -translate-y-1/2 z-0"></div>
-
-                     {/* Left Stream: YOU -> NEXUS */}
-                     <div className="absolute left-[12%] right-[50%] top-1/2 -translate-y-1/2 h-20 overflow-hidden z-0 pointer-events-none mix-blend-screen">
-                        {/* Blue Particles */}
-                        <div
-                           className="w-full h-full opacity-80 animate-data-stream"
-                           style={{
-                              backgroundImage: `radial-gradient(circle, #3b82f6 2px, transparent 3px)`,
-                              backgroundSize: '24px 24px',
-                              backgroundRepeat: 'repeat'
-                           }}
-                        ></div>
-                        <div className="absolute inset-0 bg-gradient-to-r from-transparent via-blue-500/10 to-transparent blur-sm"></div>
-                     </div>
-
-                     {/* Right Stream: NEXUS -> AI */}
-                     <div className="absolute left-[50%] right-[12%] top-1/2 -translate-y-1/2 h-20 overflow-hidden z-0 pointer-events-none mix-blend-screen">
-                        {/* Purple Particles */}
-                        <div
-                           className="w-full h-full opacity-80 animate-data-stream"
-                           style={{
-                              backgroundImage: `radial-gradient(circle, #d946ef 2px, transparent 3px)`,
-                              backgroundSize: '24px 24px',
-                              backgroundRepeat: 'repeat',
-                              animationDirection: 'reverse'
-                           }}
-                        ></div>
-                        <div className="absolute inset-0 bg-gradient-to-r from-transparent via-purple-500/10 to-transparent blur-sm"></div>
-                     </div>
-
-                     {/* Left Node: YOU */}
-                     <div className="relative z-10 flex flex-col items-center group">
-                        <div className="w-16 h-16 lg:w-20 lg:h-20 rounded-2xl bg-[#0a0a0a] border border-blue-500/50 flex items-center justify-center shadow-[0_0_40px_rgba(59,130,246,0.3)] group-hover:shadow-[0_0_60px_rgba(59,130,246,0.5)] transition-all duration-300 relative overflow-hidden">
-                           <div className="absolute inset-0 bg-blue-500/10 animate-pulse"></div>
-                           <div className="relative z-10 flex flex-col items-center">
-                              <FileText className="w-6 h-6 lg:w-8 lg:h-8 text-blue-400 mb-1" />
-                              <Users className="w-3 h-3 lg:w-4 lg:h-4 text-blue-300 absolute -bottom-1 -right-1" />
-                           </div>
-                           {/* Scan line effect */}
-                           <div className="absolute top-0 left-0 w-full h-1 bg-blue-400/50 blur-sm " style={{ animationDuration: '2s', animationIterationCount: 'infinite' }}></div>
-                        </div>
-                        <div className="absolute top-[calc(100%+16px)] px-3 py-1 bg-blue-950/50 border border-blue-500/30 rounded-full text-[10px] font-bold text-blue-400 tracking-widest uppercase shadow-[0_0_20px_rgba(59,130,246,0.2)] whitespace-nowrap">
-                           YOU
-                        </div>
-                     </div>
-
-                     {/* Center Node: NEXUS */}
-                     <div className="relative z-20 flex flex-col items-center justify-center scale-100 lg:scale-110">
-                        {/* Rotating Rings Container - INCREASED SIZE */}
-                        <div className="relative w-48 h-48 lg:w-80 lg:h-80 flex items-center justify-center">
-
-                           {/* Outer Glow */}
-                           <div className="absolute inset-0 rounded-full bg-gradient-to-br from-blue-600/20 to-purple-600/20 blur-3xl animate-pulse"></div>
-
-                           {/* Outer Dashed Ring - Spins Slow */}
-                           <svg className="absolute inset-0 w-full h-full animate-spin-slower" viewBox="0 0 100 100">
-                              <defs>
-                                 <linearGradient id="ringGradientHero" x1="0%" y1="0%" x2="100%" y2="100%">
-                                    <stop offset="0%" stopColor="#3b82f6" />
-                                    <stop offset="100%" stopColor="#a855f7" />
-                                 </linearGradient>
-                              </defs>
-                              <circle cx="50" cy="50" r="49" fill="none" stroke="url(#ringGradientHero)" strokeWidth="0.5" strokeDasharray="4 4" opacity="0.6" />
-                              <circle cx="50" cy="50" r="44" fill="none" stroke="#3b82f6" strokeWidth="0.2" opacity="0.4" />
-                           </svg>
-
-                           {/* Middle Tech Ring - Reverse Spin */}
-                           <svg className="absolute inset-4 w-[calc(100%-32px)] h-[calc(100%-32px)] animate-reverse-spin-slow" viewBox="0 0 100 100">
-                              <path d="M50 5 A45 45 0 0 1 95 50" fill="none" stroke="#3b82f6" strokeWidth="2" strokeLinecap="round" opacity="0.9" filter="drop-shadow(0 0 4px #3b82f6)" />
-                              <path d="M50 95 A45 45 0 0 1 5 50" fill="none" stroke="#d946ef" strokeWidth="2" strokeLinecap="round" opacity="0.9" filter="drop-shadow(0 0 4px #d946ef)" />
-                           </svg>
-
-                           {/* Inner Glow Core */}
-                           <div className="absolute inset-12 lg:inset-20 bg-[#050505] rounded-full border border-white/10 flex items-center justify-center z-10 shadow-[inset_0_0_30px_rgba(0,0,0,1)] overflow-hidden">
-                              {/* Core Background Effect */}
-                              <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-indigo-900/40 via-transparent to-transparent"></div>
-
-                              <div className="text-center relative z-20">
-                                 <div className="text-[10px] lg:text-xs text-blue-300/70 font-mono tracking-widest mb-1 lg:mb-2">STARSET</div>
-                                 <div className="text-2xl lg:text-4xl font-black text-transparent bg-clip-text bg-gradient-to-br from-white to-zinc-400 tracking-tight leading-none mb-2 drop-shadow-lg">NEXUS</div>
-                                 <div className="text-[8px] lg:text-[10px] font-bold text-blue-400 tracking-widest animate-pulse border border-blue-500/30 px-2 lg:px-3 py-0.5 rounded-full bg-blue-950/30 inline-block">PROCESSING</div>
-                              </div>
-                           </div>
-                        </div>
-                     </div>
-
-                     {/* Right Node: SMART AI */}
-                     <div className="relative z-10 flex flex-col items-center group">
-                        <div className="w-16 h-16 lg:w-20 lg:h-20 rounded-2xl bg-[#0a0a0a] border border-purple-500/50 flex items-center justify-center shadow-[0_0_40px_rgba(168,85,247,0.3)] group-hover:shadow-[0_0_60px_rgba(168,85,247,0.5)] transition-all duration-300 relative overflow-hidden">
-                           <div className="absolute inset-0 bg-purple-500/10 animate-pulse" style={{ animationDelay: '1s' }}></div>
-                           <Cpu className="w-6 h-6 lg:w-8 lg:h-8 text-purple-400 relative z-10" />
-                           {/* Circuit lines */}
-                           <div className="absolute inset-0 opacity-30">
-                              <div className="absolute top-2 left-2 w-2 h-2 bg-purple-500 rounded-full"></div>
-                              <div className="absolute bottom-2 right-2 w-2 h-2 bg-purple-500 rounded-full"></div>
-                              <div className="absolute top-1/2 left-0 w-full h-px bg-purple-500/50"></div>
-                              <div className="absolute left-1/2 top-0 w-px h-full bg-purple-500/50"></div>
-                           </div>
-                        </div>
-                        <div className="absolute top-[calc(100%+16px)] px-3 py-1 bg-purple-950/50 border border-purple-500/30 rounded-full text-[10px] font-bold text-purple-400 tracking-widest uppercase shadow-[0_0_20px_rgba(168,85,247,0.2)] whitespace-nowrap">
-                           SMART AI
-                        </div>
-                     </div>
-
-                  </div>
+                  <EcosystemVisual />
                </motion.div>
 
             </div>
@@ -331,7 +409,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onEnterApp, onStartSig
                         <div className="h-24 md:h-48 bg-blue-900/10 rounded-2xl mb-3 md:mb-6 flex items-center justify-center relative overflow-hidden">
                            <div className="absolute inset-0 bg-gradient-to-tr from-blue-500/10 to-transparent"></div>
                            <Mic className="h-10 w-10 md:h-16 md:w-16 text-blue-400 group-hover:scale-110 transition-transform duration-500 drop-shadow-lg" />
-                           <div className="absolute bottom-2 right-2 md:bottom-4 md:right-4 bg-black/90 px-2 md:px-3 py-1 md:py-1.5 rounded-lg text-xs font-bold shadow-lg border border-white/10 backdrop-blur-sm">Avg: ₹150/hr</div>
+                           <div className="absolute bottom-2 right-2 md:bottom-4 md:right-4 bg-slate-900 dark:bg-black/90 px-2 md:px-3 py-1 md:py-1.5 rounded-lg text-[10px] md:text-xs font-bold shadow-lg border border-white/10 backdrop-blur-sm text-white">Avg: ₹150/hr</div>
                         </div>
                         <h3 className="text-lg md:text-2xl font-bold text-white mb-1 md:mb-2">Audio Recording</h3>
                         <p className="text-sm md:text-base text-zinc-500 mb-3 md:mb-6 flex-1">Read short phrases or record conversations to help AI understand speech.</p>
@@ -347,7 +425,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onEnterApp, onStartSig
                         <div className="h-24 md:h-48 bg-purple-900/10 rounded-2xl mb-3 md:mb-6 flex items-center justify-center relative overflow-hidden">
                            <div className="absolute inset-0 bg-gradient-to-tr from-purple-500/10 to-transparent"></div>
                            <ImageIcon className="h-10 w-10 md:h-16 md:w-16 text-purple-400 group-hover:scale-110 transition-transform duration-500 drop-shadow-lg" />
-                           <div className="absolute bottom-2 right-2 md:bottom-4 md:right-4 bg-black/90 px-2 md:px-3 py-1 md:py-1.5 rounded-lg text-xs font-bold shadow-lg border border-white/10 backdrop-blur-sm">Avg: ₹120/hr</div>
+                           <div className="absolute bottom-2 right-2 md:bottom-4 md:right-4 bg-slate-900 dark:bg-black/90 px-2 md:px-3 py-1 md:py-1.5 rounded-lg text-[10px] md:text-xs font-bold shadow-lg border border-white/10 backdrop-blur-sm text-white">Avg: ₹120/hr</div>
                         </div>
                         <h3 className="text-lg md:text-2xl font-bold text-white mb-1 md:mb-2">Image Annotation</h3>
                         <p className="text-sm md:text-base text-zinc-500 mb-3 md:mb-6 flex-1">Draw boxes around objects or describe images to train computer vision.</p>
@@ -363,7 +441,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onEnterApp, onStartSig
                         <div className="h-24 md:h-48 bg-blue-900/10 rounded-2xl mb-3 md:mb-6 flex items-center justify-center relative overflow-hidden">
                            <div className="absolute inset-0 bg-gradient-to-tr from-blue-500/10 to-transparent"></div>
                            <MessageSquare className="h-10 w-10 md:h-16 md:w-16 text-blue-400 group-hover:scale-110 transition-transform duration-500 drop-shadow-lg" />
-                           <div className="absolute bottom-2 right-2 md:bottom-4 md:right-4 bg-black/90 px-2 md:px-3 py-1 md:py-1.5 rounded-lg text-xs font-bold shadow-lg border border-white/10 backdrop-blur-sm">Avg: ₹100/hr</div>
+                           <div className="absolute bottom-2 right-2 md:bottom-4 md:right-4 bg-slate-900 dark:bg-black/90 px-2 md:px-3 py-1 md:py-1.5 rounded-lg text-[10px] md:text-xs font-bold shadow-lg border border-white/10 backdrop-blur-sm text-white">Avg: ₹100/hr</div>
                         </div>
                         <h3 className="text-lg md:text-2xl font-bold text-white mb-1 md:mb-2">Text & Logic</h3>
                         <p className="text-sm md:text-base text-zinc-500 mb-3 md:mb-6 flex-1">Rate chatbot responses, write creative stories, or solve logic puzzles.</p>
@@ -507,38 +585,55 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onEnterApp, onStartSig
          </section>
 
          {/* --- REDESIGNED CTA SECTION --- */}
-         <section className="py-20 md:py-40 px-4 md:px-6 relative overflow-hidden perspective-1000">
-            {/* CTA Background */}
-            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-blue-500/10 rounded-full blur-[120px] animate-pulse"></div>
+         <section className="py-24 md:py-48 px-4 md:px-6 relative overflow-hidden">
+            {/* Luel Dotted Background for consistency */}
+            <div className="absolute inset-0 bg-luel-dots opacity-20 -z-20 pointer-events-none"></div>
+            
+            {/* CTA Background Glow */}
+            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] md:w-[1000px] h-[600px] md:h-[1000px] bg-blue-500/10 dark:bg-blue-500/5 rounded-full blur-[120px] -z-10 animate-pulse"></div>
 
-            <div className="max-w-5xl mx-auto text-center relative z-10 transform-style-3d">
-               <div className="inline-flex items-center gap-2 px-4 md:px-6 py-2 rounded-full bg-white/5 border border-white/10 text-[10px] md:text-sm font-bold text-indigo-300 mb-8 md:mb-14 shadow-sm">
-                  <TrendingUp className="h-4 w-4 md:h-5 md:w-5" /> HIGH DEMAND FOR NEW CONTRIBUTORS
+            <motion.div 
+               initial={{ opacity: 0, y: 30 }}
+               whileInView={{ opacity: 1, y: 0 }}
+               viewport={{ once: true }}
+               transition={{ duration: 1 }}
+               className="max-w-5xl mx-auto text-center relative z-10"
+            >
+               <div className="inline-flex items-center gap-2.5 px-5 py-2.5 rounded-full bg-white/80 dark:bg-zinc-900/80 border border-slate-200 dark:border-white/10 shadow-sm mb-12 backdrop-blur-md">
+                  <TrendingUp className="h-4 w-4 text-blue-600" />
+                  <span className="text-xs font-black text-slate-600 dark:text-zinc-400 tracking-tight uppercase">High demand for contributors</span>
                </div>
 
-               <h2 className="text-3xl sm:text-5xl md:text-8xl font-black mb-6 md:mb-10 text-white tracking-tighter leading-[0.9] drop-shadow-[0_0_30px_rgba(255,255,255,0.2)] px-2">
-                  Your <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 via-indigo-400 to-purple-400">Digital Wallet</span> <br />
+               <h2 className="text-4xl md:text-8xl font-black mb-8 text-slate-900 dark:text-white tracking-tighter leading-[0.95] md:leading-[0.9]">
+                  Your <span className="bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">Digital Wallet</span> <br className="hidden md:block" />
                   Is Waiting.
                </h2>
 
-               <p className="text-sm sm:text-base md:text-2xl text-zinc-400 mb-10 md:mb-16 max-w-2xl mx-auto leading-relaxed px-4 md:px-6 font-medium">
+               <p className="text-base md:text-2xl text-slate-500 dark:text-zinc-400 mb-14 max-w-2xl mx-auto leading-relaxed px-4 font-medium">
                   Join the workforce of tomorrow. Start earning real money for simple digital tasks today. No interviews, no resume, just results.
                </p>
 
-               <div className="flex flex-col sm:flex-row gap-4 md:gap-8 justify-center items-center px-4 md:px-6">
-                  <button
+               <div className="flex flex-col sm:flex-row gap-6 justify-center items-center px-4">
+                  <Button
                      onClick={onStartSignup}
-                     className="group relative px-10 md:px-14 py-5 md:py-6 bg-white text-black font-black text-lg md:text-2xl rounded-2xl hover:scale-105 transition-all duration-300 shadow-[0_0_60px_rgba(255,255,255,0.2)] w-full sm:w-auto overflow-hidden hover:bg-zinc-100"
+                     className="btn-pill w-full sm:w-auto h-16 md:h-24 px-10 md:px-16 text-lg md:text-2xl bg-slate-900 dark:bg-white text-white dark:text-black hover:scale-105 transition-transform shadow-2xl shadow-slate-900/20 dark:shadow-white/10"
                   >
-                     <span className="relative z-10">Start Earning Now</span>
-                     <div className="absolute inset-0 bg-gradient-to-r from-blue-600 to-indigo-600 opacity-0 group-hover:opacity-10 transition-opacity"></div>
-                  </button>
+                     Start Earning Now
+                  </Button>
 
-                  <button onClick={() => onNavigate('money')} className="text-zinc-400 hover:text-white font-black text-sm md:text-xl flex items-center gap-2 transition-all hover:translate-x-1 py-2">
-                     View Payouts <ArrowRight className="h-5 w-5 md:h-6 md:w-6 text-blue-500" />
+                  <button 
+                     onClick={() => onNavigate('money')} 
+                     className="text-slate-600 dark:text-zinc-400 hover:text-blue-600 dark:hover:text-white font-black text-base md:text-xl flex items-center gap-2 transition-all hover:translate-x-1 py-3 group"
+                  >
+                     View Payouts 
+                     <ArrowRight className="h-5 w-5 md:h-6 md:w-6 text-blue-500 group-hover:translate-x-1 transition-transform" />
                   </button>
                </div>
-            </div>
+
+               {/* Decorative floating elements for engagement */}
+               <div className="absolute -top-10 -left-10 w-20 h-20 bg-blue-500/10 rounded-full blur-2xl animate-bounce hidden md:block" />
+               <div className="absolute -bottom-20 -right-10 w-32 h-32 bg-indigo-500/10 rounded-full blur-3xl animate-pulse hidden md:block" />
+            </motion.div>
          </section>
       </PublicLayout>
    );

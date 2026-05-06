@@ -56,14 +56,14 @@ export const TaskList: React.FC<TaskListProps> = ({ onSelectTask, tasks, userRol
       </div>
 
       {/* Filters */}
-      <div className="bg-white/5 p-1.5 rounded-2xl border border-white/10 shadow-sm flex flex-wrap gap-1 overflow-x-auto no-scrollbar">
+      <div className="bg-slate-100 dark:bg-white/5 p-1.5 rounded-2xl border border-slate-200 dark:border-white/10 shadow-sm flex flex-wrap gap-1 overflow-x-auto no-scrollbar">
         {(['All', TaskType.AUDIO_COLLECTION, TaskType.IMAGE_COLLECTION, TaskType.TEXT_ANNOTATION, TaskType.IMAGE_LABELING, TaskType.SURVEY] as string[]).map((type) => (
           <button
             key={type}
             onClick={() => setFilterType(type)}
             className={`px-4 md:px-5 py-2 md:py-2.5 text-xs md:text-sm font-bold rounded-xl transition-all duration-300 whitespace-nowrap ${filterType === type
-              ? 'bg-white text-black shadow-lg scale-[1.02]'
-              : 'bg-transparent text-stone-500 hover:text-white hover:bg-white/5'
+              ? 'bg-slate-900 dark:bg-white text-white dark:text-black shadow-lg scale-[1.02]'
+              : 'bg-transparent text-slate-500 dark:text-stone-500 hover:text-slate-900 dark:hover:text-white hover:bg-white dark:hover:bg-white/5'
               }`}
           >
             {type === 'All' ? 'All Operations' : type}
@@ -86,12 +86,12 @@ export const TaskList: React.FC<TaskListProps> = ({ onSelectTask, tasks, userRol
             return (
               <div
                 key={task.id}
-                className={`group relative bg-zinc-900 rounded-2xl border transition-all duration-300 overflow-hidden
+                className={`group relative bg-white dark:bg-zinc-900 rounded-2xl border transition-all duration-300 overflow-hidden
                   ${isCompleted
-                    ? 'opacity-60 cursor-not-allowed border-white/10'
+                    ? 'opacity-60 cursor-not-allowed border-slate-200 dark:border-white/10'
                     : userRole === 'contributor'
-                      ? 'cursor-pointer border-white/10 hover:border-blue-500 hover:shadow-xl hover:shadow-blue-500/5 hover:-translate-y-0.5'
-                      : 'border-white/10'
+                      ? 'cursor-pointer border-slate-200 dark:border-white/10 hover:border-blue-500 hover:shadow-xl hover:shadow-blue-500/5 hover:-translate-y-0.5'
+                      : 'border-slate-200 dark:border-white/10'
                   }`}
                 onClick={() => userRole === 'contributor' && !isCompleted && onSelectTask(task)}
               >
@@ -274,13 +274,13 @@ export const TaskList: React.FC<TaskListProps> = ({ onSelectTask, tasks, userRol
             );
           })
         ) : (
-          <div className="flex flex-col items-center justify-center py-24 bg-white/5 rounded-2xl border border-dashed border-white/10">
-            <div className="h-20 w-20 bg-white/10 rounded-full flex items-center justify-center mb-6">
-              <Filter className="h-10 w-10 text-stone-400" />
+          <div className="flex flex-col items-center justify-center py-24 bg-slate-50 dark:bg-white/5 rounded-2xl border border-dashed border-slate-300 dark:border-white/10">
+            <div className="h-20 w-20 bg-slate-100 dark:bg-white/10 rounded-full flex items-center justify-center mb-6">
+              <Filter className="h-10 w-10 text-slate-400 dark:text-stone-400" />
             </div>
             <h3 className="text-xl font-bold text-white">No active campaigns</h3>
             <p className="text-stone-500 mt-2 text-base">Try adjusting your filters or come back later.</p>
-            <Button variant="secondary" className="mt-6 bg-white/5 text-white border-white/10" onClick={() => setFilterType('All')}>
+            <Button variant="secondary" className="mt-6 bg-slate-100 dark:bg-white/5 text-slate-700 dark:text-white border-slate-200 dark:border-white/10" onClick={() => setFilterType('All')}>
               Clear Filters
             </Button>
           </div>

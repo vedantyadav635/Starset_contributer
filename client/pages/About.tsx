@@ -13,7 +13,7 @@ export const About: React.FC<PageProps> = ({ onNavigate, onEnterApp }) => {
          <section className="py-24 px-6 relative overflow-hidden">
             <div className="max-w-7xl mx-auto">
                <div className="mb-16 text-center">
-                  <span className="text-blue-400 font-bold uppercase tracking-widest text-xs mb-2 block">Our Story</span>
+                  <span className="text-blue-600 dark:text-blue-400 font-bold uppercase tracking-widest text-xs mb-2 block">Our Story</span>
                   <h1 className="text-4xl md:text-6xl font-bold text-white mb-6">Humans Teaching Machines</h1>
                   <p className="text-zinc-400 max-w-3xl mx-auto text-xl leading-relaxed">
                      AI isn't magic—it learns from people like you. Starset connects real people with the world's smartest AI companies. You provide the knowledge, and the AI gets smarter. 
@@ -56,11 +56,11 @@ export const About: React.FC<PageProps> = ({ onNavigate, onEnterApp }) => {
                   <h2 className="text-3xl font-black mb-12 text-center text-white tracking-tight">What You'll Be Working On</h2>
                   <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
                      {['Teaching Chatbots', 'Voice Recognition', 'Identifying Images', 'Rating AI Responses', 'Translating Text', 'Safety Checks'].map((cap) => (
-                        <div key={cap} className="flex items-center gap-4 p-5 bg-black/40 backdrop-blur-md rounded-2xl border border-white/10 hover:border-blue-900 transition-colors group">
+                        <div key={cap} className="flex items-center gap-4 p-5 bg-slate-50 dark:bg-black/40 backdrop-blur-md rounded-2xl border border-slate-200 dark:border-white/10 hover:border-blue-300 dark:hover:border-blue-900 transition-colors group">
                            <div className="h-8 w-8 rounded-full bg-emerald-500/10 flex items-center justify-center">
                               <ShieldCheck className="h-5 w-5 text-emerald-500" />
                            </div>
-                           <span className="font-bold text-zinc-200 text-sm md:text-base">{cap}</span>
+                           <span className="font-bold text-slate-700 dark:text-zinc-200 text-sm md:text-base">{cap}</span>
                         </div>
                      ))}
                   </div>
