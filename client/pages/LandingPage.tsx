@@ -138,7 +138,7 @@ const EcosystemVisual = () => {
                </div>
                <div className="text-3xl font-black text-slate-900 dark:text-white mb-1 tracking-tight">₹1,240.50</div>
                <div className="text-[10px] text-slate-500 font-bold mb-4">AVAILABLE BALANCE</div>
-               <Button className="w-full h-10 rounded-xl bg-slate-900 dark:bg-white text-white dark:text-black font-bold text-xs uppercase tracking-widest group-hover:bg-blue-600 group-hover:text-white transition-colors">
+               <Button variant="black" className="w-full h-10 rounded-xl font-bold text-xs uppercase tracking-widest group-hover:bg-blue-600 group-hover:text-white transition-colors">
                   Withdraw to UPI
                </Button>
             </motion.div>
@@ -214,16 +214,8 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onEnterApp, onStartSig
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 1 }}
-                  className="text-center lg:text-left"
+                  className="text-center"
                >
-                  {/* Status Badge */}
-                  <div className="inline-flex items-center gap-2.5 px-4 py-2 rounded-full bg-white dark:bg-zinc-900 border border-slate-200 dark:border-white/10 shadow-sm mb-10">
-                     <div className="h-2 w-2 rounded-full bg-emerald-500 animate-pulse"></div>
-                     <span className="text-xs font-black text-slate-600 dark:text-zinc-400 tracking-tight">
-                        {activeNodeCount.toLocaleString()} contributors earning live today
-                     </span>
-                  </div>
-
                   <motion.h1 
                      initial={{ y: 20, opacity: 0 }}
                      animate={{ y: 0, opacity: 1 }}
@@ -262,7 +254,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onEnterApp, onStartSig
                      initial={{ y: 20, opacity: 0 }}
                      animate={{ y: 0, opacity: 1 }}
                      transition={{ duration: 0.8, delay: 0.6 }}
-                     className="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-4 px-4"
+                     className="flex flex-col sm:flex-row items-center justify-center lg:justify-center gap-4 px-4"
                   >
                      <Button 
                         onClick={() => onNavigate('signup')}
@@ -277,19 +269,6 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onEnterApp, onStartSig
                         How it Works
                      </Button>
                   </motion.div>
-
-                  {/* Trust Badges */}
-                  <div className="mt-16 pt-10 border-t border-slate-200 dark:border-white/5 flex flex-wrap justify-center lg:justify-start gap-10 opacity-40 grayscale hover:grayscale-0 transition-all">
-                     <div className="flex items-center gap-2 font-black text-slate-900 dark:text-white">
-                        <ShieldCheck className="h-5 w-5" /> SOC2 COMPLIANT
-                     </div>
-                     <div className="flex items-center gap-2 font-black text-slate-900 dark:text-white">
-                        <Lock className="h-5 w-5" /> 256-BIT SECURE
-                     </div>
-                     <div className="flex items-center gap-2 font-black text-slate-900 dark:text-white">
-                        <Globe className="h-5 w-5" /> GLOBAL ACCESS
-                     </div>
-                  </div>
                </motion.div>
 
                {/* Right Side Visual */}
@@ -396,7 +375,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onEnterApp, onStartSig
             >
                <div className="flex flex-col md:flex-row justify-between items-start md:items-end mb-12 md:mb-20 gap-6">
                   <div className="max-w-2xl">
-                     <span className="text-blue-600 dark:text-blue-400 font-black uppercase tracking-widest text-[10px] mb-3 block">Contributor Journey</span>
+                     <span className="text-blue-600 dark:text-blue-400 font-black uppercase tracking-widest text-[10px] mb-3 block">Task Types</span>
                      <h2 className="text-4xl md:text-6xl font-black text-slate-900 dark:text-white tracking-tighter leading-tight">
                         What Will <br className="md:hidden" /> You Do?
                      </h2>
@@ -406,7 +385,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onEnterApp, onStartSig
                      onClick={() => onNavigate('contributors')} 
                      className="btn-pill h-12 md:h-14 px-8 border-slate-200 dark:border-white/10 dark:text-white hover:bg-slate-50 dark:hover:bg-white/5"
                   >
-                     Explore All Tasks
+                     See All Tasks
                   </Button>
                </div>
 
@@ -670,7 +649,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onEnterApp, onStartSig
             >
                <div className="inline-flex items-center gap-2.5 px-5 py-2.5 rounded-full bg-white/80 dark:bg-zinc-900/80 border border-slate-200 dark:border-white/10 shadow-sm mb-12 backdrop-blur-md">
                   <TrendingUp className="h-4 w-4 text-blue-600" />
-                  <span className="text-xs font-black text-slate-600 dark:text-zinc-400 tracking-tight uppercase">High demand for contributors</span>
+                  <span className="text-xs font-black text-slate-600 dark:text-zinc-400 tracking-tight uppercase">High demand for new contributors</span>
                </div>
 
                <h2 className="text-4xl md:text-8xl font-black mb-8 text-slate-900 dark:text-white tracking-tighter leading-[0.95] md:leading-[0.9]">
@@ -684,8 +663,9 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onEnterApp, onStartSig
 
                <div className="flex flex-col sm:flex-row gap-6 justify-center items-center px-4">
                   <Button
+                     variant="black"
                      onClick={onStartSignup}
-                     className="btn-pill w-full sm:w-auto h-16 md:h-24 px-10 md:px-16 text-lg md:text-2xl bg-slate-900 dark:bg-white text-white dark:text-black hover:scale-105 transition-transform shadow-2xl shadow-slate-900/20 dark:shadow-white/10"
+                     className="btn-pill w-full sm:w-auto h-16 md:h-24 px-10 md:px-16 text-lg md:text-2xl hover:scale-105 transition-transform shadow-2xl shadow-slate-900/20 dark:shadow-white/10"
                   >
                      Start Earning Now
                   </Button>
