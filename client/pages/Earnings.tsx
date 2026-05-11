@@ -86,7 +86,7 @@ export const Earnings: React.FC = () => {
           <h1 className="text-3xl md:text-4xl font-bold text-white tracking-tight">Compensation & Settlement</h1>
           <p className="text-zinc-500 mt-1 text-sm md:text-base">View accrued compensation for accepted data contributions.</p>
         </div>
-        <Button variant="outline" className="w-full sm:w-auto bg-transparent text-white border-zinc-700 shadow-sm hover:shadow-md transition-all">
+        <Button variant="outline" className="w-full sm:w-auto bg-transparent text-slate-700 dark:text-white border-slate-300 dark:border-zinc-700 shadow-sm hover:shadow-md transition-all">
           <Download className="h-4 w-4 mr-2" /> Tax Invoice
         </Button>
       </div>
@@ -149,7 +149,7 @@ export const Earnings: React.FC = () => {
         </div>
 
         {/* Payment Methods */}
-        <div className="lg:col-span-2 bg-zinc-900 rounded-3xl border border-white/5 shadow-xl p-6 md:p-8 flex flex-col h-full relative overflow-hidden">
+        <div className="lg:col-span-2 bg-white dark:bg-zinc-900 rounded-3xl border border-slate-200 dark:border-white/5 shadow-xl p-6 md:p-8 flex flex-col h-full relative overflow-hidden">
           <div className="absolute top-0 right-0 w-64 h-64 bg-emerald-500/5 rounded-full blur-3xl -mr-32 -mt-32 pointer-events-none"></div>
 
           <h2 className="text-xl font-bold text-white mb-8 flex items-center justify-between relative z-10">
@@ -201,11 +201,11 @@ export const Earnings: React.FC = () => {
       </div>
 
       {/* Transaction History */}
-      <div className="bg-zinc-900 rounded-3xl border border-white/10 shadow-xl overflow-hidden transform transition-all hover:shadow-2xl">
-        <div className="px-8 py-6 border-b border-white/5 flex flex-col md:flex-row justify-between items-start md:items-center bg-white/5 gap-4">
+      <div className="bg-white dark:bg-zinc-900 rounded-3xl border border-slate-200 dark:border-white/10 shadow-xl overflow-hidden transform transition-all hover:shadow-2xl">
+        <div className="px-8 py-6 border-b border-slate-200 dark:border-white/5 flex flex-col md:flex-row justify-between items-start md:items-center bg-slate-50 dark:bg-white/5 gap-4">
           <div className="flex items-center gap-4 w-full md:w-auto justify-between md:justify-start">
             <h2 className="text-xl font-bold text-white">Settlement Ledger</h2>
-            <select className="text-xs border-white/10 rounded-lg py-1.5 px-3 bg-black focus:ring-blue-600 focus:border-blue-600 text-white shadow-sm">
+            <select className="text-xs border-slate-200 dark:border-white/10 rounded-lg py-1.5 px-3 bg-white dark:bg-black focus:ring-blue-600 focus:border-blue-600 text-slate-700 dark:text-white shadow-sm">
               <option>All Entries</option>
               <option>Processed</option>
               <option>Pending</option>
@@ -232,7 +232,7 @@ export const Earnings: React.FC = () => {
                   <th className="px-8 py-5">Status</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-white/5">
+              <tbody className="divide-y divide-slate-100 dark:divide-white/5">
                 {transactions.map((tx) => (
                   <tr key={tx.id} className="hover:bg-white/5 transition-colors group cursor-default">
                     <td className="px-8 py-5 text-stone-500 font-mono text-xs">{tx.date}</td>

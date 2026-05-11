@@ -3,6 +3,7 @@ import { Logo } from './Logo';
 import { Button } from './Button';
 import { Menu, Activity, Database, X, Linkedin, Mail, Sun, Moon } from 'lucide-react';
 import { CookieConsent } from './CookieConsent';
+import { ThemeToggle } from './ThemeToggle';
 
 export type PublicPageType = 'home' | 'about' | 'contributors' | 'money';
 
@@ -59,7 +60,7 @@ export const PublicLayout: React.FC<PublicLayoutProps> = ({
    ];
 
    return (
-      <div className="min-h-screen text-white font-sans selection:bg-purple-500/30 selection:text-purple-200">
+      <div className="min-h-screen text-slate-900 dark:text-white font-sans selection:bg-blue-500/30 selection:text-blue-900 dark:selection:bg-purple-500/30 dark:selection:text-purple-200 transition-colors duration-300">
 
          {/* Global Background Gradient & Grid - Across all public pages */}
          <div className="fixed inset-0 z-0 pointer-events-none bg-[#020205]">
@@ -85,7 +86,7 @@ export const PublicLayout: React.FC<PublicLayoutProps> = ({
                {/* Left: Logo */}
                <div className="flex items-center gap-2 md:gap-3 cursor-pointer group" onClick={() => onNavigate('home')}>
                   <Logo className="h-10 w-10 md:h-14 md:w-14 transition-transform duration-300 group-hover:scale-110" />
-                  <span className="font-extrabold text-lg md:text-xl tracking-[0.05em] text-white transition-colors uppercase whitespace-nowrap">Starset</span>
+                  <span className="font-extrabold text-lg md:text-xl tracking-[0.05em] text-slate-900 dark:text-white transition-colors uppercase whitespace-nowrap">Starset</span>
                </div>
 
                {/* Right: Floating Capsule (Desktop) */}
@@ -96,7 +97,7 @@ export const PublicLayout: React.FC<PublicLayoutProps> = ({
                         <button
                            key={item.id}
                            onClick={() => onNavigate(item.id)}
-                           className={`text-[11px] font-black tracking-widest uppercase transition-all duration-200 ${currentPage === item.id ? 'text-white' : 'text-zinc-400 hover:text-white'}`}
+                           className={`text-[11px] font-black tracking-widest uppercase transition-all duration-200 ${currentPage === item.id ? 'text-blue-600 dark:text-white' : 'text-slate-500 dark:text-zinc-400 hover:text-blue-600 dark:hover:text-white'}`}
                         >
                            {item.name}
                         </button>
@@ -107,10 +108,17 @@ export const PublicLayout: React.FC<PublicLayoutProps> = ({
                   <Button onClick={onEnterApp} className="bg-white text-black hover:bg-zinc-200 !rounded-full px-7 shadow-[0_0_20px_rgba(255,255,255,0.1)] transition-all text-[11px] font-black tracking-widest uppercase h-10 border-0">
                      Start Earning
                   </Button>
+
+                  {/* Theme Toggle */}
+                  <div className="ml-2 border-l border-white/10 pl-4 h-6 flex items-center">
+                     <ThemeToggle className="!h-9 !w-9" />
+                  </div>
                </div>
 
                {/* Right Actions (Mobile) */}
-               <div className="flex items-center gap-2 md:gap-3 lg:hidden">
+                <div className="flex items-center gap-2 md:gap-3 lg:hidden">
+                  <ThemeToggle className="!h-9 !w-9" />
+                  
                   <Button onClick={onEnterApp} size="sm" className="bg-white text-black hover:bg-zinc-200 !rounded-full px-4 shadow-[0_0_15px_rgba(255,255,255,0.1)] transition-all text-xs font-bold h-9">
                      Start Earning
                   </Button>
@@ -158,7 +166,7 @@ export const PublicLayout: React.FC<PublicLayoutProps> = ({
          </main>
 
          {/* Professional Footer */}
-         <footer className="pt-20 pb-10 px-6 relative z-10 border-t border-white/5 bg-[#020205]/40 backdrop-blur-xl mt-20">
+         <footer className="pt-20 pb-10 px-6 relative z-10 border-t border-slate-200 dark:border-white/5 bg-white/80 dark:bg-[#020205]/40 backdrop-blur-xl mt-20">
             <div className="max-w-7xl mx-auto">
                <div className="grid grid-cols-1 md:grid-cols-3 gap-12 md:gap-8 mb-16">
                   <div className="md:col-span-1 space-y-4 text-center md:text-left flex flex-col items-center md:items-start">
@@ -206,7 +214,7 @@ export const PublicLayout: React.FC<PublicLayoutProps> = ({
                         <li><a href="#" className="text-sm text-zinc-400 hover:text-blue-400 flex items-center justify-center md:justify-start gap-2 transition-colors"><Mail className="h-4 w-4" /> support@starset.intelligence</a></li>
 
                         <li className="pt-2 w-full">
-                           <Button onClick={onEnterApp} variant="outline" size="sm" className="w-full justify-center bg-transparent border-white/10 hover:bg-white/5 text-white">
+                           <Button onClick={onEnterApp} variant="outline" size="sm" className="w-full justify-center bg-transparent border-slate-300 dark:border-white/10 hover:bg-slate-100 dark:hover:bg-white/5 text-slate-700 dark:text-white">
                               Login to Terminal
                            </Button>
                         </li>
@@ -215,7 +223,7 @@ export const PublicLayout: React.FC<PublicLayoutProps> = ({
                </div>
 
                {/* Bottom Bar */}
-               <div className="pt-8 border-t border-white/10 flex flex-col md:flex-row justify-between items-center gap-4 text-xs text-zinc-500">
+               <div className="pt-8 border-t border-slate-200 dark:border-white/10 flex flex-col md:flex-row justify-between items-center gap-4 text-xs text-zinc-500">
                   <p>&copy; {new Date().getFullYear()} Starset Intelligence. All rights reserved.</p>
                </div>
             </div>

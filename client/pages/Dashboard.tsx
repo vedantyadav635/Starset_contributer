@@ -121,7 +121,7 @@ export const Dashboard: React.FC<DashboardProps> = ({ onNavigate }) => {
     <div className="space-y-6 animate-in fade-in duration-500">
 
       {/* Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-6 border-b border-white/10">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-6 border-b border-slate-200 dark:border-white/10">
         <div>
           <h1 className="text-2xl font-bold text-white tracking-tight">Dashboard</h1>
           <p className="text-zinc-500 text-sm mt-1">
@@ -129,7 +129,7 @@ export const Dashboard: React.FC<DashboardProps> = ({ onNavigate }) => {
           </p>
         </div>
         <div className="flex items-center gap-3">
-          <Button variant="secondary" onClick={() => onNavigate('tasks')} size="sm" className="bg-white/10 text-white border-white/10 hover:bg-white/20">
+          <Button variant="secondary" onClick={() => onNavigate('tasks')} size="sm" className="bg-slate-100 dark:bg-white/10 text-slate-700 dark:text-white border-slate-200 dark:border-white/10 hover:bg-slate-200 dark:hover:bg-white/20">
             View Data Tasks
           </Button>
         </div>
@@ -138,7 +138,7 @@ export const Dashboard: React.FC<DashboardProps> = ({ onNavigate }) => {
       {/* KPI Stats - Real Data */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
         {statCards.map((stat, idx) => (
-          <div key={idx} className="bg-zinc-900 p-6 md:p-7 rounded-[2rem] border border-white/10 shadow-sm transition-all hover:shadow-lg hover:scale-[1.02] duration-300 group">
+          <div key={idx} className="bg-white dark:bg-zinc-900 p-6 md:p-7 rounded-[2rem] border border-slate-200 dark:border-white/10 shadow-sm transition-all hover:shadow-lg hover:scale-[1.02] duration-300 group">
             <div className="flex items-center justify-between mb-6">
               <div className={`p-3 rounded-2xl transition-colors ${stat.label === 'Acceptance' ? 'bg-blue-900/20 text-blue-400' : stat.label === 'Accepted' ? 'bg-emerald-900/20 text-emerald-400' : stat.label === 'In Review' ? 'bg-amber-900/20 text-amber-400' : 'bg-purple-900/20 text-purple-400'}`}>
                 <stat.icon className="h-6 w-6" />
@@ -153,14 +153,14 @@ export const Dashboard: React.FC<DashboardProps> = ({ onNavigate }) => {
 
       {/* Quick Actions */}
       <div className="grid grid-cols-1 gap-6 mt-8">
-        <div className="bg-zinc-900 text-white rounded-[2.5rem] border border-white/10 p-8 md:p-10 relative overflow-hidden group cursor-pointer" onClick={() => onNavigate('tasks')}>
+        <div className="bg-white dark:bg-zinc-900 text-slate-900 dark:text-white rounded-[2.5rem] border border-slate-200 dark:border-white/10 p-8 md:p-10 relative overflow-hidden group cursor-pointer" onClick={() => onNavigate('tasks')}>
           <div className="absolute top-0 right-0 w-[60%] h-full bg-gradient-to-l from-blue-600/20 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700"></div>
           <div className="relative z-10">
-            <div className="h-14 w-14 bg-white/10 rounded-2xl flex items-center justify-center text-blue-400 mb-6 group-hover:scale-110 transition-transform duration-500">
+            <div className="h-14 w-14 bg-slate-100 dark:bg-white/10 rounded-2xl flex items-center justify-center text-blue-500 dark:text-blue-400 mb-6 group-hover:scale-110 transition-transform duration-500">
               <Database className="h-7 w-7" />
             </div>
             <h3 className="text-2xl font-black mb-2 tracking-tight">Active Operation Tasks</h3>
-            <p className="text-stone-400 font-medium mb-6">Contribute high-quality data to the network.</p>
+            <p className="text-slate-500 dark:text-stone-400 font-medium mb-6">Contribute high-quality data to the network.</p>
             <div className="inline-flex items-center text-sm font-black uppercase tracking-widest text-blue-400 group-hover:translate-x-2 transition-transform">
               Launch Terminal <ArrowRight className="ml-2 h-4 w-4" />
             </div>

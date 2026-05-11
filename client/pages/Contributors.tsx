@@ -23,7 +23,7 @@ export const Contributors: React.FC<PageProps> = ({ onNavigate, onEnterApp }) =>
             <div className="text-center lg:text-left">
               <div className="inline-flex items-center gap-3 px-5 py-2.5 rounded-full bg-white/5 border border-white/10 mb-8 shadow-sm">
                 <Zap className="w-4 h-4 text-blue-400" />
-                <span className="text-sm font-bold text-blue-100 uppercase tracking-wider">
+                <span className="text-sm font-bold text-blue-600 dark:text-blue-100 uppercase tracking-wider">
                   Joining 100,000+ contributors worldwide
                 </span>
               </div>
@@ -194,10 +194,10 @@ export const Contributors: React.FC<PageProps> = ({ onNavigate, onEnterApp }) =>
       </div>
 
       {/* CTA Section */}
-      <div className="relative z-10 py-24 bg-zinc-950/50 backdrop-blur-md border-y border-white/5">
+      <div className="relative z-10 py-24 bg-slate-50/50 dark:bg-zinc-950/50 backdrop-blur-md border-y border-slate-200 dark:border-white/5">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <h2 className="text-4xl sm:text-7xl font-black text-white mb-8 leading-tight tracking-tighter">
-            Ready to Start <span className="text-blue-400">Earning?</span>
+            Ready to Start <span className="text-blue-500 dark:text-blue-400">Earning?</span>
           </h2>
           <p className="text-xl text-zinc-400 mb-12 font-medium">
             Join thousands of contributors making money on their own schedule without any hassle.
@@ -274,19 +274,19 @@ const StatCard: React.FC<{
   color: 'blue' | 'emerald' | 'purple' | 'indigo';
 }> = ({ icon: Icon, value, label, color }) => {
   const colorStyles = {
-    blue: 'text-blue-400 bg-blue-500/10 border-white/10',
-    emerald: 'text-emerald-400 bg-emerald-500/10 border-white/10',
-    purple: 'text-purple-400 bg-purple-500/10 border-white/10',
-    indigo: 'text-indigo-400 bg-indigo-500/10 border-white/10'
+    blue: 'text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-900/20 border-blue-100 dark:border-white/10',
+    emerald: 'text-emerald-600 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-900/20 border-emerald-100 dark:border-white/10',
+    purple: 'text-purple-600 dark:text-purple-400 bg-purple-50 dark:bg-purple-900/20 border-purple-100 dark:border-white/10',
+    indigo: 'text-indigo-600 dark:text-indigo-400 bg-indigo-50 dark:bg-indigo-900/20 border-indigo-100 dark:border-white/10'
   };
 
   return (
-    <div className={`bg-zinc-900/50 backdrop-blur-md p-8 rounded-[2rem] border transition-all duration-300 group hover:-translate-y-1 ${colorStyles[color]}`}>
-      <div className={`w-14 h-14 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform ${colorStyles[color].split(' shadow')[0]}`}>
+    <div className={`bg-white dark:bg-zinc-900/50 backdrop-blur-md p-8 rounded-[2rem] border shadow-sm dark:shadow-none transition-all duration-300 group hover:-translate-y-1 ${colorStyles[color]}`}>
+      <div className={`w-14 h-14 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform ${colorStyles[color].split(' border')[0]}`}>
         <Icon className="w-7 h-7" />
       </div>
-      <div className="text-3xl font-black text-white mb-1 tracking-tight">{value}</div>
-      <div className="text-sm text-zinc-400 font-bold uppercase tracking-wider">{label}</div>
+      <div className="text-3xl font-black text-slate-900 dark:text-white mb-1 tracking-tight">{value}</div>
+      <div className="text-sm text-slate-500 dark:text-zinc-400 font-bold uppercase tracking-wider">{label}</div>
     </div>
   );
 };
@@ -300,20 +300,20 @@ const FeatureCard: React.FC<{
   };
 }> = ({ feature }) => {
   const colorMap: any = {
-    blue: 'text-blue-400 bg-blue-500/10 border-white/10',
-    emerald: 'text-emerald-400 bg-emerald-500/10 border-white/10',
-    purple: 'text-purple-400 bg-purple-500/10 border-white/10',
+    blue: 'text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-900/20 border-blue-100 dark:border-white/10',
+    emerald: 'text-emerald-600 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-900/20 border-emerald-100 dark:border-white/10',
+    purple: 'text-purple-600 dark:text-purple-400 bg-purple-50 dark:bg-purple-900/20 border-purple-100 dark:border-white/10',
   };
 
   return (
-    <div className={`bg-zinc-900/50 backdrop-blur-md p-10 rounded-[2.5rem] border ${colorMap[feature.color] || 'border-white/10'} transition-all duration-500 hover:-translate-y-2 group`}>
-      <div className={`w-16 h-16 rounded-2xl flex items-center justify-center mb-8 group-hover:scale-110 transition-transform ${colorMap[feature.color] || 'bg-white/5'}`}>
+    <div className={`bg-white dark:bg-zinc-900/50 backdrop-blur-md p-10 rounded-[2.5rem] border shadow-sm dark:shadow-none ${colorMap[feature.color] || 'border-slate-200 dark:border-white/10'} transition-all duration-500 hover:-translate-y-2 group`}>
+      <div className={`w-16 h-16 rounded-2xl flex items-center justify-center mb-8 group-hover:scale-110 transition-transform ${colorMap[feature.color] || 'bg-slate-50 dark:bg-white/5'}`}>
         <feature.icon className="w-8 h-8" />
       </div>
-      <h3 className="text-2xl font-black text-white mb-4 tracking-tight">
+      <h3 className="text-2xl font-black text-slate-900 dark:text-white mb-4 tracking-tight">
         {feature.title}
       </h3>
-      <p className="text-zinc-400 leading-relaxed font-medium">
+      <p className="text-slate-600 dark:text-zinc-400 leading-relaxed font-medium">
         {feature.desc}
       </p>
     </div>
@@ -331,20 +331,20 @@ const StepCard: React.FC<{
 }> = ({ step }) => {
   return (
     <div className="relative group">
-      <div className="flex flex-col h-full bg-zinc-900/40 backdrop-blur-md p-8 rounded-3xl border border-white/5 hover:border-white/10 transition-all duration-300">
-        <div className="text-5xl font-black text-white/10 mb-6 tracking-tighter">
+      <div className="flex flex-col h-full bg-white dark:bg-zinc-900/40 backdrop-blur-md p-8 rounded-3xl border border-slate-200 dark:border-white/5 hover:border-slate-300 dark:hover:border-white/10 transition-all duration-300 shadow-sm dark:shadow-none">
+        <div className="text-5xl font-black text-slate-100 dark:text-white/10 mb-6 tracking-tighter">
           {step.num}
         </div>
 
-        <div className="w-14 h-14 rounded-2xl bg-white/5 flex items-center justify-center mb-6 transition-transform group-hover:scale-110 border border-white/10">
-          <step.icon className="w-7 h-7 text-white" />
+        <div className="w-14 h-14 rounded-2xl bg-slate-50 dark:bg-white/5 flex items-center justify-center mb-6 transition-transform group-hover:scale-110 border border-slate-200 dark:border-white/10">
+          <step.icon className={`w-7 h-7 ${step.color === 'blue' ? 'text-blue-600 dark:text-blue-400' : step.color === 'purple' ? 'text-purple-600 dark:text-purple-400' : 'text-emerald-600 dark:text-emerald-400'}`} />
         </div>
 
-        <h3 className="text-xl font-bold text-white mb-3 tracking-tight">
+        <h3 className="text-xl font-bold text-slate-900 dark:text-white mb-3 tracking-tight">
           {step.title}
         </h3>
 
-        <p className="text-zinc-400 leading-relaxed font-medium">
+        <p className="text-slate-600 dark:text-zinc-400 leading-relaxed font-medium">
           {step.desc}
         </p>
       </div>
