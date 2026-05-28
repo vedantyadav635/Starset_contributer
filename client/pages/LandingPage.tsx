@@ -390,114 +390,57 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onEnterApp, onStartSig
                </div>
 
                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                  {/* Task Card 1: Audio */}
-                  <motion.div 
-                     whileHover={{ y: -5 }}
-                     className="bg-white dark:bg-zinc-900 rounded-[32px] p-8 border border-slate-200 dark:border-white/10 shadow-luel group cursor-pointer"
-                  >
-                     <div className="h-56 bg-slate-50 dark:bg-zinc-950 rounded-2xl mb-8 flex items-center justify-center relative overflow-hidden">
-                        <div className="absolute inset-0 bg-luel-dots opacity-20"></div>
+                  {[
+                     {
+                        title: "Audio Recording",
+                        desc: "Read short phrases or record conversations to help AI understand speech across languages.",
+                        icon: Mic,
+                        color: "text-blue-500",
+                        bg: "bg-blue-50 dark:bg-blue-900/10",
+                        badge: "Voice Assistant",
+                        price: "Avg: ₹150/hr"
+                     },
+                     {
+                        title: "Image Annotation",
+                        desc: "Draw boxes around objects or describe scenes to train computer vision for autonomous systems.",
+                        icon: ImageIcon,
+                        color: "text-indigo-500",
+                        bg: "bg-indigo-50 dark:bg-indigo-900/10",
+                        badge: "Self-Driving",
+                        price: "Avg: ₹120/hr"
+                     },
+                     {
+                        title: "Text & Logic",
+                        desc: "Rate chatbot responses, write creative stories, or solve complex logic puzzles for LLMs.",
+                        icon: FileText,
+                        color: "text-violet-500",
+                        bg: "bg-violet-50 dark:bg-violet-900/10",
+                        badge: "RLHF",
+                        price: "Avg: ₹100/hr"
+                     }
+                  ].map((task, idx) => (
+                     <div key={idx} className="bg-white dark:bg-white/5 backdrop-blur-md p-5 md:p-8 rounded-[32px] border border-slate-100 dark:border-white/10 hover:border-blue-500/30 transition-all duration-300 relative overflow-hidden group md:hover:-translate-y-2 hover:shadow-xl shadow-sm cursor-pointer">
+                        <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-current to-transparent opacity-[0.03] dark:opacity-5 rounded-bl-full pointer-events-none transition-opacity group-hover:opacity-10" style={{ color: task.color.replace('text-', '') }}></div>
                         
-                        {/* Audio Waveform Animation */}
-                        <div className="flex items-end gap-1 h-12">
-                           {[...Array(8)].map((_, i) => (
-                              <motion.div
-                                 key={i}
-                                 animate={{ 
-                                    height: [10, Math.random() * 40 + 10, 10]
-                                 }}
-                                 transition={{ 
-                                    duration: 1, 
-                                    repeat: Infinity, 
-                                    delay: i * 0.1 
-                                 }}
-                                 className="w-1.5 bg-blue-500 rounded-full"
-                              />
-                           ))}
+                        <div className="flex justify-between items-start mb-5 md:mb-8 relative z-10">
+                           <div className={`h-12 w-12 md:h-16 md:w-16 ${task.bg} rounded-2xl flex items-center justify-center group-hover:scale-110 transition-transform duration-300 shadow-inner`}>
+                              <task.icon className={`h-5 w-5 md:h-8 md:w-8 ${task.color}`} />
+                           </div>
+                           <div className="bg-slate-50 dark:bg-zinc-900 px-3 py-1.5 rounded-full text-[10px] font-black shadow-sm border border-slate-200 dark:border-white/5 text-slate-900 dark:text-white">
+                              {task.price}
+                           </div>
                         </div>
 
-                        <div className="absolute top-4 right-4 bg-white dark:bg-zinc-900 px-3 py-1.5 rounded-full text-[10px] font-black shadow-sm border border-slate-100 dark:border-white/5 text-slate-900 dark:text-white">
-                           Avg: ₹150/hr
-                        </div>
-                     </div>
-                     <h3 className="text-2xl font-black text-slate-900 dark:text-white mb-3 tracking-tight">Audio Recording</h3>
-                     <p className="text-base text-slate-500 dark:text-zinc-400 mb-8 leading-relaxed">
-                        Read short phrases or record conversations to help AI understand speech across languages.
-                     </p>
-                     <div className="flex items-center gap-2">
-                        <span className="px-4 py-1.5 bg-slate-50 dark:bg-white/5 rounded-full text-[10px] font-black text-slate-500 dark:text-zinc-500 uppercase tracking-widest border border-slate-100 dark:border-white/5">
-                           Voice Assistant
-                        </span>
-                     </div>
-                  </motion.div>
-
-                  {/* Task Card 2: Image */}
-                  <motion.div 
-                     whileHover={{ y: -5 }}
-                     className="bg-white dark:bg-zinc-900 rounded-[32px] p-8 border border-slate-200 dark:border-white/10 shadow-luel group cursor-pointer"
-                  >
-                     <div className="h-56 bg-slate-50 dark:bg-zinc-950 rounded-2xl mb-8 flex items-center justify-center relative overflow-hidden">
-                        <div className="absolute inset-0 bg-luel-dots opacity-20"></div>
+                        <h3 className="text-lg md:text-2xl font-black text-slate-900 dark:text-white mb-2 md:mb-4 tracking-tight relative z-10">{task.title}</h3>
+                        <p className="text-sm md:text-lg text-slate-500 dark:text-zinc-400 leading-relaxed mb-6 md:mb-8 relative z-10">{task.desc}</p>
                         
-                        {/* Bounding Box Visual */}
-                        <div className="relative w-24 h-24 border-2 border-dashed border-indigo-300 dark:border-indigo-500/30 rounded-lg">
-                           <motion.div 
-                              animate={{ 
-                                 top: ["10%", "50%", "20%"],
-                                 left: ["10%", "30%", "60%"],
-                                 width: ["40%", "60%", "30%"],
-                                 height: ["30%", "20%", "50%"]
-                              }}
-                              transition={{ duration: 4, repeat: Infinity }}
-                              className="absolute bg-indigo-500/20 border border-indigo-500 rounded-sm"
-                           />
-                           <ImageIcon className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 h-8 w-8 text-indigo-500/40" />
-                        </div>
-
-                        <div className="absolute top-4 right-4 bg-white dark:bg-zinc-900 px-3 py-1.5 rounded-full text-[10px] font-black shadow-sm border border-slate-100 dark:border-white/5 text-slate-900 dark:text-white">
-                           Avg: ₹120/hr
+                        <div className="flex items-center gap-2 relative z-10">
+                           <span className="px-4 py-1.5 bg-slate-50 dark:bg-white/5 rounded-full text-[10px] font-black text-slate-500 dark:text-zinc-500 uppercase tracking-widest border border-slate-200 dark:border-white/5">
+                              {task.badge}
+                           </span>
                         </div>
                      </div>
-                     <h3 className="text-2xl font-black text-slate-900 dark:text-white mb-3 tracking-tight">Image Annotation</h3>
-                     <p className="text-base text-slate-500 dark:text-zinc-400 mb-8 leading-relaxed">
-                        Draw boxes around objects or describe scenes to train computer vision for autonomous systems.
-                     </p>
-                     <div className="flex items-center gap-2">
-                        <span className="px-4 py-1.5 bg-slate-50 dark:bg-white/5 rounded-full text-[10px] font-black text-slate-500 dark:text-zinc-500 uppercase tracking-widest border border-slate-100 dark:border-white/5">
-                           Self-Driving
-                        </span>
-                     </div>
-                  </motion.div>
-
-                  {/* Task Card 3: Text */}
-                  <motion.div 
-                     whileHover={{ y: -5 }}
-                     className="bg-white dark:bg-zinc-900 rounded-[32px] p-8 border border-slate-200 dark:border-white/10 shadow-luel group cursor-pointer"
-                  >
-                     <div className="h-56 bg-slate-50 dark:bg-zinc-950 rounded-2xl mb-8 flex items-center justify-center relative overflow-hidden">
-                        <div className="absolute inset-0 bg-luel-dots opacity-20"></div>
-                        
-                        {/* Typing Animation Visual */}
-                        <div className="w-32 space-y-2">
-                           <motion.div animate={{ width: ["40%", "100%", "60%"] }} transition={{ duration: 2, repeat: Infinity }} className="h-1.5 bg-violet-500/30 rounded-full" />
-                           <motion.div animate={{ width: ["80%", "30%", "90%"] }} transition={{ duration: 2, repeat: Infinity, delay: 0.5 }} className="h-1.5 bg-violet-500/50 rounded-full" />
-                           <motion.div animate={{ width: ["20%", "70%", "40%"] }} transition={{ duration: 2, repeat: Infinity, delay: 1 }} className="h-1.5 bg-violet-500/20 rounded-full" />
-                        </div>
-
-                        <div className="absolute top-4 right-4 bg-white dark:bg-zinc-900 px-3 py-1.5 rounded-full text-[10px] font-black shadow-sm border border-slate-100 dark:border-white/5 text-slate-900 dark:text-white">
-                           Avg: ₹100/hr
-                        </div>
-                     </div>
-                     <h3 className="text-2xl font-black text-slate-900 dark:text-white mb-3 tracking-tight">Text & Logic</h3>
-                     <p className="text-base text-slate-500 dark:text-zinc-400 mb-8 leading-relaxed">
-                        Rate chatbot responses, write creative stories, or solve complex logic puzzles for LLMs.
-                     </p>
-                     <div className="flex items-center gap-2">
-                        <span className="px-4 py-1.5 bg-slate-50 dark:bg-white/5 rounded-full text-[10px] font-black text-slate-500 dark:text-zinc-500 uppercase tracking-widest border border-slate-100 dark:border-white/5">
-                           RLHF
-                        </span>
-                     </div>
-                  </motion.div>
+                  ))}
                </div>
             </motion.div>
          </section>
