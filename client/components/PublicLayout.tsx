@@ -105,7 +105,7 @@ export const PublicLayout: React.FC<PublicLayoutProps> = ({
                   </div>
 
                   {/* Button */}
-                  <Button onClick={onEnterApp} className="bg-white text-black hover:bg-zinc-200 !rounded-full px-7 shadow-[0_0_20px_rgba(255,255,255,0.1)] transition-all text-[11px] font-black tracking-widest uppercase h-10 border-0">
+                  <Button onClick={onEnterApp} className="bg-blue-600 hover:bg-blue-700 !text-white !rounded-full px-7 shadow-[0_0_20px_rgba(59,130,246,0.3)] transition-all text-[11px] font-black tracking-widest uppercase h-10 border-0">
                      Start Earning
                   </Button>
 
@@ -119,7 +119,7 @@ export const PublicLayout: React.FC<PublicLayoutProps> = ({
                 <div className="flex items-center gap-2 md:gap-3 lg:hidden">
                   <ThemeToggle className="!h-9 !w-9" />
                   
-                  <Button onClick={onEnterApp} size="sm" className="bg-white text-black hover:bg-zinc-200 !rounded-full px-4 shadow-[0_0_15px_rgba(255,255,255,0.1)] transition-all text-xs font-bold h-9">
+                  <Button onClick={onEnterApp} size="sm" className="bg-blue-600 hover:bg-blue-700 !text-white !rounded-full px-4 shadow-[0_0_15px_rgba(59,130,246,0.3)] transition-all text-xs font-bold h-9">
                      Start Earning
                   </Button>
 
