@@ -1,10 +1,21 @@
 import { Router, Request, Response } from "express";
 import multer from "multer";
+import rateLimit from "express-rate-limit";
 import { uploadToBucket, copyBetweenBuckets, uploadToB2, generateAudioFileName } from "../utils/b2Upload";
 import { validateAudio } from "../utils/audioValidator";
 import { supabase } from "../db/supabase";
 
 const router = Router();
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Strict Rate Limiter for File Uploads (prevents B2 DoS)
+// ─────────────────────────────────────────────────────────────────────────────
+const uploadLimiter = rateLimit({
+    windowMs: 60 * 60 * 1000, // 1 hour
+    max: 20, // max 20 submissions per IP per hour
+    message: { error: "Submission limit reached. Please try again later." },
+});
+
 
 const MAX_SUBMISSIONS_PER_TASK = 100;
 
@@ -180,13 +191,14 @@ async function runValidationPipeline(
 // ─────────────────────────────────────────────────────────────────────────────
 // POST /submissions/audio
 // ─────────────────────────────────────────────────────────────────────────────
-router.post("/audio", upload.single('audio'), async (req: Request, res: Response) => {
+router.post("/audio", uploadLimiter, upload.single('audio'), async (req: Request, res: Response) => {
     try {
-        const { taskId, userId, duration } = req.body;
+        const { taskId, duration } = req.body;
+        const userId = (req as any).user?.id;
         const audioFile = req.file;
 
         if (!taskId || !userId) {
-            return res.status(400).json({ error: "Missing required fields: taskId and userId are required" });
+            return res.status(400).json({ error: "Missing required fields: taskId is required and user must be authenticated" });
         }
         if (!audioFile) {
             return res.status(400).json({ error: "No audio file provided" });
@@ -333,13 +345,14 @@ router.post("/audio", upload.single('audio'), async (req: Request, res: Response
 // ─────────────────────────────────────────────────────────────────────────────
 // POST /submissions/image
 // ─────────────────────────────────────────────────────────────────────────────
-router.post("/image", upload.single('image'), async (req: Request, res: Response) => {
+router.post("/image", uploadLimiter, upload.single('image'), async (req: Request, res: Response) => {
     try {
-        const { taskId, userId } = req.body;
+        const { taskId } = req.body;
+        const userId = (req as any).user?.id;
         const imageFile = req.file;
 
         if (!taskId || !userId || !imageFile) {
-            return res.status(400).json({ error: "Missing required fields" });
+            return res.status(400).json({ error: "Missing required fields: taskId, imageFile required and user must be authenticated" });
         }
 
         // Duplicate-submission guard
@@ -395,10 +408,11 @@ router.post("/image", upload.single('image'), async (req: Request, res: Response
 // ─────────────────────────────────────────────────────────────────────────────
 router.post("/text", async (req: Request, res: Response) => {
     try {
-        const { taskId, userId, textContent, selectedOption } = req.body;
+        const { taskId, textContent, selectedOption } = req.body;
+        const userId = (req as any).user?.id;
 
         if (!taskId || !userId || (!textContent && !selectedOption)) {
-            return res.status(400).json({ error: "Missing required fields" });
+            return res.status(400).json({ error: "Missing required fields: taskId, content required and user must be authenticated" });
         }
 
         // Duplicate-submission guard
