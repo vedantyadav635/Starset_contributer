@@ -47,7 +47,7 @@ export const TaskList: React.FC<TaskListProps> = ({ onSelectTask, tasks, userRol
 
       {/* Page Header */}
       <div className="flex flex-col gap-1">
-        <h1 className="text-3xl font-bold text-white tracking-tight">
+        <h1 className="text-3xl font-bold text-slate-900 dark:text-white tracking-tight">
           {userRole === 'admin' ? 'Task Registry' : 'Active Projects'}
         </h1>
         <p className="text-zinc-500 text-base">
@@ -131,7 +131,7 @@ export const TaskList: React.FC<TaskListProps> = ({ onSelectTask, tasks, userRol
                         {getTaskIcon(task.type as TaskType)}
                         {task.type}
                       </span>
-                      <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-[11px] font-bold uppercase tracking-wide bg-white/10 text-stone-300 border border-white/10">
+                      <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-[11px] font-bold uppercase tracking-wide bg-slate-100 dark:bg-white/10 text-slate-700 dark:text-stone-300 border border-slate-200 dark:border-white/10">
                         <Globe className="h-3 w-3" /> {task.language}
                       </span>
                       <span className={`inline-flex items-center px-2.5 py-1 rounded-full text-[11px] font-bold uppercase tracking-wide border ${task.difficulty === 'Beginner'
@@ -210,11 +210,11 @@ export const TaskList: React.FC<TaskListProps> = ({ onSelectTask, tasks, userRol
 
                     {/* Title — no clamp, always fully visible */}
                     <div>
-                      <h3 className="text-lg md:text-xl font-bold text-white group-hover:text-blue-400 transition-colors leading-snug">
+                      <h3 className="text-lg md:text-xl font-bold text-slate-900 dark:text-white group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors leading-snug">
                         {task.title}
                       </h3>
                       {task.project && task.project !== 'NA' && !task.imageUrl && (
-                        <p className="text-xs text-stone-400 mt-0.5 uppercase tracking-wider font-semibold">{task.project}</p>
+                        <p className="text-xs text-slate-500 dark:text-stone-400 mt-0.5 uppercase tracking-wider font-semibold">{task.project}</p>
                       )}
                     </div>
 
@@ -222,9 +222,9 @@ export const TaskList: React.FC<TaskListProps> = ({ onSelectTask, tasks, userRol
                     {task.requirements && task.requirements.length > 0 &&
                       task.requirements.some(r => r && r !== 'NA') && (
                         <div className="flex items-center gap-2 flex-wrap">
-                          <span className="text-xs text-stone-400 uppercase tracking-wide font-bold">Requires:</span>
+                          <span className="text-xs text-slate-500 dark:text-stone-400 uppercase tracking-wide font-bold">Requires:</span>
                           {task.requirements.filter(r => r && r !== 'NA').map((req, i) => (
-                            <span key={i} className="inline-flex items-center px-2 py-0.5 bg-white/10 text-stone-300 rounded-md text-xs font-semibold">
+                            <span key={i} className="inline-flex items-center px-2 py-0.5 bg-slate-200 dark:bg-white/10 text-slate-700 dark:text-stone-300 rounded-md text-xs font-semibold">
                               {req}
                             </span>
                           ))}
@@ -233,7 +233,7 @@ export const TaskList: React.FC<TaskListProps> = ({ onSelectTask, tasks, userRol
 
                     {/* Bottom row: time, payout, quota, CTA */}
                     <div className="flex items-center gap-3 mt-auto pt-1 flex-wrap">
-                      <span className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-white/5 border border-white/10 rounded-lg text-sm font-semibold text-white">
+                      <span className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-slate-100 dark:bg-white/5 border border-slate-200 dark:border-white/10 rounded-lg text-sm font-semibold text-slate-900 dark:text-white">
                         <Clock className="h-3.5 w-3.5 text-stone-400" />
                         {task.estimatedTimeSec} sec
                       </span>
@@ -278,7 +278,7 @@ export const TaskList: React.FC<TaskListProps> = ({ onSelectTask, tasks, userRol
             <div className="h-20 w-20 bg-slate-100 dark:bg-white/10 rounded-full flex items-center justify-center mb-6">
               <Filter className="h-10 w-10 text-slate-400 dark:text-stone-400" />
             </div>
-            <h3 className="text-xl font-bold text-white">No active campaigns</h3>
+            <h3 className="text-xl font-bold text-slate-900 dark:text-white">No active campaigns</h3>
             <p className="text-stone-500 mt-2 text-base">Try adjusting your filters or come back later.</p>
             <Button variant="secondary" className="mt-6 bg-slate-100 dark:bg-white/5 text-slate-700 dark:text-white border-slate-200 dark:border-white/10" onClick={() => setFilterType('All')}>
               Clear Filters
