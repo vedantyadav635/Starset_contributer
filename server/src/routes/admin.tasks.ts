@@ -1,12 +1,13 @@
 import { Router } from "express";
 import { supabase } from "../db/supabase";
+import { validate, CreateTaskSchema } from "../middleware/validate";
 
 const router = Router();
 
 /**
  * POST /admin/tasks
  */
-router.post("/", async (req, res) => {
+router.post("/", validate(CreateTaskSchema), async (req, res) => {
   try {
     console.log("📥 Incoming task:", req.body);
 
