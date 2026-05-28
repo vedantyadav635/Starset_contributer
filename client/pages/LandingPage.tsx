@@ -62,7 +62,7 @@ const EcosystemVisual = () => {
                transition={{ duration: 0.8, delay: 0.2 }}
                whileHover={{ y: -5, scale: 1.02 }}
                whileTap={{ scale: 0.98 }}
-               className="w-full max-w-[320px] md:w-80 bg-white dark:bg-zinc-900 rounded-3xl p-6 border border-slate-200 dark:border-white/10 shadow-luel z-10 md:-rotate-3 md:hover:rotate-0 transition-transform cursor-pointer group"
+               className="w-full max-w-[320px] md:w-80 bg-white dark:bg-zinc-900 rounded-3xl p-6 border border-slate-200 dark:border-white/10 shadow-luel z-10 transition-all duration-300 cursor-pointer group"
             >
                <div className="flex items-center gap-4 mb-4">
                   <div className="w-12 h-12 rounded-2xl bg-indigo-50 dark:bg-indigo-500/10 flex items-center justify-center group-hover:bg-indigo-500 group-hover:text-white transition-colors">
@@ -103,22 +103,22 @@ const EcosystemVisual = () => {
                <div className="flex items-center justify-between mb-4">
                   <div className="flex items-center gap-3">
                      <div className="w-2 h-2 rounded-full bg-amber-500 animate-pulse"></div>
-                     <span className="text-[10px] font-black text-slate-500 uppercase tracking-widest">Neural Processing</span>
+                     <span className="text-[10px] font-black text-slate-500 uppercase tracking-widest">Quality Check</span>
                   </div>
-                  <Cpu className="w-4 h-4 text-slate-400 animate-spin-slow" />
+                  <Cpu className="w-4 h-4 text-slate-400 animate-spin-slower" />
                </div>
                <div className="space-y-3">
                   <div className="flex items-center gap-3">
                      <div className="w-8 h-8 rounded-lg bg-slate-100 dark:bg-white/5 flex items-center justify-center">
                         <Network className="w-4 h-4 text-indigo-500" />
                      </div>
-                     <div className="text-[10px] font-bold text-slate-700 dark:text-zinc-300">Model Learning In Progress</div>
+                     <div className="text-[10px] font-bold text-slate-700 dark:text-zinc-300">Quality Validation Active</div>
                   </div>
                   <div className="flex items-center gap-3">
                      <div className="w-8 h-8 rounded-lg bg-slate-100 dark:bg-white/5 flex items-center justify-center">
                         <Brain className="w-4 h-4 text-blue-500" />
                      </div>
-                     <div className="text-[10px] font-bold text-slate-700 dark:text-zinc-300">Accuracy Verified: 99.8%</div>
+                     <div className="text-[10px] font-bold text-slate-700 dark:text-zinc-300">Accuracy: 99.8%</div>
                   </div>
                </div>
             </motion.div>
@@ -130,7 +130,7 @@ const EcosystemVisual = () => {
                transition={{ duration: 0.8, delay: 0.6 }}
                whileHover={{ y: 5, scale: 1.02 }}
                whileTap={{ scale: 0.98 }}
-               className="w-full max-w-[320px] md:w-80 bg-white dark:bg-zinc-900 rounded-3xl p-6 border border-slate-200 dark:border-white/10 shadow-luel z-10 md:rotate-3 md:hover:rotate-0 transition-transform cursor-pointer group"
+               className="w-full max-w-[320px] md:w-80 bg-white dark:bg-zinc-900 rounded-3xl p-6 border border-slate-200 dark:border-white/10 shadow-luel z-10 transition-all duration-300 cursor-pointer group"
             >
                <div className="flex items-center justify-between mb-4">
                   <span className="text-[10px] font-black text-emerald-600 uppercase tracking-widest group-hover:text-emerald-400 transition-colors">Payment Sent</span>
@@ -153,7 +153,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onEnterApp, onStartSig
    const [openFaq, setOpenFaq] = useState<number | null>(null);
 
    useEffect(() => {
-      // Only run live counter on desktop — avoids re-renders on mobile
+      // Only run live counter on desktop â€” avoids re-renders on mobile
       const isMobile = window.matchMedia('(max-width: 768px)').matches;
       if (isMobile) return;
 
@@ -220,7 +220,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onEnterApp, onStartSig
                      initial={{ y: 20, opacity: 0 }}
                      animate={{ y: 0, opacity: 1 }}
                      transition={{ duration: 0.8, delay: 0.4 }}
-                     className="text-6xl md:text-8xl font-black text-slate-900 dark:text-white leading-[1] md:leading-[0.95] tracking-tighter mb-8"
+                     className="text-5xl md:text-7xl font-extrabold text-slate-900 dark:text-white leading-[1] md:leading-[0.95] tracking-tighter mb-8"
                   >
                      <motion.span 
                         initial={{ opacity: 0, x: -20 }}
@@ -235,7 +235,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onEnterApp, onStartSig
                         initial={{ opacity: 0, x: 20 }}
                         animate={{ opacity: 1, x: 0 }}
                         transition={{ delay: 0.7 }}
-                        className="bg-gradient-to-r from-blue-600 via-indigo-600 to-violet-600 bg-clip-text text-transparent animate-gradient-swipe drop-shadow-[0_0_15px_rgba(37,99,235,0.2)]"
+                        className="bg-gradient-to-r from-blue-600 via-indigo-600 to-violet-600 bg-clip-text text-transparent animate-gradient-swipe "
                      >
                         Teach AI.
                      </motion.span>
@@ -287,24 +287,24 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onEnterApp, onStartSig
 
 
          {/* --- STATS SECTION (REPLACES TELEMETRY) --- */}
-         <section className="py-14 md:py-20 relative overflow-hidden">
+         <section className="py-14 md:py-20 relative overflow-hidden border-y border-slate-200 dark:border-white/5 bg-white/50 dark:bg-transparent">
             <div className="absolute inset-0 bg-transparent opacity-20"></div>
             <div className="max-w-7xl mx-auto px-6 relative z-10">
                <div className="grid grid-cols-2 lg:grid-cols-4 gap-y-10 gap-x-4 md:gap-y-12 md:gap-x-6 text-center">
                   <div className="space-y-1.5">
-                     <div className="text-2xl sm:text-3xl md:text-5xl font-bold text-indigo-500">₹1K+</div>
+                     <div className="text-2xl sm:text-3xl md:text-5xl font-black text-indigo-600 dark:text-indigo-400">₹1K+</div>
                      <div className="text-[9px] sm:text-[10px] font-bold text-zinc-500 uppercase tracking-widest leading-tight">Paid to Contributors</div>
                   </div>
                   <div className="space-y-1.5">
-                     <div className="text-2xl sm:text-3xl md:text-5xl font-bold text-blue-500">99+</div>
+                     <div className="text-2xl sm:text-3xl md:text-5xl font-black text-blue-600 dark:text-blue-400">99+</div>
                      <div className="text-[9px] sm:text-[10px] font-bold text-zinc-500 uppercase tracking-widest leading-tight">Active Users</div>
                   </div>
                   <div className="space-y-1.5">
-                     <div className="text-2xl sm:text-3xl md:text-5xl font-bold text-purple-400">14</div>
+                     <div className="text-2xl sm:text-3xl md:text-5xl font-black text-violet-600 dark:text-violet-400">14</div>
                      <div className="text-[9px] sm:text-[10px] font-bold text-zinc-500 uppercase tracking-widest leading-tight">Countries Supported</div>
                   </div>
                   <div className="space-y-1.5">
-                     <div className="text-2xl sm:text-3xl md:text-5xl font-bold text-white">99.9%</div>
+                     <div className="text-2xl sm:text-3xl md:text-5xl font-black text-slate-900 dark:text-white">99.9%</div>
                      <div className="text-[9px] sm:text-[10px] font-bold text-zinc-500 uppercase tracking-widest leading-tight">Platform Uptime</div>
                   </div>
                </div>
@@ -321,7 +321,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onEnterApp, onStartSig
                className="max-w-7xl mx-auto"
             >
                <div className="text-center mb-6 md:mb-20 px-2">
-                  <h2 className="text-2xl sm:text-4xl md:text-6xl font-bold text-white mb-2 md:mb-6 tracking-tight">Why Contribute?</h2>
+                  <h2 className="text-2xl sm:text-4xl md:text-6xl font-black text-slate-900 dark:text-white mb-2 md:mb-6 tracking-tight">Why Contribute?</h2>
                   <p className="text-sm md:text-2xl text-zinc-500 max-w-3xl mx-auto">The most flexible and rewarding way to join the AI economy.</p>
                </div>
 
@@ -329,33 +329,33 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onEnterApp, onStartSig
                   {[
                      {
                         icon: Smartphone,
-                        color: "text-blue-400",
-                        bg: "bg-blue-900/10",
+                        color: "text-blue-600 dark:text-blue-400",
+                        bg: "bg-blue-50 dark:bg-blue-900/10",
                         title: "Work Anywhere",
                         desc: "Your phone is your office. Complete tasks while commuting, waiting in line, or relaxing at home."
                      },
                      {
                         icon: Zap,
-                        color: "text-amber-500",
-                        bg: "bg-amber-900/10",
+                        color: "text-amber-600 dark:text-amber-500",
+                        bg: "bg-amber-50 dark:bg-amber-900/10",
                         title: "Instant Earnings",
                         desc: "Watch your balance grow in real-time. Withdraw funds immediately to your bank or wallet."
                      },
                      {
                         icon: ShieldCheck,
-                        color: "text-emerald-500",
-                        bg: "bg-emerald-900/10",
+                        color: "text-emerald-600 dark:text-emerald-500",
+                        bg: "bg-emerald-50 dark:bg-emerald-900/10",
                         title: "Trusted Platform",
                         desc: "SOC2 certified. Trusted by 50,000+ contributors. Your data and privacy are our priority."
                      }
                   ].map((feature, idx) => (
-                     <div key={idx} className="bg-white/5 backdrop-blur-md p-5 md:p-8 rounded-3xl border border-white/10 hover:border-blue-500/30 transition-all duration-300 relative overflow-hidden group md:hover:-translate-y-2 hover:shadow-2xl flex-shrink-0 w-[80vw] sm:w-[340px] md:w-auto snap-center shadow-sm">
-                        <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-current to-transparent opacity-5 rounded-bl-full pointer-events-none transition-opacity group-hover:opacity-10" style={{ color: feature.color.replace('text-', '') }}></div>
+                     <div key={idx} className="bg-white dark:bg-white/5 backdrop-blur-md p-5 md:p-8 rounded-3xl border border-slate-200 dark:border-white/10 hover:border-blue-500/30 transition-all duration-300 relative overflow-hidden group md:hover:-translate-y-2 hover:shadow-2xl flex-shrink-0 w-[80vw] sm:w-[340px] md:w-auto snap-center shadow-sm">
+                        <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-current to-transparent opacity-[0.03] dark:opacity-5 rounded-bl-full pointer-events-none transition-opacity group-hover:opacity-10" style={{ color: feature.color.replace('text-', '') }}></div>
                         <div className={`h-12 w-12 md:h-16 md:w-16 ${feature.bg} rounded-2xl flex items-center justify-center mb-5 md:mb-8 group-hover:scale-110 transition-transform duration-300 shadow-inner`}>
                            <feature.icon className={`h-5 w-5 md:h-8 md:w-8 ${feature.color}`} />
                         </div>
-                        <h3 className="text-lg md:text-2xl font-bold text-white mb-2 md:mb-4">{feature.title}</h3>
-                        <p className="text-sm md:text-lg text-zinc-400 leading-relaxed">{feature.desc}</p>
+                        <h3 className="text-lg md:text-2xl font-black text-slate-900 dark:text-white mb-2 md:mb-4">{feature.title}</h3>
+                        <p className="text-sm md:text-lg text-slate-500 dark:text-zinc-400 leading-relaxed">{feature.desc}</p>
                      </div>
                   ))}
                </div>
@@ -420,7 +420,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onEnterApp, onStartSig
                      }
                   ].map((task, idx) => (
                      <div key={idx} className="bg-white dark:bg-white/5 backdrop-blur-md p-5 md:p-8 rounded-[32px] border border-slate-100 dark:border-white/10 hover:border-blue-500/30 transition-all duration-300 relative overflow-hidden group md:hover:-translate-y-2 hover:shadow-xl shadow-sm cursor-pointer">
-                        <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-current to-transparent opacity-[0.03] dark:opacity-5 rounded-bl-full pointer-events-none transition-opacity group-hover:opacity-10" style={{ color: task.color.replace('text-', '') }}></div>
+                        <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-current to-transparent opacity-[0.03] dark:opacity-[0.03] dark:opacity-5 rounded-bl-full pointer-events-none transition-opacity group-hover:opacity-10" style={{ color: task.color.replace('text-', '') }}></div>
                         
                         <div className="flex justify-between items-start mb-5 md:mb-8 relative z-10">
                            <div className={`h-12 w-12 md:h-16 md:w-16 ${task.bg} rounded-2xl flex items-center justify-center group-hover:scale-110 transition-transform duration-300 shadow-inner`}>
@@ -445,11 +445,8 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onEnterApp, onStartSig
             </motion.div>
          </section>
 
-         {/* --- HOW IT WORKS --- */}
-         <section className="py-8 md:py-24 px-4 md:px-6 overflow-hidden relative">
-            {/* Background Elements — desktop only */}
-            <div className="hidden md:block absolute top-0 right-0 w-[800px] h-[800px] bg-blue-500/5 rounded-full blur-[120px] pointer-events-none"></div>
-
+         {/* --- HOW IT WORKS (CLEAN & MINIMAL) --- */}
+         <section className="py-16 md:py-24 px-4 md:px-6 relative overflow-hidden bg-slate-50/50 dark:bg-zinc-950/50 border-y border-slate-200 dark:border-white/5">
             <motion.div
                initial={{ opacity: 0 }}
                whileInView={{ opacity: 1 }}
@@ -457,33 +454,82 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onEnterApp, onStartSig
                transition={{ duration: 0.8 }}
                className="max-w-7xl mx-auto relative z-10"
             >
-               <div className="text-center mb-6 md:mb-20 px-2">
-                  <h2 className="text-2xl sm:text-4xl md:text-5xl font-bold text-white mb-2 md:mb-6">Start Earning in Minutes</h2>
-                  <p className="text-sm md:text-xl text-zinc-500">No complex onboarding. Just create an account and go.</p>
+               <div className="text-center mb-16 md:mb-24 px-2">
+                  <h2 className="text-3xl md:text-5xl font-black text-slate-900 dark:text-white mb-4 tracking-tighter">
+                     Start Earning in Minutes
+                  </h2>
+                  <p className="text-base md:text-lg text-slate-500 dark:text-zinc-400 max-w-2xl mx-auto">
+                     No complex onboarding. Just create an account, select a task, and start contributing.
+                  </p>
                </div>
 
-               <div className="flex overflow-x-auto pt-10 pb-6 gap-3 md:gap-8 snap-x snap-mandatory no-scrollbar -mx-4 px-4 md:grid md:grid-cols-4 md:mx-0 md:px-0 relative">
+               <div className="relative">
                   {/* Connecting Line (Desktop) */}
-                  <div className="hidden md:block absolute top-10 left-[10%] right-[10%] h-[1px] bg-blue-500/10 -z-10"></div>
+                  <div className="hidden md:block absolute top-10 left-[12%] right-[12%] h-[2px] bg-slate-200 dark:bg-white/10 -z-10 rounded-full"></div>
 
-                  {[
-                     { step: "01", title: "Sign Up", desc: "Create your free account using email or phone." },
-                     { step: "02", title: "Select", desc: "Browse tasks that match your skills and language." },
-                     { step: "03", title: "Execute", desc: "Follow the instructions and submit your work." },
-                     { step: "04", title: "Get Paid", desc: "Earnings hit your wallet instantly after approval." }
-                  ].map((item, i) => (
-                     <div key={i} className="flex flex-col items-center text-center bg-white/5 backdrop-blur-md p-4 md:p-8 rounded-2xl md:rounded-3xl border border-white/10 hover:-translate-y-2 transition-transform duration-300 flex-shrink-0 w-[58vw] sm:w-[240px] md:w-auto snap-center">
-                        <div className="h-11 w-11 md:h-20 md:w-20 bg-blue-500/10 rounded-full border-2 md:border-4 border-blue-500/20 flex items-center justify-center text-base md:text-2xl font-black text-white shadow-[0_0_20px_rgba(59,130,246,0.2)] mb-3 md:mb-6 z-10">
-                           {item.step}
+                  <div className="grid grid-cols-1 md:grid-cols-4 gap-10 md:gap-6">
+                     {[
+                        { 
+                           step: "1", 
+                           title: "Sign Up Free", 
+                           desc: "Create your account using email or phone in under 30 seconds.",
+                           icon: Sparkles,
+                           color: "text-blue-600 dark:text-blue-400",
+                           bg: "bg-blue-50 dark:bg-blue-500/10"
+                        },
+                        { 
+                           step: "2", 
+                           title: "Choose Tasks", 
+                           desc: "Browse a variety of tasks that match your language and skills.",
+                           icon: MousePointer2,
+                           color: "text-indigo-600 dark:text-indigo-400",
+                           bg: "bg-indigo-50 dark:bg-indigo-500/10"
+                        },
+                        { 
+                           step: "3", 
+                           title: "Execute", 
+                           desc: "Follow simple instructions to record audio, tag images, or write text.",
+                           icon: Activity,
+                           color: "text-violet-600 dark:text-violet-400",
+                           bg: "bg-violet-50 dark:bg-violet-500/10"
+                        },
+                        { 
+                           step: "4", 
+                           title: "Get Paid", 
+                           desc: "Earnings are credited instantly upon validation. Withdraw immediately.",
+                           icon: Banknote,
+                           color: "text-emerald-600 dark:text-emerald-400",
+                           bg: "bg-emerald-50 dark:bg-emerald-500/10"
+                        }
+                     ].map((item, i) => (
+                        <div key={i} className="flex flex-col items-center text-center group">
+                           {/* Icon Container */}
+                           <div className="relative mb-6 md:mb-8">
+                              <div className={`w-20 h-20 md:w-24 md:h-24 ${item.bg} rounded-[24px] flex items-center justify-center border border-white dark:border-white/5 shadow-sm group-hover:-translate-y-2 transition-transform duration-300 relative z-10`}>
+                                 <item.icon className={`h-8 w-8 md:h-10 md:w-10 ${item.color}`} />
+                              </div>
+                              {/* Step Badge */}
+                              <div className="absolute -top-3 -right-3 w-8 h-8 rounded-full bg-slate-900 dark:bg-white text-white dark:text-slate-900 flex items-center justify-center text-sm font-black shadow-md border-2 border-white dark:border-zinc-900 z-20">
+                                 {item.step}
+                              </div>
+                           </div>
+
+                           <h3 className="text-xl font-black text-slate-900 dark:text-white mb-2">{item.title}</h3>
+                           <p className="text-sm text-slate-500 dark:text-zinc-400 leading-relaxed font-medium px-4">
+                              {item.desc}
+                           </p>
                         </div>
-                        <h3 className="text-sm md:text-xl font-bold text-white mb-1 md:mb-3">{item.title}</h3>
-                        <p className="text-xs md:text-base text-zinc-500 leading-relaxed font-medium">{item.desc}</p>
-                     </div>
-                  ))}
+                     ))}
+                  </div>
                </div>
 
-               <div className="hidden md:block text-center mt-6 md:mt-20 px-4">
-                  <Button onClick={onStartSignup} size="lg" className="rounded-full px-8 md:px-12 h-12 md:h-16 text-base md:text-xl bg-white text-black hover:scale-105 transition-transform w-full md:w-auto shadow-2xl">Create Free Account</Button>
+               <div className="mt-16 md:mt-24 text-center">
+                  <Button 
+                     onClick={onStartSignup} 
+                     className="btn-pill h-14 px-10 text-base font-bold bg-blue-600 hover:bg-blue-700 !text-white border-none shadow-lg shadow-blue-500/25"
+                  >
+                     Create Free Account
+                  </Button>
                </div>
             </motion.div>
          </section>
@@ -554,7 +600,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onEnterApp, onStartSig
                      { q: "Do I need any special skills?", a: "No special skills are required for most tasks. If you can speak, type, or identify objects in images, you can contribute. Some advanced tasks might require specific language proficiency." },
                      { q: "How much can I earn?", a: "Earnings depend on the complexity of tasks and your speed. Most contributors earn between ₹300-₹500 per hour of active work. Payments are listed upfront for every task." },
                      { q: "When do I get paid?", a: "We process payments daily. Once your work is validated (usually within 24 hours), you can withdraw funds immediately to your UPI or Bank Account." },
-                     { q: "Is my data safe?", a: "Yes. We are SOC2 certified and prioritize data privacy. Your personal information is never shared with clients—only the anonymized data you explicitly contribute." }
+                     { q: "Is my data safe?", a: "Yes. We are SOC2 certified and prioritize data privacy. Your personal information is never shared with clientsâ€”only the anonymized data you explicitly contribute." }
                   ].map((faq, i) => (
                      <div key={i} className="bg-white/5 backdrop-blur-xl rounded-2xl border border-white/10 overflow-hidden hover:border-blue-500/30 transition-all">
                         <button

@@ -112,7 +112,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
                     w-full flex items-center transition-all duration-300 group relative
                     pl-[22px] py-3.5 text-sm font-bold rounded-2xl
                     ${isActive
-                      ? 'bg-blue-500 text-white shadow-[0_10px_20px_-5px_rgba(37,99,235,0.4)]'
+                      ? 'bg-blue-500 text-white shadow-md'
                       : 'hover:bg-slate-100 dark:hover:bg-white/5 text-slate-500 dark:text-zinc-500 hover:text-slate-900 dark:hover:text-white'}
                   `}
                   title={isCollapsed ? item.label : ''}
@@ -141,7 +141,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
                 )}
               </div>
               <div className={`flex flex-col truncate flex-1 ml-4 transition-all duration-300 ${isCollapsed ? 'opacity-0 w-0' : 'opacity-100 w-auto'}`}>
-                <span className="text-sm font-black text-white truncate uppercase tracking-tight">
+                <span className="text-sm font-bold text-slate-900 dark:text-white truncate tracking-tight">
                   {user?.user_metadata?.full_name || 'Contributor'}
                 </span>
                 <span className="text-[10px] text-zinc-500 truncate font-mono uppercase">
@@ -155,7 +155,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
               title={isCollapsed ? 'Disconnect' : ''}
             >
               <Power className="h-5 w-5 mr-4 flex-shrink-0" />
-              <span className={`truncate transition-all duration-300 ${isCollapsed ? 'opacity-0 w-0' : 'opacity-100 w-auto'}`}>Disconnect</span>
+              <span className={`truncate transition-all duration-300 ${isCollapsed ? 'opacity-0 w-0' : 'opacity-100 w-auto'}`}>Log Out</span>
             </button>
           </div>
         </div>

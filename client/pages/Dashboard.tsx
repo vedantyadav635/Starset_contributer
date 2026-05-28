@@ -123,7 +123,7 @@ export const Dashboard: React.FC<DashboardProps> = ({ onNavigate }) => {
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-6 border-b border-slate-200 dark:border-white/10">
         <div>
-          <h1 className="text-2xl font-bold text-white tracking-tight">Dashboard</h1>
+          <h1 className="text-2xl font-bold text-slate-900 dark:text-white tracking-tight">Dashboard</h1>
           <p className="text-zinc-500 text-sm mt-1">
             Welcome back, {userName}
           </p>
@@ -145,7 +145,7 @@ export const Dashboard: React.FC<DashboardProps> = ({ onNavigate }) => {
               </div>
               <span className="text-[10px] font-black text-zinc-400 uppercase tracking-[0.2em]">{stat.label}</span>
             </div>
-            <div className="text-3xl md:text-4xl font-black text-white mb-2 tracking-tight group-hover:text-blue-400 transition-colors">{stat.value}</div>
+            <div className="text-3xl md:text-4xl font-extrabold text-slate-900 dark:text-white mb-2 tracking-tight group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">{stat.value}</div>
             <div className="text-xs font-bold text-zinc-500 uppercase tracking-widest">{stat.sub}</div>
           </div>
         ))}
@@ -159,10 +159,10 @@ export const Dashboard: React.FC<DashboardProps> = ({ onNavigate }) => {
             <div className="h-14 w-14 bg-slate-100 dark:bg-white/10 rounded-2xl flex items-center justify-center text-blue-500 dark:text-blue-400 mb-6 group-hover:scale-110 transition-transform duration-500">
               <Database className="h-7 w-7" />
             </div>
-            <h3 className="text-2xl font-black mb-2 tracking-tight">Active Operation Tasks</h3>
+            <h3 className="text-2xl font-black mb-2 tracking-tight">Available Tasks</h3>
             <p className="text-slate-500 dark:text-stone-400 font-medium mb-6">Contribute high-quality data to the network.</p>
             <div className="inline-flex items-center text-sm font-black uppercase tracking-widest text-blue-400 group-hover:translate-x-2 transition-transform">
-              Launch Terminal <ArrowRight className="ml-2 h-4 w-4" />
+              Browse Tasks <ArrowRight className="ml-2 h-4 w-4" />
             </div>
           </div>
         </div>

@@ -1,14 +1,13 @@
-/* Main CSS file */
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Outfit:wght@600;700;800&display=swap');
-
-/* Tailwind is loaded via CDN in index.html */
-
 /* ═══════════════════════════════════════════════════════
-   DARK THEME (default)
+   STARSET DESIGN SYSTEM
    ═══════════════════════════════════════════════════════ */
 
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Outfit:wght@500;600;700;800&display=swap');
+
+/* ─── Design Tokens (Dark Default) ─── */
+
 :root {
-  --foreground: #ffffff;
+  --foreground: #f8fafc;
   --background: #020205;
   --surface: #09090b;
   --surface-elevated: #18181b;
@@ -16,6 +15,10 @@
   --heading: #ffffff;
   --body: #a1a1aa;
   --muted: #71717a;
+  --accent: #3b82f6;
+  --accent-hover: #2563eb;
+  --radius-card: 16px;
+  --radius-pill: 9999px;
 }
 
 body {
@@ -24,15 +27,12 @@ body {
   font-family: 'Inter', system-ui, -apple-system, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  font-feature-settings: 'cv11', 'ss01', 'ss03';
 }
 
 h1, h2, h3, h4, h5, h6, .font-outfit {
   font-family: 'Outfit', sans-serif;
   letter-spacing: -0.02em;
-}
-
-* {
-  transition: background-color 0.3s ease, border-color 0.3s ease, color 0.3s ease;
 }
 
 ::selection {
@@ -54,6 +54,8 @@ html.light {
   --heading: #020617;
   --body: #475569;
   --muted: #94a3b8;
+  --accent: #2563eb;
+  --accent-hover: #1d4ed8;
 }
 
 html.light body {
@@ -68,7 +70,6 @@ html.light ::selection {
 
 /* ─── Background Layers ─── */
 
-/* Dark bg hex values → white surface */
 html.light [class*="bg-[#020205]"],
 html.light [class*="bg-[#050505]"],
 html.light [class*="bg-[#09090b]"],
@@ -77,7 +78,6 @@ html.light [class*="bg-[#0a0a0a]"] {
   background-image: none !important;
 }
 
-/* Radial gradient backgrounds used in PublicLayout */
 html.light [class*="radial-gradient"] {
   opacity: 0.3;
 }
@@ -98,7 +98,6 @@ html.light [class*="bg-zinc-800/"] {
   background-color: #f1f5f9 !important;
 }
 
-/* Translucent white/black surfaces */
 html.light [class~="bg-white/5"],
 html.light [class*="bg-white/5"],
 html.light [class~="bg-white/10"],
@@ -116,7 +115,6 @@ html.light [class*="bg-black/40"] {
   background-color: rgba(248, 250, 252, 0.9) !important;
 }
 
-/* Overlay modals keep dark */
 html.light [class*="bg-black/50"],
 html.light [class*="bg-black/60"] {
   background-color: rgba(15, 23, 42, 0.5) !important;
@@ -126,20 +124,17 @@ html.light [class*="bg-black/90"] {
   background-color: rgba(15, 23, 42, 0.9) !important;
 }
 
-/* Nav & Header with backdrop */
 html.light nav[class*="bg-black"],
 html.light header[class*="bg-black"] {
   background-color: rgba(248, 250, 252, 0.85) !important;
   backdrop-filter: blur(16px) !important;
 }
 
-/* Full-page dark backgrounds */
 html.light [class~="min-h-screen"][class~="bg-black"],
 html.light [class~="min-h-screen"][class*="bg-[#020205]"] {
   background: var(--background) !important;
 }
 
-/* Grid pattern — extremely subtle */
 html.light [class*="#ffffff03"] {
   background-image:
     linear-gradient(to right, rgba(15, 23, 42, 0.025) 1px, transparent 1px),
@@ -148,12 +143,10 @@ html.light [class*="#ffffff03"] {
 
 /* ─── Typography ─── */
 
-/* White text → dark heading */
 html.light [class~="text-white"] {
   color: var(--heading) !important;
 }
 
-/* Keep white text on colored/dark backgrounds */
 html.light [class~="bg-blue-500"] [class~="text-white"],
 html.light [class~="bg-blue-600"] [class~="text-white"],
 html.light [class~="bg-blue-700"] [class~="text-white"],
@@ -170,13 +163,11 @@ html.light [class*="bg-emerald-500/90"] [class~="text-white"] {
   color: #ffffff !important;
 }
 
-/* Force white text on dark background badges/pills */
 html.light .text-white[class*="bg-slate-900"],
 html.light .text-white[class*="bg-black"] {
   color: #ffffff !important;
 }
 
-/* Zinc text → muted body */
 html.light [class~="text-zinc-200"],
 html.light [class~="text-zinc-300"],
 html.light [class~="text-stone-300"] {
@@ -196,13 +187,11 @@ html.light [class~="text-stone-600"] {
   color: #334155 !important;
 }
 
-/* Faint step numbers */
 html.light [class*="text-white/10"],
 html.light [class*="text-white/20"] {
   color: rgba(15, 23, 42, 0.08) !important;
 }
 
-/* Blue accent text — make slightly darker for contrast */
 html.light [class~="text-blue-100"] {
   color: #3b82f6 !important;
 }
@@ -215,15 +204,9 @@ html.light [class~="text-indigo-300"] {
   color: #4f46e5 !important;
 }
 
-/* Gradient text styling */
 html.light [class*="from-white"][class*="to-zinc-400"] {
   --tw-gradient-from: #020617 !important;
   --tw-gradient-to: #475569 !important;
-}
-
-/* Professional 3D Immersion Utilities */
-html.light .text-3d {
-  text-shadow: 0 1px 0 #fff, 0 2px 0 #cbd5e1, 0 4px 10px rgba(0,0,0,0.1);
 }
 
 /* ─── Borders ─── */
@@ -276,7 +259,6 @@ html.light [class*="hover:border-emerald-500/50"]:hover {
 
 /* ─── Buttons ─── */
 
-/* CTA "Start Earning" — invert to dark in light mode */
 html.light [class*="bg-white"][class*="text-black"] {
   background-color: #0f172a !important;
   color: #ffffff !important;
@@ -286,14 +268,12 @@ html.light [class*="bg-white"][class*="text-black"]:hover {
   background-color: #1e293b !important;
 }
 
-/* Active filter tab */
 html.light button[class*="bg-white"][class*="text-black"] {
   background-color: #0f172a !important;
   color: #ffffff !important;
   box-shadow: 0 4px 12px rgba(15, 23, 42, 0.15) !important;
 }
 
-/* Ghost button text */
 html.light [class*="hover:text-white"]:hover {
   color: #0f172a !important;
 }
@@ -348,7 +328,6 @@ html.light [class*="bg-blue-500/10"] {
   opacity: 0.25;
 }
 
-/* Color tinted icon backgrounds — keep but soften */
 html.light [class*="bg-blue-900/10"],
 html.light [class*="bg-blue-900/20"] {
   background-color: rgba(59, 130, 246, 0.06) !important;
@@ -430,7 +409,6 @@ html.light [class*="bg-orange-900/20"][class*="text-orange-300"] {
   color: #ea580c !important;
 }
 
-/* Difficulty badges */
 html.light [class*="text-emerald-400"][class*="bg-emerald-900/10"] {
   color: #059669 !important;
   background-color: rgba(16, 185, 129, 0.08) !important;
@@ -446,14 +424,12 @@ html.light [class*="text-red-400"][class*="bg-red-900/10"] {
   background-color: rgba(239, 68, 68, 0.08) !important;
 }
 
-/* Language/stone badges */
 html.light [class*="text-stone-300"][class*="bg-white/10"],
 html.light [class*="text-stone-400"][class*="bg-white/10"] {
   color: var(--body) !important;
   background-color: rgba(15, 23, 42, 0.05) !important;
 }
 
-/* Payout badge */
 html.light [class*="text-blue-400"][class*="bg-blue-900/20"] {
   color: #2563eb !important;
   background-color: rgba(59, 130, 246, 0.08) !important;
@@ -465,7 +441,6 @@ html.light [class*="bg-gradient-to-br"][class*="from-blue-500/20"][class*="to-in
   background: rgba(59, 130, 246, 0.06) !important;
 }
 
-/* Social Links & Icons */
 html.light [class*="text-zinc-400"][class*="hover:text-white"]:hover {
   color: var(--heading) !important;
 }
@@ -475,17 +450,16 @@ html.light [class*="bg-white/5"][class*="text-zinc-400"] {
   color: var(--body) !important;
 }
 
-/* Secondary Buttons with light text */
 html.light [class~="text-zinc-300"],
 html.light [class*="text-zinc-300"] {
-  color: var(--muted-strong) !important;
+  color: var(--body) !important;
 }
 
 /* ═══════════════════════════════════════════════════════
    UTILITIES (theme-independent)
    ═══════════════════════════════════════════════════════ */
 
-/* Luel-Inspired Dotted Grid Background */
+/* Subtle Dotted Grid Background */
 .bg-luel-dots {
   background-image: radial-gradient(circle, #cbd5e1 1px, transparent 1px);
   background-size: 24px 24px;
@@ -497,10 +471,10 @@ html.light [class*="text-zinc-300"] {
 
 /* Premium Pill Buttons */
 .btn-pill {
-  border-radius: 9999px;
+  border-radius: var(--radius-pill);
   padding-left: 2rem;
   padding-right: 2rem;
-  font-weight: 800;
+  font-weight: 700;
   letter-spacing: -0.025em;
 }
 
@@ -513,7 +487,120 @@ html.light [class*="text-zinc-300"] {
   box-shadow: 0 0 0 1px rgba(255,255,255,0.05), 0 2px 4px rgba(0,0,0,0.2), 0 12px 24px rgba(0,0,0,0.3);
 }
 
-/* 3D Transform Utilities */
+/* ─── Professional Transitions ─── */
+
+/* Smooth card hover */
+.card-hover {
+  transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1),
+              box-shadow 0.25s cubic-bezier(0.4, 0, 0.2, 1),
+              border-color 0.25s ease;
+}
+
+.card-hover:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 40px -8px rgba(0, 0, 0, 0.12);
+}
+
+.dark .card-hover:hover {
+  box-shadow: 0 12px 40px -8px rgba(0, 0, 0, 0.4);
+}
+
+/* Button press feedback */
+.btn-press {
+  transition: transform 0.15s cubic-bezier(0.4, 0, 0.2, 1),
+              box-shadow 0.15s ease,
+              background-color 0.2s ease;
+}
+
+.btn-press:active {
+  transform: scale(0.97);
+}
+
+/* Smooth focus ring */
+.focus-ring {
+  transition: box-shadow 0.2s ease;
+}
+
+.focus-ring:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 2px var(--background), 0 0 0 4px var(--accent);
+}
+
+/* ─── Section Reveal Animation ─── */
+
+@keyframes reveal-up {
+  from {
+    opacity: 0;
+    transform: translateY(24px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-reveal {
+  animation: reveal-up 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  animation-delay: var(--reveal-delay, 0s);
+}
+
+/* Stagger children reveal */
+.stagger-children > * {
+  opacity: 0;
+  animation: reveal-up 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.stagger-children > *:nth-child(1) { animation-delay: 0.05s; }
+.stagger-children > *:nth-child(2) { animation-delay: 0.1s; }
+.stagger-children > *:nth-child(3) { animation-delay: 0.15s; }
+.stagger-children > *:nth-child(4) { animation-delay: 0.2s; }
+.stagger-children > *:nth-child(5) { animation-delay: 0.25s; }
+.stagger-children > *:nth-child(6) { animation-delay: 0.3s; }
+
+/* ─── Smooth Icon Transitions ─── */
+
+.icon-hover {
+  transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1),
+              color 0.2s ease;
+}
+
+.group:hover .icon-hover {
+  transform: scale(1.1);
+}
+
+/* ─── Link Underline Animation ─── */
+
+.link-underline {
+  position: relative;
+  text-decoration: none;
+}
+
+.link-underline::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  bottom: -2px;
+  width: 0;
+  height: 2px;
+  background: var(--accent);
+  transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.link-underline:hover::after {
+  width: 100%;
+}
+
+/* ─── Gradient text utility ─── */
+
+.text-gradient {
+  background: linear-gradient(135deg, #2563eb, #7c3aed);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* ─── 3D Transform Utilities ─── */
+
 .preserve-3d {
   transform-style: preserve-3d;
 }
@@ -530,36 +617,46 @@ html.light [class*="text-zinc-300"] {
   backface-visibility: hidden;
 }
 
-/* Neural Pulse Animation */
-@keyframes neural-pulse {
-  0%, 100% {
-    transform: scale(1) translateZ(0);
-    opacity: 0.8;
-    filter: blur(10px) brightness(1);
+/* ─── Smooth Page Transition ─── */
+
+@keyframes page-in {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
   }
-  50% {
-    transform: scale(1.1) translateZ(50px);
+  to {
     opacity: 1;
-    filter: blur(15px) brightness(1.5);
+    transform: translateY(0);
   }
 }
 
-.animate-neural-pulse {
-  animation: neural-pulse 4s ease-in-out infinite;
+.animate-page-in {
+  animation: page-in 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
 
-/* Float Animation */
-@keyframes float-3d {
-  0%, 100% {
-    transform: translateY(0) translateZ(0) rotateY(0);
-  }
-  50% {
-    transform: translateY(-20px) translateZ(30px) rotateY(10deg);
-  }
+/* ─── Gradient Border Utility ─── */
+
+.gradient-border {
+  position: relative;
 }
 
-.animate-float-3d {
-  animation: float-3d 6s ease-in-out infinite;
+.gradient-border::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  padding: 1px;
+  background: linear-gradient(135deg, rgba(59, 130, 246, 0.3), rgba(139, 92, 246, 0.3));
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.gradient-border:hover::before {
+  opacity: 1;
 }
 
 /* Hide scrollbar utility */
@@ -571,34 +668,24 @@ html.light [class*="text-zinc-300"] {
   scrollbar-width: none;
 }
 
-@keyframes shimmer {
-  100% {
-    transform: translateX(200%) skewX(12deg);
-  }
-}
-
+/* Slow spin for loading states */
 @keyframes spin-slower {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
-}
-
-@keyframes reverse-spin-slow {
-  from {
-    transform: rotate(360deg);
-  }
-  to {
-    transform: rotate(0deg);
-  }
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
 }
 
 .animate-spin-slower {
   animation: spin-slower 20s linear infinite;
 }
 
-.animate-reverse-spin-slow {
-  animation: reverse-spin-slow 15s linear infinite;
+/* Subtle gradient text shimmer (hero only) */
+@keyframes gradient-shift {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+.animate-gradient-swipe {
+  background-size: 200% 200%;
+  animation: gradient-shift 6s ease-in-out infinite;
 }
