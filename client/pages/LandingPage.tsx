@@ -62,7 +62,7 @@ const EcosystemVisual = () => {
                transition={{ duration: 0.8, delay: 0.2 }}
                whileHover={{ y: -5, scale: 1.02 }}
                whileTap={{ scale: 0.98 }}
-               className="w-full max-w-[320px] md:w-80 bg-white dark:bg-zinc-900 rounded-3xl p-6 border border-slate-200 dark:border-white/10 shadow-luel z-10 transition-all duration-300 cursor-pointer group"
+               className="w-full max-w-[320px] md:w-80 bg-white dark:bg-blue-950/40 dark:backdrop-blur-xl rounded-3xl p-6 border border-slate-200 dark:border-blue-500/20 shadow-xl shadow-slate-200/50 dark:shadow-[0_8px_30px_rgba(37,99,235,0.15)] z-10 transition-all duration-300 cursor-pointer group hover:dark:border-blue-500/40 hover:dark:shadow-[0_8px_30px_rgba(37,99,235,0.25)]"
             >
                <div className="flex items-center gap-4 mb-4">
                   <div className="w-12 h-12 rounded-2xl bg-indigo-50 dark:bg-indigo-500/10 flex items-center justify-center group-hover:bg-indigo-500 group-hover:text-white transition-colors">
@@ -98,7 +98,7 @@ const EcosystemVisual = () => {
                transition={{ duration: 0.8, delay: 0.4 }}
                whileHover={{ scale: 1.05 }}
                whileTap={{ scale: 0.95 }}
-               className="w-full max-w-[320px] md:w-80 bg-white/80 dark:bg-zinc-900/80 backdrop-blur-md rounded-3xl p-6 border border-slate-200 dark:border-white/10 shadow-luel z-20"
+               className="w-full max-w-[320px] md:w-80 bg-white/80 dark:bg-blue-950/40 backdrop-blur-xl rounded-3xl p-6 border border-slate-200 dark:border-blue-500/20 shadow-xl shadow-slate-200/50 dark:shadow-[0_8px_30px_rgba(37,99,235,0.15)] z-20 transition-all duration-300 hover:dark:border-blue-500/40 hover:dark:shadow-[0_8px_30px_rgba(37,99,235,0.25)]"
             >
                <div className="flex items-center justify-between mb-4">
                   <div className="flex items-center gap-3">
@@ -130,7 +130,7 @@ const EcosystemVisual = () => {
                transition={{ duration: 0.8, delay: 0.6 }}
                whileHover={{ y: 5, scale: 1.02 }}
                whileTap={{ scale: 0.98 }}
-               className="w-full max-w-[320px] md:w-80 bg-white dark:bg-zinc-900 rounded-3xl p-6 border border-slate-200 dark:border-white/10 shadow-luel z-10 transition-all duration-300 cursor-pointer group"
+               className="w-full max-w-[320px] md:w-80 bg-white dark:bg-blue-950/40 dark:backdrop-blur-xl rounded-3xl p-6 border border-slate-200 dark:border-emerald-500/20 shadow-xl shadow-slate-200/50 dark:shadow-[0_8px_30px_rgba(16,185,129,0.15)] z-10 transition-all duration-300 cursor-pointer group hover:dark:border-emerald-500/40 hover:dark:shadow-[0_8px_30px_rgba(16,185,129,0.25)]"
             >
                <div className="flex items-center justify-between mb-4">
                   <span className="text-[10px] font-black text-emerald-600 uppercase tracking-widest group-hover:text-emerald-400 transition-colors">Payment Sent</span>
@@ -214,59 +214,49 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onEnterApp, onStartSig
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 1 }}
-                  className="text-center"
+                  className="text-left relative z-20"
                >
                   <motion.h1 
                      initial={{ y: 20, opacity: 0 }}
                      animate={{ y: 0, opacity: 1 }}
                      transition={{ duration: 0.8, delay: 0.4 }}
-                     className="text-5xl md:text-7xl font-extrabold text-slate-900 dark:text-white leading-[1] md:leading-[0.95] tracking-tighter mb-8"
+                     className="text-[3.25rem] sm:text-6xl md:text-[5.5rem] font-black leading-[1.05] md:leading-[1.05] tracking-tighter mb-6 md:mb-8"
                   >
-                     <motion.span 
-                        initial={{ opacity: 0, x: -20 }}
-                        animate={{ opacity: 1, x: 0 }}
-                        transition={{ delay: 0.5 }}
-                        className="inline-block"
-                     >
-                        Earn cash.
-                     </motion.span>
-                     <br className="hidden md:block" />
-                     <motion.span 
-                        initial={{ opacity: 0, x: 20 }}
-                        animate={{ opacity: 1, x: 0 }}
-                        transition={{ delay: 0.7 }}
-                        className="bg-gradient-to-r from-blue-600 via-indigo-600 to-violet-600 bg-clip-text text-transparent animate-gradient-swipe "
-                     >
-                        Teach AI.
-                     </motion.span>
+                     <span className="text-slate-900 dark:text-white">
+                        Earn money from
+                     </span>
+                     <br />
+                     <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-700 via-blue-500 to-blue-700 dark:from-blue-600 dark:via-blue-500 dark:to-blue-600 drop-shadow-md animate-shimmer">
+                        your daily tasks
+                     </span>
                   </motion.h1>
 
                   <motion.p 
                      initial={{ y: 20, opacity: 0 }}
                      animate={{ y: 0, opacity: 1 }}
                      transition={{ duration: 0.8, delay: 0.5 }}
-                     className="text-base md:text-xl text-slate-500 dark:text-zinc-400 max-w-2xl mx-auto mb-10 leading-relaxed px-4"
+                     className="text-lg md:text-2xl font-medium text-slate-600 dark:text-zinc-300 max-w-xl mb-12 leading-relaxed"
                   >
-                     Join the world's most innovative data community. Turn your daily moments into valuable training data for the next generation of intelligence.
+                     Get paid for your everyday conversations, videos and photos. Join hundreds of thousands of contributors already earning with Starset.
                   </motion.p>
 
                   <motion.div 
                      initial={{ y: 20, opacity: 0 }}
                      animate={{ y: 0, opacity: 1 }}
                      transition={{ duration: 0.8, delay: 0.6 }}
-                     className="flex flex-col sm:flex-row items-center justify-center lg:justify-center gap-4 px-4"
+                     className="flex flex-col sm:flex-row items-center justify-start gap-4"
                   >
                      <Button 
                         onClick={() => onNavigate('signup')}
-                        className="btn-pill w-full sm:w-auto h-14 md:h-16 px-8 md:px-12 text-base md:text-xl bg-blue-600 hover:bg-blue-700 !text-white border-none flex items-center justify-center"
+                        className="relative overflow-hidden group w-full sm:w-auto h-16 md:h-16 px-8 md:px-10 text-lg font-bold !text-white rounded-2xl shadow-[0_0_40px_-10px_rgba(37,99,235,0.6)] hover:shadow-[0_0_60px_-15px_rgba(37,99,235,0.8)] transition-all duration-300 bg-gradient-to-b from-blue-500 to-blue-700 hover:from-blue-400 hover:to-blue-600 border border-blue-400/30 hover:-translate-y-1"
                      >
-                        Start Contributing
-                     </Button>
-                     <Button 
-                        variant="outline"
-                        className="btn-pill w-full sm:w-auto h-14 md:h-16 px-8 md:px-12 text-base md:text-xl border-2 border-slate-200 dark:border-white/10 dark:text-white hover:bg-slate-50 dark:hover:bg-white/5 flex items-center justify-center"
-                     >
-                        How it Works
+                        <span className="relative z-10 flex items-center shadow-sm text-white">
+                           Start earning <ArrowRight className="w-5 h-5 ml-2 group-hover:translate-x-1 transition-transform" />
+                        </span>
+                        {/* 3D Inner Highlight */}
+                        <div className="absolute inset-0 rounded-2xl ring-1 ring-inset ring-white/20 pointer-events-none" />
+                        {/* Sweep animation on hover */}
+                        <div className="absolute inset-0 translate-x-[-100%] bg-gradient-to-r from-transparent via-white/30 to-transparent group-hover:translate-x-[100%] transition-transform duration-700 ease-in-out pointer-events-none" />
                      </Button>
                   </motion.div>
                </motion.div>
@@ -373,9 +363,9 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onEnterApp, onStartSig
                transition={{ duration: 0.8 }}
                className="max-w-7xl mx-auto relative z-10"
             >
-               <div className="flex flex-col md:flex-row justify-between items-start md:items-end mb-12 md:mb-20 gap-6">
-                  <div className="max-w-2xl">
-                     <span className="text-blue-600 dark:text-blue-400 font-black uppercase tracking-widest text-[10px] mb-3 block">Task Types</span>
+               <div className="flex flex-col items-center justify-center text-center mb-12 md:mb-20 gap-6">
+                  <div className="max-w-2xl flex flex-col items-center">
+                     <span className="text-blue-600 dark:text-blue-400 font-black uppercase tracking-widest text-[10px] mb-3 block text-center">Task Types</span>
                      <h2 className="text-4xl md:text-6xl font-black text-slate-900 dark:text-white tracking-tighter leading-tight">
                         What Will <br className="md:hidden" /> You Do?
                      </h2>
@@ -383,13 +373,13 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onEnterApp, onStartSig
                   <Button 
                      variant="outline"
                      onClick={() => onNavigate('contributors')} 
-                     className="btn-pill h-12 md:h-14 px-8 border-slate-200 dark:border-white/10 dark:text-white hover:bg-slate-50 dark:hover:bg-white/5"
+                     className="btn-pill h-12 md:h-14 px-8 border-slate-200 dark:border-white/10 dark:text-white hover:bg-slate-50 dark:hover:bg-white/5 mt-2 md:mt-4"
                   >
                      See All Tasks
                   </Button>
                </div>
 
-               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+               <div className="flex overflow-x-auto pb-8 gap-4 md:gap-8 snap-x snap-mandatory no-scrollbar -mx-4 px-4 md:grid md:grid-cols-2 lg:grid-cols-3 md:mx-0 md:px-0">
                   {[
                      {
                         title: "Audio Recording",
@@ -419,7 +409,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onEnterApp, onStartSig
                         price: "Avg: ₹100/hr"
                      }
                   ].map((task, idx) => (
-                     <div key={idx} className="bg-white dark:bg-white/5 backdrop-blur-md p-5 md:p-8 rounded-[32px] border border-slate-100 dark:border-white/10 hover:border-blue-500/30 transition-all duration-300 relative overflow-hidden group md:hover:-translate-y-2 hover:shadow-xl shadow-sm cursor-pointer">
+                     <div key={idx} className="bg-white dark:bg-white/5 backdrop-blur-md p-5 md:p-8 rounded-[32px] border border-slate-100 dark:border-white/10 hover:border-blue-500/30 transition-all duration-300 relative overflow-hidden group md:hover:-translate-y-2 hover:shadow-xl shadow-sm cursor-pointer flex-shrink-0 w-[85vw] sm:w-[350px] md:w-auto snap-center">
                         <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-current to-transparent opacity-[0.03] dark:opacity-[0.03] dark:opacity-5 rounded-bl-full pointer-events-none transition-opacity group-hover:opacity-10" style={{ color: task.color.replace('text-', '') }}></div>
                         
                         <div className="flex justify-between items-start mb-5 md:mb-8 relative z-10">
@@ -641,9 +631,11 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onEnterApp, onStartSig
                   <span className="text-xs font-black text-slate-600 dark:text-zinc-400 tracking-tight uppercase">High demand for new contributors</span>
                </div>
 
-               <h2 className="text-4xl md:text-8xl font-black mb-8 text-slate-900 dark:text-white tracking-tighter leading-[0.95] md:leading-[0.9]">
-                  Your <span className="bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">Digital Wallet</span> <br className="hidden md:block" />
-                  Is Waiting.
+               <h2 className="text-4xl sm:text-5xl font-black mb-6 tracking-tight">
+                  <span className="text-slate-900 dark:text-white">Your </span>
+                  <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-700 via-blue-500 to-blue-700 dark:from-blue-600 dark:via-blue-500 dark:to-blue-600 animate-shimmer drop-shadow-md">Digital Wallet</span>
+                  <br className="hidden md:block" />
+                  <span className="text-slate-900 dark:text-white"> Will Thank You</span>
                </h2>
 
                <p className="text-base md:text-2xl text-slate-500 dark:text-zinc-400 mb-14 max-w-2xl mx-auto leading-relaxed px-4 font-medium">
