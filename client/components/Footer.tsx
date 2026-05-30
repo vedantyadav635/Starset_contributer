@@ -29,7 +29,7 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
           </div>
           
           <div className="relative z-10 flex w-full md:w-auto">
-            <button className="w-full md:w-auto px-8 py-4 bg-slate-900 dark:bg-white text-white dark:text-slate-900 font-bold rounded-2xl flex items-center justify-center gap-3 hover:scale-105 hover:bg-blue-600 dark:hover:bg-blue-50 transition-all duration-300 shadow-xl shadow-slate-900/20 dark:shadow-white/10 group">
+            <button onClick={() => onNavigate('signup')} className="w-full md:w-auto px-8 py-4 bg-slate-900 dark:bg-white text-white dark:text-slate-900 font-bold rounded-2xl flex items-center justify-center gap-3 hover:scale-105 hover:bg-blue-600 dark:hover:bg-blue-50 transition-all duration-300 shadow-xl shadow-slate-900/20 dark:shadow-white/10 group">
               Become a Contributor
               <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
             </button>
