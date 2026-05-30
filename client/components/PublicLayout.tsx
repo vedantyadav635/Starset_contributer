@@ -4,6 +4,7 @@ import { Button } from './Button';
 import { Menu, Activity, Database, X, Linkedin, Mail, Sun, Moon } from 'lucide-react';
 import { CookieConsent } from './CookieConsent';
 import { ThemeToggle } from './ThemeToggle';
+import { Footer } from './Footer';
 
 export type PublicPageType = 'home' | 'about' | 'contributors' | 'money';
 
@@ -165,69 +166,8 @@ export const PublicLayout: React.FC<PublicLayoutProps> = ({
             {children}
          </main>
 
-         {/* Professional Footer */}
-         <footer className="pt-20 pb-10 px-6 relative z-10 border-t border-slate-200 dark:border-white/5 bg-white/80 dark:bg-[#020205]/40 backdrop-blur-xl mt-20">
-            <div className="max-w-7xl mx-auto">
-               <div className="grid grid-cols-1 md:grid-cols-3 gap-12 md:gap-8 mb-16">
-                  <div className="md:col-span-1 space-y-4 text-center md:text-left flex flex-col items-center md:items-start">
-                     <div className="flex items-center gap-3 mb-4 group cursor-pointer" onClick={() => onNavigate('home')}>
-                        <Logo className="h-10 w-10 transition-transform duration-300 group-hover:scale-110" />
-                        <span className="font-extrabold text-slate-900 dark:text-white uppercase tracking-wider text-sm">Starset</span>
-                     </div>
-                     <p className="text-sm text-zinc-400 leading-relaxed max-w-xs mx-auto md:mx-0 transition-colors">
-                        Connecting real people with the world's smartest AI companies. Turn your spare time into income.
-                     </p>
-                     <div className="flex gap-4 pt-2">
-                        <a href="#" className="h-10 w-10 rounded-full bg-slate-100 dark:bg-white/5 border border-slate-200 dark:border-white/10 flex items-center justify-center text-slate-500 dark:text-zinc-400 hover:text-white hover:bg-white/10 hover:border-blue-500/50 transition-all">
-                           <svg viewBox="0 0 24 24" aria-hidden="true" className="h-4 w-4 fill-current">
-                              <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"></path>
-                           </svg>
-                        </a>
-
-                        <a href="#" className="h-10 w-10 rounded-full bg-slate-100 dark:bg-white/5 border border-slate-200 dark:border-white/10 flex items-center justify-center text-slate-500 dark:text-zinc-400 hover:text-white hover:bg-white/10 hover:border-blue-500/50 transition-all">
-                           <Linkedin className="h-4 w-4" />
-                        </a>
-                     </div>
-                  </div>
-
-                  {/* Navigation */}
-                  <div className="space-y-4 text-center md:text-left">
-                     <h3 className="font-bold text-slate-900 dark:text-white mb-4">Platform</h3>
-                     <ul className="space-y-3">
-                        {navLinks.map((item) => (
-                           <li key={item.id}>
-                              <button
-                                 onClick={() => onNavigate(item.id)}
-                                 className="text-sm text-zinc-400 hover:text-blue-400 transition-colors"
-                              >
-                                 {item.name}
-                              </button>
-                           </li>
-                        ))}
-                     </ul>
-                  </div>
-
-                  {/* Help & Support */}
-                  <div className="space-y-4 text-center md:text-left flex flex-col items-center md:items-start">
-                     <h3 className="font-bold text-slate-900 dark:text-white mb-4">Contact</h3>
-                     <ul className="space-y-3 w-full max-w-[200px] md:max-w-none flex flex-col items-center md:items-start">
-                        <li><a href="#" className="text-sm text-zinc-400 hover:text-blue-400 flex items-center justify-center md:justify-start gap-2 transition-colors"><Mail className="h-4 w-4" /> support@starset.intelligence</a></li>
-
-                        <li className="pt-2 w-full">
-                           <Button onClick={onEnterApp} variant="outline" size="sm" className="w-full justify-center bg-transparent border-slate-300 dark:border-white/10 hover:bg-slate-100 dark:hover:bg-white/5 text-slate-700 dark:text-white">
-                              Login to Terminal
-                           </Button>
-                        </li>
-                     </ul>
-                  </div>
-               </div>
-
-               {/* Bottom Bar */}
-               <div className="pt-8 border-t border-slate-200 dark:border-white/10 flex flex-col md:flex-row justify-between items-center gap-4 text-xs text-zinc-500">
-                  <p>&copy; {new Date().getFullYear()} Starset Intelligence. All rights reserved.</p>
-               </div>
-            </div>
-         </footer>
+         {/* Custom Premium Footer */}
+         <Footer onNavigate={onNavigate} />
          <CookieConsent />
       </div >
    );
