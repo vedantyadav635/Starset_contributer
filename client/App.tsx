@@ -18,6 +18,7 @@ const AdminSubmissions = lazy(() => import('./pages/AdminSubmissions').then(m =>
 const ForgotPassword = lazy(() => import('./pages/ForgotPassword').then(m => ({ default: m.ForgotPassword })));
 const ResetPassword = lazy(() => import('./pages/ResetPassword').then(m => ({ default: m.ResetPassword })));
 const CompleteProfile = lazy(() => import('./pages/CompleteProfile').then(m => ({ default: m.default })));
+const Legal = lazy(() => import('./pages/Legal').then(m => ({ default: m.Legal })));
 
 // Type definitions for TypeScript
 import { PageView, Task, UserRole, TaskType, TaskStatus } from './types';
@@ -586,6 +587,11 @@ const App: React.FC = () => {
           return <Contributors {...publicProps} onEnterApp={handleStartSignup} />;
         case 'money':
           return <Money {...publicProps} onEnterApp={handleStartSignup} />;
+        case 'terms':
+        case 'privacy':
+        case 'cookies':
+        case 'data-processing':
+          return <Legal {...publicProps} pageType={publicPage as any} />;
         default:
           return <LandingPage onNavigate={handlePublicNavigate} onEnterApp={handleEnterApp} onStartSignup={handleStartSignup} />;
       }

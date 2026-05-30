@@ -92,10 +92,10 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
             {/* Column 3 */}
             <div className="flex flex-col gap-4">
               <h4 className="font-bold text-slate-900 dark:text-white uppercase tracking-widest text-xs mb-2 opacity-80">Legal</h4>
-              <button className="text-left text-slate-500 dark:text-zinc-400 hover:text-blue-600 dark:hover:text-blue-400 font-medium transition-colors">Terms of Service</button>
-              <button className="text-left text-slate-500 dark:text-zinc-400 hover:text-blue-600 dark:hover:text-blue-400 font-medium transition-colors">Privacy Policy</button>
-              <button className="text-left text-slate-500 dark:text-zinc-400 hover:text-blue-600 dark:hover:text-blue-400 font-medium transition-colors">Cookie Policy</button>
-              <button className="text-left text-slate-500 dark:text-zinc-400 hover:text-blue-600 dark:hover:text-blue-400 font-medium transition-colors">Data Processing</button>
+              <button onClick={() => onNavigate('terms')} className="text-left text-slate-500 dark:text-zinc-400 hover:text-blue-600 dark:hover:text-blue-400 font-medium transition-colors">Terms of Service</button>
+              <button onClick={() => onNavigate('privacy')} className="text-left text-slate-500 dark:text-zinc-400 hover:text-blue-600 dark:hover:text-blue-400 font-medium transition-colors">Privacy Policy</button>
+              <button onClick={() => onNavigate('cookies')} className="text-left text-slate-500 dark:text-zinc-400 hover:text-blue-600 dark:hover:text-blue-400 font-medium transition-colors">Cookie Policy</button>
+              <button onClick={() => onNavigate('data-processing')} className="text-left text-slate-500 dark:text-zinc-400 hover:text-blue-600 dark:hover:text-blue-400 font-medium transition-colors">Data Processing</button>
             </div>
           </div>
         </div>
