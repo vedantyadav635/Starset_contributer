@@ -16,8 +16,9 @@ export const Money: React.FC<PageProps> = ({ onNavigate, onEnterApp }) => {
           <div className="mb-16">
             <div>
               <span className="text-amber-500 font-bold uppercase tracking-widest text-xs mb-2 block">Your Earnings</span>
-              <h1 className="text-4xl md:text-6xl font-bold text-slate-900 dark:text-white mb-4">
-                Get Paid Fast
+              <h1 className="text-4xl md:text-6xl font-black mb-4 tracking-tighter leading-tight">
+                <span className="text-slate-900 dark:text-white">Get Paid </span>
+                <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-700 via-blue-500 to-blue-700 dark:from-blue-600 dark:via-blue-500 dark:to-blue-600 animate-shimmer drop-shadow-md">Fast</span>
               </h1>
               <p className="text-slate-600 dark:text-zinc-400 max-w-2xl text-xl">
                 We know you work hard. That's why we make getting paid simple, transparent, and quick.

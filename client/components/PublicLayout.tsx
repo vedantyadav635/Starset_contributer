@@ -54,9 +54,9 @@ export const PublicLayout: React.FC<PublicLayoutProps> = ({
 
    const navLinks: { name: string; id: PublicPageType }[] = [
       { name: 'Home', id: 'home' },
-      { name: 'About', id: 'about' },
       { name: 'Contributors', id: 'contributors' },
-      { name: 'Money', id: 'money' },
+      { name: 'Earning', id: 'money' },
+      { name: 'About', id: 'about' },
    ];
 
    return (
