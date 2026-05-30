@@ -140,9 +140,11 @@ export const Signup: React.FC<SignupProps> = ({ onLogin, onSwitchToLogin, onBack
           <p className="text-zinc-400 text-xs md:text-sm px-4">Join the network to start earning from data contributions.</p>
         </div>
 
-        <div className="bg-gradient-to-br from-blue-50/50 to-indigo-50/50 dark:from-white/5 dark:to-white/5 backdrop-blur-2xl p-6 md:p-8 rounded-[32px] border border-blue-100/50 dark:border-white/10 shadow-xl shadow-slate-200/40 dark:shadow-2xl mx-1 md:mx-0">
+        <div className="bg-gradient-to-br from-blue-50 to-indigo-50 dark:from-white/5 dark:to-white/5 p-6 md:p-8 rounded-[32px] border border-blue-100 dark:border-white/10 shadow-xl shadow-slate-200/50 dark:shadow-2xl mx-1 md:mx-0 relative overflow-hidden">
+          <div className="absolute top-0 right-0 w-[400px] h-[400px] bg-blue-600/10 dark:bg-blue-500/20 blur-[80px] rounded-full translate-x-1/3 -translate-y-1/3 pointer-events-none z-0" />
+          
+          <div className="relative z-10">
           <form onSubmit={handleSubmit} className="space-y-5">
-
             <div className="space-y-4">
               <div className="relative group">
                 <User className="absolute top-3.5 left-4 h-5 w-5 text-zinc-400 group-focus-within:text-blue-500 transition-colors" />
@@ -210,6 +212,7 @@ export const Signup: React.FC<SignupProps> = ({ onLogin, onSwitchToLogin, onBack
               Already have an ID? <button type="button" onClick={onSwitchToLogin} className="text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 transition-colors font-bold ml-1">Log In</button>
             </div>
           </form>
+          </div>
         </div>
       </div>
 

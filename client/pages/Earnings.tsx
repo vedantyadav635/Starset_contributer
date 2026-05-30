@@ -149,10 +149,10 @@ export const Earnings: React.FC = () => {
         </div>
 
         {/* Payment Methods */}
-        <div className="lg:col-span-2 bg-gradient-to-br from-blue-50/50 to-indigo-50/50 dark:from-white/5 dark:to-white/5 rounded-[32px] border border-blue-100/50 dark:border-white/10 shadow-xl shadow-slate-200/40 dark:shadow-none p-6 md:p-8 flex flex-col h-full relative overflow-hidden">
-          <div className="absolute top-0 right-0 w-64 h-64 bg-emerald-500/5 rounded-full blur-3xl -mr-32 -mt-32 pointer-events-none"></div>
+        <div className="lg:col-span-2 bg-gradient-to-br from-blue-50 to-indigo-50 dark:from-white/5 dark:to-white/5 rounded-[32px] border border-blue-100 dark:border-white/10 shadow-xl shadow-slate-200/50 dark:shadow-none p-6 md:p-8 flex flex-col h-full relative overflow-hidden">
+          <div className="absolute top-0 right-0 w-[400px] h-[400px] bg-emerald-500/10 dark:bg-emerald-500/20 blur-[80px] rounded-full translate-x-1/3 -translate-y-1/3 pointer-events-none z-0" />
 
-          <h2 className="text-xl font-bold text-white mb-8 flex items-center justify-between relative z-10">
+          <h2 className="text-xl font-bold text-slate-900 dark:text-white mb-8 flex items-center justify-between relative z-10">
             <span>Transfer Accounts</span>
             {upiId !== 'Not set' && (
               <span className="text-xs font-bold text-emerald-400 bg-emerald-900/20 px-3 py-1 rounded-full border border-emerald-900/30">Active</span>
@@ -201,10 +201,11 @@ export const Earnings: React.FC = () => {
       </div>
 
       {/* Transaction History */}
-      <div className="bg-gradient-to-br from-blue-50/50 to-indigo-50/50 dark:from-white/5 dark:to-white/5 rounded-[32px] border border-blue-100/50 dark:border-white/10 shadow-xl shadow-slate-200/40 dark:shadow-none overflow-hidden transform transition-all hover:-translate-y-1 hover:shadow-2xl">
-        <div className="px-8 py-6 border-b border-slate-200 dark:border-white/5 flex flex-col md:flex-row justify-between items-start md:items-center bg-slate-50 dark:bg-white/5 gap-4">
+      <div className="bg-gradient-to-br from-blue-50 to-indigo-50 dark:from-white/5 dark:to-white/5 rounded-[32px] border border-blue-100 dark:border-white/10 shadow-xl shadow-slate-200/50 dark:shadow-none overflow-hidden transform transition-all hover:-translate-y-1 hover:shadow-2xl relative">
+        <div className="absolute top-0 right-0 w-[400px] h-[400px] bg-blue-600/10 dark:bg-blue-500/20 blur-[80px] rounded-full translate-x-1/3 -translate-y-1/3 pointer-events-none z-0" />
+        <div className="px-8 py-6 border-b border-slate-200 dark:border-white/5 flex flex-col md:flex-row justify-between items-start md:items-center bg-slate-50 dark:bg-white/5 gap-4 relative z-10">
           <div className="flex items-center gap-4 w-full md:w-auto justify-between md:justify-start">
-            <h2 className="text-xl font-bold text-white">Settlement Ledger</h2>
+            <h2 className="text-xl font-bold text-slate-900 dark:text-white">Settlement Ledger</h2>
             <select className="text-xs border-slate-200 dark:border-white/10 rounded-lg py-1.5 px-3 bg-white dark:bg-black focus:ring-blue-600 focus:border-blue-600 text-slate-700 dark:text-white shadow-sm">
               <option>All Entries</option>
               <option>Processed</option>
@@ -215,15 +216,15 @@ export const Earnings: React.FC = () => {
         </div>
 
         {loading ? (
-          <div className="p-12 text-center text-zinc-500">Loading transactions...</div>
+          <div className="p-12 text-center text-zinc-500 relative z-10">Loading transactions...</div>
         ) : transactions.length === 0 ? (
-          <div className="p-12 text-center">
+          <div className="p-12 text-center relative z-10">
             <Inbox className="h-12 w-12 text-zinc-600 mx-auto mb-3" />
-            <p className="text-zinc-500 font-medium">No transactions yet</p>
-            <p className="text-zinc-400 text-sm mt-1">Complete tasks to see your earnings here</p>
+            <p className="text-slate-900 dark:text-zinc-500 font-medium">No transactions yet</p>
+            <p className="text-slate-500 dark:text-zinc-400 text-sm mt-1">Complete tasks to see your earnings here</p>
           </div>
         ) : (
-          <div className="overflow-x-auto">
+          <div className="overflow-x-auto relative z-10">
             <table className="w-full text-sm text-left whitespace-nowrap">
               <thead className="bg-black/20 text-stone-500 font-bold border-b border-white/5 text-xs uppercase tracking-wider">
                 <tr>
@@ -236,7 +237,7 @@ export const Earnings: React.FC = () => {
                 {transactions.map((tx) => (
                   <tr key={tx.id} className="hover:bg-white/5 transition-colors group cursor-default">
                     <td className="px-8 py-5 text-stone-500 font-mono text-xs">{tx.date}</td>
-                    <td className="px-8 py-5 text-white font-medium group-hover:text-blue-400 transition-colors">
+                    <td className="px-8 py-5 text-slate-900 dark:text-white font-medium group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">
                       {tx.description}
                     </td>
                     <td className="px-8 py-5">
