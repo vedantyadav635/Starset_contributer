@@ -53,15 +53,14 @@ export const PublicLayout: React.FC<PublicLayoutProps> = ({
       return () => window.removeEventListener('scroll', handleScroll);
    }, [lastScrollY]);
 
+   // Prevent background scrolling when mobile menu is open
    React.useEffect(() => {
       if (isMobileMenuOpen) {
          document.body.style.overflow = 'hidden';
       } else {
          document.body.style.overflow = 'unset';
       }
-      return () => {
-         document.body.style.overflow = 'unset';
-      };
+      return () => { document.body.style.overflow = 'unset'; };
    }, [isMobileMenuOpen]);
 
    const navLinks: { name: string; id: PublicPageType }[] = [
