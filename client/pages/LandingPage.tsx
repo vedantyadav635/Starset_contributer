@@ -65,11 +65,11 @@ const EcosystemVisual = () => {
                className="w-full max-w-[320px] md:w-80 bg-white dark:bg-blue-950/40 dark:backdrop-blur-xl rounded-3xl p-6 border border-slate-200 dark:border-blue-500/20 shadow-xl shadow-slate-200/50 dark:shadow-[0_8px_30px_rgba(37,99,235,0.15)] z-10 transition-all duration-300 cursor-pointer group hover:dark:border-blue-500/40 hover:dark:shadow-[0_8px_30px_rgba(37,99,235,0.25)]"
             >
                <div className="flex items-center gap-4 mb-4">
-                  <div className="w-12 h-12 rounded-2xl bg-indigo-50 dark:bg-indigo-500/10 flex items-center justify-center group-hover:bg-indigo-500 group-hover:text-white transition-colors">
-                     <Mic className="w-6 h-6 text-indigo-600 group-hover:text-white" />
+                  <div className="w-12 h-12 rounded-2xl bg-blue-100 dark:bg-blue-500/10 flex items-center justify-center group-hover:bg-blue-600 transition-colors">
+                     <Mic className="w-6 h-6 text-blue-600 group-hover:text-white transition-colors" />
                   </div>
                   <div>
-                     <div className="text-[10px] font-black text-indigo-600 uppercase tracking-widest group-hover:text-indigo-400 transition-colors">New Task</div>
+                     <div className="text-[10px] font-black text-blue-600 uppercase tracking-widest group-hover:text-blue-400 transition-colors">New Task</div>
                      <div className="font-bold text-slate-900 dark:text-white">Audio Collection</div>
                   </div>
                </div>
