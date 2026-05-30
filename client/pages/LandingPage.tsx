@@ -631,7 +631,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onEnterApp, onStartSig
                   <span className="text-xs font-black text-slate-600 dark:text-zinc-400 tracking-tight uppercase">High demand for new contributors</span>
                </div>
 
-               <h2 className="text-4xl sm:text-5xl font-black mb-6 tracking-tight">
+               <h2 className="text-5xl sm:text-6xl lg:text-7xl font-black mb-6 tracking-tighter">
                   <span className="text-slate-900 dark:text-white">Your </span>
                   <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-700 via-blue-500 to-blue-700 dark:from-blue-600 dark:via-blue-500 dark:to-blue-600 animate-shimmer drop-shadow-md">Digital Wallet</span>
                   <br className="hidden md:block" />
