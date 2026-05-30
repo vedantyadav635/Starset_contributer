@@ -5,6 +5,83 @@ import { Menu, Activity, Database, X, Linkedin, Mail, Sun, Moon } from 'lucide-r
 import { CookieConsent } from './CookieConsent';
 import { ThemeToggle } from './ThemeToggle';
 import { Footer } from './Footer';
+import { SEOHead } from './SEOHead';
+
+// ── Per-page SEO configuration map ──
+const SEO_CONFIG: Record<string, { title: string; description: string; keywords: string; canonicalPath: string }> = {
+  home: {
+    title: 'Starset Intelligence — Earn Money Daily by Training AI | starset.online',
+    description: 'Starset Intelligence is the #1 platform to earn real money daily by completing AI training tasks. Join 10,000+ contributors. Data labeling, RLHF evaluation, creative writing. Instant payouts. Free to join.',
+    keywords: 'Starset, starset.online, Starset Intelligence, earn money online, earn money daily, daily money, daily earning, AI tasks, AI jobs, AI opportunity, earn from home, data labeling jobs, RLHF, task earning, AI contributor, machine learning jobs, earn cash online, remote AI work, side hustle AI, train AI earn money, starset contributor, online earning platform, micro tasks, AI training platform, daily payout, star, starset ai, intelligence',
+    canonicalPath: '/',
+  },
+  contributors: {
+    title: 'Become a Contributor — Earn Money Training AI | Starset Intelligence',
+    description: 'Join Starset Intelligence as a contributor. Complete AI data tasks, earn instant payouts. No experience needed. Work from anywhere. Flexible hours. Start earning money by training artificial intelligence models today.',
+    keywords: 'AI contributor, become contributor, earn money AI, Starset contributor, data labeling contributor, RLHF contributor, work from home AI, remote AI jobs, flexible AI work, earn daily, starset.online contributor, money from tasks, daily earnings',
+    canonicalPath: '/contributors',
+  },
+  money: {
+    title: 'Earnings & Payouts — How to Earn Money on Starset Intelligence',
+    description: 'Learn how much you can earn on Starset Intelligence. Instant payouts via UPI, bank transfer, and crypto. Contributors earn ₹200–₹2,000+ daily. Transparent earnings, no hidden fees.',
+    keywords: 'earn money, daily earnings, AI earnings, Starset payouts, instant payout, UPI payout, earn money online, daily money, task earnings, how much earn Starset, AI task pay, earning platform, starset.online earnings, money from AI tasks',
+    canonicalPath: '/money',
+  },
+  'task-types': {
+    title: 'AI Task Types — RLHF, Data Labeling, Writing | Starset Intelligence',
+    description: 'Explore all task types on Starset Intelligence. RLHF text evaluation, data labeling & tagging, creative writing, image classification, audio transcription. Tasks for every skill level.',
+    keywords: 'AI tasks, RLHF tasks, data labeling, creative writing AI, image classification, audio transcription, task types, AI training tasks, Starset tasks, machine learning tasks, earn from tasks, starset.online tasks',
+    canonicalPath: '/task-types',
+  },
+  about: {
+    title: 'About Starset Intelligence — Our Mission to Train Better AI',
+    description: 'Starset Intelligence connects human intelligence with the world\'s leading AI companies. Learn about our mission, how we work, and why thousands trust us to deliver high-quality AI training data.',
+    keywords: 'about Starset, Starset Intelligence mission, AI data company, human-in-the-loop, AI training data, about starset.online, who is Starset, AI company India',
+    canonicalPath: '/about',
+  },
+  careers: {
+    title: 'Careers at Starset Intelligence — Join Our Team',
+    description: 'Join the Starset Intelligence team. We are hiring engineers, AI researchers, and operations professionals to build the world\'s most advanced human-in-the-loop AI platform.',
+    keywords: 'Starset careers, AI jobs, hiring AI engineers, Starset Intelligence jobs, work at Starset, AI startup jobs, remote AI career, starset.online careers',
+    canonicalPath: '/careers',
+  },
+  blog: {
+    title: 'Starset Blog — AI Insights, Updates & Industry News',
+    description: 'Read the latest insights from Starset Intelligence. AI industry news, platform updates, contributor tips, RLHF research, and more from the frontlines of artificial intelligence.',
+    keywords: 'Starset blog, AI blog, AI news, RLHF insights, AI industry, Starset updates, AI training news, machine learning blog, starset.online blog',
+    canonicalPath: '/blog',
+  },
+  contact: {
+    title: 'Contact Starset Intelligence — Get in Touch',
+    description: 'Contact Starset Intelligence for support, partnerships, or general inquiries. Our team typically responds within 24 hours. Email us at support@starset.ai.',
+    keywords: 'contact Starset, Starset support, starset.online contact, Starset Intelligence email, get help Starset, Starset customer support',
+    canonicalPath: '/contact',
+  },
+  terms: {
+    title: 'Terms of Service — Starset Intelligence',
+    description: 'Read the Terms of Service for Starset Intelligence. Understand our platform rules, user agreements, and contributor guidelines.',
+    keywords: 'terms of service, Starset terms, starset.online terms, legal, user agreement',
+    canonicalPath: '/terms',
+  },
+  privacy: {
+    title: 'Privacy Policy — Starset Intelligence',
+    description: 'Starset Intelligence Privacy Policy. Learn how we collect, use, and protect your personal data. Your privacy matters to us.',
+    keywords: 'privacy policy, Starset privacy, data protection, starset.online privacy, GDPR',
+    canonicalPath: '/privacy',
+  },
+  cookies: {
+    title: 'Cookie Policy — Starset Intelligence',
+    description: 'Cookie Policy for Starset Intelligence. Learn about how we use cookies and tracking technologies on our platform.',
+    keywords: 'cookie policy, Starset cookies, starset.online cookies, tracking policy',
+    canonicalPath: '/cookies',
+  },
+  'data-processing': {
+    title: 'Data Processing Agreement — Starset Intelligence',
+    description: 'Data Processing Agreement for Starset Intelligence. Learn how contributor data is processed, stored, and protected.',
+    keywords: 'data processing, DPA, Starset data, data agreement, starset.online data processing',
+    canonicalPath: '/data-processing',
+  },
+};
 
 export type PublicPageType = 'home' | 'about' | 'contributors' | 'money' | 'terms' | 'privacy' | 'cookies' | 'data-processing' | 'task-types' | 'careers' | 'blog' | 'contact';
 
@@ -60,8 +137,16 @@ export const PublicLayout: React.FC<PublicLayoutProps> = ({
       { name: 'About', id: 'about' },
    ];
 
+   const seo = SEO_CONFIG[currentPage] || SEO_CONFIG.home;
+
    return (
       <div className="min-h-screen text-slate-900 dark:text-white font-sans selection:bg-blue-500/30 selection:text-blue-900 dark:selection:bg-purple-500/30 dark:selection:text-purple-200 transition-colors duration-300">
+         <SEOHead
+            title={seo.title}
+            description={seo.description}
+            keywords={seo.keywords}
+            canonicalPath={seo.canonicalPath}
+         />
 
          {/* Global Background Gradient & Grid - Across all public pages */}
          <div className="fixed inset-0 z-0 pointer-events-none bg-slate-50 dark:bg-[#020205] transition-colors duration-300">
