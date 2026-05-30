@@ -14,7 +14,7 @@ export const Logo: React.FC<LogoProps> = ({ className = "h-10 w-10", animated = 
   return (
     <svg 
       viewBox="-5 -5 110 115" 
-      className={`${className} ${animated ? 'animate-pulse' : ''} drop-shadow-xl`}
+      className={`${className} ${animated ? 'animate-[pulse_2s_ease-in-out_infinite]' : 'animate-[float_6s_ease-in-out_infinite]'} drop-shadow-2xl transition-all duration-500 hover:scale-110 hover:brightness-125`}
       fill="none" 
       xmlns="http://www.w3.org/2000/svg"
     >
@@ -45,11 +45,11 @@ export const Logo: React.FC<LogoProps> = ({ className = "h-10 w-10", animated = 
         </linearGradient>
 
         <filter id="shadow3d" x="-20%" y="-20%" width="140%" height="140%">
-          <feDropShadow dx="0" dy="2" stdDeviation="2" floodColor="#000000" floodOpacity="0.4"/>
+          <feDropShadow dx="0" dy="4" stdDeviation="4" floodColor="#000000" floodOpacity="0.5"/>
         </filter>
         
-        <filter id="glow" x="-20%" y="-20%" width="140%" height="140%">
-          <feGaussianBlur stdDeviation="1.5" result="blur" />
+        <filter id="glow" x="-50%" y="-50%" width="200%" height="200%">
+          <feGaussianBlur stdDeviation="3" result="blur" />
           <feComposite in="SourceGraphic" in2="blur" operator="over" />
         </filter>
       </defs>
@@ -59,7 +59,7 @@ export const Logo: React.FC<LogoProps> = ({ className = "h-10 w-10", animated = 
         d="M 50 5 L 15 85 L 28 85 L 50 25 L 72 85 L 85 85 Z" 
         fill="url(#metal-dark)" 
         filter="url(#shadow3d)"
-        stroke="#cbd5e1"
+        stroke="#60a5fa"
         strokeWidth="0.5"
       />
 
@@ -68,7 +68,7 @@ export const Logo: React.FC<LogoProps> = ({ className = "h-10 w-10", animated = 
         d="M 85 85 Q 50 85 5 45 Q 50 65 72 85 Z" 
         fill="url(#metal)" 
         filter="url(#shadow3d)"
-        stroke="#f8fafc"
+        stroke="#93c5fd"
         strokeWidth="0.5"
       />
 
@@ -81,14 +81,16 @@ export const Logo: React.FC<LogoProps> = ({ className = "h-10 w-10", animated = 
         strokeWidth="0.5"
       />
 
-      {/* Diamond Star */}
-      <path 
-        d="M 50 88 Q 50 94 42 94 Q 50 94 50 100 Q 50 94 58 94 Q 50 94 50 88 Z" 
-        fill="url(#metal-highlight)" 
-        filter="url(#glow)"
-        stroke="#ffffff"
-        strokeWidth="0.5"
-      />
+      {/* Diamond Star with glowing pulse */}
+      <g className="origin-[50px_94px] animate-[pulse_2s_ease-in-out_infinite]">
+        <path 
+          d="M 50 88 Q 50 94 42 94 Q 50 94 50 100 Q 50 94 58 94 Q 50 94 50 88 Z" 
+          fill="url(#metal-highlight)" 
+          filter="url(#glow)"
+          stroke="#ffffff"
+          strokeWidth="1"
+        />
+      </g>
     </svg>
   );
 };
