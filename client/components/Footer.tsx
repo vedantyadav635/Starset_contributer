@@ -2,7 +2,6 @@ import React, { useEffect, useRef } from 'react';
 import { PublicPageType } from './PublicLayout';
 import { Logo } from './Logo';
 import { Mail, Linkedin, Twitter, Github, ArrowRight } from 'lucide-react';
-import { Button } from './Button';
 
 interface FooterProps {
   onNavigate: (page: PublicPageType) => void;
@@ -30,10 +29,10 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
           </div>
           
           <div className="relative z-10 flex w-full md:w-auto">
-            <Button onClick={() => onNavigate('signup')} variant="primary" size="lg" className="w-full md:w-auto flex items-center justify-center gap-3">
+            <button onClick={() => onNavigate('signup')} className="w-full md:w-auto px-8 py-4 bg-slate-900 dark:bg-white text-white dark:text-slate-900 font-bold rounded-2xl flex items-center justify-center gap-3 hover:scale-105 hover:bg-blue-600 dark:hover:bg-blue-50 transition-all duration-300 shadow-xl shadow-slate-900/20 dark:shadow-white/10 group">
               Become a Contributor
               <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
-            </Button>
+            </button>
           </div>
         </div>
 
@@ -116,7 +115,7 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
       </div>
       
       {/* Massive subtle watermark */}
-      <div className="w-full overflow-hidden flex justify-center pointer-events-none select-none absolute bottom-0 left-0 right-0 z-0 opacity-20 dark:opacity-[0.03]">
+      <div className="w-full overflow-hidden flex justify-center pointer-events-none select-none absolute bottom-0 left-0 right-0 z-0 opacity-20 dark:opacity-10">
         <h1 className="text-[15vw] leading-none font-black text-slate-300 dark:text-white whitespace-nowrap translate-y-1/3">
           STARSET
         </h1>
