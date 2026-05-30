@@ -21,27 +21,27 @@ export const Logo: React.FC<LogoProps> = ({ className = "h-10 w-10", animated = 
       <defs>
         {/* Main 3D Metallic Gradient */}
         <linearGradient id="metal" x1="0%" y1="0%" x2="100%" y2="100%">
-          <stop offset="0%" className="text-slate-400 dark:text-slate-50" stopColor="currentColor" />
-          <stop offset="25%" className="text-slate-600 dark:text-slate-300" stopColor="currentColor" />
-          <stop offset="50%" className="text-slate-800 dark:text-slate-400" stopColor="currentColor" />
-          <stop offset="75%" className="text-slate-600 dark:text-slate-300" stopColor="currentColor" />
-          <stop offset="100%" className="text-slate-900 dark:text-slate-500" stopColor="currentColor" />
+          <stop offset="0%" className="text-blue-400 dark:text-blue-300" stopColor="currentColor" />
+          <stop offset="25%" className="text-blue-500 dark:text-blue-400" stopColor="currentColor" />
+          <stop offset="50%" className="text-blue-600 dark:text-blue-500" stopColor="currentColor" />
+          <stop offset="75%" className="text-blue-700 dark:text-blue-600" stopColor="currentColor" />
+          <stop offset="100%" className="text-blue-800 dark:text-blue-700" stopColor="currentColor" />
         </linearGradient>
 
         {/* Darker Metallic Gradient for Depth (Back elements) */}
         <linearGradient id="metal-dark" x1="0%" y1="0%" x2="100%" y2="100%">
-          <stop offset="0%" className="text-slate-500 dark:text-slate-200" stopColor="currentColor" />
-          <stop offset="40%" className="text-slate-800 dark:text-slate-400" stopColor="currentColor" />
-          <stop offset="60%" className="text-slate-900 dark:text-slate-500" stopColor="currentColor" />
-          <stop offset="100%" className="text-black dark:text-slate-700" stopColor="currentColor" />
+          <stop offset="0%" className="text-blue-600 dark:text-blue-500" stopColor="currentColor" />
+          <stop offset="40%" className="text-blue-800 dark:text-blue-600" stopColor="currentColor" />
+          <stop offset="60%" className="text-blue-900 dark:text-blue-700" stopColor="currentColor" />
+          <stop offset="100%" className="text-blue-950 dark:text-blue-900" stopColor="currentColor" />
         </linearGradient>
 
         {/* Highlight Gradient for Swooshes */}
         <linearGradient id="metal-highlight" x1="0%" y1="100%" x2="100%" y2="0%">
-          <stop offset="0%" className="text-slate-300 dark:text-white" stopColor="currentColor" />
-          <stop offset="30%" className="text-slate-500 dark:text-slate-300" stopColor="currentColor" />
-          <stop offset="70%" className="text-slate-700 dark:text-slate-400" stopColor="currentColor" />
-          <stop offset="100%" className="text-slate-400 dark:text-slate-200" stopColor="currentColor" />
+          <stop offset="0%" className="text-blue-300 dark:text-blue-200" stopColor="currentColor" />
+          <stop offset="30%" className="text-blue-400 dark:text-blue-300" stopColor="currentColor" />
+          <stop offset="70%" className="text-blue-500 dark:text-blue-400" stopColor="currentColor" />
+          <stop offset="100%" className="text-blue-300 dark:text-blue-200" stopColor="currentColor" />
         </linearGradient>
 
         <filter id="shadow3d" x="-20%" y="-20%" width="140%" height="140%">
@@ -77,7 +77,7 @@ export const Logo: React.FC<LogoProps> = ({ className = "h-10 w-10", animated = 
         d="M 15 85 Q 50 85 95 45 Q 50 65 28 85 Z" 
         fill="url(#metal-highlight)" 
         filter="url(#shadow3d)"
-        stroke="#ffffff"
+        stroke="#bfdbfe"
         strokeWidth="0.5"
       />
 
