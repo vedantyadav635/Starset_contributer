@@ -27,7 +27,7 @@ export const Money: React.FC<PageProps> = ({ onNavigate, onEnterApp }) => {
           </div>
 
           <div className="grid md:grid-cols-3 gap-8 mb-24">
-            <div className="bg-white dark:bg-zinc-900/50 backdrop-blur-md p-10 rounded-[2rem] border border-slate-200 dark:border-white/10 hover:border-emerald-500/50 transition-all group hover:-translate-y-2 shadow-sm dark:shadow-none">
+            <div className="bg-gradient-to-br from-blue-50/50 to-indigo-50/50 dark:from-white/5 dark:to-white/5 backdrop-blur-md p-10 rounded-[32px] border border-blue-100/50 dark:border-white/10 hover:border-emerald-500/50 transition-all group hover:-translate-y-2 shadow-lg shadow-slate-200/40 dark:shadow-none">
               <div className="h-14 w-14 bg-emerald-50 dark:bg-emerald-500/10 rounded-2xl flex items-center justify-center mb-8 group-hover:bg-emerald-100 dark:group-hover:bg-emerald-500/20 transition-colors">
                 <Banknote className="h-7 w-7 text-emerald-600 dark:text-emerald-500" />
               </div>
@@ -37,7 +37,7 @@ export const Money: React.FC<PageProps> = ({ onNavigate, onEnterApp }) => {
               </p>
             </div>
 
-            <div className="bg-white dark:bg-zinc-900/50 backdrop-blur-md p-10 rounded-[2rem] border border-slate-200 dark:border-white/10 hover:border-blue-500/50 transition-all group hover:-translate-y-2 shadow-sm dark:shadow-none">
+            <div className="bg-gradient-to-br from-blue-50/50 to-indigo-50/50 dark:from-white/5 dark:to-white/5 backdrop-blur-md p-10 rounded-[32px] border border-blue-100/50 dark:border-white/10 hover:border-blue-500/50 transition-all group hover:-translate-y-2 shadow-lg shadow-slate-200/40 dark:shadow-none">
               <div className="h-14 w-14 bg-blue-50 dark:bg-blue-500/10 rounded-2xl flex items-center justify-center mb-8 group-hover:bg-blue-100 dark:group-hover:bg-blue-500/20 transition-colors">
                 <Zap className="h-7 w-7 text-blue-600 dark:text-blue-500" />
               </div>
@@ -47,7 +47,7 @@ export const Money: React.FC<PageProps> = ({ onNavigate, onEnterApp }) => {
               </p>
             </div>
 
-            <div className="bg-white dark:bg-zinc-900/50 backdrop-blur-md p-10 rounded-[2rem] border border-slate-200 dark:border-white/10 hover:border-purple-500/50 transition-all group hover:-translate-y-2 shadow-sm dark:shadow-none">
+            <div className="bg-gradient-to-br from-blue-50/50 to-indigo-50/50 dark:from-white/5 dark:to-white/5 backdrop-blur-md p-10 rounded-[32px] border border-blue-100/50 dark:border-white/10 hover:border-purple-500/50 transition-all group hover:-translate-y-2 shadow-lg shadow-slate-200/40 dark:shadow-none">
               <div className="h-14 w-14 bg-purple-50 dark:bg-purple-500/10 rounded-2xl flex items-center justify-center mb-8 group-hover:bg-purple-100 dark:group-hover:bg-purple-500/20 transition-colors">
                 <TrendingUp className="h-7 w-7 text-purple-600 dark:text-purple-500" />
               </div>
@@ -58,7 +58,7 @@ export const Money: React.FC<PageProps> = ({ onNavigate, onEnterApp }) => {
             </div>
           </div>
 
-          <div className="bg-white dark:bg-zinc-900/80 backdrop-blur-xl rounded-[2.5rem] p-12 text-slate-900 dark:text-white relative overflow-hidden shadow-2xl border border-slate-100 dark:border-white/5">
+          <div className="bg-gradient-to-br from-blue-50/50 to-indigo-50/50 dark:from-white/5 dark:to-white/5 backdrop-blur-xl rounded-[32px] p-12 text-slate-900 dark:text-white relative overflow-hidden shadow-xl shadow-slate-200/50 dark:shadow-none border border-blue-100/50 dark:border-white/10">
             <div className="absolute top-0 right-0 p-64 bg-emerald-500/5 dark:bg-emerald-500/10 rounded-full blur-[120px] -mr-32 -mt-32"></div>
             <div className="relative z-10 grid md:grid-cols-2 gap-12 items-center">
               <div>

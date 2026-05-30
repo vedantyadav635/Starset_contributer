@@ -278,7 +278,7 @@ const StatCard: React.FC<{
   };
 
   return (
-    <div className="bg-white dark:bg-zinc-900/50 backdrop-blur-md p-8 rounded-[2rem] border border-slate-200 dark:border-white/10 shadow-sm dark:shadow-none transition-all duration-300 group hover:-translate-y-1">
+    <div className="bg-gradient-to-br from-blue-50/50 to-indigo-50/50 dark:from-white/5 dark:to-white/5 backdrop-blur-md p-8 rounded-[32px] border border-blue-100/50 dark:border-white/10 shadow-lg shadow-slate-200/40 dark:shadow-none transition-all duration-300 group hover:-translate-y-1">
       <div className={`w-14 h-14 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform ${colorStyles[color]}`}>
         <Icon className="w-7 h-7" />
       </div>
@@ -303,7 +303,7 @@ const FeatureCard: React.FC<{
   };
 
   return (
-    <div className={`bg-white dark:bg-zinc-900/50 backdrop-blur-md p-10 rounded-[2.5rem] border shadow-sm dark:shadow-none ${colorMap[feature.color] || 'border-slate-200 dark:border-white/10'} transition-all duration-500 hover:-translate-y-2 group`}>
+    <div className={`bg-gradient-to-br from-blue-50/50 to-indigo-50/50 dark:from-white/5 dark:to-white/5 backdrop-blur-md p-10 rounded-[32px] border shadow-lg shadow-slate-200/40 dark:shadow-none ${colorMap[feature.color] || 'border-blue-100/50 dark:border-white/10'} transition-all duration-500 hover:-translate-y-2 group`}>
       <div className={`w-16 h-16 rounded-2xl flex items-center justify-center mb-8 group-hover:scale-110 transition-transform ${colorMap[feature.color] || 'bg-slate-50 dark:bg-white/5'}`}>
         <feature.icon className="w-8 h-8" />
       </div>
@@ -328,7 +328,7 @@ const StepCard: React.FC<{
 }> = ({ step }) => {
   return (
     <div className="relative group">
-      <div className="flex flex-col h-full bg-white dark:bg-zinc-900/40 backdrop-blur-md p-8 rounded-3xl border border-slate-200 dark:border-white/5 hover:border-slate-300 dark:hover:border-white/10 transition-all duration-300 shadow-sm dark:shadow-none">
+      <div className="flex flex-col h-full bg-gradient-to-br from-blue-50/50 to-indigo-50/50 dark:from-white/5 dark:to-white/5 backdrop-blur-md p-8 rounded-[32px] border border-blue-100/50 dark:border-white/5 hover:border-blue-300 dark:hover:border-white/10 transition-all duration-300 shadow-lg shadow-slate-200/40 dark:shadow-none">
         <div className="text-5xl font-black text-black dark:text-white/10 mb-6 tracking-tighter">
           {step.num}
         </div>

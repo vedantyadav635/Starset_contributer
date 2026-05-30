@@ -339,7 +339,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onEnterApp, onStartSig
                         desc: "SOC2 certified. Trusted by 50,000+ contributors. Your data and privacy are our priority."
                      }
                   ].map((feature, idx) => (
-                     <div key={idx} className="bg-white dark:bg-white/5 backdrop-blur-md p-5 md:p-8 rounded-3xl border border-slate-200 dark:border-white/10 hover:border-blue-500/30 transition-all duration-300 relative overflow-hidden group md:hover:-translate-y-2 hover:shadow-2xl flex-shrink-0 w-[80vw] sm:w-[340px] md:w-auto snap-center shadow-sm">
+                     <div key={idx} className="bg-gradient-to-br from-blue-50/50 to-indigo-50/50 dark:from-white/5 dark:to-white/5 backdrop-blur-md p-5 md:p-8 rounded-[32px] border border-blue-100/50 dark:border-white/10 hover:border-blue-500/30 transition-all duration-300 relative overflow-hidden group md:hover:-translate-y-2 hover:shadow-xl shadow-lg shadow-slate-200/40 dark:shadow-none flex-shrink-0 w-[80vw] sm:w-[340px] md:w-auto snap-center">
                         <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-current to-transparent opacity-[0.03] dark:opacity-5 rounded-bl-full pointer-events-none transition-opacity group-hover:opacity-10" style={{ color: feature.color.replace('text-', '') }}></div>
                         <div className={`h-12 w-12 md:h-16 md:w-16 ${feature.bg} rounded-2xl flex items-center justify-center mb-5 md:mb-8 group-hover:scale-110 transition-transform duration-300 shadow-inner`}>
                            <feature.icon className={`h-5 w-5 md:h-8 md:w-8 ${feature.color}`} />
@@ -409,7 +409,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onEnterApp, onStartSig
                         price: "Avg: ₹100/hr"
                      }
                   ].map((task, idx) => (
-                     <div key={idx} className="bg-white dark:bg-white/5 backdrop-blur-md p-5 md:p-8 rounded-[32px] border border-slate-100 dark:border-white/10 hover:border-blue-500/30 transition-all duration-300 relative overflow-hidden group md:hover:-translate-y-2 hover:shadow-xl shadow-sm cursor-pointer flex-shrink-0 w-[85vw] sm:w-[350px] md:w-auto snap-center">
+                     <div key={idx} className="bg-gradient-to-br from-blue-50/50 to-indigo-50/50 dark:from-white/5 dark:to-white/5 backdrop-blur-md p-5 md:p-8 rounded-[32px] border border-blue-100/50 dark:border-white/10 hover:border-blue-500/30 transition-all duration-300 relative overflow-hidden group md:hover:-translate-y-2 hover:shadow-xl shadow-lg shadow-slate-200/40 dark:shadow-none cursor-pointer flex-shrink-0 w-[85vw] sm:w-[350px] md:w-auto snap-center">
                         <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-current to-transparent opacity-[0.03] dark:opacity-[0.03] dark:opacity-5 rounded-bl-full pointer-events-none transition-opacity group-hover:opacity-10" style={{ color: task.color.replace('text-', '') }}></div>
                         
                         <div className="flex justify-between items-start mb-5 md:mb-8 relative z-10">

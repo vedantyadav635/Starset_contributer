@@ -149,7 +149,7 @@ export const Earnings: React.FC = () => {
         </div>
 
         {/* Payment Methods */}
-        <div className="lg:col-span-2 bg-white dark:bg-zinc-900 rounded-3xl border border-slate-200 dark:border-white/5 shadow-xl p-6 md:p-8 flex flex-col h-full relative overflow-hidden">
+        <div className="lg:col-span-2 bg-gradient-to-br from-blue-50/50 to-indigo-50/50 dark:from-white/5 dark:to-white/5 rounded-[32px] border border-blue-100/50 dark:border-white/10 shadow-xl shadow-slate-200/40 dark:shadow-none p-6 md:p-8 flex flex-col h-full relative overflow-hidden">
           <div className="absolute top-0 right-0 w-64 h-64 bg-emerald-500/5 rounded-full blur-3xl -mr-32 -mt-32 pointer-events-none"></div>
 
           <h2 className="text-xl font-bold text-white mb-8 flex items-center justify-between relative z-10">
@@ -201,7 +201,7 @@ export const Earnings: React.FC = () => {
       </div>
 
       {/* Transaction History */}
-      <div className="bg-white dark:bg-zinc-900 rounded-3xl border border-slate-200 dark:border-white/10 shadow-xl overflow-hidden transform transition-all hover:shadow-2xl">
+      <div className="bg-gradient-to-br from-blue-50/50 to-indigo-50/50 dark:from-white/5 dark:to-white/5 rounded-[32px] border border-blue-100/50 dark:border-white/10 shadow-xl shadow-slate-200/40 dark:shadow-none overflow-hidden transform transition-all hover:-translate-y-1 hover:shadow-2xl">
         <div className="px-8 py-6 border-b border-slate-200 dark:border-white/5 flex flex-col md:flex-row justify-between items-start md:items-center bg-slate-50 dark:bg-white/5 gap-4">
           <div className="flex items-center gap-4 w-full md:w-auto justify-between md:justify-start">
             <h2 className="text-xl font-bold text-white">Settlement Ledger</h2>

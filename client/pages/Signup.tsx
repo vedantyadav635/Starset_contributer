@@ -106,6 +106,28 @@ export const Signup: React.FC<SignupProps> = ({ onLogin, onSwitchToLogin, onBack
       <div className="absolute top-[-20%] left-[-10%] w-[400px] md:w-[600px] h-[400px] md:h-[600px] bg-blue-600/10 rounded-full blur-[80px] md:blur-[100px] animate-blob"></div>
       <div className="absolute bottom-[-20%] right-[-10%] w-[400px] md:w-[600px] h-[400px] md:h-[600px] bg-indigo-600/10 rounded-full blur-[80px] md:blur-[100px] animate-blob animation-delay-2000"></div>
 
+      {/* Header */}
+      <div className="absolute top-0 left-0 right-0 p-6 flex justify-between items-center z-20">
+        <div className="flex items-center gap-3 cursor-pointer" onClick={onBackHome}>
+          <Logo className="h-8 w-8 text-blue-600 dark:text-white" />
+          <span className="font-bold text-xl tracking-tight text-slate-900 dark:text-white uppercase">STARSET</span>
+        </div>
+        <div className="flex items-center gap-6">
+          <button 
+            onClick={onSwitchToLogin}
+            className="text-sm font-semibold text-slate-600 dark:text-zinc-400 hover:text-slate-900 dark:hover:text-white transition-colors hidden sm:block"
+          >
+            Log In
+          </button>
+          <button 
+            onClick={onBackHome}
+            className="text-sm font-semibold text-slate-600 dark:text-zinc-400 hover:text-slate-900 dark:hover:text-white transition-colors flex items-center gap-2"
+          >
+            <ArrowRight className="h-4 w-4 rotate-180" /> Back to Home
+          </button>
+        </div>
+      </div>
+
       <div className="w-full max-w-md relative z-10 pt-8 pb-8">
         <div className="mb-6 md:mb-8 text-center">
           <div className="flex flex-col items-center justify-center gap-3 md:gap-4 mb-4 md:mb-6">
@@ -114,11 +136,11 @@ export const Signup: React.FC<SignupProps> = ({ onLogin, onSwitchToLogin, onBack
             </div>
             <span className="font-bold text-xl md:text-2xl tracking-[0.15em] bg-clip-text text-transparent bg-gradient-to-r from-white to-zinc-400 uppercase">STARSET</span>
           </div>
-          <h1 className="text-lg md:text-xl font-bold tracking-tight mb-1 text-white">New Contributor Profile</h1>
+          <h1 className="text-lg md:text-xl font-bold tracking-tight mb-1 text-slate-900 dark:text-white">New Contributor Profile</h1>
           <p className="text-zinc-400 text-xs md:text-sm px-4">Join the network to start earning from data contributions.</p>
         </div>
 
-        <div className="bg-white dark:bg-zinc-900/40 backdrop-blur-2xl p-6 md:p-8 rounded-2xl md:rounded-3xl border border-slate-200 dark:border-white/10 shadow-lg dark:shadow-2xl mx-1 md:mx-0">
+        <div className="bg-gradient-to-br from-blue-50/50 to-indigo-50/50 dark:from-white/5 dark:to-white/5 backdrop-blur-2xl p-6 md:p-8 rounded-[32px] border border-blue-100/50 dark:border-white/10 shadow-xl shadow-slate-200/40 dark:shadow-2xl mx-1 md:mx-0">
           <form onSubmit={handleSubmit} className="space-y-5">
 
             <div className="space-y-4">

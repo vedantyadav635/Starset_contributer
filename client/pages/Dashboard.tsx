@@ -138,7 +138,7 @@ export const Dashboard: React.FC<DashboardProps> = ({ onNavigate }) => {
       {/* KPI Stats - Real Data */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
         {statCards.map((stat, idx) => (
-          <div key={idx} className="bg-white dark:bg-zinc-900 p-6 md:p-7 rounded-[2rem] border border-slate-200 dark:border-white/10 shadow-sm transition-all hover:shadow-lg hover:scale-[1.02] duration-300 group">
+          <div key={idx} className="bg-gradient-to-br from-blue-50/50 to-indigo-50/50 dark:from-white/5 dark:to-white/5 p-6 md:p-7 rounded-[32px] border border-blue-100/50 dark:border-white/10 shadow-lg shadow-slate-200/40 dark:shadow-none transition-all hover:shadow-xl hover:-translate-y-1 duration-300 group">
             <div className="flex items-center justify-between mb-6">
               <div className={`p-3 rounded-2xl transition-colors ${stat.label === 'Acceptance' ? 'bg-blue-900/20 text-blue-400' : stat.label === 'Accepted' ? 'bg-emerald-900/20 text-emerald-400' : stat.label === 'In Review' ? 'bg-amber-900/20 text-amber-400' : 'bg-purple-900/20 text-purple-400'}`}>
                 <stat.icon className="h-6 w-6" />
@@ -153,7 +153,7 @@ export const Dashboard: React.FC<DashboardProps> = ({ onNavigate }) => {
 
       {/* Quick Actions */}
       <div className="grid grid-cols-1 gap-6 mt-8">
-        <div className="bg-white dark:bg-zinc-900 text-slate-900 dark:text-white rounded-[2.5rem] border border-slate-200 dark:border-white/10 p-8 md:p-10 relative overflow-hidden group cursor-pointer" onClick={() => onNavigate('tasks')}>
+        <div className="bg-gradient-to-br from-blue-50/50 to-indigo-50/50 dark:from-white/5 dark:to-white/5 text-slate-900 dark:text-white rounded-[32px] border border-blue-100/50 dark:border-white/10 shadow-lg shadow-slate-200/40 dark:shadow-none p-8 md:p-10 relative overflow-hidden group cursor-pointer transition-all hover:-translate-y-1 hover:shadow-xl" onClick={() => onNavigate('tasks')}>
           <div className="absolute top-0 right-0 w-[60%] h-full bg-gradient-to-l from-blue-600/20 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700"></div>
           <div className="relative z-10">
             <div className="h-14 w-14 bg-slate-100 dark:bg-white/10 rounded-2xl flex items-center justify-center text-blue-500 dark:text-blue-400 mb-6 group-hover:scale-110 transition-transform duration-500">

@@ -117,14 +117,22 @@ export const Login: React.FC<LoginProps> = ({
       <div className="absolute top-0 left-0 right-0 p-6 flex justify-between items-center z-20">
         <div className="flex items-center gap-3 cursor-pointer" onClick={onBackHome}>
           <Logo className="h-8 w-8 text-blue-600 dark:text-white" />
-          <span className="font-bold text-xl tracking-tight text-slate-900 dark:text-white">STARSET</span>
+          <span className="font-bold text-xl tracking-tight text-slate-900 dark:text-white uppercase">STARSET</span>
         </div>
-        <button 
-          onClick={onBackHome}
-          className="text-sm font-semibold text-slate-600 dark:text-zinc-400 hover:text-slate-900 dark:hover:text-white transition-colors flex items-center gap-2"
-        >
-          <ArrowRight className="h-4 w-4 rotate-180" /> Back to Home
-        </button>
+        <div className="flex items-center gap-6">
+          <button 
+            onClick={onSwitchToSignup}
+            className="text-sm font-semibold text-slate-600 dark:text-zinc-400 hover:text-slate-900 dark:hover:text-white transition-colors hidden sm:block"
+          >
+            Create Account
+          </button>
+          <button 
+            onClick={onBackHome}
+            className="text-sm font-semibold text-slate-600 dark:text-zinc-400 hover:text-slate-900 dark:hover:text-white transition-colors flex items-center gap-2"
+          >
+            <ArrowRight className="h-4 w-4 rotate-180" /> Back to Home
+          </button>
+        </div>
       </div>
 
       <div className="w-full max-w-md relative z-10 pt-8 pb-8">
@@ -149,7 +157,7 @@ export const Login: React.FC<LoginProps> = ({
           </p>
         </div>
 
-        <div className="bg-white dark:bg-zinc-900/40 backdrop-blur-xl p-6 md:p-8 rounded-2xl md:rounded-3xl border border-slate-200 dark:border-white/10 shadow-lg dark:shadow-2xl mx-1 md:mx-0">
+        <div className="bg-gradient-to-br from-blue-50/50 to-indigo-50/50 dark:from-white/5 dark:to-white/5 backdrop-blur-xl p-6 md:p-8 rounded-[32px] border border-blue-100/50 dark:border-white/10 shadow-xl shadow-slate-200/40 dark:shadow-2xl mx-1 md:mx-0">
           {error && (
             <div className="mb-4 p-3 bg-red-900/20 border border-red-200 rounded-lg flex items-center gap-2 text-red-600 text-sm">
               <AlertCircle className="h-4 w-4" />
