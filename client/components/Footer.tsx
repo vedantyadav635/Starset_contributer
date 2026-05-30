@@ -115,8 +115,8 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
       </div>
       
       {/* Massive subtle watermark */}
-      <div className="w-full overflow-hidden flex justify-center pointer-events-none select-none absolute bottom-0 left-0 right-0 z-0 opacity-20 dark:opacity-10">
-        <h1 className="text-[15vw] leading-none font-black text-slate-300 dark:text-white whitespace-nowrap translate-y-1/3">
+      <div className="w-full overflow-hidden flex justify-center pointer-events-none select-none absolute bottom-0 left-0 right-0 z-0 opacity-5 dark:opacity-10">
+        <h1 className="text-[15vw] leading-none font-black text-slate-900 dark:text-white whitespace-nowrap translate-y-1/3">
           STARSET
         </h1>
       </div>
