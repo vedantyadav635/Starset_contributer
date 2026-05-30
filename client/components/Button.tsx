@@ -20,11 +20,11 @@ export const Button: React.FC<ButtonProps> = ({
   const variants = {
     primary: "bg-blue-600 !text-white hover:bg-blue-500 shadow-[0_4px_0_#1d4ed8,0_2px_4px_rgba(0,0,0,0.1)] active:shadow-[0_0px_0_#1d4ed8] active:translate-y-1 hover:-translate-y-0.5 hover:shadow-[0_6px_0_#1d4ed8,0_8px_16px_-4px_rgba(37,99,235,0.4)] border border-blue-600",
 
-    glow: "bg-blue-600 !text-white hover:bg-blue-500 shadow-[0_0_20px_rgba(37,99,235,0.5)] active:translate-y-[2px] hover:-translate-y-0.5 border border-blue-500 relative before:absolute before:inset-0 before:bg-white/20 before:blur-md before:rounded-lg",
+    glow: "bg-blue-600 !text-white hover:bg-blue-500 shadow-[0_4px_0_#1d4ed8,0_2px_4px_rgba(0,0,0,0.1)] active:shadow-[0_0px_0_#1d4ed8] active:translate-y-1 hover:-translate-y-0.5 hover:shadow-[0_6px_0_#1d4ed8,0_8px_16px_-4px_rgba(37,99,235,0.4)] border border-blue-600",
 
-    black: "bg-slate-900 dark:bg-white !text-white dark:!text-slate-900 hover:bg-slate-800 dark:hover:bg-slate-100 shadow-[0_4px_0_#0f172a,0_2px_4px_rgba(0,0,0,0.1)] dark:shadow-[0_4px_0_#cbd5e1] active:shadow-[0_0px_0_#0f172a] dark:active:shadow-[0_0px_0_#cbd5e1] active:translate-y-1 hover:-translate-y-0.5 hover:shadow-[0_6px_0_#0f172a,0_8px_16px_-4px_rgba(0,0,0,0.4)] dark:hover:shadow-[0_6px_0_#cbd5e1,0_8px_16px_-4px_rgba(255,255,255,0.4)] border border-slate-900 dark:border-white",
+    black: "bg-blue-600 !text-white hover:bg-blue-500 shadow-[0_4px_0_#1d4ed8,0_2px_4px_rgba(0,0,0,0.1)] active:shadow-[0_0px_0_#1d4ed8] active:translate-y-1 hover:-translate-y-0.5 hover:shadow-[0_6px_0_#1d4ed8,0_8px_16px_-4px_rgba(37,99,235,0.4)] border border-blue-600",
 
-    secondary: "bg-white dark:bg-slate-800 !text-slate-900 dark:!text-white hover:bg-slate-50 dark:hover:bg-slate-700 shadow-[0_4px_0_#cbd5e1,0_2px_4px_rgba(0,0,0,0.05)] dark:shadow-[0_4px_0_#1e293b] active:shadow-[0_0px_0_#cbd5e1] dark:active:shadow-[0_0px_0_#1e293b] active:translate-y-1 hover:-translate-y-0.5 hover:shadow-[0_6px_0_#cbd5e1,0_8px_16px_-4px_rgba(0,0,0,0.1)] dark:hover:shadow-[0_6px_0_#1e293b] border border-slate-200 dark:border-slate-700 transition-all",
+    secondary: "bg-blue-600 !text-white hover:bg-blue-500 shadow-[0_4px_0_#1d4ed8,0_2px_4px_rgba(0,0,0,0.1)] active:shadow-[0_0px_0_#1d4ed8] active:translate-y-1 hover:-translate-y-0.5 hover:shadow-[0_6px_0_#1d4ed8,0_8px_16px_-4px_rgba(37,99,235,0.4)] border border-blue-600",
 
     danger: "bg-red-600 !text-white hover:bg-red-500 shadow-[0_4px_0_#991b1b,0_2px_4px_rgba(0,0,0,0.1)] active:shadow-[0_0px_0_#991b1b] active:translate-y-1 hover:-translate-y-0.5 hover:shadow-[0_6px_0_#991b1b,0_8px_16px_-4px_rgba(220,38,38,0.4)] border border-red-600",
 
