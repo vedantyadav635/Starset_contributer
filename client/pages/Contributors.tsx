@@ -21,16 +21,12 @@ export const Contributors: React.FC<PageProps> = ({ onNavigate, onEnterApp }) =>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24 sm:py-32 relative z-10">
           <div className="grid lg:grid-cols-2 gap-12 lg:gap-20 items-center">
             <div className="text-center lg:text-left">
-              <div className="inline-flex items-center gap-3 px-5 py-2.5 rounded-full bg-white/5 border border-white/10 mb-8 shadow-sm">
-                <Zap className="w-4 h-4 text-blue-400" />
-                <span className="text-sm font-bold text-blue-600 dark:text-blue-100 uppercase tracking-wider">
-                  Joining 100,000+ contributors worldwide
-                </span>
-              </div>
 
-              <h1 className="text-5xl sm:text-7xl font-black text-white mb-8 leading-[1.1] tracking-tight">
-                Work on <br />
-                <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-indigo-400">
+
+              <h1 className="text-5xl sm:text-7xl font-black mb-8 leading-[1.1] tracking-tight">
+                <span className="text-slate-900 dark:text-white">Work on </span>
+                <br />
+                <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-700 via-blue-500 to-blue-700 dark:from-blue-600 dark:via-blue-500 dark:to-blue-600 animate-shimmer drop-shadow-md">
                   Your Terms.
                 </span>
               </h1>
@@ -196,8 +192,9 @@ export const Contributors: React.FC<PageProps> = ({ onNavigate, onEnterApp }) =>
       {/* CTA Section */}
       <div className="relative z-10 py-24 bg-slate-50/50 dark:bg-zinc-950/50 backdrop-blur-md border-y border-slate-200 dark:border-white/5">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h2 className="text-4xl sm:text-7xl font-black text-white mb-8 leading-tight tracking-tighter">
-            Ready to Start <span className="text-blue-500 dark:text-blue-400">Earning?</span>
+          <h2 className="text-4xl sm:text-7xl font-black mb-8 leading-tight tracking-tighter">
+            <span className="text-slate-900 dark:text-white">Ready to Start </span>
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-700 via-blue-500 to-blue-700 dark:from-blue-600 dark:via-blue-500 dark:to-blue-600 animate-shimmer drop-shadow-md">Earning?</span>
           </h2>
           <p className="text-xl text-zinc-400 mb-12 font-medium">
             Join thousands of contributors making money on their own schedule without any hassle.
@@ -274,19 +271,19 @@ const StatCard: React.FC<{
   color: 'blue' | 'emerald' | 'purple' | 'indigo';
 }> = ({ icon: Icon, value, label, color }) => {
   const colorStyles = {
-    blue: 'text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-900/20 border-blue-100 dark:border-white/10',
-    emerald: 'text-emerald-600 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-900/20 border-emerald-100 dark:border-white/10',
-    purple: 'text-purple-600 dark:text-purple-400 bg-purple-50 dark:bg-purple-900/20 border-purple-100 dark:border-white/10',
-    indigo: 'text-indigo-600 dark:text-indigo-400 bg-indigo-50 dark:bg-indigo-900/20 border-indigo-100 dark:border-white/10'
+    blue: 'text-blue-600 dark:text-blue-400 bg-blue-100 dark:bg-blue-900/40',
+    emerald: 'text-emerald-600 dark:text-emerald-400 bg-emerald-100 dark:bg-emerald-900/40',
+    purple: 'text-purple-600 dark:text-purple-400 bg-purple-100 dark:bg-purple-900/40',
+    indigo: 'text-indigo-600 dark:text-indigo-400 bg-indigo-100 dark:bg-indigo-900/40'
   };
 
   return (
-    <div className={`bg-white dark:bg-zinc-900/50 backdrop-blur-md p-8 rounded-[2rem] border shadow-sm dark:shadow-none transition-all duration-300 group hover:-translate-y-1 ${colorStyles[color]}`}>
-      <div className={`w-14 h-14 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform ${colorStyles[color].split(' border')[0]}`}>
+    <div className="bg-white dark:bg-zinc-900/50 backdrop-blur-md p-8 rounded-[2rem] border border-slate-200 dark:border-white/10 shadow-sm dark:shadow-none transition-all duration-300 group hover:-translate-y-1">
+      <div className={`w-14 h-14 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform ${colorStyles[color]}`}>
         <Icon className="w-7 h-7" />
       </div>
       <div className="text-3xl font-black text-slate-900 dark:text-white mb-1 tracking-tight">{value}</div>
-      <div className="text-sm text-slate-500 dark:text-zinc-400 font-bold uppercase tracking-wider">{label}</div>
+      <div className="text-sm text-slate-600 dark:text-zinc-400 font-bold uppercase tracking-wider">{label}</div>
     </div>
   );
 };
@@ -332,7 +329,7 @@ const StepCard: React.FC<{
   return (
     <div className="relative group">
       <div className="flex flex-col h-full bg-white dark:bg-zinc-900/40 backdrop-blur-md p-8 rounded-3xl border border-slate-200 dark:border-white/5 hover:border-slate-300 dark:hover:border-white/10 transition-all duration-300 shadow-sm dark:shadow-none">
-        <div className="text-5xl font-black text-slate-100 dark:text-white/10 mb-6 tracking-tighter">
+        <div className="text-5xl font-black text-black dark:text-white/10 mb-6 tracking-tighter">
           {step.num}
         </div>
 
