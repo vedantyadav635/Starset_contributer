@@ -248,15 +248,10 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onEnterApp, onStartSig
                   >
                      <Button 
                         onClick={() => onNavigate('signup')}
-                        className="relative overflow-hidden group w-full sm:w-auto h-16 md:h-16 px-8 md:px-10 text-lg font-bold !text-white rounded-2xl shadow-[0_0_40px_-10px_rgba(37,99,235,0.6)] hover:shadow-[0_0_60px_-15px_rgba(37,99,235,0.8)] transition-all duration-300 bg-gradient-to-b from-blue-500 to-blue-700 hover:from-blue-400 hover:to-blue-600 border border-blue-400/30 hover:-translate-y-1"
+                        variant="primary"
+                        className="w-full sm:w-auto h-16 md:h-16 px-8 md:px-10 text-lg flex items-center gap-2"
                      >
-                        <span className="relative z-10 flex items-center shadow-sm text-white">
-                           Start earning <ArrowRight className="w-5 h-5 ml-2 group-hover:translate-x-1 transition-transform" />
-                        </span>
-                        {/* 3D Inner Highlight */}
-                        <div className="absolute inset-0 rounded-2xl ring-1 ring-inset ring-white/20 pointer-events-none" />
-                        {/* Sweep animation on hover */}
-                        <div className="absolute inset-0 translate-x-[-100%] bg-gradient-to-r from-transparent via-white/30 to-transparent group-hover:translate-x-[100%] transition-transform duration-700 ease-in-out pointer-events-none" />
+                        Start earning <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
                      </Button>
                   </motion.div>
                </motion.div>
@@ -516,7 +511,8 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onEnterApp, onStartSig
                <div className="mt-16 md:mt-24 text-center">
                   <Button 
                      onClick={onStartSignup} 
-                     className="btn-pill h-14 px-10 text-base font-bold bg-blue-600 hover:bg-blue-700 !text-white border-none shadow-lg shadow-blue-500/25"
+                     variant="primary"
+                     className="h-14 px-10 text-base"
                   >
                      Create Free Account
                   </Button>

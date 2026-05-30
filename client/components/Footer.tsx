@@ -2,6 +2,7 @@ import React, { useEffect, useRef } from 'react';
 import { PublicPageType } from './PublicLayout';
 import { Logo } from './Logo';
 import { Mail, Linkedin, Twitter, Github, ArrowRight } from 'lucide-react';
+import { Button } from './Button';
 
 interface FooterProps {
   onNavigate: (page: PublicPageType) => void;
@@ -29,10 +30,10 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
           </div>
           
           <div className="relative z-10 flex w-full md:w-auto">
-            <button onClick={() => onNavigate('signup')} className="w-full md:w-auto px-8 py-4 bg-slate-900 dark:bg-white text-white dark:text-slate-900 font-bold rounded-2xl flex items-center justify-center gap-3 hover:scale-105 hover:bg-blue-600 dark:hover:bg-blue-50 transition-all duration-300 shadow-xl shadow-slate-900/20 dark:shadow-white/10 group">
+            <Button onClick={() => onNavigate('signup')} variant="primary" size="lg" className="w-full md:w-auto flex items-center justify-center gap-3">
               Become a Contributor
               <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
-            </button>
+            </Button>
           </div>
         </div>
 
