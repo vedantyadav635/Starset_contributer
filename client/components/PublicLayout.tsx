@@ -53,16 +53,6 @@ export const PublicLayout: React.FC<PublicLayoutProps> = ({
       return () => window.removeEventListener('scroll', handleScroll);
    }, [lastScrollY]);
 
-   // Prevent background scrolling when mobile menu is open
-   React.useEffect(() => {
-      if (isMobileMenuOpen) {
-         document.body.style.overflow = 'hidden';
-      } else {
-         document.body.style.overflow = 'unset';
-      }
-      return () => { document.body.style.overflow = 'unset'; };
-   }, [isMobileMenuOpen]);
-
    const navLinks: { name: string; id: PublicPageType }[] = [
       { name: 'Home', id: 'home' },
       { name: 'Contributors', id: 'contributors' },
@@ -75,16 +65,16 @@ export const PublicLayout: React.FC<PublicLayoutProps> = ({
 
          {/* Global Background Gradient & Grid - Across all public pages */}
          <div className="fixed inset-0 z-0 pointer-events-none bg-slate-50 dark:bg-[#020205] transition-colors duration-300">
-            {/* Main Blue Gradient Background */}
-            <div className="absolute inset-0 bg-[radial-gradient(circle_at_20%_30%,_#e0f2fe_0%,_transparent_70%),radial-gradient(circle_at_80%_70%,_#bae6fd_0%,_transparent_70%),#f8fafc] dark:bg-[radial-gradient(circle_at_20%_30%,_#0a1d3a_0%,_transparent_70%),radial-gradient(circle_at_80%_70%,_#050b18_0%,_transparent_70%),#020205] opacity-100 transition-colors duration-300"></div>
+            {/* Main Gradient Background */}
+            <div className="absolute inset-0 bg-[radial-gradient(circle_at_20%_30%,_#f1f5f9_0%,_transparent_70%),radial-gradient(circle_at_80%_70%,_#f8fafc_0%,_transparent_70%),#f8fafc] dark:bg-[radial-gradient(circle_at_20%_30%,_#0a1d3a_0%,_transparent_70%),radial-gradient(circle_at_80%_70%,_#050b18_0%,_transparent_70%),#020205] opacity-100 transition-colors duration-300"></div>
 
             {/* Grid Pattern */}
-            <div className="absolute inset-0 bg-[linear-gradient(to_right,#0f172a05_1px,transparent_1px),linear-gradient(to_bottom,#0f172a05_1px,transparent_1px)] dark:bg-[linear-gradient(to_right,#ffffff03_1px,transparent_1px),linear-gradient(to_bottom,#ffffff03_1px,transparent_1px)] bg-[size:40px_40px] transition-colors duration-300"></div>
+            <div className="absolute inset-0 bg-[linear-gradient(to_right,#00000003_1px,transparent_1px),linear-gradient(to_bottom,#00000003_1px,transparent_1px)] dark:bg-[linear-gradient(to_right,#ffffff03_1px,transparent_1px),linear-gradient(to_bottom,#ffffff03_1px,transparent_1px)] bg-[size:40px_40px] transition-colors duration-300"></div>
 
             {/* Animated Glows */}
-            <div className="absolute top-[-10%] left-[-10%] w-[600px] h-[600px] bg-blue-500/20 dark:bg-blue-600/10 rounded-full blur-[120px] transition-colors duration-300"></div>
-            <div className="absolute bottom-[20%] right-[10%] w-[500px] h-[500px] bg-indigo-500/20 dark:bg-indigo-900/20 rounded-full blur-[100px] transition-colors duration-300"></div>
-            <div className="absolute top-[30%] right-[-5%] w-[400px] h-[400px] bg-sky-400/20 dark:bg-blue-500/5 rounded-full blur-[80px] transition-colors duration-300"></div>
+            <div className="absolute top-[-10%] left-[-10%] w-[600px] h-[600px] bg-blue-500/10 dark:bg-blue-600/10 rounded-full blur-[120px] transition-colors duration-300"></div>
+            <div className="absolute bottom-[20%] right-[10%] w-[500px] h-[500px] bg-indigo-500/10 dark:bg-indigo-900/20 rounded-full blur-[100px] transition-colors duration-300"></div>
+            <div className="absolute top-[30%] right-[-5%] w-[400px] h-[400px] bg-sky-400/10 dark:bg-blue-500/5 rounded-full blur-[80px] transition-colors duration-300"></div>
          </div>
 
          {/* Navigation */}
@@ -101,14 +91,18 @@ export const PublicLayout: React.FC<PublicLayoutProps> = ({
                </div>
 
                {/* Right: Floating Capsule (Desktop) */}
-               <div className="hidden lg:flex items-center bg-white/5 backdrop-blur-xl border border-white/10 rounded-full p-1.5 shadow-2xl">
+               <div className="hidden lg:flex items-center bg-white/80 dark:bg-white/5 backdrop-blur-xl border border-slate-200 dark:border-white/10 rounded-full p-1.5 shadow-lg shadow-slate-200/50 dark:shadow-2xl">
                   {/* Links */}
-                  <div className="flex items-center pl-6 pr-4 gap-6">
+                  <div className="flex items-center pl-4 pr-2 gap-2">
                      {navLinks.map((item) => (
                         <button
                            key={item.id}
                            onClick={() => onNavigate(item.id)}
-                           className={`text-[11px] font-black tracking-widest uppercase transition-all duration-200 ${currentPage === item.id ? 'text-blue-600 dark:text-white' : 'text-slate-500 dark:text-zinc-400 hover:text-blue-600 dark:hover:text-white'}`}
+                           className={`px-5 py-2 rounded-full text-sm font-semibold transition-all duration-300
+                              ${currentPage === item.id 
+                                 ? 'bg-blue-600 !text-white shadow-md shadow-blue-500/25' 
+                                 : '!text-slate-600 hover:!text-slate-900 dark:!text-zinc-400 dark:hover:!text-white !bg-transparent'}
+                           `}
                         >
                            {item.name}
                         </button>
@@ -116,12 +110,12 @@ export const PublicLayout: React.FC<PublicLayoutProps> = ({
                   </div>
 
                   {/* Button */}
-                  <Button onClick={onEnterApp} className="bg-blue-600 hover:bg-blue-700 !text-white !rounded-full px-7 shadow-[0_0_20px_rgba(59,130,246,0.3)] transition-all text-[11px] font-black tracking-widest uppercase h-10 border-0">
+                  <Button onClick={onEnterApp} className="ml-4 bg-blue-600 hover:bg-blue-700 !text-white !rounded-full px-6 shadow-md shadow-blue-500/25 transition-all text-xs font-bold uppercase tracking-wider h-10 border-0">
                      Start Earning
                   </Button>
 
                   {/* Theme Toggle */}
-                  <div className="ml-2 border-l border-white/10 pl-4 h-6 flex items-center">
+                  <div className="ml-3 border-l border-slate-200 dark:border-white/10 pl-3 h-6 flex items-center">
                      <ThemeToggle className="!h-9 !w-9" />
                   </div>
                </div>

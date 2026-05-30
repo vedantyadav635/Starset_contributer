@@ -203,9 +203,9 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onEnterApp, onStartSig
             <div className="absolute bottom-0 left-0 w-full h-1/2 bg-gradient-to-t from-slate-50 dark:from-[#020205] to-transparent" />
          </div>
 
-         <section className="relative z-10 -mt-20 pt-36 pb-32 px-4 md:px-6 overflow-hidden">
+         <section className="relative z-10 -mt-20 pt-36 pb-32 px-4 md:px-6 overflow-hidden bg-transparent dark:bg-transparent">
             {/* Luel Dotted Background (Mobile/Backup) */}
-            <div className="absolute inset-0 bg-luel-dots opacity-40 -z-20 pointer-events-none lg:hidden"></div>
+            <div className="absolute inset-0 bg-luel-dots opacity-40 -z-20 pointer-events-none lg:hidden transition-opacity"></div>
             
             <div className="max-w-7xl mx-auto grid lg:grid-cols-2 gap-20 items-center relative z-20">
                
@@ -248,10 +248,15 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onEnterApp, onStartSig
                   >
                      <Button 
                         onClick={() => onNavigate('signup')}
-                        variant="primary"
-                        className="w-full sm:w-auto h-16 md:h-16 px-8 md:px-10 text-lg flex items-center gap-2"
+                        className="relative overflow-hidden group w-full sm:w-auto h-16 md:h-16 px-8 md:px-10 text-lg font-bold !text-white rounded-2xl shadow-[0_0_40px_-10px_rgba(37,99,235,0.6)] hover:shadow-[0_0_60px_-15px_rgba(37,99,235,0.8)] transition-all duration-300 bg-gradient-to-b from-blue-500 to-blue-700 hover:from-blue-400 hover:to-blue-600 border border-blue-400/30 hover:-translate-y-1"
                      >
-                        Start earning <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
+                        <span className="relative z-10 flex items-center shadow-sm text-white">
+                           Start earning <ArrowRight className="w-5 h-5 ml-2 group-hover:translate-x-1 transition-transform" />
+                        </span>
+                        {/* 3D Inner Highlight */}
+                        <div className="absolute inset-0 rounded-2xl ring-1 ring-inset ring-white/20 pointer-events-none" />
+                        {/* Sweep animation on hover */}
+                        <div className="absolute inset-0 translate-x-[-100%] bg-gradient-to-r from-transparent via-white/30 to-transparent group-hover:translate-x-[100%] transition-transform duration-700 ease-in-out pointer-events-none" />
                      </Button>
                   </motion.div>
                </motion.div>
@@ -511,8 +516,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onEnterApp, onStartSig
                <div className="mt-16 md:mt-24 text-center">
                   <Button 
                      onClick={onStartSignup} 
-                     variant="primary"
-                     className="h-14 px-10 text-base"
+                     className="btn-pill h-14 px-10 text-base font-bold bg-blue-600 hover:bg-blue-700 !text-white border-none shadow-lg shadow-blue-500/25"
                   >
                      Create Free Account
                   </Button>
@@ -529,7 +533,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onEnterApp, onStartSig
                transition={{ duration: 0.8 }}
                className="max-w-7xl mx-auto px-6"
             >
-               <h2 className="text-2xl md:text-4xl font-bold text-center text-white mb-6 md:mb-16">Community Stories</h2>
+               <h2 className="text-2xl md:text-4xl font-bold text-center text-slate-900 dark:text-white mb-6 md:mb-16">Community Stories</h2>
                <div className="flex overflow-x-auto pb-2 md:pb-8 gap-4 md:gap-6 snap-x snap-mandatory no-scrollbar -mx-4 px-4 md:grid md:grid-cols-3 md:mx-0 md:px-0">
                   {[
                      {
@@ -551,18 +555,18 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onEnterApp, onStartSig
                         initial: "S"
                      }
                   ].map((story, i) => (
-                     <div key={i} className="bg-white/5 backdrop-blur-md p-5 md:p-8 rounded-3xl border border-white/5 hover:border-white/10 transition-colors flex-shrink-0 w-[82vw] sm:w-[350px] md:w-auto snap-center">
+                     <div key={i} className="bg-white/50 dark:bg-white/5 backdrop-blur-md p-5 md:p-8 rounded-3xl border border-slate-200 dark:border-white/5 hover:border-slate-300 dark:hover:border-white/10 shadow-sm dark:shadow-none transition-colors flex-shrink-0 w-[82vw] sm:w-[350px] md:w-auto snap-center">
                         <div className="flex gap-1 text-amber-400 mb-3 md:mb-6">
                            {[...Array(5)].map((_, i) => <Star key={i} className="h-4 w-4 fill-current" />)}
                         </div>
-                        <p className="text-zinc-300 text-lg mb-8 italic leading-relaxed">"{story.quote}"</p>
+                        <p className="text-slate-600 dark:text-zinc-300 text-lg mb-8 italic leading-relaxed">"{story.quote}"</p>
                         <div className="flex items-center gap-4">
-                           <div className="h-10 w-10 rounded-full bg-zinc-800 flex items-center justify-center text-white font-bold shadow-lg">
+                           <div className="h-10 w-10 rounded-full bg-slate-200 dark:bg-zinc-800 flex items-center justify-center text-slate-900 dark:text-white font-bold shadow-sm dark:shadow-lg">
                               {story.initial}
                            </div>
                            <div>
-                              <div className="text-white font-bold">{story.name}</div>
-                              <div className="text-xs text-zinc-500">{story.role}</div>
+                              <div className="text-slate-900 dark:text-white font-bold">{story.name}</div>
+                              <div className="text-xs text-slate-500 dark:text-zinc-500">{story.role}</div>
                            </div>
                         </div>
                      </div>
@@ -580,24 +584,24 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onEnterApp, onStartSig
                transition={{ duration: 0.8 }}
                className="max-w-3xl mx-auto px-4 md:px-6"
             >
-               <h2 className="text-2xl sm:text-3xl md:text-4xl font-black text-center text-white mb-10 md:mb-16 tracking-tight">Frequently Asked Questions</h2>
+               <h2 className="text-2xl sm:text-3xl md:text-4xl font-black text-center text-slate-900 dark:text-white mb-10 md:mb-16 tracking-tight">Frequently Asked Questions</h2>
                <div className="space-y-3 md:space-y-4">
                   {[
                      { q: "Do I need any special skills?", a: "No special skills are required for most tasks. If you can speak, type, or identify objects in images, you can contribute. Some advanced tasks might require specific language proficiency." },
                      { q: "How much can I earn?", a: "Earnings depend on the complexity of tasks and your speed. Most contributors earn between ₹300-₹500 per hour of active work. Payments are listed upfront for every task." },
                      { q: "When do I get paid?", a: "We process payments daily. Once your work is validated (usually within 24 hours), you can withdraw funds immediately to your UPI or Bank Account." },
-                     { q: "Is my data safe?", a: "Yes. We are SOC2 certified and prioritize data privacy. Your personal information is never shared with clientsâ€”only the anonymized data you explicitly contribute." }
+                     { q: "Is my data safe?", a: "Yes. We are SOC2 certified and prioritize data privacy. Your personal information is never shared with clients—only the anonymized data you explicitly contribute." }
                   ].map((faq, i) => (
-                     <div key={i} className="bg-white/5 backdrop-blur-xl rounded-2xl border border-white/10 overflow-hidden hover:border-blue-500/30 transition-all">
+                     <div key={i} className="bg-white/50 dark:bg-white/5 backdrop-blur-xl rounded-2xl border border-slate-200 dark:border-white/10 overflow-hidden hover:border-blue-500/30 shadow-sm dark:shadow-none transition-all">
                         <button
                            onClick={() => toggleFaq(i)}
-                           className="w-full px-4 md:px-6 py-4 md:py-5 text-left flex items-center justify-between text-white font-bold hover:bg-white/5 transition-colors text-sm md:text-base gap-3"
+                           className="w-full px-4 md:px-6 py-4 md:py-5 text-left flex items-center justify-between text-slate-900 dark:text-white font-bold hover:bg-slate-100 dark:hover:bg-white/5 transition-colors text-sm md:text-base gap-3"
                         >
                            <span>{faq.q}</span>
-                           <ChevronDown className={`h-5 w-5 text-zinc-500 transition-transform flex-shrink-0 ${openFaq === i ? 'rotate-180' : ''}`} />
+                           <ChevronDown className={`h-5 w-5 text-slate-400 dark:text-zinc-500 transition-transform flex-shrink-0 ${openFaq === i ? 'rotate-180' : ''}`} />
                         </button>
                         {openFaq === i && (
-                           <div className="px-4 md:px-6 pb-4 md:pb-6 text-sm md:text-base text-zinc-400 leading-relaxed animate-in fade-in slide-in-from-top-2 duration-300">
+                           <div className="px-4 md:px-6 pb-4 md:pb-6 text-sm md:text-base text-slate-600 dark:text-zinc-400 leading-relaxed animate-in fade-in slide-in-from-top-2 duration-300">
                               {faq.a}
                            </div>
                         )}

@@ -33,7 +33,7 @@ export const Contributors: React.FC<PageProps> = ({ onNavigate, onEnterApp }) =>
 
               <p className="text-xl text-zinc-400 mb-10 leading-relaxed font-medium max-w-xl mx-auto lg:mx-0">
                 Turn your spare time into income. Complete simple digital tasks from anywhere,
-                get paid instantly. <span className="text-white font-bold">No experience required.</span>
+                get paid instantly. <span className="text-slate-900 dark:text-white font-bold">No experience required.</span>
               </p>
 
               <div className="flex flex-col sm:flex-row gap-5 justify-center lg:justify-start">
@@ -49,7 +49,7 @@ export const Contributors: React.FC<PageProps> = ({ onNavigate, onEnterApp }) =>
                 <Button
                   onClick={() => onNavigate('about')}
                   variant="ghost"
-                  className="px-10 py-4 text-lg font-bold text-zinc-300 hover:text-white transition-all h-16 rounded-2xl border-2 border-white/10"
+                  className="px-10 py-4 text-lg font-bold text-slate-600 dark:text-zinc-300 hover:text-slate-900 dark:hover:text-white transition-all h-16 rounded-2xl border-2 border-slate-200 dark:border-white/10"
                 >
                   Learn More
                 </Button>
@@ -105,10 +105,10 @@ export const Contributors: React.FC<PageProps> = ({ onNavigate, onEnterApp }) =>
       <div className="relative z-10 py-24">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-20">
-            <h2 className="text-3xl sm:text-5xl font-black text-white mb-6 tracking-tight">
+            <h2 className="text-3xl sm:text-5xl font-black text-slate-900 dark:text-white mb-6 tracking-tight">
               Why Contributors Choose Us
             </h2>
-            <p className="text-xl text-zinc-400 max-w-2xl mx-auto leading-relaxed font-medium">
+            <p className="text-xl text-slate-600 dark:text-zinc-400 max-w-2xl mx-auto leading-relaxed font-medium">
               Flexible work that fits your lifestyle. Simple tasks, <span className="text-blue-400">transparent pay</span>, instant earnings.
             </p>
           </div>
@@ -144,10 +144,10 @@ export const Contributors: React.FC<PageProps> = ({ onNavigate, onEnterApp }) =>
       <div className="py-24 relative z-10">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-20">
-            <h2 className="text-3xl sm:text-5xl font-black text-white mb-6 tracking-tight">
+            <h2 className="text-3xl sm:text-5xl font-black text-slate-900 dark:text-white mb-6 tracking-tight">
               Get Started in 4 Simple Steps
             </h2>
-            <p className="text-xl text-zinc-400 font-medium">
+            <p className="text-xl text-slate-600 dark:text-zinc-400 font-medium">
               From signup to earning in under <span className="text-blue-400 font-bold">5 minutes</span>
             </p>
           </div>
@@ -256,10 +256,10 @@ const CountUpStat: React.FC<{
 
   return (
     <div ref={ref}>
-      <div className="text-3xl font-bold text-white">
+      <div className="text-3xl font-bold text-slate-900 dark:text-white">
         {prefix}{count.toFixed(decimals)}{suffix}
       </div>
-      <div className="text-sm text-gray-400">{label}</div>
+      <div className="text-sm text-slate-500 dark:text-gray-400">{label}</div>
     </div>
   );
 };

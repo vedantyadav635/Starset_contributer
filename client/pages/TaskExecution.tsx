@@ -349,25 +349,25 @@ export const TaskExecution: React.FC<TaskExecutionProps> = ({ task, onBack, onCo
   if (step === 'brief') {
     return (
       <div className="max-w-5xl mx-auto animate-in fade-in slide-in-from-bottom-4 duration-500">
-        <button onClick={onBack} className="flex items-center text-sm font-medium text-stone-500 hover:text-white mb-3 transition-colors">
+        <button onClick={onBack} className="flex items-center text-sm font-medium text-stone-500 hover:text-slate-900 dark:text-white mb-3 transition-colors">
           <ArrowLeft className="h-4 w-4 mr-2" /> Back to Console
         </button>
 
-        <div className="bg-zinc-900 rounded-3xl border border-white/10 shadow-xl shadow-none overflow-hidden">
-          <div className="px-5 md:px-8 py-4 md:py-6 border-b border-white/5 flex flex-col md:flex-row justify-between items-start md:items-center bg-white/5 gap-4">
+        <div className="bg-slate-100 dark:bg-zinc-900 rounded-3xl border border-slate-200 dark:border-white/10 shadow-xl shadow-none overflow-hidden">
+          <div className="px-5 md:px-8 py-4 md:py-6 border-b border-white/5 flex flex-col md:flex-row justify-between items-start md:items-center bg-slate-100 dark:bg-white/5 gap-4">
             <div className="flex-1 w-full">
               <div className="flex items-center gap-2 mb-1">
                 <span className="px-2 py-0.5 bg-blue-500/10 text-blue-400 text-[10px] font-bold uppercase tracking-wider rounded border border-blue-500/20">Active Operation</span>
                 <span className="font-mono text-[10px] text-stone-400"># {task.id.slice(0, 8)}</span>
               </div>
-              <h2 className="text-xl md:text-3xl font-black text-white leading-tight tracking-tight">{task.title}</h2>
+              <h2 className="text-xl md:text-3xl font-black text-slate-900 dark:text-white leading-tight tracking-tight">{task.title}</h2>
               <div className="flex flex-wrap items-center mt-3 gap-2 text-sm text-stone-500">
-                <span className="flex items-center bg-black/40 px-3 py-1.5 rounded-lg border border-white/10 shadow-sm font-bold text-xs"><Info className="h-3.5 w-3.5 mr-2 text-blue-400" /> {task.type}</span>
-                <span className="flex items-center bg-black/40 px-3 py-1.5 rounded-lg border border-white/10 shadow-sm font-bold text-xs"><Clock className="h-3.5 w-3.5 mr-2 text-stone-400" /> {task.estimatedTimeSec}s Est.</span>
+                <span className="flex items-center bg-black/40 px-3 py-1.5 rounded-lg border border-slate-200 dark:border-white/10 shadow-sm font-bold text-xs"><Info className="h-3.5 w-3.5 mr-2 text-blue-400" /> {task.type}</span>
+                <span className="flex items-center bg-black/40 px-3 py-1.5 rounded-lg border border-slate-200 dark:border-white/10 shadow-sm font-bold text-xs"><Clock className="h-3.5 w-3.5 mr-2 text-stone-400" /> {task.estimatedTimeSec}s Est.</span>
               </div>
             </div>
-            <div className="flex items-center md:flex-col justify-between w-full md:w-auto md:text-right border-t md:border-t-0 border-white/10 pt-4 md:pt-0">
-              <div className="text-[10px] text-zinc-400 font-black uppercase tracking-[0.2em] mb-1">Compensation</div>
+            <div className="flex items-center md:flex-col justify-between w-full md:w-auto md:text-right border-t md:border-t-0 border-slate-200 dark:border-white/10 pt-4 md:pt-0">
+              <div className="text-[10px] text-slate-600 dark:text-zinc-400 font-black uppercase tracking-[0.2em] mb-1">Compensation</div>
               <div className="text-2xl md:text-4xl font-black text-blue-400 drop-shadow-sm">₹{task.compensation.toFixed(2)}</div>
             </div>
           </div>
@@ -389,8 +389,8 @@ export const TaskExecution: React.FC<TaskExecutionProps> = ({ task, onBack, onCo
             </div>
 
             <div className="prose prose-invert max-w-none">
-              <h3 className="text-base md:text-lg font-bold text-white mb-2">Operational Instructions</h3>
-              <p className="text-stone-300 leading-relaxed bg-white/5 p-3 md:p-4 rounded-xl border border-white/5 font-mono text-sm">{task.instructions}</p>
+              <h3 className="text-base md:text-lg font-bold text-slate-900 dark:text-white mb-2">Operational Instructions</h3>
+              <p className="text-stone-300 leading-relaxed bg-slate-100 dark:bg-white/5 p-3 md:p-4 rounded-xl border border-white/5 font-mono text-sm">{task.instructions}</p>
             </div>
 
             <div className="bg-amber-900/10 border border-amber-900/20 rounded-xl p-3 md:p-4 flex flex-col md:flex-row gap-3">
@@ -407,7 +407,7 @@ export const TaskExecution: React.FC<TaskExecutionProps> = ({ task, onBack, onCo
               </div>
             </div>
 
-            <div className="flex justify-end pt-4 border-t border-white/10">
+            <div className="flex justify-end pt-4 border-t border-slate-200 dark:border-white/10">
               <Button size="lg" onClick={() => setStep('consent')} className="w-full md:w-auto px-8 h-12 text-base">Proceed to Consent <ArrowLeft className="ml-2 h-5 w-5 rotate-180" /></Button>
             </div>
           </div>
@@ -420,14 +420,14 @@ export const TaskExecution: React.FC<TaskExecutionProps> = ({ task, onBack, onCo
   if (step === 'consent') {
     return (
       <div className="max-w-2xl mx-auto mt-4 md:mt-12 animate-in zoom-in-95 duration-300">
-        <div className="bg-zinc-900 rounded-3xl border border-white/10 shadow-none p-6 md:p-12">
+        <div className="bg-slate-100 dark:bg-zinc-900 rounded-3xl border border-slate-200 dark:border-white/10 shadow-none p-6 md:p-12">
           <div className="flex items-center justify-center h-16 w-16 md:h-20 md:w-20 bg-blue-900/20 rounded-full mx-auto mb-6 md:mb-8">
             <Lock className="h-8 w-8 md:h-10 md:w-10 text-blue-400" />
           </div>
-          <h2 className="text-2xl md:text-3xl font-bold text-white mb-3 text-center">Protocol Acceptance</h2>
+          <h2 className="text-2xl md:text-3xl font-bold text-slate-900 dark:text-white mb-3 text-center">Protocol Acceptance</h2>
           <p className="text-stone-500 text-center mb-8 md:mb-10 text-base md:text-lg">Confirm understanding of data handling protocols.</p>
 
-          <div className="bg-white/5 rounded-2xl p-6 md:p-8 border border-white/5 mb-8 md:mb-10 text-sm md:text-base text-stone-300 space-y-5">
+          <div className="bg-slate-100 dark:bg-white/5 rounded-2xl p-6 md:p-8 border border-white/5 mb-8 md:mb-10 text-sm md:text-base text-stone-300 space-y-5">
             <p className="leading-relaxed font-bold">
               You are contributing structured data for: <span className="text-blue-400">{task.aiCapability}</span>.
             </p>
@@ -439,7 +439,7 @@ export const TaskExecution: React.FC<TaskExecutionProps> = ({ task, onBack, onCo
             </ul>
           </div>
 
-          <div className="flex items-start md:items-center mb-8 md:mb-10 bg-black/20 border border-white/10 p-5 rounded-xl cursor-pointer hover:border-blue-500 transition-colors" onClick={() => setConsentGiven(!consentGiven)}>
+          <div className="flex items-start md:items-center mb-8 md:mb-10 bg-black/20 border border-slate-200 dark:border-white/10 p-5 rounded-xl cursor-pointer hover:border-blue-500 transition-colors" onClick={() => setConsentGiven(!consentGiven)}>
             <div className="flex items-center h-6">
               <input
                 id="consent"
@@ -450,7 +450,7 @@ export const TaskExecution: React.FC<TaskExecutionProps> = ({ task, onBack, onCo
               />
             </div>
             <div className="ml-4 text-sm md:text-base select-none">
-              <label htmlFor="consent" className="font-medium text-white cursor-pointer">I confirm this data is accurate and generated by human effort.</label>
+              <label htmlFor="consent" className="font-medium text-slate-900 dark:text-white cursor-pointer">I confirm this data is accurate and generated by human effort.</label>
             </div>
           </div>
 
@@ -467,24 +467,24 @@ export const TaskExecution: React.FC<TaskExecutionProps> = ({ task, onBack, onCo
   if (step === 'submitted') {
     return (
       <div className="max-w-xl mx-auto mt-8 md:mt-16 animate-in zoom-in-95 duration-500">
-        <div className="bg-zinc-900 rounded-3xl border border-white/10 shadow-xl p-8 md:p-12 text-center">
+        <div className="bg-slate-100 dark:bg-zinc-900 rounded-3xl border border-slate-200 dark:border-white/10 shadow-xl p-8 md:p-12 text-center">
           <div className="h-24 w-24 md:h-28 md:w-28 bg-emerald-900/20 rounded-full flex items-center justify-center mx-auto mb-6 md:mb-8 animate-in zoom-in duration-300">
             <CheckCircle className="h-12 w-12 md:h-14 md:w-14 text-emerald-400" />
           </div>
-          <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">Contribution Received</h2>
+          <h2 className="text-3xl md:text-4xl font-bold text-slate-900 dark:text-white mb-4">Contribution Received</h2>
           <p className="text-stone-300 mb-8 md:mb-12 max-w-md mx-auto leading-relaxed text-base md:text-lg">
             Your data has been securely logged and queued for validation.
           </p>
 
-          <div className="bg-white/5 rounded-2xl p-6 border border-white/5 mb-8 md:mb-10 text-left space-y-4">
+          <div className="bg-slate-100 dark:bg-white/5 rounded-2xl p-6 border border-white/5 mb-8 md:mb-10 text-left space-y-4">
             <div className="flex justify-between items-center">
               <span className="text-sm text-stone-500 font-medium">Operation ID</span>
-              <span className="text-sm font-mono font-bold text-white">{task.id}</span>
+              <span className="text-sm font-mono font-bold text-slate-900 dark:text-white">{task.id}</span>
             </div>
             <div className="h-px bg-white/10 w-full"></div>
             <div className="flex justify-between items-center">
               <span className="text-sm text-stone-500 font-medium flex items-center"><Clock className="h-4 w-4 mr-2" /> Validation SLA</span>
-              <span className="text-sm font-bold text-white">~24 Hours</span>
+              <span className="text-sm font-bold text-slate-900 dark:text-white">~24 Hours</span>
             </div>
             <div className="h-px bg-white/10 w-full"></div>
             <div className="flex justify-between items-center">
@@ -502,28 +502,28 @@ export const TaskExecution: React.FC<TaskExecutionProps> = ({ task, onBack, onCo
   // Step 3: Execution
   return (
     <div className="max-w-7xl mx-auto animate-in fade-in duration-500">
-      <div className="bg-zinc-900 rounded-3xl border border-white/10 shadow-2xl overflow-hidden flex flex-col md:flex-row min-h-[600px]">
+      <div className="bg-slate-100 dark:bg-zinc-900 rounded-3xl border border-slate-200 dark:border-white/10 shadow-2xl overflow-hidden flex flex-col md:flex-row min-h-[600px]">
 
         {/* Sidebar for Task Context */}
-        <div className="w-full md:w-1/3 bg-black/30 border-b md:border-b-0 md:border-r border-white/10 p-6 md:p-8 flex flex-col order-1 md:order-1">
+        <div className="w-full md:w-1/3 bg-black/30 border-b md:border-b-0 md:border-r border-slate-200 dark:border-white/10 p-6 md:p-8 flex flex-col order-1 md:order-1">
           {task.imageUrl && task.type === TaskType.AUDIO_COLLECTION && (
-            <div className="w-full h-32 md:h-48 rounded-xl overflow-hidden mb-6 border border-white/10 shadow-sm hidden md:block">
+            <div className="w-full h-32 md:h-48 rounded-xl overflow-hidden mb-6 border border-slate-200 dark:border-white/10 shadow-sm hidden md:block">
               <img src={task.imageUrl} alt="" className="w-full h-full object-cover" />
             </div>
           )}
 
-          <h3 className="font-bold text-white mb-2 md:mb-4 text-base md:text-lg">Operational Context</h3>
+          <h3 className="font-bold text-slate-900 dark:text-white mb-2 md:mb-4 text-base md:text-lg">Operational Context</h3>
           <div className="space-y-4 text-sm text-stone-400 flex-1">
             <p className="text-sm md:text-base leading-relaxed line-clamp-2 md:line-clamp-none">{task.title}</p>
-            <div className="p-3 md:p-4 bg-white/5 rounded-xl border border-white/5 text-xs md:text-sm shadow-sm">
+            <div className="p-3 md:p-4 bg-slate-100 dark:bg-white/5 rounded-xl border border-white/5 text-xs md:text-sm shadow-sm">
               <strong>Requirement:</strong> {task.type === TaskType.AUDIO_COLLECTION ? "Speak clearly." : task.type === TaskType.IMAGE_COLLECTION ? "Good lighting required." : "Be descriptive."}
             </div>
           </div>
 
-          <div className="mt-8 pt-6 border-t border-white/10 hidden md:block">
+          <div className="mt-8 pt-6 border-t border-slate-200 dark:border-white/10 hidden md:block">
             <div className="flex justify-between items-center mb-2">
               <span className="text-xs font-bold text-stone-500 uppercase tracking-wider">Completion Status</span>
-              <span className="text-xs font-bold text-white">0%</span>
+              <span className="text-xs font-bold text-slate-900 dark:text-white">0%</span>
             </div>
             <div className="h-2 bg-white/10 rounded-full overflow-hidden">
               <div className="h-full bg-blue-500 w-0"></div>
@@ -532,13 +532,13 @@ export const TaskExecution: React.FC<TaskExecutionProps> = ({ task, onBack, onCo
         </div>
 
         {/* Main Execution Area */}
-        <div className="flex-1 p-4 md:p-8 flex flex-col items-center justify-center relative bg-zinc-900 order-2 md:order-2">
+        <div className="flex-1 p-4 md:p-8 flex flex-col items-center justify-center relative bg-slate-100 dark:bg-zinc-900 order-2 md:order-2">
 
           {/* AUDIO TASK UI */}
           {task.type === TaskType.AUDIO_COLLECTION && (
             <>
               <div className="absolute top-4 right-4 md:top-8 md:right-10 text-right">
-                <div className={`text-4xl md:text-5xl font-mono font-light tracking-tighter transition-colors ${isRecording ? 'text-white' : 'text-zinc-700'}`}>
+                <div className={`text-4xl md:text-5xl font-mono font-light tracking-tighter transition-colors ${isRecording ? 'text-slate-900 dark:text-white' : 'text-zinc-700'}`}>
                   {formatTime(recordingTime)}
                 </div>
                 {isRecording && (
@@ -560,7 +560,7 @@ export const TaskExecution: React.FC<TaskExecutionProps> = ({ task, onBack, onCo
               <div className="w-full max-w-2xl mx-auto text-center space-y-6 md:space-y-8">
                 <div className="space-y-3">
                   <span className="inline-block px-4 py-1.5 bg-blue-900/20 text-blue-400 text-xs font-bold uppercase tracking-wider rounded-full">Script</span>
-                  <p className="text-xl md:text-3xl font-serif text-white leading-tight px-2">
+                  <p className="text-xl md:text-3xl font-serif text-slate-900 dark:text-white leading-tight px-2">
                     "{task.prompt}"
                   </p>
                 </div>
@@ -586,11 +586,11 @@ export const TaskExecution: React.FC<TaskExecutionProps> = ({ task, onBack, onCo
 
                   {hasRecorded && !isRecording && (
                     <div className="w-full animate-in slide-in-from-bottom-4 fade-in duration-500">
-                      <div className="bg-white/5 rounded-2xl p-4 md:p-6 border border-white/10 mb-8 flex items-center justify-between">
+                      <div className="bg-slate-100 dark:bg-white/5 rounded-2xl p-4 md:p-6 border border-slate-200 dark:border-white/10 mb-8 flex items-center justify-between">
                         <div className="flex items-center gap-4">
                           <button
                             onClick={handlePlayAudio}
-                            className={`h-10 w-10 md:h-12 md:w-12 rounded-full bg-black border border-white/10 flex items-center justify-center transition-colors shadow-sm ${isPlaying
+                            className={`h-10 w-10 md:h-12 md:w-12 rounded-full bg-white dark:bg-black border border-slate-200 dark:border-white/10 flex items-center justify-center transition-colors shadow-sm ${isPlaying
                               ? 'text-blue-400 border-blue-400'
                               : 'text-stone-300 hover:text-blue-400 hover:border-blue-400'
                               }`}
@@ -619,10 +619,10 @@ export const TaskExecution: React.FC<TaskExecutionProps> = ({ task, onBack, onCo
 
           {/* IMAGE TASK UI */}
           {task.type === TaskType.IMAGE_COLLECTION && (
-            <div className="w-full max-w-lg aspect-[4/3] bg-black rounded-2xl overflow-hidden relative border-4 border-zinc-800 shadow-2xl">
+            <div className="w-full max-w-lg aspect-[4/3] bg-white dark:bg-black rounded-2xl overflow-hidden relative border-4 border-zinc-800 shadow-2xl">
               {!capturedImage ? (
                 !isCameraActive ? (
-                  <div className="absolute inset-0 flex flex-col items-center justify-center bg-zinc-900 p-6 text-center">
+                  <div className="absolute inset-0 flex flex-col items-center justify-center bg-slate-100 dark:bg-zinc-900 p-6 text-center">
                     <Camera className="h-12 w-12 text-stone-300 mb-4" />
                     <Button onClick={startCamera} variant="primary">Access Camera</Button>
                   </div>
@@ -648,15 +648,15 @@ export const TaskExecution: React.FC<TaskExecutionProps> = ({ task, onBack, onCo
           {/* TEXT/LABELS UI */}
           {(task.type === TaskType.IMAGE_LABELING || task.type === TaskType.TEXT_ANNOTATION || task.type === TaskType.SURVEY) && (
             <div className="w-full max-w-2xl space-y-8">
-              <div className="bg-white/5 p-6 rounded-2xl border border-white/10 relative">
-                <p className="text-xl md:text-2xl font-serif text-white leading-relaxed">
+              <div className="bg-slate-100 dark:bg-white/5 p-6 rounded-2xl border border-slate-200 dark:border-white/10 relative">
+                <p className="text-xl md:text-2xl font-serif text-slate-900 dark:text-white leading-relaxed">
                   {task.prompt}
                 </p>
               </div>
               {task.options ? (
                 <div className="grid grid-cols-1 gap-3">
                   {task.options.map((opt, i) => (
-                    <button key={i} onClick={() => setSelectedOption(opt)} className={`p-4 md:p-5 rounded-xl border-2 transition-all flex items-center justify-between ${selectedOption === opt ? 'border-blue-600 bg-blue-50/10' : 'border-white/10'}`}>
+                    <button key={i} onClick={() => setSelectedOption(opt)} className={`p-4 md:p-5 rounded-xl border-2 transition-all flex items-center justify-between ${selectedOption === opt ? 'border-blue-600 bg-blue-50/10' : 'border-slate-200 dark:border-white/10'}`}>
                       <span className={`text-base font-medium ${selectedOption === opt ? 'text-blue-600' : 'text-stone-600'}`}>{opt}</span>
                       <div className={`h-5 w-5 rounded-full border-2 flex items-center justify-center ${selectedOption === opt ? 'border-blue-600' : 'border-stone-300'}`}>
                         {selectedOption === opt && <div className="h-2.5 w-2.5 rounded-full bg-blue-600" />}
@@ -665,7 +665,7 @@ export const TaskExecution: React.FC<TaskExecutionProps> = ({ task, onBack, onCo
                   ))}
                 </div>
               ) : (
-                <textarea value={textInput} onChange={e => setTextInput(e.target.value)} className="w-full h-40 bg-black/20 border border-white/10 rounded-xl p-6 text-white outline-none focus:border-blue-500 transition-all" placeholder="Enter output..." />
+                <textarea value={textInput} onChange={e => setTextInput(e.target.value)} className="w-full h-40 bg-black/20 border border-slate-200 dark:border-white/10 rounded-xl p-6 text-slate-900 dark:text-white outline-none focus:border-blue-500 transition-all" placeholder="Enter output..." />
               )}
             </div>
           )}
