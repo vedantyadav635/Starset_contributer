@@ -7,6 +7,22 @@ interface FooterProps {
   onNavigate: (page: PublicPageType) => void;
 }
 
+// Helper: real <a href> for SEO crawlability + SPA navigation via preventDefault
+const FooterLink: React.FC<{
+  href: string;
+  page: PublicPageType;
+  onNavigate: (page: PublicPageType) => void;
+  children: React.ReactNode;
+}> = ({ href, page, onNavigate, children }) => (
+  <a
+    href={href}
+    onClick={(e) => { e.preventDefault(); onNavigate(page); }}
+    className="text-left text-slate-500 dark:text-zinc-400 hover:text-blue-600 dark:hover:text-blue-400 font-medium transition-colors"
+  >
+    {children}
+  </a>
+);
+
 export const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
   return (
     <footer className="relative pt-24 pb-12 overflow-hidden border-t border-slate-200 dark:border-white/5 bg-white dark:bg-[#020205] z-10">
@@ -29,10 +45,10 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
           </div>
           
           <div className="relative z-10 flex w-full md:w-auto">
-            <button onClick={() => onNavigate('signup')} className="w-full md:w-auto px-8 py-4 bg-slate-900 dark:bg-white text-white dark:text-slate-900 font-bold rounded-2xl flex items-center justify-center gap-3 hover:scale-105 hover:bg-blue-600 dark:hover:bg-blue-50 transition-all duration-300 shadow-xl shadow-slate-900/20 dark:shadow-white/10 group">
+            <a href="/signup" onClick={(e) => { e.preventDefault(); onNavigate('signup' as PublicPageType); }} className="w-full md:w-auto px-8 py-4 bg-slate-900 dark:bg-white text-white dark:text-slate-900 font-bold rounded-2xl flex items-center justify-center gap-3 hover:scale-105 hover:bg-blue-600 dark:hover:bg-blue-50 transition-all duration-300 shadow-xl shadow-slate-900/20 dark:shadow-white/10 group">
               Become a Contributor
               <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
-            </button>
+            </a>
           </div>
         </div>
 
@@ -41,10 +57,10 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
           
           {/* Brand Column */}
           <div className="md:col-span-5 lg:col-span-4 flex flex-col items-center md:items-start text-center md:text-left">
-            <div className="flex items-center gap-3 mb-6 cursor-pointer group" onClick={() => onNavigate('home')}>
+            <a href="/" onClick={(e) => { e.preventDefault(); onNavigate('home'); }} className="flex items-center gap-3 mb-6 cursor-pointer group">
               <Logo className="w-10 h-10 transition-transform duration-300 group-hover:scale-110" />
               <span className="font-black text-2xl tracking-tighter text-slate-900 dark:text-white">STARSET</span>
-            </div>
+            </a>
             <p className="text-slate-500 dark:text-zinc-400 leading-relaxed mb-8 max-w-sm">
               The premier platform connecting human intelligence with the next generation of artificial intelligence. Smarter tasks, faster payouts.
             </p>
@@ -69,35 +85,35 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
           {/* Spacer */}
           <div className="hidden lg:block lg:col-span-1"></div>
 
-          {/* Links Columns */}
-          <div className="md:col-span-7 flex flex-wrap md:flex-nowrap justify-between md:justify-around gap-10">
-            {/* Column 1 */}
+          {/* Links Columns — ALL <a> tags for Google crawlability */}
+          <nav className="md:col-span-7 flex flex-wrap md:flex-nowrap justify-between md:justify-around gap-10" aria-label="Footer navigation">
+            {/* Column 1: Platform */}
             <div className="flex flex-col gap-4">
               <h4 className="font-bold text-slate-900 dark:text-white uppercase tracking-widest text-xs mb-2 opacity-80">Platform</h4>
-              <button onClick={() => onNavigate('home')} className="text-left text-slate-500 dark:text-zinc-400 hover:text-blue-600 dark:hover:text-blue-400 font-medium transition-colors">Home</button>
-              <button onClick={() => onNavigate('contributors')} className="text-left text-slate-500 dark:text-zinc-400 hover:text-blue-600 dark:hover:text-blue-400 font-medium transition-colors">Contributors</button>
-              <button onClick={() => onNavigate('money')} className="text-left text-slate-500 dark:text-zinc-400 hover:text-blue-600 dark:hover:text-blue-400 font-medium transition-colors">Earnings</button>
-              <button onClick={() => onNavigate('task-types')} className="text-left text-slate-500 dark:text-zinc-400 hover:text-blue-600 dark:hover:text-blue-400 font-medium transition-colors">Task Types</button>
+              <FooterLink href="/" page="home" onNavigate={onNavigate}>Home</FooterLink>
+              <FooterLink href="/contributors" page="contributors" onNavigate={onNavigate}>Contributors</FooterLink>
+              <FooterLink href="/money" page="money" onNavigate={onNavigate}>Earnings</FooterLink>
+              <FooterLink href="/task-types" page="task-types" onNavigate={onNavigate}>Task Types</FooterLink>
             </div>
 
-            {/* Column 2 */}
+            {/* Column 2: Company */}
             <div className="flex flex-col gap-4">
               <h4 className="font-bold text-slate-900 dark:text-white uppercase tracking-widest text-xs mb-2 opacity-80">Company</h4>
-              <button onClick={() => onNavigate('about')} className="text-left text-slate-500 dark:text-zinc-400 hover:text-blue-600 dark:hover:text-blue-400 font-medium transition-colors">About Us</button>
-              <button onClick={() => onNavigate('careers')} className="text-left text-slate-500 dark:text-zinc-400 hover:text-blue-600 dark:hover:text-blue-400 font-medium transition-colors">Careers</button>
-              <button onClick={() => onNavigate('blog')} className="text-left text-slate-500 dark:text-zinc-400 hover:text-blue-600 dark:hover:text-blue-400 font-medium transition-colors">Blog</button>
-              <button onClick={() => onNavigate('contact')} className="text-left text-slate-500 dark:text-zinc-400 hover:text-blue-600 dark:hover:text-blue-400 font-medium transition-colors">Contact</button>
+              <FooterLink href="/about" page="about" onNavigate={onNavigate}>About Us</FooterLink>
+              <FooterLink href="/careers" page="careers" onNavigate={onNavigate}>Careers</FooterLink>
+              <FooterLink href="/blog" page="blog" onNavigate={onNavigate}>Blog</FooterLink>
+              <FooterLink href="/contact" page="contact" onNavigate={onNavigate}>Contact</FooterLink>
             </div>
 
-            {/* Column 3 */}
+            {/* Column 3: Legal */}
             <div className="flex flex-col gap-4">
               <h4 className="font-bold text-slate-900 dark:text-white uppercase tracking-widest text-xs mb-2 opacity-80">Legal</h4>
-              <button onClick={() => onNavigate('terms')} className="text-left text-slate-500 dark:text-zinc-400 hover:text-blue-600 dark:hover:text-blue-400 font-medium transition-colors">Terms of Service</button>
-              <button onClick={() => onNavigate('privacy')} className="text-left text-slate-500 dark:text-zinc-400 hover:text-blue-600 dark:hover:text-blue-400 font-medium transition-colors">Privacy Policy</button>
-              <button onClick={() => onNavigate('cookies')} className="text-left text-slate-500 dark:text-zinc-400 hover:text-blue-600 dark:hover:text-blue-400 font-medium transition-colors">Cookie Policy</button>
-              <button onClick={() => onNavigate('data-processing')} className="text-left text-slate-500 dark:text-zinc-400 hover:text-blue-600 dark:hover:text-blue-400 font-medium transition-colors">Data Processing</button>
+              <FooterLink href="/terms" page="terms" onNavigate={onNavigate}>Terms of Service</FooterLink>
+              <FooterLink href="/privacy" page="privacy" onNavigate={onNavigate}>Privacy Policy</FooterLink>
+              <FooterLink href="/cookies" page="cookies" onNavigate={onNavigate}>Cookie Policy</FooterLink>
+              <FooterLink href="/data-processing" page="data-processing" onNavigate={onNavigate}>Data Processing</FooterLink>
             </div>
-          </div>
+          </nav>
         </div>
 
         {/* Bottom Bar */}

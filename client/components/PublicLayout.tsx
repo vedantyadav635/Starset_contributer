@@ -130,12 +130,18 @@ export const PublicLayout: React.FC<PublicLayoutProps> = ({
       return () => window.removeEventListener('scroll', handleScroll);
    }, [lastScrollY]);
 
-   const navLinks: { name: string; id: PublicPageType }[] = [
-      { name: 'Home', id: 'home' },
-      { name: 'Contributors', id: 'contributors' },
-      { name: 'Earning', id: 'money' },
-      { name: 'About', id: 'about' },
+   const navLinks: { name: string; id: PublicPageType; href: string }[] = [
+      { name: 'Home', id: 'home', href: '/' },
+      { name: 'Contributors', id: 'contributors', href: '/contributors' },
+      { name: 'Earning', id: 'money', href: '/money' },
+      { name: 'About', id: 'about', href: '/about' },
    ];
+
+   // Helper: generates an onClick that prevents full reload but still navigates via SPA
+   const navClick = (e: React.MouseEvent, page: PublicPageType) => {
+      e.preventDefault();
+      onNavigate(page);
+   };
 
    const seo = SEO_CONFIG[currentPage] || SEO_CONFIG.home;
 
@@ -170,19 +176,20 @@ export const PublicLayout: React.FC<PublicLayoutProps> = ({
             <div className="max-w-7xl mx-auto px-4 md:px-6 flex items-center justify-between relative">
 
                {/* Left: Logo */}
-               <div className="flex items-center gap-2 md:gap-3 cursor-pointer group" onClick={() => onNavigate('home')}>
+               <a href="/" onClick={(e) => navClick(e, 'home')} className="flex items-center gap-2 md:gap-3 cursor-pointer group">
                   <Logo className="h-10 w-10 md:h-14 md:w-14 transition-transform duration-300 group-hover:scale-110" />
                   <span className="font-extrabold text-lg md:text-xl tracking-[0.05em] text-slate-900 dark:text-white transition-colors uppercase whitespace-nowrap">Starset</span>
-               </div>
+               </a>
 
                {/* Right: Floating Capsule (Desktop) */}
                <div className="hidden lg:flex items-center bg-white/80 dark:bg-white/5 backdrop-blur-xl border border-slate-200 dark:border-white/10 rounded-full p-1.5 shadow-lg shadow-slate-200/50 dark:shadow-2xl">
                   {/* Links */}
                   <div className="flex items-center pl-4 pr-2 gap-2">
                      {navLinks.map((item) => (
-                        <button
+                        <a
                            key={item.id}
-                           onClick={() => onNavigate(item.id)}
+                           href={item.href}
+                           onClick={(e) => navClick(e, item.id)}
                            className={`px-5 py-2 rounded-full text-sm font-semibold transition-all duration-300
                               ${currentPage === item.id 
                                  ? 'bg-blue-600 !text-white shadow-md shadow-blue-500/25' 
@@ -190,14 +197,14 @@ export const PublicLayout: React.FC<PublicLayoutProps> = ({
                            `}
                         >
                            {item.name}
-                        </button>
+                        </a>
                      ))}
                   </div>
 
                   {/* Button */}
-                  <Button onClick={onEnterApp} className="ml-4 bg-blue-600 hover:bg-blue-700 !text-white !rounded-full px-6 shadow-md shadow-blue-500/25 transition-all text-xs font-bold uppercase tracking-wider h-10 border-0">
+                  <a href="/login" onClick={(e) => { e.preventDefault(); onEnterApp(); }} className="ml-4 inline-flex items-center justify-center bg-blue-600 hover:bg-blue-700 !text-white !rounded-full px-6 shadow-md shadow-blue-500/25 transition-all text-xs font-bold uppercase tracking-wider h-10 border-0">
                      Start Earning
-                  </Button>
+                  </a>
 
                   {/* Theme Toggle */}
                   <div className="ml-3 border-l border-slate-200 dark:border-white/10 pl-3 h-6 flex items-center">
@@ -229,16 +236,17 @@ export const PublicLayout: React.FC<PublicLayoutProps> = ({
                   <div className="flex flex-col gap-2">
                      <div className="text-[10px] font-black text-zinc-400 uppercase tracking-[0.2em] mb-4 pl-2 opacity-60">Navigation</div>
                      {navLinks.map((item) => (
-                        <button
+                        <a
                            key={item.id}
-                           onClick={() => {
-                              onNavigate(item.id);
+                           href={item.href}
+                           onClick={(e) => {
+                              navClick(e, item.id);
                               setIsMobileMenuOpen(false);
                            }}
-                           className={`text-3xl font-black text-left transition-all py-3 px-2 rounded-2xl ${currentPage === item.id ? 'bg-blue-500/10 text-blue-400' : 'text-zinc-300 hover:bg-white/5'}`}
+                           className={`text-3xl font-black text-left transition-all py-3 px-2 rounded-2xl block ${currentPage === item.id ? 'bg-blue-500/10 text-blue-400' : 'text-zinc-300 hover:bg-white/5'}`}
                         >
                            {item.name}
-                        </button>
+                        </a>
                      ))}
                   </div>
                   <div className="mt-auto pb-10">
