@@ -29,7 +29,7 @@ export const Careers: React.FC<PageProps> = ({ onNavigate, onEnterApp }) => {
                   <p className="text-slate-600 dark:text-zinc-400 text-lg mb-8">
                      While we aren't displaying open positions publicly just yet, we're always looking for exceptional talent in Engineering, AI Research, and Operations.
                   </p>
-                  <a href="mailto:careers@starset.ai" className="inline-flex items-center justify-center px-8 py-4 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-full transition-all duration-300 shadow-lg shadow-blue-500/25">
+                  <a href="mailto:careers@starset.ai" className="inline-flex items-center justify-center px-8 py-4 bg-blue-600 hover:bg-blue-700 !text-white font-bold rounded-full transition-all duration-300 shadow-lg shadow-blue-500/25">
                      Email our recruiting team
                   </a>
                </div>
