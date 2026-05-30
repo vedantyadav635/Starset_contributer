@@ -6,7 +6,7 @@ import { CookieConsent } from './CookieConsent';
 import { ThemeToggle } from './ThemeToggle';
 import { Footer } from './Footer';
 
-export type PublicPageType = 'home' | 'about' | 'contributors' | 'money' | 'terms' | 'privacy' | 'cookies' | 'data-processing';
+export type PublicPageType = 'home' | 'about' | 'contributors' | 'money' | 'terms' | 'privacy' | 'cookies' | 'data-processing' | 'task-types' | 'careers' | 'blog' | 'contact';
 
 interface PublicLayoutProps {
    children: React.ReactNode;

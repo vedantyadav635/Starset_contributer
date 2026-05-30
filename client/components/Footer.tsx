@@ -77,16 +77,16 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
               <button onClick={() => onNavigate('home')} className="text-left text-slate-500 dark:text-zinc-400 hover:text-blue-600 dark:hover:text-blue-400 font-medium transition-colors">Home</button>
               <button onClick={() => onNavigate('contributors')} className="text-left text-slate-500 dark:text-zinc-400 hover:text-blue-600 dark:hover:text-blue-400 font-medium transition-colors">Contributors</button>
               <button onClick={() => onNavigate('money')} className="text-left text-slate-500 dark:text-zinc-400 hover:text-blue-600 dark:hover:text-blue-400 font-medium transition-colors">Earnings</button>
-              <button className="text-left text-slate-500 dark:text-zinc-400 hover:text-blue-600 dark:hover:text-blue-400 font-medium transition-colors">Task Types</button>
+              <button onClick={() => onNavigate('task-types')} className="text-left text-slate-500 dark:text-zinc-400 hover:text-blue-600 dark:hover:text-blue-400 font-medium transition-colors">Task Types</button>
             </div>
 
             {/* Column 2 */}
             <div className="flex flex-col gap-4">
               <h4 className="font-bold text-slate-900 dark:text-white uppercase tracking-widest text-xs mb-2 opacity-80">Company</h4>
               <button onClick={() => onNavigate('about')} className="text-left text-slate-500 dark:text-zinc-400 hover:text-blue-600 dark:hover:text-blue-400 font-medium transition-colors">About Us</button>
-              <button className="text-left text-slate-500 dark:text-zinc-400 hover:text-blue-600 dark:hover:text-blue-400 font-medium transition-colors">Careers</button>
-              <button className="text-left text-slate-500 dark:text-zinc-400 hover:text-blue-600 dark:hover:text-blue-400 font-medium transition-colors">Blog</button>
-              <button className="text-left text-slate-500 dark:text-zinc-400 hover:text-blue-600 dark:hover:text-blue-400 font-medium transition-colors">Contact</button>
+              <button onClick={() => onNavigate('careers')} className="text-left text-slate-500 dark:text-zinc-400 hover:text-blue-600 dark:hover:text-blue-400 font-medium transition-colors">Careers</button>
+              <button onClick={() => onNavigate('blog')} className="text-left text-slate-500 dark:text-zinc-400 hover:text-blue-600 dark:hover:text-blue-400 font-medium transition-colors">Blog</button>
+              <button onClick={() => onNavigate('contact')} className="text-left text-slate-500 dark:text-zinc-400 hover:text-blue-600 dark:hover:text-blue-400 font-medium transition-colors">Contact</button>
             </div>
 
             {/* Column 3 */}

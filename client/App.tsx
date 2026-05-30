@@ -19,6 +19,10 @@ const ForgotPassword = lazy(() => import('./pages/ForgotPassword').then(m => ({ 
 const ResetPassword = lazy(() => import('./pages/ResetPassword').then(m => ({ default: m.ResetPassword })));
 const CompleteProfile = lazy(() => import('./pages/CompleteProfile').then(m => ({ default: m.default })));
 const Legal = lazy(() => import('./pages/Legal').then(m => ({ default: m.Legal })));
+const TaskTypes = lazy(() => import('./pages/TaskTypes').then(m => ({ default: m.TaskTypes })));
+const Careers = lazy(() => import('./pages/Careers').then(m => ({ default: m.Careers })));
+const Blog = lazy(() => import('./pages/Blog').then(m => ({ default: m.Blog })));
+const Contact = lazy(() => import('./pages/Contact').then(m => ({ default: m.Contact })));
 
 // Type definitions for TypeScript
 import { PageView, Task, UserRole, TaskType, TaskStatus } from './types';
@@ -587,6 +591,14 @@ const App: React.FC = () => {
           return <Contributors {...publicProps} onEnterApp={handleStartSignup} />;
         case 'money':
           return <Money {...publicProps} onEnterApp={handleStartSignup} />;
+        case 'task-types':
+          return <TaskTypes {...publicProps} />;
+        case 'careers':
+          return <Careers {...publicProps} />;
+        case 'blog':
+          return <Blog {...publicProps} />;
+        case 'contact':
+          return <Contact {...publicProps} />;
         case 'terms':
         case 'privacy':
         case 'cookies':
