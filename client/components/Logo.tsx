@@ -21,27 +21,27 @@ export const Logo: React.FC<LogoProps> = ({ className = "h-10 w-10", animated = 
       <defs>
         {/* Main 3D Metallic Gradient */}
         <linearGradient id="metal" x1="0%" y1="0%" x2="100%" y2="100%">
-          <stop offset="0%" stopColor="#f8fafc" />
-          <stop offset="25%" stopColor="#cbd5e1" />
-          <stop offset="50%" stopColor="#94a3b8" />
-          <stop offset="75%" stopColor="#cbd5e1" />
-          <stop offset="100%" stopColor="#64748b" />
+          <stop offset="0%" className="text-slate-400 dark:text-slate-50" stopColor="currentColor" />
+          <stop offset="25%" className="text-slate-600 dark:text-slate-300" stopColor="currentColor" />
+          <stop offset="50%" className="text-slate-800 dark:text-slate-400" stopColor="currentColor" />
+          <stop offset="75%" className="text-slate-600 dark:text-slate-300" stopColor="currentColor" />
+          <stop offset="100%" className="text-slate-900 dark:text-slate-500" stopColor="currentColor" />
         </linearGradient>
 
         {/* Darker Metallic Gradient for Depth (Back elements) */}
         <linearGradient id="metal-dark" x1="0%" y1="0%" x2="100%" y2="100%">
-          <stop offset="0%" stopColor="#e2e8f0" />
-          <stop offset="40%" stopColor="#94a3b8" />
-          <stop offset="60%" stopColor="#64748b" />
-          <stop offset="100%" stopColor="#334155" />
+          <stop offset="0%" className="text-slate-500 dark:text-slate-200" stopColor="currentColor" />
+          <stop offset="40%" className="text-slate-800 dark:text-slate-400" stopColor="currentColor" />
+          <stop offset="60%" className="text-slate-900 dark:text-slate-500" stopColor="currentColor" />
+          <stop offset="100%" className="text-black dark:text-slate-700" stopColor="currentColor" />
         </linearGradient>
 
         {/* Highlight Gradient for Swooshes */}
         <linearGradient id="metal-highlight" x1="0%" y1="100%" x2="100%" y2="0%">
-          <stop offset="0%" stopColor="#ffffff" />
-          <stop offset="30%" stopColor="#cbd5e1" />
-          <stop offset="70%" stopColor="#94a3b8" />
-          <stop offset="100%" stopColor="#e2e8f0" />
+          <stop offset="0%" className="text-slate-300 dark:text-white" stopColor="currentColor" />
+          <stop offset="30%" className="text-slate-500 dark:text-slate-300" stopColor="currentColor" />
+          <stop offset="70%" className="text-slate-700 dark:text-slate-400" stopColor="currentColor" />
+          <stop offset="100%" className="text-slate-400 dark:text-slate-200" stopColor="currentColor" />
         </linearGradient>
 
         <filter id="shadow3d" x="-20%" y="-20%" width="140%" height="140%">
