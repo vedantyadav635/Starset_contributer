@@ -262,7 +262,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onEnterApp, onStartSig
                               animate={{ opacity: 1, y: 0 }}
                               exit={{ opacity: 0, y: -5 }}
                               transition={{ duration: 0.3, ease: "easeInOut" }}
-                              className="inline-block text-transparent bg-clip-text bg-gradient-to-r from-blue-700 via-blue-500 to-blue-700 dark:from-blue-600 dark:via-blue-500 dark:to-blue-600 drop-shadow-md animate-shimmer"
+                              className="inline-block text-transparent bg-clip-text bg-gradient-to-r from-blue-700 via-blue-500 to-blue-700 dark:from-blue-600 dark:via-blue-500 dark:to-blue-600 drop-shadow-md animate-shimmer pr-4"
                            >
                               {words[wordIndex]}
                            </motion.span>
