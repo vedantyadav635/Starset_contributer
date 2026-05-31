@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Button } from '../components/Button';
 import { ArrowRight, Activity, Database, Server, Zap, Globe, ShieldCheck, Lock, Smartphone, Banknote, Mic, Image as ImageIcon, MessageSquare, CheckCircle2, ChevronDown, Play, Star, TrendingUp, Users, Cpu, FileText, Sparkles, Brain, Network, MousePointer2 } from 'lucide-react';
 import { PublicLayout, PublicPageType } from '../components/PublicLayout';
-import { motion, useMotionValue, useSpring, useTransform } from 'framer-motion';
+import { motion, AnimatePresence, useMotionValue, useSpring, useTransform } from 'framer-motion';
 
 interface LandingPageProps {
    onEnterApp: () => void;
@@ -170,6 +170,16 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onEnterApp, onStartSig
    const [activeNodeCount, setActiveNodeCount] = useState(8432);
    const [openFaq, setOpenFaq] = useState<number | null>(null);
 
+   const words = ["your daily tasks", "your audio", "your conversations", "your videos", "your camera roll"];
+   const [wordIndex, setWordIndex] = useState(0);
+
+   useEffect(() => {
+      const interval = setInterval(() => {
+         setWordIndex((prev) => (prev + 1) % words.length);
+      }, 1800);
+      return () => clearInterval(interval);
+   }, []);
+
    useEffect(() => {
       // Only run live counter on desktop â€” avoids re-renders on mobile
       const isMobile = window.matchMedia('(max-width: 768px)').matches;
@@ -244,8 +254,19 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onEnterApp, onStartSig
                         Earn money from
                      </span>
                      <br />
-                     <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-700 via-blue-500 to-blue-700 dark:from-blue-600 dark:via-blue-500 dark:to-blue-600 drop-shadow-md animate-shimmer">
-                        your daily tasks
+                     <span className="relative inline-block">
+                        <AnimatePresence mode="wait">
+                           <motion.span
+                              key={wordIndex}
+                              initial={{ opacity: 0, y: 5 }}
+                              animate={{ opacity: 1, y: 0 }}
+                              exit={{ opacity: 0, y: -5 }}
+                              transition={{ duration: 0.3, ease: "easeInOut" }}
+                              className="inline-block text-transparent bg-clip-text bg-gradient-to-r from-blue-700 via-blue-500 to-blue-700 dark:from-blue-600 dark:via-blue-500 dark:to-blue-600 drop-shadow-md animate-shimmer"
+                           >
+                              {words[wordIndex]}
+                           </motion.span>
+                        </AnimatePresence>
                      </span>
                   </motion.h1>
 
