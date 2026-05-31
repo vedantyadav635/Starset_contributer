@@ -18,135 +18,153 @@ const Sparkle = ({ className }: { className?: string }) => (
 );
 
 const EcosystemVisual = () => {
+   // Pipeline flow: each card triggers the next
+   const cardBase = {
+      hidden: { opacity: 0, y: 40, scale: 0.92, filter: 'blur(10px)' },
+      visible: (i: number) => ({
+         opacity: 1, y: 0, scale: 1, filter: 'blur(0px)',
+         transition: {
+            type: 'spring', stiffness: 260, damping: 22,
+            delay: 0.15 + i * 0.35,
+         },
+      }),
+   };
+
    return (
-      <div className="relative w-full max-w-[600px] h-[500px] flex items-center justify-center">
-         {/* Background World Map Graphic (Simplified dots) */}
-         <div className="absolute inset-0 opacity-20 dark:opacity-40 mask-fade-out">
-            <svg viewBox="0 0 800 400" className="w-full h-full text-slate-300 dark:text-zinc-700">
-               <circle cx="200" cy="150" r="2" fill="currentColor" />
-               <circle cx="300" cy="180" r="2" fill="currentColor" />
-               <circle cx="450" cy="120" r="2" fill="currentColor" />
-               <circle cx="600" cy="220" r="2" fill="currentColor" />
-               <circle cx="150" cy="280" r="2" fill="currentColor" />
-               <circle cx="550" cy="100" r="2" fill="currentColor" />
-            </svg>
-         </div>
+      <div className="relative w-full max-w-[600px] h-[560px] md:h-[540px] flex items-center justify-center">
 
-         {/* Neural Merge Connection Lines - Hidden on Mobile */}
-         <svg className="absolute inset-0 w-full h-full pointer-events-none overflow-visible hidden md:block">
-            <motion.path 
-               d="M 180 180 Q 300 250 400 300" 
-               stroke="url(#pulseGradient)" 
-               strokeWidth="2" 
-               fill="none"
-               strokeDasharray="10 10"
-               animate={{ strokeDashoffset: [0, -100] }}
-               transition={{ duration: 10, repeat: Infinity, ease: "linear" }}
-               className="opacity-40"
-            />
-            <defs>
-               <linearGradient id="pulseGradient" x1="0%" y1="0%" x2="100%" y2="100%">
-                  <stop offset="0%" stopColor="#6366f1" />
-                  <stop offset="100%" stopColor="#3b82f6" />
-               </linearGradient>
-            </defs>
-         </svg>
-
-         {/* Floating Cards Stack */}
-         <div className="relative w-full h-full flex flex-col justify-center items-center gap-6 perspective-1000">
-            
-            {/* Card 1: Audio Task */}
-            <motion.div
-               initial={{ x: -100, opacity: 0 }}
-               animate={{ x: 0, opacity: 1 }}
-               transition={{ duration: 0.8, delay: 0.2 }}
-               whileHover={{ y: -5, scale: 1.02 }}
-               whileTap={{ scale: 0.98 }}
-               className="w-full max-w-[320px] md:w-80 bg-white dark:bg-blue-950/40 dark:backdrop-blur-xl rounded-3xl p-6 border border-slate-200 dark:border-blue-500/20 shadow-xl shadow-slate-200/50 dark:shadow-[0_8px_30px_rgba(37,99,235,0.15)] z-10 transition-all duration-300 cursor-pointer group hover:dark:border-blue-500/40 hover:dark:shadow-[0_8px_30px_rgba(37,99,235,0.25)]"
-            >
-               <div className="flex items-center gap-4 mb-4">
-                  <div className="w-12 h-12 rounded-2xl bg-blue-100 dark:bg-blue-500/10 flex items-center justify-center group-hover:bg-blue-600 transition-colors">
-                     <Mic className="w-6 h-6 text-blue-600 group-hover:text-white transition-colors" />
-                  </div>
-                  <div>
-                     <div className="text-[10px] font-black text-blue-600 uppercase tracking-widest group-hover:text-blue-400 transition-colors">New Task</div>
-                     <div className="font-bold text-slate-900 dark:text-white">Audio Collection</div>
-                  </div>
-               </div>
-               
-               <div className="flex items-end gap-1 h-8 mb-4">
-                  {[0.4, 0.7, 0.5, 0.9, 0.6, 0.8, 0.4, 0.6, 0.9, 0.7].map((h, i) => (
-                     <motion.div 
-                        key={i}
-                        animate={{ height: [`${h * 100}%`, `${(1-h) * 100}%`, `${h * 100}%`] }}
-                        transition={{ duration: 1.5, repeat: Infinity, delay: i * 0.1 }}
-                        className="flex-1 bg-indigo-500/30 dark:bg-indigo-500/50 rounded-full"
-                     />
-                  ))}
-               </div>
-
-               <div className="flex justify-between items-center text-xs">
-                  <span className="text-slate-500">Earn up to</span>
-                  <span className="font-black text-slate-900 dark:text-white text-lg">₹85.00</span>
-               </div>
-            </motion.div>
-
-            {/* Card 2: Processing (Middle) */}
-            <motion.div
-               initial={{ scale: 0.8, opacity: 0 }}
-               animate={{ scale: 1, opacity: 1 }}
-               transition={{ duration: 0.8, delay: 0.4 }}
-               whileHover={{ scale: 1.05 }}
-               whileTap={{ scale: 0.95 }}
-               className="w-full max-w-[320px] md:w-80 bg-white/80 dark:bg-blue-950/40 backdrop-blur-xl rounded-3xl p-6 border border-slate-200 dark:border-blue-500/20 shadow-xl shadow-slate-200/50 dark:shadow-[0_8px_30px_rgba(37,99,235,0.15)] z-20 transition-all duration-300 hover:dark:border-blue-500/40 hover:dark:shadow-[0_8px_30px_rgba(37,99,235,0.25)]"
-            >
-               <div className="flex items-center justify-between mb-4">
-                  <div className="flex items-center gap-3">
-                     <div className="w-2 h-2 rounded-full bg-amber-500 animate-pulse"></div>
-                     <span className="text-[10px] font-black text-slate-500 uppercase tracking-widest">Quality Check</span>
-                  </div>
-                  <Cpu className="w-4 h-4 text-slate-400 animate-spin-slower" />
-               </div>
-               <div className="space-y-3">
-                  <div className="flex items-center gap-3">
-                     <div className="w-8 h-8 rounded-lg bg-slate-100 dark:bg-white/5 flex items-center justify-center">
-                        <Network className="w-4 h-4 text-indigo-500" />
+         {/* Main pipeline container */}
+         <motion.div
+            className="relative w-full h-full flex flex-col justify-center items-center gap-6"
+            initial="hidden"
+            animate="visible"
+         >
+            {/* ─── CARD 1: Submit Task ─── */}
+            <div className="relative flex items-center w-full justify-center">
+               <motion.div
+                  custom={0} variants={cardBase}
+                  whileHover={{ y: -6, scale: 1.03, transition: { type: 'spring', stiffness: 300, damping: 20 } }}
+                  whileTap={{ scale: 0.97 }}
+                  className="w-full max-w-[320px] md:w-80 bg-white dark:bg-blue-950/40 dark:backdrop-blur-xl rounded-3xl p-6 border border-slate-200 dark:border-blue-500/20 shadow-xl shadow-slate-200/50 dark:shadow-[0_8px_30px_rgba(37,99,235,0.15)] z-10 cursor-pointer group hover:dark:border-blue-500/40 hover:dark:shadow-[0_8px_30px_rgba(37,99,235,0.25)] glass-shine"
+               >
+                  <div className="flex items-center gap-4 mb-4">
+                     <motion.div
+                        className="w-12 h-12 rounded-2xl bg-blue-100 dark:bg-blue-500/10 flex items-center justify-center group-hover:bg-blue-600 transition-colors"
+                        whileHover={{ rotate: -8, scale: 1.1 }}
+                        transition={{ type: 'spring', stiffness: 400, damping: 15 }}
+                     >
+                        <Mic className="w-6 h-6 text-blue-600 group-hover:text-white transition-colors" />
+                     </motion.div>
+                     <div>
+                        <div className="text-[10px] font-black text-blue-600 uppercase tracking-widest group-hover:text-blue-400 transition-colors">New Task</div>
+                        <div className="font-bold text-slate-900 dark:text-white">Audio Collection</div>
                      </div>
-                     <div className="text-[10px] font-bold text-slate-700 dark:text-zinc-300">Quality Validation Active</div>
                   </div>
-                  <div className="flex items-center gap-3">
-                     <div className="w-8 h-8 rounded-lg bg-slate-100 dark:bg-white/5 flex items-center justify-center">
-                        <Brain className="w-4 h-4 text-blue-500" />
+                  
+                  <div className="flex items-end gap-1 h-8 mb-4">
+                     {[0.4, 0.7, 0.5, 0.9, 0.6, 0.8, 0.4, 0.6, 0.9, 0.7].map((h, i) => (
+                        <motion.div 
+                           key={i}
+                           initial={{ height: 0 }}
+                           animate={{ height: ['' + (h * 100) + '%', '' + ((1 - h) * 100) + '%', '' + (h * 100) + '%'] }}
+                           transition={{ duration: 1.5, repeat: Infinity, delay: 0.6 + i * 0.08 }}
+                           className="flex-1 bg-indigo-500/30 dark:bg-indigo-500/50 rounded-full"
+                        />
+                     ))}
+                  </div>
+
+                  <div className="flex justify-between items-center text-xs">
+                     <span className="text-slate-500">Earn up to</span>
+                     <motion.span
+                        className="font-black text-slate-900 dark:text-white text-lg"
+                        initial={{ opacity: 0, x: 10 }}
+                        animate={{ opacity: 1, x: 0 }}
+                        transition={{ delay: 0.8, type: 'spring', stiffness: 300 }}
+                     >₹85.00</motion.span>
+                  </div>
+               </motion.div>
+            </div>
+
+            {/* ─── CARD 2: Quality Check ─── */}
+            <div className="relative flex items-center w-full justify-center">
+               <motion.div
+                  custom={1} variants={cardBase}
+                  whileHover={{ scale: 1.04, transition: { type: 'spring', stiffness: 300, damping: 20 } }}
+                  whileTap={{ scale: 0.97 }}
+                  className="w-full max-w-[320px] md:w-80 bg-white/80 dark:bg-blue-950/40 backdrop-blur-xl rounded-3xl p-6 border border-slate-200 dark:border-blue-500/20 shadow-xl shadow-slate-200/50 dark:shadow-[0_8px_30px_rgba(37,99,235,0.15)] z-20 hover:dark:border-blue-500/40 hover:dark:shadow-[0_8px_30px_rgba(37,99,235,0.25)] glass-shine"
+               >
+                  <div className="flex items-center justify-between mb-4">
+                     <div className="flex items-center gap-3">
+                        <motion.div
+                           className="w-2 h-2 rounded-full bg-amber-500"
+                           animate={{ scale: [1, 1.5, 1], opacity: [1, 0.5, 1] }}
+                           transition={{ duration: 1.5, repeat: Infinity }}
+                        />
+                        <span className="text-[10px] font-black text-slate-500 uppercase tracking-widest">Quality Check</span>
                      </div>
-                     <div className="text-[10px] font-bold text-slate-700 dark:text-zinc-300">Accuracy: 99.8%</div>
+                     <Cpu className="w-4 h-4 text-slate-400 animate-spin-slower" />
                   </div>
-               </div>
-            </motion.div>
+                  <div className="space-y-3">
+                     <motion.div
+                        className="flex items-center gap-3"
+                        initial={{ opacity: 0, x: -12 }}
+                        animate={{ opacity: 1, x: 0 }}
+                        transition={{ delay: 0.9, duration: 0.4 }}
+                     >
+                        <div className="w-8 h-8 rounded-lg bg-slate-100 dark:bg-white/5 flex items-center justify-center">
+                           <Network className="w-4 h-4 text-indigo-500" />
+                        </div>
+                        <div className="text-[10px] font-bold text-slate-700 dark:text-zinc-300">Quality Validation Active</div>
+                     </motion.div>
+                     <motion.div
+                        className="flex items-center gap-3"
+                        initial={{ opacity: 0, x: -12 }}
+                        animate={{ opacity: 1, x: 0 }}
+                        transition={{ delay: 1.05, duration: 0.4 }}
+                     >
+                        <div className="w-8 h-8 rounded-lg bg-slate-100 dark:bg-white/5 flex items-center justify-center">
+                           <Brain className="w-4 h-4 text-blue-500" />
+                        </div>
+                        <div className="text-[10px] font-bold text-slate-700 dark:text-zinc-300">Accuracy: 99.8%</div>
+                     </motion.div>
+                  </div>
+               </motion.div>
+            </div>
 
-            {/* Card 3: Payment (Bottom Right) */}
-            <motion.div
-               initial={{ x: 100, opacity: 0 }}
-               animate={{ x: 0, opacity: 1 }}
-               transition={{ duration: 0.8, delay: 0.6 }}
-               whileHover={{ y: 5, scale: 1.02 }}
-               whileTap={{ scale: 0.98 }}
-               className="w-full max-w-[320px] md:w-80 bg-white dark:bg-blue-950/40 dark:backdrop-blur-xl rounded-3xl p-6 border border-slate-200 dark:border-emerald-500/20 shadow-xl shadow-slate-200/50 dark:shadow-[0_8px_30px_rgba(16,185,129,0.15)] z-10 transition-all duration-300 cursor-pointer group hover:dark:border-emerald-500/40 hover:dark:shadow-[0_8px_30px_rgba(16,185,129,0.25)]"
-            >
-               <div className="flex items-center justify-between mb-4">
-                  <span className="text-[10px] font-black text-emerald-600 uppercase tracking-widest group-hover:text-emerald-400 transition-colors">Payment Sent</span>
-                  <Banknote className="w-5 h-5 text-emerald-500 group-hover:scale-110 transition-transform" />
-               </div>
-               <div className="text-3xl font-black text-slate-900 dark:text-white mb-1 tracking-tight">₹1,240.50</div>
-               <div className="text-[10px] text-slate-500 font-bold mb-4">AVAILABLE BALANCE</div>
-               <Button variant="black" className="w-full h-10 rounded-xl font-bold text-xs uppercase tracking-widest group-hover:bg-blue-600 group-hover:text-white transition-colors">
-                  Withdraw to UPI
-               </Button>
-            </motion.div>
+            {/* ─── CARD 3: Payment ─── */}
+            <div className="relative flex items-center w-full justify-center">
+               <motion.div
+                  custom={2} variants={cardBase}
+                  whileHover={{ y: -6, scale: 1.03, transition: { type: 'spring', stiffness: 300, damping: 20 } }}
+                  whileTap={{ scale: 0.97 }}
+                  className="w-full max-w-[320px] md:w-80 bg-white dark:bg-blue-950/40 dark:backdrop-blur-xl rounded-3xl p-6 border border-slate-200 dark:border-emerald-500/20 shadow-xl shadow-slate-200/50 dark:shadow-[0_8px_30px_rgba(16,185,129,0.15)] z-10 cursor-pointer group hover:dark:border-emerald-500/40 hover:dark:shadow-[0_8px_30px_rgba(16,185,129,0.25)] glass-shine"
+               >
+                  <div className="flex items-center justify-between mb-4">
+                     <span className="text-[10px] font-black text-emerald-600 uppercase tracking-widest group-hover:text-emerald-400 transition-colors">Payment Sent</span>
+                     <motion.div
+                        whileHover={{ rotate: 12, scale: 1.2 }}
+                        transition={{ type: 'spring', stiffness: 400, damping: 15 }}
+                     >
+                        <Banknote className="w-5 h-5 text-emerald-500" />
+                     </motion.div>
+                  </div>
+                  <motion.div
+                     className="text-3xl font-black text-slate-900 dark:text-white mb-1 tracking-tight"
+                     initial={{ opacity: 0, scale: 0.8 }}
+                     animate={{ opacity: 1, scale: 1 }}
+                     transition={{ delay: 1.1, type: 'spring', stiffness: 300, damping: 18 }}
+                  >₹1,240.50</motion.div>
+                  <div className="text-[10px] text-slate-500 font-bold mb-4">AVAILABLE BALANCE</div>
+                  <Button variant="black" className="w-full h-10 rounded-xl font-bold text-xs uppercase tracking-widest group-hover:bg-blue-600 group-hover:text-white transition-colors btn-premium">
+                     Withdraw to UPI
+                  </Button>
+               </motion.div>
+            </div>
 
-         </div>
+         </motion.div>
       </div>
    );
-};
+};;
 
 export const LandingPage: React.FC<LandingPageProps> = ({ onEnterApp, onStartSignup, onNavigate }) => {
    const [activeNodeCount, setActiveNodeCount] = useState(8432);

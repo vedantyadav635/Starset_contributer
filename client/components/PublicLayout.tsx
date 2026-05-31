@@ -130,6 +130,18 @@ export const PublicLayout: React.FC<PublicLayoutProps> = ({
       return () => window.removeEventListener('scroll', handleScroll);
    }, [lastScrollY]);
 
+   // Lock background body scroll when mobile menu is open
+   React.useEffect(() => {
+      if (isMobileMenuOpen) {
+         document.body.style.overflow = 'hidden';
+      } else {
+         document.body.style.overflow = '';
+      }
+      return () => {
+         document.body.style.overflow = '';
+      };
+   }, [isMobileMenuOpen]);
+
    const navLinks: { name: string; id: PublicPageType; href: string }[] = [
       { name: 'Home', id: 'home', href: '/' },
       { name: 'Contributors', id: 'contributors', href: '/contributors' },
@@ -232,9 +244,9 @@ export const PublicLayout: React.FC<PublicLayoutProps> = ({
 
             {/* Mobile Menu Dropdown */}
             {isMobileMenuOpen && (
-               <div className="lg:hidden fixed top-16 left-0 w-full h-[calc(100vh-64px)] bg-zinc-900/95 backdrop-blur-3xl border-b border-white/10 p-6 flex flex-col gap-6 animate-in slide-in-from-top-4 duration-300 shadow-2xl overflow-y-auto z-50">
+               <div className="lg:hidden fixed top-16 left-0 w-full h-[calc(100vh-64px)] bg-white dark:bg-zinc-900/95 backdrop-blur-3xl border-b border-slate-200 dark:border-white/10 p-6 flex flex-col gap-6 animate-in slide-in-from-top-4 duration-300 shadow-2xl overflow-y-auto z-50">
                   <div className="flex flex-col gap-2">
-                     <div className="text-[10px] font-black text-zinc-400 uppercase tracking-[0.2em] mb-4 pl-2 opacity-60">Navigation</div>
+                     <div className="text-[10px] font-black text-slate-500 dark:text-zinc-400 uppercase tracking-[0.2em] mb-4 pl-2 opacity-60">Navigation</div>
                      {navLinks.map((item) => (
                         <a
                            key={item.id}
@@ -243,15 +255,23 @@ export const PublicLayout: React.FC<PublicLayoutProps> = ({
                               navClick(e, item.id);
                               setIsMobileMenuOpen(false);
                            }}
-                           className={`text-3xl font-black text-left transition-all py-3 px-2 rounded-2xl block ${currentPage === item.id ? 'bg-blue-500/10 text-blue-400' : 'text-zinc-300 hover:bg-white/5'}`}
+                           className={`text-3xl font-black text-left transition-all py-3 px-2 rounded-2xl block ${
+                              currentPage === item.id 
+                                 ? 'bg-blue-500/10 text-blue-600 dark:text-blue-400' 
+                                 : 'text-slate-700 dark:text-zinc-300 hover:bg-slate-100 dark:hover:bg-white/5'
+                           }`}
                         >
                            {item.name}
                         </a>
                      ))}
                   </div>
                   <div className="mt-auto pb-10">
-                     <div className="text-[10px] font-black text-zinc-400 uppercase tracking-[0.2em] mb-4 pl-2 opacity-60">Account System</div>
-                     <Button onClick={() => { onEnterApp(); setIsMobileMenuOpen(false); }} className="w-full h-16 text-xl font-black rounded-2xl shadow-xl bg-white !text-black">
+                     <div className="text-[10px] font-black text-slate-500 dark:text-zinc-400 uppercase tracking-[0.2em] mb-4 pl-2 opacity-60">Account System</div>
+                     <Button 
+                        onClick={() => { onEnterApp(); setIsMobileMenuOpen(false); }} 
+                        variant="ghost"
+                        className="w-full h-16 text-xl font-black rounded-2xl shadow-xl bg-slate-950 !text-white hover:bg-slate-900 dark:bg-white dark:!text-black dark:hover:bg-slate-100"
+                     >
                         Access Terminal
                      </Button>
                   </div>
