@@ -233,7 +233,7 @@ export const PublicLayout: React.FC<PublicLayoutProps> = ({
                   </Button>
 
                   <button
-                     className="text-white p-2 hover:bg-white/5 rounded-full transition-colors"
+                     className="text-slate-900 dark:text-white p-2 hover:bg-slate-100 dark:hover:bg-white/5 rounded-full transition-colors"
                      onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
                      aria-label="Toggle Menu"
                   >
@@ -257,7 +257,7 @@ export const PublicLayout: React.FC<PublicLayoutProps> = ({
                            }}
                            className={`text-3xl font-black text-left transition-all py-3 px-2 rounded-2xl block ${
                               currentPage === item.id 
-                                 ? 'bg-blue-500/10 text-blue-600 dark:text-blue-400' 
+                                 ? 'bg-blue-50 dark:bg-blue-950/40 text-blue-600 dark:text-blue-400 !opacity-100' 
                                  : 'text-slate-700 dark:text-zinc-300 hover:bg-slate-100 dark:hover:bg-white/5'
                            }`}
                         >
