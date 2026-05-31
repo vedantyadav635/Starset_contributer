@@ -248,7 +248,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onEnterApp, onStartSig
                      initial={{ y: 20, opacity: 0 }}
                      animate={{ y: 0, opacity: 1 }}
                      transition={{ duration: 0.8, delay: 0.4 }}
-                     className="text-[3.25rem] sm:text-6xl md:text-[5.5rem] font-black leading-[1.05] md:leading-[1.05] tracking-tighter mb-6 md:mb-8"
+                     className="text-[2.75rem] sm:text-5xl md:text-6xl lg:text-[3.8rem] xl:text-[4.8rem] 2xl:text-[5.5rem] font-black leading-[1.1] md:leading-[1.1] tracking-tighter mb-6 md:mb-8"
                   >
                      <span className="text-slate-900 dark:text-white">
                         Earn money from
@@ -262,7 +262,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onEnterApp, onStartSig
                               animate={{ opacity: 1, y: 0 }}
                               exit={{ opacity: 0, y: -5 }}
                               transition={{ duration: 0.3, ease: "easeInOut" }}
-                              className="inline-block text-transparent bg-clip-text bg-gradient-to-r from-blue-700 via-blue-500 to-blue-700 dark:from-blue-600 dark:via-blue-500 dark:to-blue-600 drop-shadow-md animate-shimmer pr-4"
+                              className="inline-block text-transparent bg-clip-text bg-gradient-to-r from-blue-700 via-blue-500 to-blue-700 dark:from-blue-600 dark:via-blue-500 dark:to-blue-600 drop-shadow-md animate-shimmer pr-4 whitespace-nowrap"
                            >
                               {words[wordIndex]}
                            </motion.span>
