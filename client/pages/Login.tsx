@@ -110,8 +110,30 @@ export const Login: React.FC<LoginProps> = ({
     <div className="min-h-screen flex flex-col items-center justify-center p-4 font-sans relative overflow-hidden bg-slate-50 dark:bg-[#020205]">
 
       {/* Background Ambience */}
-      <div className="absolute top-[-20%] left-[-10%] w-[400px] md:w-[600px] h-[400px] md:h-[600px] bg-blue-600/10 rounded-full blur-[80px] md:blur-[100px] animate-blob"></div>
-      <div className="absolute bottom-[-20%] right-[-10%] w-[400px] md:w-[600px] h-[400px] md:h-[600px] bg-indigo-600/10 rounded-full blur-[80px] md:blur-[100px] animate-blob animation-delay-2000"></div>
+      <div className="absolute top-[-20%] left-[-10%] w-[400px] md:w-[600px] h-[400px] md:h-[600px] bg-blue-600/10 rounded-full blur-[80px] md:blur-[100px] "></div>
+      <div className="absolute bottom-[-20%] right-[-10%] w-[400px] md:w-[600px] h-[400px] md:h-[600px] bg-indigo-600/10 rounded-full blur-[80px] md:blur-[100px] "></div>
+
+      {/* Header */}
+      <div className="absolute top-0 left-0 right-0 p-6 flex justify-between items-center z-20">
+        <div className="flex items-center gap-3 cursor-pointer" onClick={onBackHome}>
+          <Logo className="h-8 w-8 text-blue-600 dark:text-white" />
+          <span className="font-bold text-xl tracking-tight text-slate-900 dark:text-white uppercase">STARSET</span>
+        </div>
+        <div className="flex items-center gap-6">
+          <button 
+            onClick={onSwitchToSignup}
+            className="text-sm font-semibold text-slate-600 dark:text-zinc-400 hover:text-slate-900 dark:hover:text-white transition-colors hidden sm:block"
+          >
+            Create Account
+          </button>
+          <button 
+            onClick={onBackHome}
+            className="text-sm font-semibold text-slate-600 dark:text-zinc-400 hover:text-slate-900 dark:hover:text-white transition-colors flex items-center gap-2"
+          >
+            <ArrowRight className="h-4 w-4 rotate-180" /> Back to Home
+          </button>
+        </div>
+      </div>
 
       <div className="w-full max-w-md relative z-10 pt-8 pb-8">
         <div className="mb-6 md:mb-8 text-center px-4">
@@ -123,19 +145,22 @@ export const Login: React.FC<LoginProps> = ({
                 <Shield className="h-6 w-6 md:h-8 md:w-8 text-purple-500" />
               )}
             </div>
-            <span className="font-bold text-xl md:text-2xl tracking-[0.15em] bg-clip-text text-transparent bg-gradient-to-r from-white to-zinc-400 uppercase">STARSET</span>
+            <span className="font-bold text-xl md:text-2xl tracking-[0.15em] text-slate-900 dark:text-white uppercase">STARSET</span>
           </div>
-          <h1 className="text-lg md:text-xl font-bold tracking-tight mb-1 text-white">
+          <h1 className="text-lg md:text-xl font-bold tracking-tight mb-1 text-slate-900 dark:text-white">
             {isContributor ? "Contributor Access" : "Admin Console"}
           </h1>
           <p className="text-zinc-400 text-xs md:text-sm">
             {isContributor
-              ? "Enter your credentials to access the node."
+              ? "Enter your credentials to access your account."
               : "Authorized personnel only. Activities logged."}
           </p>
         </div>
 
-        <div className="bg-white dark:bg-zinc-900/40 backdrop-blur-xl p-6 md:p-8 rounded-2xl md:rounded-3xl border border-slate-200 dark:border-white/10 shadow-lg dark:shadow-2xl mx-1 md:mx-0">
+        <div className="bg-gradient-to-br from-blue-50 to-indigo-50 dark:from-white/5 dark:to-white/5 p-6 md:p-8 rounded-[32px] border border-blue-100 dark:border-white/10 shadow-xl shadow-slate-200/50 dark:shadow-2xl mx-1 md:mx-0 relative overflow-hidden">
+          <div className="absolute top-0 right-0 w-[400px] h-[400px] bg-blue-600/10 dark:bg-blue-500/20 blur-[80px] rounded-full translate-x-1/3 -translate-y-1/3 pointer-events-none z-0" />
+          
+          <div className="relative z-10">
           {error && (
             <div className="mb-4 p-3 bg-red-900/20 border border-red-200 rounded-lg flex items-center gap-2 text-red-600 text-sm">
               <AlertCircle className="h-4 w-4" />
@@ -227,6 +252,7 @@ export const Login: React.FC<LoginProps> = ({
               </button>
             </div>
           </form>
+          </div>
         </div>
       </div>
 

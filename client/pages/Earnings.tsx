@@ -3,6 +3,36 @@ import { Transaction } from '../types';
 import { Button } from '../components/Button';
 import { Download, CreditCard, Wallet, Plus, X, Smartphone, Landmark, Check, Inbox, AlertCircle } from 'lucide-react';
 import { supabase } from '../supabaseClient';
+import { motion, AnimatePresence } from 'framer-motion';
+
+const EASE = [0.16, 1, 0.3, 1] as const;
+
+const containerVariants = {
+  hidden: {},
+  visible: {
+    transition: { staggerChildren: 0.12, delayChildren: 0.05 },
+  },
+};
+
+const itemVariants = {
+  hidden: { opacity: 0, y: 28, filter: 'blur(8px)' },
+  visible: {
+    opacity: 1,
+    y: 0,
+    filter: 'blur(0px)',
+    transition: { duration: 0.65, ease: EASE },
+  },
+};
+
+const cardVariants = {
+  hidden: { opacity: 0, y: 24, scale: 0.97 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    scale: 1,
+    transition: { duration: 0.6, ease: EASE },
+  },
+};
 
 export const Earnings: React.FC = () => {
   const [showAddMethod, setShowAddMethod] = useState(false);
@@ -79,9 +109,14 @@ export const Earnings: React.FC = () => {
   const userName = userProfile?.full_name || 'Contributor';
 
   return (
-    <div className="space-y-8 animate-in fade-in duration-500 relative pb-24 md:pb-0 perspective-1000">
+    <motion.div
+      className="space-y-8 relative pb-24 md:pb-0 perspective-1000"
+      variants={containerVariants}
+      initial="hidden"
+      animate="visible"
+    >
       {/* Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+      <motion.div variants={itemVariants} className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>
           <h1 className="text-3xl md:text-4xl font-bold text-white tracking-tight">Compensation & Settlement</h1>
           <p className="text-zinc-500 mt-1 text-sm md:text-base">View accrued compensation for accepted data contributions.</p>
@@ -89,15 +124,18 @@ export const Earnings: React.FC = () => {
         <Button variant="outline" className="w-full sm:w-auto bg-transparent text-slate-700 dark:text-white border-slate-300 dark:border-zinc-700 shadow-sm hover:shadow-md transition-all">
           <Download className="h-4 w-4 mr-2" /> Tax Invoice
         </Button>
-      </div>
+      </motion.div>
 
 
 
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 md:gap-8">
+      <motion.div variants={containerVariants} className="grid grid-cols-1 lg:grid-cols-3 gap-6 md:gap-8">
         {/* Balance Card */}
-        <div className="relative group perspective-1000 h-auto md:h-full min-h-[280px]">
+        <motion.div variants={cardVariants} className="relative group perspective-1000 h-auto md:h-full min-h-[280px]">
           <div className="absolute inset-0 bg-blue-600/20 blur-2xl rounded-3xl transform group-hover:scale-105 transition-transform duration-500"></div>
-          <div className="bg-gradient-to-br from-black to-zinc-900 rounded-3xl p-6 md:p-8 text-white shadow-2xl shadow-black/50 flex flex-col justify-between relative overflow-hidden border border-zinc-800 h-full transform transition-transform duration-500 group-hover:rotate-x-2 group-hover:scale-[1.02] transform-style-3d">
+          <motion.div
+            whileHover={{ scale: 1.02, rotateX: 2 }}
+            transition={{ duration: 0.4, ease: [0.25, 0.46, 0.45, 0.94] }}
+            className="bg-gradient-to-br from-black to-zinc-900 rounded-3xl p-6 md:p-8 text-white shadow-2xl shadow-black/50 flex flex-col justify-between relative overflow-hidden border border-zinc-800 h-full glass-shine">
 
             <div className="absolute inset-0 bg-gradient-to-tr from-white/0 via-white/5 to-white/0 translate-x-[-100%] group-hover:animate-[shimmer_2s_infinite] pointer-events-none z-20"></div>
             <div className="absolute top-0 right-0 p-32 bg-blue-500/10 rounded-full blur-3xl -mr-16 -mt-16 pointer-events-none z-0"></div>
@@ -145,14 +183,14 @@ export const Earnings: React.FC = () => {
                 </div>
               </div>
             </div>
-          </div>
-        </div>
+          </motion.div>
+        </motion.div>
 
         {/* Payment Methods */}
-        <div className="lg:col-span-2 bg-white dark:bg-zinc-900 rounded-3xl border border-slate-200 dark:border-white/5 shadow-xl p-6 md:p-8 flex flex-col h-full relative overflow-hidden">
-          <div className="absolute top-0 right-0 w-64 h-64 bg-emerald-500/5 rounded-full blur-3xl -mr-32 -mt-32 pointer-events-none"></div>
+        <motion.div variants={cardVariants} className="lg:col-span-2 bg-gradient-to-br from-blue-50 to-indigo-50 dark:from-white/5 dark:to-white/5 rounded-[32px] border border-blue-100 dark:border-white/10 shadow-xl shadow-slate-200/50 dark:shadow-none p-6 md:p-8 flex flex-col h-full relative overflow-hidden glass-shine">
+          <div className="absolute top-0 right-0 w-[400px] h-[400px] bg-emerald-500/10 dark:bg-emerald-500/20 blur-[80px] rounded-full translate-x-1/3 -translate-y-1/3 pointer-events-none z-0" />
 
-          <h2 className="text-xl font-bold text-white mb-8 flex items-center justify-between relative z-10">
+          <h2 className="text-xl font-bold text-slate-900 dark:text-white mb-8 flex items-center justify-between relative z-10">
             <span>Transfer Accounts</span>
             {upiId !== 'Not set' && (
               <span className="text-xs font-bold text-emerald-400 bg-emerald-900/20 px-3 py-1 rounded-full border border-emerald-900/30">Active</span>
@@ -162,7 +200,10 @@ export const Earnings: React.FC = () => {
           <div className="space-y-4 flex-1 relative z-10">
             {/* UPI Method from profile */}
             {upiId !== 'Not set' ? (
-              <div className="flex flex-col sm:flex-row sm:items-center justify-between p-5 border border-blue-500 bg-blue-900/10 rounded-2xl transition-all cursor-pointer group gap-4 hover:shadow-lg hover:shadow-blue-500/10 hover:-translate-y-1 duration-300">
+              <motion.div
+                whileHover={{ y: -4, scale: 1.01 }}
+                transition={{ duration: 0.3, ease: [0.25, 0.46, 0.45, 0.94] }}
+                className="flex flex-col sm:flex-row sm:items-center justify-between p-5 border border-blue-500 bg-blue-900/10 rounded-2xl transition-all cursor-pointer group gap-4 hover:shadow-lg hover:shadow-blue-500/10">
                 <div className="flex items-center">
                   <div className="h-14 w-14 bg-black border border-white/10 rounded-2xl flex items-center justify-center text-blue-400 mr-5 shadow-sm group-hover:scale-110 transition-transform">
                     <Smartphone className="h-7 w-7" />
@@ -177,7 +218,7 @@ export const Earnings: React.FC = () => {
                     <Check className="h-3 w-3 mr-1" /> Verified
                   </span>
                 </div>
-              </div>
+              </motion.div>
             ) : (
               <div className="p-6 border border-dashed border-white/10 rounded-2xl text-center">
                 <Smartphone className="h-8 w-8 text-zinc-600 mx-auto mb-2" />
@@ -197,14 +238,20 @@ export const Earnings: React.FC = () => {
               Connect New Account
             </button>
           </div>
-        </div>
-      </div>
+        </motion.div>
+      </motion.div>
 
       {/* Transaction History */}
-      <div className="bg-white dark:bg-zinc-900 rounded-3xl border border-slate-200 dark:border-white/10 shadow-xl overflow-hidden transform transition-all hover:shadow-2xl">
-        <div className="px-8 py-6 border-b border-slate-200 dark:border-white/5 flex flex-col md:flex-row justify-between items-start md:items-center bg-slate-50 dark:bg-white/5 gap-4">
+      <motion.div
+        variants={itemVariants}
+        whileHover={{ y: -4 }}
+        transition={{ duration: 0.35, ease: [0.25, 0.46, 0.45, 0.94] }}
+        className="bg-gradient-to-br from-blue-50 to-indigo-50 dark:from-white/5 dark:to-white/5 rounded-[32px] border border-blue-100 dark:border-white/10 shadow-xl shadow-slate-200/50 dark:shadow-none overflow-hidden relative glass-shine"
+      >
+        <div className="absolute top-0 right-0 w-[400px] h-[400px] bg-blue-600/10 dark:bg-blue-500/20 blur-[80px] rounded-full translate-x-1/3 -translate-y-1/3 pointer-events-none z-0" />
+        <div className="px-8 py-6 border-b border-slate-200 dark:border-white/5 flex flex-col md:flex-row justify-between items-start md:items-center bg-slate-50 dark:bg-white/5 gap-4 relative z-10">
           <div className="flex items-center gap-4 w-full md:w-auto justify-between md:justify-start">
-            <h2 className="text-xl font-bold text-white">Settlement Ledger</h2>
+            <h2 className="text-xl font-bold text-slate-900 dark:text-white">Settlement Ledger</h2>
             <select className="text-xs border-slate-200 dark:border-white/10 rounded-lg py-1.5 px-3 bg-white dark:bg-black focus:ring-blue-600 focus:border-blue-600 text-slate-700 dark:text-white shadow-sm">
               <option>All Entries</option>
               <option>Processed</option>
@@ -215,15 +262,15 @@ export const Earnings: React.FC = () => {
         </div>
 
         {loading ? (
-          <div className="p-12 text-center text-zinc-500">Loading transactions...</div>
+          <div className="p-12 text-center text-zinc-500 relative z-10">Loading transactions...</div>
         ) : transactions.length === 0 ? (
-          <div className="p-12 text-center">
+          <div className="p-12 text-center relative z-10">
             <Inbox className="h-12 w-12 text-zinc-600 mx-auto mb-3" />
-            <p className="text-zinc-500 font-medium">No transactions yet</p>
-            <p className="text-zinc-400 text-sm mt-1">Complete tasks to see your earnings here</p>
+            <p className="text-slate-900 dark:text-zinc-500 font-medium">No transactions yet</p>
+            <p className="text-slate-500 dark:text-zinc-400 text-sm mt-1">Complete tasks to see your earnings here</p>
           </div>
         ) : (
-          <div className="overflow-x-auto">
+          <div className="overflow-x-auto relative z-10">
             <table className="w-full text-sm text-left whitespace-nowrap">
               <thead className="bg-black/20 text-stone-500 font-bold border-b border-white/5 text-xs uppercase tracking-wider">
                 <tr>
@@ -236,7 +283,7 @@ export const Earnings: React.FC = () => {
                 {transactions.map((tx) => (
                   <tr key={tx.id} className="hover:bg-white/5 transition-colors group cursor-default">
                     <td className="px-8 py-5 text-stone-500 font-mono text-xs">{tx.date}</td>
-                    <td className="px-8 py-5 text-white font-medium group-hover:text-blue-400 transition-colors">
+                    <td className="px-8 py-5 text-slate-900 dark:text-white font-medium group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">
                       {tx.description}
                     </td>
                     <td className="px-8 py-5">
@@ -253,12 +300,24 @@ export const Earnings: React.FC = () => {
             </table>
           </div>
         )}
-      </div>
+      </motion.div>
 
       {/* Add Payment Method Modal */}
-      {showAddMethod && (
-        <div className="fixed inset-0 z-50 flex items-end md:items-center justify-center p-4 bg-black/60 backdrop-blur-md animate-in fade-in duration-300 perspective-1000">
-          <div className="bg-zinc-900 rounded-t-3xl md:rounded-3xl shadow-2xl w-full max-w-md overflow-hidden animate-in slide-in-from-bottom-20 md:zoom-in-95 duration-300 border border-white/10 transform-style-3d">
+      <AnimatePresence>
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          transition={{ duration: 0.3 }}
+          className="fixed inset-0 z-50 flex items-end md:items-center justify-center p-4 bg-black/60 backdrop-blur-md perspective-1000"
+        >
+          <motion.div
+            initial={{ opacity: 0, y: 60, scale: 0.95 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            exit={{ opacity: 0, y: 30, scale: 0.97 }}
+            transition={{ duration: 0.4, ease: EASE }}
+            className="bg-zinc-900 rounded-t-3xl md:rounded-3xl shadow-2xl w-full max-w-md overflow-hidden border border-white/10 transform-style-3d"
+          >
             <div className="px-8 py-5 border-b border-white/10 flex justify-between items-center bg-white/5">
               <h3 className="font-bold text-xl text-white">Add Account</h3>
               <button onClick={() => setShowAddMethod(false)} className="text-stone-400 hover:text-red-400 p-2 hover:bg-red-900/20 rounded-full transition-colors">
@@ -317,9 +376,10 @@ export const Earnings: React.FC = () => {
                 <Button className="flex-1 h-12 text-base shadow-lg" onClick={() => { setShowAddMethod(false); alert("Account added successfully!"); }}>Save Details</Button>
               </div>
             </div>
-          </div>
-        </div>
+          </motion.div>
+        </motion.div>
       )}
-    </div>
+      </AnimatePresence>
+    </motion.div>
   );
 };

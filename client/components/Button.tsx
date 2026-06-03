@@ -15,24 +15,22 @@ export const Button: React.FC<ButtonProps> = ({
   disabled,
   ...props
 }) => {
-  const baseStyle = "inline-flex items-center justify-center font-medium transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-white dark:focus:ring-offset-black disabled:opacity-50 disabled:cursor-not-allowed rounded-lg active:scale-[0.96] active:translate-y-0.5 relative overflow-hidden group";
+  const baseStyle = "inline-flex items-center justify-center font-semibold rounded-lg focus-ring transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed relative overflow-hidden";
 
   const variants = {
-    // Primary: Elegant Blue with 3D layers
-    primary: "bg-gradient-to-b from-[#3b82f6] to-[#2563eb] text-slate-50 hover:from-[#60a5fa] hover:to-[#3b82f6] shadow-[0_4px_0_#1e40af,0_10px_15px_-3px_rgba(37,99,235,0.2)] active:shadow-none hover:-translate-y-0.5 border-t border-white/20",
+    primary: "bg-blue-600 !text-white hover:bg-blue-500 shadow-[0_4px_0_#1d4ed8,0_2px_4px_rgba(0,0,0,0.1)] active:shadow-[0_0px_0_#1d4ed8] active:translate-y-1 hover:-translate-y-0.5 hover:shadow-[0_6px_0_#1d4ed8,0_8px_16px_-4px_rgba(37,99,235,0.4)] border border-blue-600",
 
-    // Glow: High impact CTA
-    glow: "bg-slate-950 text-slate-50 hover:bg-slate-800 shadow-[0_14px_35px_-18px_rgba(15,23,42,0.75)] border border-slate-950 font-bold hover:-translate-y-1 hover:shadow-[0_18px_45px_-20px_rgba(37,99,235,0.55)] dark:bg-white dark:text-black dark:hover:bg-zinc-100 dark:border-white dark:shadow-[0_0_20px_rgba(255,255,255,0.4)] dark:hover:shadow-[0_0_30px_rgba(255,255,255,0.6)]",
+    glow: "bg-blue-600 !text-white hover:bg-blue-500 shadow-[0_4px_0_#1d4ed8,0_2px_4px_rgba(0,0,0,0.1)] active:shadow-[0_0px_0_#1d4ed8] active:translate-y-1 hover:-translate-y-0.5 hover:shadow-[0_6px_0_#1d4ed8,0_8px_16px_-4px_rgba(37,99,235,0.4)] border border-blue-600",
 
-    black: "bg-slate-950 text-slate-50 hover:bg-slate-800 border border-slate-950 shadow-lg hover:shadow-xl hover:-translate-y-0.5 dark:bg-white dark:text-black dark:hover:bg-zinc-200 dark:border-zinc-800",
+    black: "bg-blue-600 !text-white hover:bg-blue-500 shadow-[0_4px_0_#1d4ed8,0_2px_4px_rgba(0,0,0,0.1)] active:shadow-[0_0px_0_#1d4ed8] active:translate-y-1 hover:-translate-y-0.5 hover:shadow-[0_6px_0_#1d4ed8,0_8px_16px_-4px_rgba(37,99,235,0.4)] border border-blue-600",
 
-    secondary: "bg-white backdrop-blur-md text-slate-700 border border-slate-200 hover:bg-blue-50 hover:text-blue-700 shadow-sm hover:shadow-md dark:bg-white/10 dark:text-white dark:border-white/10 dark:hover:bg-white/20 dark:hover:text-white",
+    secondary: "bg-blue-600 !text-white hover:bg-blue-500 shadow-[0_4px_0_#1d4ed8,0_2px_4px_rgba(0,0,0,0.1)] active:shadow-[0_0px_0_#1d4ed8] active:translate-y-1 hover:-translate-y-0.5 hover:shadow-[0_6px_0_#1d4ed8,0_8px_16px_-4px_rgba(37,99,235,0.4)] border border-blue-600",
 
-    danger: "bg-red-500/10 text-red-500 hover:bg-red-500/20 border border-red-500/20",
+    danger: "bg-red-600 !text-white hover:bg-red-500 shadow-[0_4px_0_#991b1b,0_2px_4px_rgba(0,0,0,0.1)] active:shadow-[0_0px_0_#991b1b] active:translate-y-1 hover:-translate-y-0.5 hover:shadow-[0_6px_0_#991b1b,0_8px_16px_-4px_rgba(220,38,38,0.4)] border border-red-600",
 
-    ghost: "text-slate-600 hover:text-slate-950 hover:bg-slate-100 dark:text-zinc-400 dark:hover:text-white dark:hover:bg-white/5",
+    ghost: "text-slate-600 hover:text-slate-900 hover:bg-slate-100 dark:text-zinc-400 dark:hover:text-white dark:hover:bg-white/5",
 
-    outline: "bg-transparent border border-slate-200 text-slate-700 hover:border-blue-300 hover:text-blue-700 hover:bg-blue-50 dark:border-zinc-700 dark:text-zinc-300 dark:hover:border-zinc-500 dark:hover:text-white dark:hover:bg-transparent dark:hover:shadow-[0_0_15px_rgba(255,255,255,0.1)]"
+    outline: "bg-blue-50 !text-blue-700 dark:bg-blue-900/20 dark:!text-blue-300 border border-blue-200 dark:border-blue-800 shadow-[0_4px_0_#bfdbfe,0_2px_4px_rgba(0,0,0,0.05)] dark:shadow-[0_4px_0_#1e3a8a] active:shadow-[0_0px_0_#bfdbfe] dark:active:shadow-[0_0px_0_#1e3a8a] active:translate-y-1 hover:-translate-y-0.5 hover:shadow-[0_6px_0_#bfdbfe,0_8px_16px_-4px_rgba(59,130,246,0.1)] dark:hover:shadow-[0_6px_0_#1e3a8a] transition-all hover:bg-blue-100 dark:hover:bg-blue-900/40"
   };
 
   const sizes = {
@@ -56,8 +54,6 @@ export const Button: React.FC<ButtonProps> = ({
         </span>
       ) : null}
       {children}
-      {/* Shine Effect */}
-      <div className="absolute inset-0 -translate-x-full group-hover:animate-[shimmer_1.5s_infinite] bg-gradient-to-r from-transparent via-white/10 to-transparent z-10 pointer-events-none"></div>
     </button>
   );
 };

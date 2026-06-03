@@ -11,6 +11,7 @@ import {
 } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 import { supabase } from '../supabaseClient';
+import { motion } from 'framer-motion';
 
 interface DashboardProps {
   onNavigate: (page: PageView) => void;
@@ -22,6 +23,36 @@ interface UserStats {
   accepted: number;
   acceptanceRate: string;
 }
+
+// Premium easing
+const EASE = [0.16, 1, 0.3, 1] as const;
+
+const containerVariants = {
+  hidden: {},
+  visible: {
+    transition: { staggerChildren: 0.1, delayChildren: 0.05 },
+  },
+};
+
+const itemVariants = {
+  hidden: { opacity: 0, y: 28, filter: 'blur(8px)' },
+  visible: {
+    opacity: 1,
+    y: 0,
+    filter: 'blur(0px)',
+    transition: { duration: 0.65, ease: EASE },
+  },
+};
+
+const cardVariants = {
+  hidden: { opacity: 0, y: 24, scale: 0.97 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    scale: 1,
+    transition: { duration: 0.6, ease: EASE },
+  },
+};
 
 export const Dashboard: React.FC<DashboardProps> = ({ onNavigate }) => {
   const { user } = useAuth();
@@ -118,55 +149,99 @@ export const Dashboard: React.FC<DashboardProps> = ({ onNavigate }) => {
   ];
 
   return (
-    <div className="space-y-6 animate-in fade-in duration-500">
+    <motion.div
+      className="space-y-6"
+      variants={containerVariants}
+      initial="hidden"
+      animate="visible"
+    >
 
-      {/* Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-6 border-b border-slate-200 dark:border-white/10">
+      {/* Header — slides in first */}
+      <motion.div variants={itemVariants} className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-6 border-b border-slate-200 dark:border-white/10">
         <div>
-          <h1 className="text-2xl font-bold text-white tracking-tight">Dashboard</h1>
+          <h1 className="text-2xl font-bold text-slate-900 dark:text-white tracking-tight">Dashboard</h1>
           <p className="text-zinc-500 text-sm mt-1">
             Welcome back, {userName}
           </p>
         </div>
         <div className="flex items-center gap-3">
-          <Button variant="secondary" onClick={() => onNavigate('tasks')} size="sm" className="bg-slate-100 dark:bg-white/10 text-slate-700 dark:text-white border-slate-200 dark:border-white/10 hover:bg-slate-200 dark:hover:bg-white/20">
+          <Button variant="secondary" onClick={() => onNavigate('tasks')} size="sm" className="btn-premium bg-slate-100 dark:bg-white/10 text-slate-700 dark:text-white border-slate-200 dark:border-white/10 hover:bg-slate-200 dark:hover:bg-white/20">
             View Data Tasks
           </Button>
         </div>
-      </div>
+      </motion.div>
 
-      {/* KPI Stats - Real Data */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
+      {/* KPI Stats - Staggered card entrance with 3D hover */}
+      <motion.div
+        className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6"
+        variants={containerVariants}
+      >
         {statCards.map((stat, idx) => (
-          <div key={idx} className="bg-white dark:bg-zinc-900 p-6 md:p-7 rounded-[2rem] border border-slate-200 dark:border-white/10 shadow-sm transition-all hover:shadow-lg hover:scale-[1.02] duration-300 group">
+          <motion.div
+            key={idx}
+            variants={cardVariants}
+            whileHover={{
+              y: -6,
+              scale: 1.02,
+              transition: { duration: 0.3, ease: [0.25, 0.46, 0.45, 0.94] },
+            }}
+            whileTap={{ scale: 0.98 }}
+            className="bg-gradient-to-br from-blue-50 to-indigo-50 dark:from-white/5 dark:to-white/5 p-6 md:p-7 rounded-[32px] border border-blue-100 dark:border-white/10 shadow-xl shadow-slate-200/50 dark:shadow-none group overflow-hidden relative cursor-default glass-shine"
+          >
+             <div className="absolute top-0 right-0 w-[150px] h-[150px] bg-blue-600/10 dark:bg-blue-500/20 blur-[40px] rounded-full translate-x-1/2 -translate-y-1/2 pointer-events-none z-0 group-hover:scale-125 transition-transform duration-700" />
+             <div className="relative z-10">
             <div className="flex items-center justify-between mb-6">
-              <div className={`p-3 rounded-2xl transition-colors ${stat.label === 'Acceptance' ? 'bg-blue-900/20 text-blue-400' : stat.label === 'Accepted' ? 'bg-emerald-900/20 text-emerald-400' : stat.label === 'In Review' ? 'bg-amber-900/20 text-amber-400' : 'bg-purple-900/20 text-purple-400'}`}>
+              <motion.div
+                className={`p-3 rounded-2xl transition-colors ${stat.label === 'Acceptance' ? 'bg-blue-900/20 text-blue-400' : stat.label === 'Accepted' ? 'bg-emerald-900/20 text-emerald-400' : stat.label === 'In Review' ? 'bg-amber-900/20 text-amber-400' : 'bg-purple-900/20 text-purple-400'}`}
+                whileHover={{ scale: 1.15, rotate: -5 }}
+                transition={{ type: 'spring', stiffness: 400, damping: 17 }}
+              >
                 <stat.icon className="h-6 w-6" />
-              </div>
+              </motion.div>
               <span className="text-[10px] font-black text-zinc-400 uppercase tracking-[0.2em]">{stat.label}</span>
             </div>
-            <div className="text-3xl md:text-4xl font-black text-white mb-2 tracking-tight group-hover:text-blue-400 transition-colors">{stat.value}</div>
-            <div className="text-xs font-bold text-zinc-500 uppercase tracking-widest">{stat.sub}</div>
-          </div>
+            <div className="text-3xl md:text-4xl font-extrabold text-slate-900 dark:text-white mb-2 tracking-tight group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors duration-300 stat-value-animate">{stat.value}</div>
+            </div>
+          </motion.div>
         ))}
-      </div>
+      </motion.div>
 
-      {/* Quick Actions */}
-      <div className="grid grid-cols-1 gap-6 mt-8">
-        <div className="bg-white dark:bg-zinc-900 text-slate-900 dark:text-white rounded-[2.5rem] border border-slate-200 dark:border-white/10 p-8 md:p-10 relative overflow-hidden group cursor-pointer" onClick={() => onNavigate('tasks')}>
-          <div className="absolute top-0 right-0 w-[60%] h-full bg-gradient-to-l from-blue-600/20 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700"></div>
+      {/* Quick Actions — enters last with a smooth reveal */}
+      <motion.div
+        variants={itemVariants}
+        className="grid grid-cols-1 gap-6 mt-8"
+      >
+        <motion.div
+          whileHover={{
+            y: -5,
+            transition: { duration: 0.35, ease: [0.25, 0.46, 0.45, 0.94] },
+          }}
+          whileTap={{ scale: 0.99 }}
+          className="bg-gradient-to-br from-blue-50 to-indigo-50 dark:from-white/5 dark:to-white/5 text-slate-900 dark:text-white rounded-[32px] border border-blue-100 dark:border-white/10 shadow-xl shadow-slate-200/50 dark:shadow-none p-8 md:p-10 relative overflow-hidden group cursor-pointer glass-shine glow-border"
+          onClick={() => onNavigate('tasks')}
+        >
+          <div className="absolute top-0 right-0 w-[400px] h-[400px] bg-blue-600/10 dark:bg-blue-500/20 blur-[80px] rounded-full translate-x-1/3 -translate-y-1/3 pointer-events-none z-0 group-hover:scale-110 transition-transform duration-700" />
+          <div className="absolute top-0 right-0 w-[60%] h-full bg-gradient-to-l from-blue-600/10 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700"></div>
           <div className="relative z-10">
-            <div className="h-14 w-14 bg-slate-100 dark:bg-white/10 rounded-2xl flex items-center justify-center text-blue-500 dark:text-blue-400 mb-6 group-hover:scale-110 transition-transform duration-500">
+            <motion.div
+              className="h-14 w-14 bg-slate-100 dark:bg-white/10 rounded-2xl flex items-center justify-center text-blue-500 dark:text-blue-400 mb-6"
+              whileHover={{ scale: 1.15, rotate: -5 }}
+              transition={{ type: 'spring', stiffness: 400, damping: 17 }}
+            >
               <Database className="h-7 w-7" />
-            </div>
-            <h3 className="text-2xl font-black mb-2 tracking-tight">Active Operation Tasks</h3>
+            </motion.div>
+            <h3 className="text-2xl font-black mb-2 tracking-tight">Available Tasks</h3>
             <p className="text-slate-500 dark:text-stone-400 font-medium mb-6">Contribute high-quality data to the network.</p>
-            <div className="inline-flex items-center text-sm font-black uppercase tracking-widest text-blue-400 group-hover:translate-x-2 transition-transform">
-              Launch Terminal <ArrowRight className="ml-2 h-4 w-4" />
-            </div>
+            <motion.div
+              className="inline-flex items-center text-sm font-black uppercase tracking-widest text-blue-400"
+              whileHover={{ x: 8 }}
+              transition={{ type: 'spring', stiffness: 300, damping: 20 }}
+            >
+              Browse Tasks <ArrowRight className="ml-2 h-4 w-4" />
+            </motion.div>
           </div>
-        </div>
-      </div>
-    </div>
+        </motion.div>
+      </motion.div>
+    </motion.div>
   );
 };

@@ -2,6 +2,36 @@ import React, { useState } from 'react';
 import { Task, TaskType, UserRole } from '../types';
 import { Button } from '../components/Button';
 import { Clock, Globe, Filter, ChevronRight, Edit3, Image as ImageIcon, CheckCircle2, Camera, Trash2, Edit, BadgeCheck, Mic, FileAudio } from 'lucide-react';
+import { motion } from 'framer-motion';
+
+const EASE = [0.16, 1, 0.3, 1] as const;
+
+const containerVariants = {
+  hidden: {},
+  visible: {
+    transition: { staggerChildren: 0.08, delayChildren: 0.05 },
+  },
+};
+
+const itemVariants = {
+  hidden: { opacity: 0, y: 24, filter: 'blur(6px)' },
+  visible: {
+    opacity: 1,
+    y: 0,
+    filter: 'blur(0px)',
+    transition: { duration: 0.6, ease: EASE },
+  },
+};
+
+const cardItemVariants = {
+  hidden: { opacity: 0, y: 20, scale: 0.98 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    scale: 1,
+    transition: { duration: 0.55, ease: EASE },
+  },
+};
 
 interface TaskListProps {
   onSelectTask: (task: Task) => void;
@@ -43,20 +73,25 @@ export const TaskList: React.FC<TaskListProps> = ({ onSelectTask, tasks, userRol
   };
 
   return (
-    <div className="space-y-8 animate-in fade-in duration-500">
+    <motion.div
+      className="space-y-8"
+      variants={containerVariants}
+      initial="hidden"
+      animate="visible"
+    >
 
       {/* Page Header */}
-      <div className="flex flex-col gap-1">
-        <h1 className="text-3xl font-bold text-white tracking-tight">
+      <motion.div variants={itemVariants} className="flex flex-col gap-1">
+        <h1 className="text-3xl font-bold text-slate-900 dark:text-white tracking-tight">
           {userRole === 'admin' ? 'Task Registry' : 'Active Projects'}
         </h1>
         <p className="text-zinc-500 text-base">
           {userRole === 'admin' ? 'Manage global task distribution and status.' : 'Select a task from available corporate campaigns.'}
         </p>
-      </div>
+      </motion.div>
 
       {/* Filters */}
-      <div className="bg-slate-100 dark:bg-white/5 p-1.5 rounded-2xl border border-slate-200 dark:border-white/10 shadow-sm flex flex-wrap gap-1 overflow-x-auto no-scrollbar">
+      <motion.div variants={itemVariants} className="bg-slate-100 dark:bg-white/5 p-1.5 rounded-2xl border border-slate-200 dark:border-white/10 shadow-sm flex flex-wrap gap-1 overflow-x-auto no-scrollbar">
         {(['All', TaskType.AUDIO_COLLECTION, TaskType.IMAGE_COLLECTION, TaskType.TEXT_ANNOTATION, TaskType.IMAGE_LABELING, TaskType.SURVEY] as string[]).map((type) => (
           <button
             key={type}
@@ -69,10 +104,10 @@ export const TaskList: React.FC<TaskListProps> = ({ onSelectTask, tasks, userRol
             {type === 'All' ? 'All Operations' : type}
           </button>
         ))}
-      </div>
+      </motion.div>
 
       {/* Task Cards */}
-      <div className="grid grid-cols-1 gap-4">
+      <motion.div className="grid grid-cols-1 gap-4" variants={containerVariants}>
         {filteredTasks.length > 0 ? (
           filteredTasks.map((task) => {
             const isCompleted = completedTaskIds.includes(task.id);
@@ -84,13 +119,20 @@ export const TaskList: React.FC<TaskListProps> = ({ onSelectTask, tasks, userRol
             const isCritical = remaining <= 10;
 
             return (
-              <div
+              <motion.div
                 key={task.id}
-                className={`group relative bg-white dark:bg-zinc-900 rounded-2xl border transition-all duration-300 overflow-hidden
+                variants={cardItemVariants}
+                whileHover={!isCompleted ? {
+                  y: -4,
+                  scale: 1.005,
+                  transition: { duration: 0.3, ease: [0.25, 0.46, 0.45, 0.94] },
+                } : {}}
+                whileTap={!isCompleted ? { scale: 0.995 } : {}}
+                className={`group relative bg-white dark:bg-zinc-900 rounded-2xl border transition-[border-color,box-shadow] duration-300 overflow-hidden glass-shine
                   ${isCompleted
                     ? 'opacity-60 cursor-not-allowed border-slate-200 dark:border-white/10'
                     : userRole === 'contributor'
-                      ? 'cursor-pointer border-slate-200 dark:border-white/10 hover:border-blue-500 hover:shadow-xl hover:shadow-blue-500/5 hover:-translate-y-0.5'
+                      ? 'cursor-pointer border-slate-200 dark:border-white/10 hover:border-blue-500 hover:shadow-xl hover:shadow-blue-500/5'
                       : 'border-slate-200 dark:border-white/10'
                   }`}
                 onClick={() => userRole === 'contributor' && !isCompleted && onSelectTask(task)}
@@ -131,7 +173,7 @@ export const TaskList: React.FC<TaskListProps> = ({ onSelectTask, tasks, userRol
                         {getTaskIcon(task.type as TaskType)}
                         {task.type}
                       </span>
-                      <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-[11px] font-bold uppercase tracking-wide bg-white/10 text-stone-300 border border-white/10">
+                      <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-[11px] font-bold uppercase tracking-wide bg-slate-100 dark:bg-white/10 text-slate-700 dark:text-stone-300 border border-slate-200 dark:border-white/10">
                         <Globe className="h-3 w-3" /> {task.language}
                       </span>
                       <span className={`inline-flex items-center px-2.5 py-1 rounded-full text-[11px] font-bold uppercase tracking-wide border ${task.difficulty === 'Beginner'
@@ -210,11 +252,11 @@ export const TaskList: React.FC<TaskListProps> = ({ onSelectTask, tasks, userRol
 
                     {/* Title — no clamp, always fully visible */}
                     <div>
-                      <h3 className="text-lg md:text-xl font-bold text-white group-hover:text-blue-400 transition-colors leading-snug">
+                      <h3 className="text-lg md:text-xl font-bold text-slate-900 dark:text-white group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors leading-snug">
                         {task.title}
                       </h3>
                       {task.project && task.project !== 'NA' && !task.imageUrl && (
-                        <p className="text-xs text-stone-400 mt-0.5 uppercase tracking-wider font-semibold">{task.project}</p>
+                        <p className="text-xs text-slate-500 dark:text-stone-400 mt-0.5 uppercase tracking-wider font-semibold">{task.project}</p>
                       )}
                     </div>
 
@@ -222,9 +264,9 @@ export const TaskList: React.FC<TaskListProps> = ({ onSelectTask, tasks, userRol
                     {task.requirements && task.requirements.length > 0 &&
                       task.requirements.some(r => r && r !== 'NA') && (
                         <div className="flex items-center gap-2 flex-wrap">
-                          <span className="text-xs text-stone-400 uppercase tracking-wide font-bold">Requires:</span>
+                          <span className="text-xs text-slate-500 dark:text-stone-400 uppercase tracking-wide font-bold">Requires:</span>
                           {task.requirements.filter(r => r && r !== 'NA').map((req, i) => (
-                            <span key={i} className="inline-flex items-center px-2 py-0.5 bg-white/10 text-stone-300 rounded-md text-xs font-semibold">
+                            <span key={i} className="inline-flex items-center px-2 py-0.5 bg-slate-200 dark:bg-white/10 text-slate-700 dark:text-stone-300 rounded-md text-xs font-semibold">
                               {req}
                             </span>
                           ))}
@@ -233,7 +275,7 @@ export const TaskList: React.FC<TaskListProps> = ({ onSelectTask, tasks, userRol
 
                     {/* Bottom row: time, payout, quota, CTA */}
                     <div className="flex items-center gap-3 mt-auto pt-1 flex-wrap">
-                      <span className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-white/5 border border-white/10 rounded-lg text-sm font-semibold text-white">
+                      <span className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-slate-100 dark:bg-white/5 border border-slate-200 dark:border-white/10 rounded-lg text-sm font-semibold text-slate-900 dark:text-white">
                         <Clock className="h-3.5 w-3.5 text-stone-400" />
                         {task.estimatedTimeSec} sec
                       </span>
@@ -270,7 +312,7 @@ export const TaskList: React.FC<TaskListProps> = ({ onSelectTask, tasks, userRol
                     </div>
                   </div>
                 </div>
-              </div>
+              </motion.div>
             );
           })
         ) : (
@@ -278,14 +320,14 @@ export const TaskList: React.FC<TaskListProps> = ({ onSelectTask, tasks, userRol
             <div className="h-20 w-20 bg-slate-100 dark:bg-white/10 rounded-full flex items-center justify-center mb-6">
               <Filter className="h-10 w-10 text-slate-400 dark:text-stone-400" />
             </div>
-            <h3 className="text-xl font-bold text-white">No active campaigns</h3>
+            <h3 className="text-xl font-bold text-slate-900 dark:text-white">No active campaigns</h3>
             <p className="text-stone-500 mt-2 text-base">Try adjusting your filters or come back later.</p>
             <Button variant="secondary" className="mt-6 bg-slate-100 dark:bg-white/5 text-slate-700 dark:text-white border-slate-200 dark:border-white/10" onClick={() => setFilterType('All')}>
               Clear Filters
             </Button>
           </div>
         )}
-      </div>
-    </div>
+      </motion.div>
+    </motion.div>
   );
 };

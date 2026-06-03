@@ -1,5 +1,6 @@
 import express from "express";
 import cors from "cors";
+import rateLimit from "express-rate-limit";
 
 import adminTasks from "./routes/admin.tasks";
 import adminStats from "./routes/admin.stats";
@@ -25,6 +26,16 @@ app.use(
 
 // ✅ JSON body parser
 app.use(express.json());
+
+// ✅ Global Rate Limiting
+const globalLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000, // 15 minutes
+  max: 200, // Limit each IP to 200 requests per `window` (here, per 15 minutes)
+  standardHeaders: true,
+  legacyHeaders: false,
+  message: { error: "Too many requests from this IP, please try again after 15 minutes" },
+});
+app.use(globalLimiter);
 
 // ✅ Health check route (used to keep Render free-tier awake)
 app.get("/health", (_req, res) => {

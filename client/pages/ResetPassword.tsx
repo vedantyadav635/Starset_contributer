@@ -99,9 +99,9 @@ export const ResetPassword: React.FC<ResetPasswordProps> = ({
     const strength = getStrengthLabel();
 
     return (
-        <div className="min-h-screen flex flex-col items-center justify-center p-4 relative overflow-hidden bg-black text-white">
+        <div className="min-h-screen flex flex-col items-center justify-center p-4 relative overflow-hidden bg-slate-50 dark:bg-black text-slate-900 dark:text-white">
             {/* HEADER */}
-            <nav className="fixed top-0 w-full z-50 border-b border-white/5 bg-black/50 backdrop-blur-xl">
+            <nav className="fixed top-0 w-full z-50 border-b border-slate-200 dark:border-white/5 bg-white/50 dark:bg-black/50 backdrop-blur-xl">
                 <div className="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
                     <div
                         className="flex items-center gap-2 cursor-pointer"
@@ -118,7 +118,7 @@ export const ResetPassword: React.FC<ResetPasswordProps> = ({
             <div className="w-full max-w-md z-10 pt-20">
                 <div className="mb-8 text-center">
                     <div className="flex justify-center mb-4">
-                        <div className="h-16 w-16 rounded-2xl flex items-center justify-center border border-white/10 backdrop-blur-md">
+                        <div className="h-16 w-16 rounded-2xl flex items-center justify-center border border-slate-200 dark:border-white/10 backdrop-blur-md">
                             <ShieldCheck className="h-8 w-8 text-teal-500" />
                         </div>
                     </div>
@@ -129,7 +129,7 @@ export const ResetPassword: React.FC<ResetPasswordProps> = ({
                     </p>
                 </div>
 
-                <div className="bg-zinc-900/40 backdrop-blur-xl p-8 rounded-2xl border border-white/10 shadow-xl">
+                <div className="bg-slate-100/40 dark:bg-zinc-900/40 backdrop-blur-xl p-8 rounded-2xl border border-slate-200 dark:border-white/10 shadow-xl">
                     {/* Success State */}
                     {success ? (
                         <div className="text-center space-y-4">
@@ -138,7 +138,7 @@ export const ResetPassword: React.FC<ResetPasswordProps> = ({
                                     <CheckCircle2 className="h-8 w-8 text-emerald-500" />
                                 </div>
                             </div>
-                            <h2 className="text-lg font-bold text-white">
+                            <h2 className="text-lg font-bold text-slate-900 dark:text-white">
                                 Password Updated!
                             </h2>
                             <p className="text-sm text-zinc-400 leading-relaxed">
@@ -178,7 +178,7 @@ export const ResetPassword: React.FC<ResetPasswordProps> = ({
                                         <input
                                             type={showPassword ? "text" : "password"}
                                             required
-                                            className="w-full pl-12 pr-12 py-3 rounded-lg border border-white/10 bg-zinc-900/60 text-white placeholder-zinc-400 focus:ring-2 focus:ring-teal-500/20 focus:border-teal-600 outline-none transition-all"
+                                            className="w-full pl-12 pr-12 py-3 rounded-lg border border-slate-200 dark:border-white/10 bg-slate-50 dark:bg-zinc-900/60 text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-zinc-400 focus:ring-2 focus:ring-teal-500/20 focus:border-teal-600 outline-none transition-all"
                                             placeholder="Enter new password"
                                             value={password}
                                             onChange={(e) => setPassword(e.target.value)}
@@ -258,7 +258,7 @@ export const ResetPassword: React.FC<ResetPasswordProps> = ({
                                         <input
                                             type={showConfirmPassword ? "text" : "password"}
                                             required
-                                            className={`w-full pl-12 pr-12 py-3 rounded-lg border border-white/10 bg-zinc-900/60 text-white placeholder-zinc-400 focus:ring-2 focus:ring-teal-500/20 outline-none transition-all ${confirmPassword.length > 0
+                                            className={`w-full pl-12 pr-12 py-3 rounded-lg border border-slate-200 dark:border-white/10 bg-slate-50 dark:bg-zinc-900/60 text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-zinc-400 focus:ring-2 focus:ring-teal-500/20 outline-none transition-all ${confirmPassword.length > 0
                                                 ? password === confirmPassword
                                                     ? "border-emerald-500 focus:border-emerald-500"
                                                     : "border-red-500 focus:border-red-500"

@@ -1,21 +1,29 @@
 {
-  "name": "Starset Intelligence",
+  "name": "Starset Intelligence — Earn Money by Training AI",
   "short_name": "Starset",
+  "description": "Starset Intelligence is the #1 AI data contribution platform. Earn real money daily by completing simple AI training tasks. Free to join, instant payouts.",
   "start_url": "/",
   "display": "standalone",
-  "background_color": "#020205",
+  "background_color": "#f8fafc",
   "theme_color": "#2563eb",
+  "orientation": "portrait-primary",
+  "scope": "/",
+  "lang": "en-US",
+  "categories": ["business", "productivity", "finance"],
   "icons": [
     {
       "src": "/logo.png",
       "sizes": "192x192",
-      "type": "image/png"
+      "type": "image/png",
+      "purpose": "any maskable"
     },
     {
       "src": "/logo.png",
       "sizes": "512x512",
-      "type": "image/png"
+      "type": "image/png",
+      "purpose": "any maskable"
     }
   ],
-  "description": "Starset Intelligence: The world's most innovative AI data community."
+  "screenshots": [],
+  "prefer_related_applications": false
 }

@@ -10,12 +10,12 @@ interface LogoProps {
  * Uses the brand PNG with mix-blend-mode to ensure
  * the white background is invisible on dark surfaces.
  */
-export const Logo: React.FC<LogoProps> = ({ className = "h-10 w-10" }) => {
+export const Logo: React.FC<LogoProps> = ({ className = "h-10 w-10", animated = false }) => {
   return (
     <img
       src="/logo.png"
       alt="Starset Logo"
-      className={`${className} mix-blend-multiply dark:mix-blend-lighten`}
+      className={`${className} ${animated ? 'animate-pulse' : ''}`}
       style={{ objectFit: 'contain' }}
       draggable={false}
     />
