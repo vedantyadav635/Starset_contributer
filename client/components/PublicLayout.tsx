@@ -81,9 +81,15 @@ const SEO_CONFIG: Record<string, { title: string; description: string; keywords:
     keywords: 'data processing, DPA, Starset data, data agreement, starset.online data processing',
     canonicalPath: '/data-processing',
   },
+  'language-directory': {
+    title: 'Regional Indian Languages Directory — Starset Intelligence',
+    description: 'Explore opportunities to train AI in Hindi, Tamil, Hinglish, Bengali, Telugu, English, and more regional Indian languages on Starset Intelligence. High payouts and flexible hours.',
+    keywords: 'AI languages, train AI Hindi, regional Indian languages, Hinglish AI, Tamil AI jobs, Bengali AI tasks, Indian languages directory, Starset languages, English AI training',
+    canonicalPath: '/language-directory',
+  },
 };
 
-export type PublicPageType = 'home' | 'about' | 'contributors' | 'money' | 'terms' | 'privacy' | 'cookies' | 'data-processing' | 'task-types' | 'careers' | 'blog' | 'contact';
+export type PublicPageType = 'home' | 'about' | 'contributors' | 'money' | 'terms' | 'privacy' | 'cookies' | 'data-processing' | 'task-types' | 'careers' | 'blog' | 'contact' | 'language-directory';
 
 interface PublicLayoutProps {
    children: React.ReactNode;
