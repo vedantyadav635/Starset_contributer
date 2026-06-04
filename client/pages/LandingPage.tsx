@@ -2,7 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { Button } from '../components/Button';
 import { ArrowRight, Activity, Database, Server, Zap, Globe, ShieldCheck, Lock, Smartphone, Banknote, Mic, Image as ImageIcon, MessageSquare, CheckCircle2, ChevronDown, Play, Star, TrendingUp, Users, Cpu, FileText, Sparkles, Brain, Network, MousePointer2 } from 'lucide-react';
 import { PublicLayout, PublicPageType } from '../components/PublicLayout';
-import { motion, AnimatePresence, useMotionValue, useSpring, useTransform } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
+import SplitText from '../components/SplitText';
 
 interface LandingPageProps {
    onEnterApp: () => void;
@@ -62,13 +63,11 @@ const EcosystemVisual = () => {
                   </div>
                   
                   <div className="flex items-end gap-1 h-8 mb-4">
-                     {[0.4, 0.7, 0.5, 0.9, 0.6, 0.8, 0.4, 0.6, 0.9, 0.7].map((h, i) => (
-                        <motion.div 
+                     {[40, 70, 50, 90, 60, 80, 40, 60, 90, 70].map((h, i) => (
+                        <div
                            key={i}
-                           initial={{ height: 0 }}
-                           animate={{ height: ['' + (h * 100) + '%', '' + ((1 - h) * 100) + '%', '' + (h * 100) + '%'] }}
-                           transition={{ duration: 1.5, repeat: Infinity, delay: 0.6 + i * 0.08 }}
-                           className="flex-1 bg-indigo-500/30 dark:bg-indigo-500/50 rounded-full"
+                           className="flex-1 bg-indigo-500/30 dark:bg-indigo-500/50 rounded-full animate-pulse"
+                           style={{ height: `${h}%`, animationDelay: `${i * 0.08}s`, animationDuration: '1.5s' }}
                         />
                      ))}
                   </div>
@@ -95,11 +94,7 @@ const EcosystemVisual = () => {
                >
                   <div className="flex items-center justify-between mb-4">
                      <div className="flex items-center gap-3">
-                        <motion.div
-                           className="w-2 h-2 rounded-full bg-amber-500"
-                           animate={{ scale: [1, 1.5, 1], opacity: [1, 0.5, 1] }}
-                           transition={{ duration: 1.5, repeat: Infinity }}
-                        />
+                        <div className="w-2 h-2 rounded-full bg-amber-500 animate-pulse" />
                         <span className="text-[10px] font-black text-slate-500 uppercase tracking-widest">Quality Check</span>
                      </div>
                      <Cpu className="w-4 h-4 text-slate-400 animate-spin-slower" />
@@ -166,12 +161,137 @@ const EcosystemVisual = () => {
    );
 };;
 
+export const LANGUAGES_DIRECTORY = [
+  {
+    id: "english",
+    name: "English",
+    nativeName: "English",
+    category: "hinglish",
+    payout: "₹250 - ₹450 / hr",
+    dialects: "Indian English, Standard Accent",
+    tasks: ["Dialogue Verification", "Audio Quality Check"],
+    payoutBonus: "+ accuracy bonus",
+    popular: true,
+  },
+  {
+    id: "hinglish",
+    name: "Hinglish",
+    nativeName: "Conversational Mix",
+    category: "hinglish",
+    payout: "₹250 - ₹400 / hr",
+    dialects: "Urban, Text-speak, Hinglish slang",
+    tasks: ["Chatbot Evaluation", "Voice Commands"],
+    payoutBonus: "+ bonuses for slang accuracy",
+    popular: true,
+  },
+  {
+    id: "hindi",
+    name: "Hindi",
+    nativeName: "हिन्दी",
+    category: "north",
+    payout: "₹180 - ₹320 / hr",
+    dialects: "Standard, Bhojpuri, Haryanvi, Rajasthani",
+    tasks: ["Audio Recording", "Sentence Translation"],
+    payoutBonus: "+ dialect bonus",
+    popular: true,
+  },
+  {
+    id: "bengali",
+    name: "Bengali",
+    nativeName: "বাংলা",
+    category: "north",
+    payout: "₹200 - ₹350 / hr",
+    dialects: "Standard, Ghoti, Bangal",
+    tasks: ["Conversational Audio", "Text Proofreading"],
+    payoutBonus: "",
+    popular: false,
+  },
+  {
+    id: "punjabi",
+    name: "Punjabi",
+    nativeName: "ਪੰਜਾਬੀ",
+    category: "north",
+    payout: "₹220 - ₹360 / hr",
+    dialects: "Majhi, Malwai, Doabi",
+    tasks: ["Voice Command Recording", "Tone Verification"],
+    payoutBonus: "",
+    popular: false,
+  },
+  {
+    id: "gujarati",
+    name: "Gujarati",
+    nativeName: "ગુજરાતી",
+    category: "north",
+    payout: "₹190 - ₹330 / hr",
+    dialects: "Standard, Kathiyawadi, Surati",
+    tasks: ["Audio Annotation", "Dialogue Writing"],
+    payoutBonus: "",
+    popular: false,
+  },
+  {
+    id: "marathi",
+    name: "Marathi",
+    nativeName: "मराठी",
+    category: "north",
+    payout: "₹200 - ₹340 / hr",
+    dialects: "Puneri, Koli, Varhadi",
+    tasks: ["Speech Collection", "Text Annotation"],
+    payoutBonus: "",
+    popular: false,
+  },
+  {
+    id: "tamil",
+    name: "Tamil",
+    nativeName: "தமிழ்",
+    category: "south",
+    payout: "₹220 - ₹380 / hr",
+    dialects: "Madras Bashai, Kongu, Nellai",
+    tasks: ["Pronunciation Rating", "Audio Collection"],
+    payoutBonus: "+ high quality multiplier",
+    popular: true,
+  },
+  {
+    id: "telugu",
+    name: "Telugu",
+    nativeName: "తెలుగు",
+    category: "south",
+    payout: "₹210 - ₹360 / hr",
+    dialects: "Telangana, Andhra, Rayalaseema",
+    tasks: ["Dialogue Verification", "Voice Over"],
+    payoutBonus: "",
+    popular: true,
+  },
+  {
+    id: "kannada",
+    name: "Kannada",
+    nativeName: "ಕನ್ನಡ",
+    category: "south",
+    payout: "₹200 - ₹350 / hr",
+    dialects: "Mysore, Dharwad, Kundapura",
+    tasks: ["Sentence Validation", "Audio Collection"],
+    payoutBonus: "",
+    popular: false,
+  },
+  {
+    id: "malayalam",
+    name: "Malayalam",
+    nativeName: "മലയാളം",
+    category: "south",
+    payout: "₹220 - ₹370 / hr",
+    dialects: "Malabar, Travancore, Central",
+    tasks: ["Audio Transcription", "Dialog Collection"],
+    payoutBonus: "",
+    popular: false,
+  }
+];
+
 export const LandingPage: React.FC<LandingPageProps> = ({ onEnterApp, onStartSignup, onNavigate }) => {
    const [activeNodeCount, setActiveNodeCount] = useState(8432);
    const [openFaq, setOpenFaq] = useState<number | null>(null);
 
    const words = ["your daily tasks", "your audio", "your conversations", "your videos", "your camera roll"];
    const [wordIndex, setWordIndex] = useState(0);
+   const [selectedCategory, setSelectedCategory] = useState<'all' | 'north' | 'south' | 'hinglish'>('all');
 
    useEffect(() => {
       const interval = setInterval(() => {
@@ -309,7 +429,6 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onEnterApp, onStartSig
                >
                   <EcosystemVisual />
                </motion.div>
-
             </div>
          </section>
 
@@ -340,17 +459,189 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onEnterApp, onStartSig
             </div>
          </section>
 
+         {/* --- REGIONAL LANGUAGE DIRECTORY SECTION --- */}
+         <section className="py-20 md:py-28 relative overflow-hidden bg-gradient-to-b from-transparent via-blue-50/30 to-transparent dark:via-blue-950/10">
+            {/* Ambient Background Glow */}
+            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-blue-500/10 dark:bg-blue-500/5 rounded-full blur-[120px] pointer-events-none -z-10"></div>
+            
+            <motion.div
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, margin: "-100px" }}
+                transition={{ duration: 0.8, ease: "easeOut" }}
+                className="max-w-7xl mx-auto px-6 relative z-10"
+             >
+               <div className="text-center mb-12 md:mb-16">
+                  <span className="px-4 py-1.5 rounded-full text-xs md:text-sm font-black bg-blue-500/10 dark:bg-blue-500/20 text-blue-600 dark:text-blue-400 border border-blue-500/20 tracking-wider uppercase mb-4 block mx-auto w-fit">
+                     Regional Indian Languages
+                  </span>
+                  <SplitText
+                     text="Train AI in Your Native Tongue"
+                     className="text-3xl sm:text-4xl md:text-5xl font-black text-slate-900 dark:text-white mb-4 tracking-tight"
+                     delay={40}
+                     duration={0.6}
+                     ease="power3.out"
+                     splitType="chars"
+                     from={{ opacity: 0, y: 40 }}
+                     to={{ opacity: 1, y: 0 }}
+                     threshold={0.1}
+                     rootMargin="-100px"
+                     textAlign="center"
+                     tag="h2"
+                  />
+                  <p className="text-md md:text-xl text-zinc-500 dark:text-zinc-400 max-w-2xl mx-auto">
+                     Explore audio collection, translation, and validation projects across 10+ major Indian languages and regional dialects. No AI experience needed.
+                  </p>
+               </div>
+
+               {/* Filter Tabs */}
+               <div className="flex justify-center mb-12">
+                  <div className="flex flex-wrap gap-2 p-1.5 bg-slate-100 dark:bg-zinc-900/60 backdrop-blur-md rounded-2xl border border-slate-200/50 dark:border-white/5 max-w-full">
+                     {(['all', 'north', 'south', 'hinglish'] as const).map((cat) => {
+                        const label = {
+                           all: "All Languages",
+                           north: "North India",
+                           south: "South India",
+                           hinglish: "Conversational / Hinglish"
+                        }[cat];
+                        const isActive = selectedCategory === cat;
+                        return (
+                           <button
+                              key={cat}
+                              onClick={() => setSelectedCategory(cat)}
+                              className={`px-5 py-2.5 rounded-xl text-sm font-bold transition-all duration-300 ${
+                                 isActive
+                                    ? "bg-white dark:bg-zinc-800 text-blue-600 dark:text-blue-400 shadow-[0_4px_20px_-4px_rgba(37,99,235,0.2)]"
+                                    : "text-slate-600 dark:text-zinc-400 hover:text-slate-900 dark:hover:text-white"
+                              }`}
+                           >
+                              {label}
+                           </button>
+                        );
+                     })}
+                  </div>
+               </div>
+
+               {/* Grid Layout of Language Cards */}
+               <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
+                  {LANGUAGES_DIRECTORY.filter(lang => selectedCategory === 'all' || lang.category === selectedCategory).slice(0, 6).map((lang) => (
+                     <motion.div
+                        key={lang.id}
+                        layout
+                        initial={{ opacity: 0, y: 20 }}
+                        whileInView={{ opacity: 1, y: 0 }}
+                        viewport={{ once: true }}
+                        transition={{ duration: 0.4 }}
+                        onClick={() => onNavigate('signup')}
+                        className="group relative flex flex-col justify-between p-6 md:p-8 rounded-3xl bg-white/60 dark:bg-zinc-900/40 backdrop-blur-md border border-slate-200/60 dark:border-white/5 hover:border-blue-500/30 dark:hover:border-blue-500/30 shadow-md hover:shadow-xl hover:-translate-y-1 transition-all duration-300 cursor-pointer"
+                     >
+                        {/* Popular Badge */}
+                        {lang.popular && (
+                           <div className="absolute top-4 right-4 px-3 py-1 rounded-full text-[10px] font-black tracking-wider uppercase bg-amber-500/10 dark:bg-amber-500/20 text-amber-600 dark:text-amber-400 border border-amber-500/20">
+                              High Volume
+                           </div>
+                        )}
+
+                        <div className="space-y-4">
+                           <div className="flex items-center gap-3">
+                              <div className="w-12 h-12 rounded-2xl flex items-center justify-center bg-blue-50 dark:bg-blue-950/40 text-blue-600 dark:text-blue-400 font-bold text-xl uppercase group-hover:scale-110 transition-transform">
+                                 {lang.name[0]}
+                              </div>
+                              <div>
+                                 <h3 className="text-xl font-extrabold text-slate-900 dark:text-white flex items-center gap-2">
+                                    {lang.name}
+                                    <span className="text-sm font-medium text-slate-400 dark:text-zinc-500">
+                                       ({lang.nativeName})
+                                    </span>
+                                 </h3>
+                                 <p className="text-xs font-bold text-blue-600 dark:text-blue-400 uppercase tracking-wider">
+                                    {lang.category === 'hinglish' ? 'Conversational' : lang.category === 'north' ? 'North Dialects' : 'South Dialects'}
+                                 </p>
+                              </div>
+                           </div>
+
+                           <div className="py-2 border-y border-slate-100 dark:border-white/5 space-y-2">
+                              <div className="flex items-baseline justify-between">
+                                 <span className="text-xs text-slate-400 dark:text-zinc-500 font-medium">Payout Rate</span>
+                                 <span className="text-lg font-black text-emerald-600 dark:text-emerald-400">{lang.payout}</span>
+                              </div>
+                              {lang.payoutBonus && (
+                                 <div className="text-[10px] text-right font-semibold text-amber-600 dark:text-amber-400">
+                                    {lang.payoutBonus}
+                                 </div>
+                              )}
+                           </div>
+
+                           <div className="space-y-2">
+                              <div>
+                                 <h4 className="text-xs font-bold text-slate-500 dark:text-zinc-400 uppercase tracking-widest mb-1">Supported Dialects</h4>
+                                 <p className="text-sm font-medium text-slate-700 dark:text-zinc-300">{lang.dialects}</p>
+                              </div>
+                              <div>
+                                 <h4 className="text-xs font-bold text-slate-500 dark:text-zinc-400 uppercase tracking-widest mb-1">Active Projects</h4>
+                                 <div className="flex flex-wrap gap-1.5 mt-1">
+                                    {lang.tasks.map((task, i) => (
+                                       <span key={i} className="px-2.5 py-1 rounded-lg text-xs font-semibold bg-slate-100 dark:bg-zinc-800 text-slate-700 dark:text-zinc-300">
+                                          {task}
+                                       </span>
+                                    ))}
+                                 </div>
+                              </div>
+                           </div>
+                        </div>
+
+                        <div className="mt-8">
+                           <div
+                              className="w-full h-12 flex items-center justify-center font-bold text-sm bg-slate-100 dark:bg-zinc-800 text-slate-800 dark:text-zinc-200 group-hover:bg-blue-600 dark:group-hover:bg-blue-600 group-hover:text-white dark:group-hover:text-white transition-all duration-300 rounded-xl shadow-inner group-hover:shadow-[0_4px_20px_-4px_rgba(37,99,235,0.4)]"
+                           >
+                              Contribute Now
+                           </div>
+                        </div>
+                     </motion.div>
+                  ))}
+               </div>
+
+               {/* See All Button */}
+               {LANGUAGES_DIRECTORY.filter(lang => selectedCategory === 'all' || lang.category === selectedCategory).length > 6 && (
+                  <div className="mt-12 text-center">
+                     <Button
+                        onClick={() => onNavigate('language-directory')}
+                        variant="outline"
+                        className="px-10 py-4 text-base font-black group rounded-2xl border-2 border-slate-200 dark:border-white/10 hover:bg-blue-600 dark:hover:bg-blue-600 hover:text-white dark:hover:text-white hover:border-blue-600 dark:hover:border-blue-600 transition-all duration-300 shadow-md"
+                     >
+                        See All Languages & Tasks
+                        <ArrowRight className="w-5 h-5 ml-2 group-hover:translate-x-1.5 transition-transform" />
+                     </Button>
+                  </div>
+               )}
+            </motion.div>
+
+         </section>
+
          {/* --- WHY STARSET / BENEFITS --- */}
          <section className="py-8 md:py-24 px-4 md:px-6 relative">
             <motion.div
-               initial={{ opacity: 0 }}
-               whileInView={{ opacity: 1 }}
+               initial={{ opacity: 0, y: 30 }}
+               whileInView={{ opacity: 1, y: 0 }}
                viewport={{ once: true, margin: "-100px" }}
-               transition={{ duration: 0.8 }}
+               transition={{ duration: 0.8, ease: "easeOut" }}
                className="max-w-7xl mx-auto"
             >
                <div className="text-center mb-6 md:mb-20 px-2">
-                  <h2 className="text-2xl sm:text-4xl md:text-6xl font-black text-slate-900 dark:text-white mb-2 md:mb-6 tracking-tight">Why Contribute?</h2>
+                  <SplitText
+                     text="Why Contribute?"
+                     className="text-2xl sm:text-4xl md:text-6xl font-black text-slate-900 dark:text-white mb-2 md:mb-6 tracking-tight"
+                     delay={40}
+                     duration={0.6}
+                     ease="power3.out"
+                     splitType="chars"
+                     from={{ opacity: 0, y: 40 }}
+                     to={{ opacity: 1, y: 0 }}
+                     threshold={0.1}
+                     rootMargin="-100px"
+                     textAlign="center"
+                     tag="h2"
+                  />
                   <p className="text-sm md:text-2xl text-zinc-500 max-w-3xl mx-auto">The most flexible and rewarding way to join the AI economy.</p>
                </div>
 
@@ -396,10 +687,10 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onEnterApp, onStartSig
             <div className="absolute inset-0 bg-transparent opacity-50 pointer-events-none"></div>
 
             <motion.div
-               initial={{ opacity: 0 }}
-               whileInView={{ opacity: 1 }}
+               initial={{ opacity: 0, y: 30 }}
+               whileInView={{ opacity: 1, y: 0 }}
                viewport={{ once: true, margin: "-100px" }}
-               transition={{ duration: 0.8 }}
+               transition={{ duration: 0.8, ease: "easeOut" }}
                className="max-w-7xl mx-auto relative z-10"
             >
                <div className="flex flex-col items-center justify-center text-center mb-12 md:mb-20 gap-6">
@@ -477,16 +768,27 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onEnterApp, onStartSig
          {/* --- HOW IT WORKS (CLEAN & MINIMAL) --- */}
          <section className="py-16 md:py-24 px-4 md:px-6 relative overflow-hidden bg-slate-50/50 dark:bg-zinc-950/50 border-y border-slate-200 dark:border-white/5">
             <motion.div
-               initial={{ opacity: 0 }}
-               whileInView={{ opacity: 1 }}
+               initial={{ opacity: 0, y: 30 }}
+               whileInView={{ opacity: 1, y: 0 }}
                viewport={{ once: true, margin: "-100px" }}
-               transition={{ duration: 0.8 }}
+               transition={{ duration: 0.8, ease: "easeOut" }}
                className="max-w-7xl mx-auto relative z-10"
             >
                <div className="text-center mb-16 md:mb-24 px-2">
-                  <h2 className="text-3xl md:text-5xl font-black text-slate-900 dark:text-white mb-4 tracking-tighter">
-                     Start Earning in Minutes
-                  </h2>
+                  <SplitText
+                     text="Start Earning in Minutes"
+                     className="text-3xl md:text-5xl font-black text-slate-900 dark:text-white mb-4 tracking-tighter"
+                     delay={40}
+                     duration={0.6}
+                     ease="power3.out"
+                     splitType="chars"
+                     from={{ opacity: 0, y: 40 }}
+                     to={{ opacity: 1, y: 0 }}
+                     threshold={0.1}
+                     rootMargin="-100px"
+                     textAlign="center"
+                     tag="h2"
+                  />
                   <p className="text-base md:text-lg text-slate-500 dark:text-zinc-400 max-w-2xl mx-auto">
                      No complex onboarding. Just create an account, select a task, and start contributing.
                   </p>
@@ -566,10 +868,10 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onEnterApp, onStartSig
          {/* --- COMMUNITY STORIES --- */}
          <section className="py-8 md:py-24 relative">
             <motion.div
-               initial={{ opacity: 0 }}
-               whileInView={{ opacity: 1 }}
+               initial={{ opacity: 0, y: 30 }}
+               whileInView={{ opacity: 1, y: 0 }}
                viewport={{ once: true, margin: "-100px" }}
-               transition={{ duration: 0.8 }}
+               transition={{ duration: 0.8, ease: "easeOut" }}
                className="max-w-7xl mx-auto px-6"
             >
                <h2 className="text-2xl md:text-4xl font-bold text-center text-slate-900 dark:text-white mb-6 md:mb-16">Community Stories</h2>
@@ -617,10 +919,10 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onEnterApp, onStartSig
          {/* --- FAQ SECTION --- */}
          <section className="py-16 md:py-24 relative">
             <motion.div
-               initial={{ opacity: 0 }}
-               whileInView={{ opacity: 1 }}
+               initial={{ opacity: 0, y: 30 }}
+               whileInView={{ opacity: 1, y: 0 }}
                viewport={{ once: true, margin: "-100px" }}
-               transition={{ duration: 0.8 }}
+               transition={{ duration: 0.8, ease: "easeOut" }}
                className="max-w-3xl mx-auto px-4 md:px-6"
             >
                <h2 className="text-2xl sm:text-3xl md:text-4xl font-black text-center text-slate-900 dark:text-white mb-10 md:mb-16 tracking-tight">Frequently Asked Questions</h2>
