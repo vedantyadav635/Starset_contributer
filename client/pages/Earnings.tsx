@@ -304,7 +304,8 @@ export const Earnings: React.FC = () => {
 
       {/* Add Payment Method Modal */}
       <AnimatePresence>
-        <motion.div
+        {showAddMethod && (
+          <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
