@@ -16,7 +16,13 @@ const getInitialTheme = (): Theme => {
   if (typeof window === 'undefined') return 'light';
 
   const storedTheme = window.localStorage.getItem(THEME_STORAGE_KEY);
-  return storedTheme === 'dark' ? 'dark' : 'light';
+  if (storedTheme === 'dark' || storedTheme === 'light') {
+    return storedTheme as Theme;
+  }
+
+  // Fallback to system preference (auto theme)
+  const systemPrefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+  return systemPrefersDark ? 'dark' : 'light';
 };
 
 export const ThemeProvider: React.FC<React.PropsWithChildren> = ({ children }) => {
