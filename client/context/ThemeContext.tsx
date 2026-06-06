@@ -20,9 +20,8 @@ const getInitialTheme = (): Theme => {
     return storedTheme as Theme;
   }
 
-  // Fallback to system preference (auto theme)
-  const systemPrefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-  return systemPrefersDark ? 'dark' : 'light';
+  // Default to light theme
+  return 'light';
 };
 
 export const ThemeProvider: React.FC<React.PropsWithChildren> = ({ children }) => {
