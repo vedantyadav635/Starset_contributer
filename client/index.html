@@ -1,12 +1,12 @@
 <!DOCTYPE html>
-<html lang="en" prefix="og: https://ogp.me/ns#">
+<html lang="en" class="light" prefix="og: https://ogp.me/ns#">
 
 <head>
   <script>
     (function() {
       try {
         const storedTheme = localStorage.getItem('starset-theme');
-        const isDark = storedTheme === 'dark' || (!storedTheme && window.matchMedia('(prefers-color-scheme: dark)').matches);
+        const isDark = storedTheme === 'dark';
         document.documentElement.classList.toggle('dark', isDark);
         document.documentElement.classList.toggle('light', !isDark);
       } catch (e) {}
