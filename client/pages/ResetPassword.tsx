@@ -10,6 +10,7 @@ import {
     ShieldCheck,
 } from "lucide-react";
 import { Logo } from "../components/Logo";
+import { ThemeToggle } from "../components/ThemeToggle";
 import { supabase } from "../supabaseClient";
 
 interface ResetPasswordProps {
@@ -112,6 +113,7 @@ export const ResetPassword: React.FC<ResetPasswordProps> = ({
                             Starset
                         </span>
                     </div>
+                    <ThemeToggle />
                 </div>
             </nav>
 

@@ -572,9 +572,6 @@ const App: React.FC = () => {
   const renderMainContent = () => {
     const renderAuthView = (content: React.ReactNode) => (
       <>
-        <div className="fixed right-4 top-4 z-[200]">
-          <ThemeToggle />
-        </div>
         {content}
       </>
     );

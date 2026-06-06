@@ -11,6 +11,7 @@ import {
     Key,
 } from "lucide-react";
 import { Logo } from "../components/Logo";
+import { ThemeToggle } from "../components/ThemeToggle";
 import { supabase } from "../supabaseClient";
 
 interface ForgotPasswordProps {
@@ -111,6 +112,7 @@ export const ForgotPassword: React.FC<ForgotPasswordProps> = ({
                             Starset
                         </span>
                     </div>
+                    <ThemeToggle />
                 </div>
             </nav>
 

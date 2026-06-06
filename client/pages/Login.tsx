@@ -13,6 +13,7 @@ import {
   Moon,
 } from "lucide-react";
 import { Logo } from "../components/Logo";
+import { ThemeToggle } from "../components/ThemeToggle";
 import { UserRole } from "../types";
 import { supabase } from "../supabaseClient";
 import { useAuth } from "../context/AuthContext";
@@ -132,6 +133,7 @@ export const Login: React.FC<LoginProps> = ({
           >
             <ArrowRight className="h-4 w-4 rotate-180" /> Back to Home
           </button>
+          <ThemeToggle />
         </div>
       </div>
 
