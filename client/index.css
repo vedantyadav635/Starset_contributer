@@ -4,6 +4,8 @@
 
 @import "tailwindcss";
 
+@custom-variant dark (&:where(.dark, .dark *));
+
 
 @theme {
   --font-sans: "Outfit", sans-serif;
@@ -172,25 +174,19 @@ html.light [class*="radial-gradient"] {
 
 /* ─── Surfaces & Cards ─── */
 
-html.light [class~="bg-zinc-900"],
-html.light [class*="bg-zinc-900/"],
-html.light [class~="bg-zinc-950"],
-html.light [class*="bg-zinc-950/"] {
+html.light [class*="bg-zinc-900"],
+html.light [class*="bg-zinc-950"] {
   background-color: #ffffff !important;
   border-color: var(--border) !important;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04), 0 4px 16px rgba(0, 0, 0, 0.03) !important;
 }
 
-html.light [class~="bg-zinc-800"],
-html.light [class*="bg-zinc-800/"] {
+html.light [class*="bg-zinc-800"] {
   background-color: #f1f5f9 !important;
 }
 
-html.light [class~="bg-white/5"],
 html.light [class*="bg-white/5"],
-html.light [class~="bg-white/10"],
 html.light [class*="bg-white/10"],
-html.light [class~="bg-white/20"],
 html.light [class*="bg-white/20"] {
   background-color: rgba(255, 255, 255, 0.85) !important;
   border-color: var(--border) !important;
@@ -231,23 +227,23 @@ html.light [class*="#ffffff03"] {
 
 /* ─── Typography ─── */
 
-html.light [class~="text-white"] {
+html.light [class*="text-white"] {
   color: var(--heading) !important;
 }
 
-html.light [class~="bg-blue-500"] [class~="text-white"],
-html.light [class~="bg-blue-600"] [class~="text-white"],
-html.light [class~="bg-blue-700"] [class~="text-white"],
-html.light [class~="bg-emerald-500"] [class~="text-white"],
-html.light [class~="bg-emerald-600"] [class~="text-white"],
-html.light [class~="bg-red-500"] [class~="text-white"],
-html.light [class~="bg-red-600"] [class~="text-white"],
-html.light [class~="bg-purple-600"] [class~="text-white"],
-html.light [class~="bg-black/50"] [class~="text-white"],
-html.light [class~="bg-black/60"] [class~="text-white"],
-html.light [class~="bg-black/90"] [class~="text-white"],
-html.light [class*="bg-slate-900"] [class~="text-white"],
-html.light [class*="bg-emerald-500/90"] [class~="text-white"] {
+html.light [class*="bg-blue-500"] [class*="text-white"],
+html.light [class*="bg-blue-600"] [class*="text-white"],
+html.light [class*="bg-blue-700"] [class*="text-white"],
+html.light [class*="bg-emerald-500"] [class*="text-white"],
+html.light [class*="bg-emerald-600"] [class*="text-white"],
+html.light [class*="bg-red-500"] [class*="text-white"],
+html.light [class*="bg-red-600"] [class*="text-white"],
+html.light [class*="bg-purple-600"] [class*="text-white"],
+html.light [class*="bg-black/50"] [class*="text-white"],
+html.light [class*="bg-black/60"] [class*="text-white"],
+html.light [class*="bg-black/90"] [class*="text-white"],
+html.light [class*="bg-slate-900"] [class*="text-white"],
+html.light [class*="bg-emerald-500/90"] [class*="text-white"] {
   color: #ffffff !important;
 }
 
@@ -256,22 +252,22 @@ html.light .text-white[class*="bg-black"] {
   color: #ffffff !important;
 }
 
-html.light [class~="text-zinc-200"],
-html.light [class~="text-zinc-300"],
-html.light [class~="text-stone-300"] {
+html.light [class*="text-zinc-200"],
+html.light [class*="text-zinc-300"],
+html.light [class*="text-stone-300"] {
   color: #334155 !important;
 }
 
-html.light [class~="text-zinc-400"],
-html.light [class~="text-zinc-500"],
-html.light [class~="text-zinc-600"],
-html.light [class~="text-stone-400"],
-html.light [class~="text-stone-500"] {
+html.light [class*="text-zinc-400"],
+html.light [class*="text-zinc-500"],
+html.light [class*="text-zinc-600"],
+html.light [class*="text-stone-400"],
+html.light [class*="text-stone-500"] {
   color: var(--body) !important;
 }
 
-html.light [class~="text-zinc-700"],
-html.light [class~="text-stone-600"] {
+html.light [class*="text-zinc-700"],
+html.light [class*="text-stone-600"] {
   color: #334155 !important;
 }
 
@@ -299,17 +295,14 @@ html.light [class*="from-white"][class*="to-zinc-400"] {
 
 /* ─── Borders ─── */
 
-html.light [class~="border-white/5"],
 html.light [class*="border-white/5"],
-html.light [class~="border-white/10"],
 html.light [class*="border-white/10"],
-html.light [class~="border-white/20"],
 html.light [class*="border-white/20"] {
   border-color: var(--border) !important;
 }
 
-html.light [class~="border-zinc-700"],
-html.light [class~="border-zinc-800"] {
+html.light [class*="border-zinc-700"],
+html.light [class*="border-zinc-800"] {
   border-color: #e2e8f0 !important;
 }
 
@@ -538,7 +531,7 @@ html.light [class*="bg-white/5"][class*="text-zinc-400"] {
   color: var(--body) !important;
 }
 
-html.light [class~="text-zinc-300"],
+html.light [class*="text-zinc-300"],
 html.light [class*="text-zinc-300"] {
   color: var(--body) !important;
 }

@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Button } from '../components/Button';
 import { ArrowRight, User, Mail, Lock, Eye, EyeOff, Globe, Check, Sun, Moon } from 'lucide-react';
 import { Logo } from '../components/Logo';
+import { ThemeToggle } from '../components/ThemeToggle';
 import { supabase } from "../supabaseClient";
 
 
@@ -125,6 +126,7 @@ export const Signup: React.FC<SignupProps> = ({ onLogin, onSwitchToLogin, onBack
           >
             <ArrowRight className="h-4 w-4 rotate-180" /> Back to Home
           </button>
+          <ThemeToggle />
         </div>
       </div>
 

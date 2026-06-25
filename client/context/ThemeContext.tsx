@@ -16,7 +16,12 @@ const getInitialTheme = (): Theme => {
   if (typeof window === 'undefined') return 'light';
 
   const storedTheme = window.localStorage.getItem(THEME_STORAGE_KEY);
-  return storedTheme === 'dark' ? 'dark' : 'light';
+  if (storedTheme === 'dark' || storedTheme === 'light') {
+    return storedTheme as Theme;
+  }
+
+  // Default to light theme
+  return 'light';
 };
 
 export const ThemeProvider: React.FC<React.PropsWithChildren> = ({ children }) => {
