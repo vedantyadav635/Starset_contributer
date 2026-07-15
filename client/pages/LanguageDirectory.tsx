@@ -83,7 +83,7 @@ export const LanguageDirectory: React.FC<PageProps> = ({ onNavigate, onEnterApp 
           </div>
 
           {/* Grid Layout of All Language Cards */}
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 md:gap-6">
             {LANGUAGES_DIRECTORY.filter(lang => selectedCategory === 'all' || lang.category === selectedCategory).map((lang) => (
               <motion.div
                 key={lang.id}
@@ -92,46 +92,47 @@ export const LanguageDirectory: React.FC<PageProps> = ({ onNavigate, onEnterApp 
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.4 }}
                 onClick={() => onNavigate('signup')}
-                className="group relative flex flex-col justify-between p-5 md:p-8 rounded-3xl bg-white dark:bg-zinc-900/40 border border-slate-200 dark:border-white/5 hover:border-blue-500 dark:hover:border-blue-500/30 shadow-md hover:shadow-xl shadow-slate-100 dark:shadow-none hover:-translate-y-2 transition-all duration-300 cursor-pointer"
+                className="group relative flex flex-col justify-between p-4 md:p-6 rounded-2xl md:rounded-3xl bg-white dark:bg-zinc-900/40 border border-slate-200 dark:border-white/5 hover:border-blue-500 dark:hover:border-blue-500/30 shadow-sm md:shadow-md hover:shadow-xl shadow-slate-100 dark:shadow-none md:hover:-translate-y-2 transition-all duration-300 cursor-pointer"
               >
                 {/* Popular Badge */}
                 {lang.popular && (
-                  <div className="absolute top-4 right-4 px-3 py-1 rounded-full text-[10px] font-black tracking-wider uppercase bg-amber-50/80 dark:bg-amber-500/20 text-amber-800 dark:text-amber-400 border border-amber-200 dark:border-amber-500/20 shadow-sm">
-                    High Volume
+                  <div className="absolute top-2 right-2 md:top-4 md:right-4 px-2 py-0.5 md:px-3 md:py-1 rounded-full text-[8px] md:text-[10px] font-black tracking-wider uppercase bg-amber-50/80 dark:bg-amber-500/20 text-amber-800 dark:text-amber-400 border border-amber-200 dark:border-amber-500/20 shadow-sm">
+                    Hot
                   </div>
                 )}
 
-                <div className="space-y-4">
-                  <div className="flex items-center gap-3">
-                    <div className="w-12 h-12 rounded-2xl flex items-center justify-center bg-blue-50/80 dark:bg-blue-950/40 text-blue-600 dark:text-blue-400 font-bold text-xl uppercase group-hover:scale-110 transition-transform">
+                <div className="space-y-2 md:space-y-4">
+                  <div className="flex flex-col md:flex-row items-start md:items-center gap-2 md:gap-3">
+                    <div className="w-10 h-10 md:w-12 md:h-12 rounded-xl md:rounded-2xl flex items-center justify-center bg-blue-50/80 dark:bg-blue-950/40 text-blue-600 dark:text-blue-400 font-bold text-lg md:text-xl uppercase group-hover:scale-110 transition-transform shrink-0">
                       {lang.name[0]}
                     </div>
                     <div>
-                      <h3 className="text-xl font-extrabold text-slate-900 dark:text-white flex items-center gap-2">
+                      <h3 className="text-sm md:text-xl font-extrabold text-slate-900 dark:text-white flex flex-col md:flex-row md:items-center gap-0.5 md:gap-2 leading-tight md:leading-normal">
                         {lang.name}
-                        <span className="text-sm font-medium text-slate-500 dark:text-zinc-400">
+                        <span className="text-[10px] md:text-sm font-medium text-slate-500 dark:text-zinc-400">
                           ({lang.nativeName})
                         </span>
                       </h3>
-                      <p className="text-xs font-bold text-blue-600 dark:text-blue-400 uppercase tracking-wider">
+                      <p className="hidden md:block text-xs font-bold text-blue-600 dark:text-blue-400 uppercase tracking-wider mt-0.5">
                         {lang.category === 'hinglish' ? 'Conversational' : lang.category === 'north' ? 'North Dialects' : 'South Dialects'}
                       </p>
                     </div>
                   </div>
 
-                  <div className="py-2 space-y-2">
-                    <div className="flex items-baseline justify-between">
-                      <span className="text-xs text-slate-400 dark:text-zinc-500 font-medium">Payout Rate</span>
-                      <span className="text-lg font-black text-emerald-600 dark:text-emerald-400">{lang.payout}</span>
+                  <div className="py-1 md:py-2 md:space-y-2">
+                    <div className="flex flex-col md:flex-row md:items-baseline md:justify-between gap-0.5">
+                      <span className="text-[9px] md:text-xs text-slate-400 dark:text-zinc-500 font-medium">Payout Rate</span>
+                      <span className="text-sm md:text-lg font-black text-emerald-600 dark:text-emerald-400">{lang.payout}</span>
                     </div>
                     {lang.payoutBonus && (
-                      <div className="text-[10px] text-right font-semibold text-amber-600 dark:text-amber-400">
+                      <div className="hidden md:block text-[10px] text-right font-semibold text-amber-600 dark:text-amber-400">
                         {lang.payoutBonus}
                       </div>
                     )}
                   </div>
 
-                  <div className="space-y-2">
+                  {/* Hidden on Mobile to save space */}
+                  <div className="hidden md:block space-y-2">
                     <div>
                       <h4 className="text-xs font-bold text-slate-500 dark:text-zinc-400 uppercase tracking-widest mb-1">Supported Dialects</h4>
                       <p className="text-sm font-medium text-slate-700 dark:text-zinc-300">{lang.dialects}</p>
@@ -149,11 +150,11 @@ export const LanguageDirectory: React.FC<PageProps> = ({ onNavigate, onEnterApp 
                   </div>
                 </div>
 
-                <div className="mt-8">
+                <div className="mt-3 md:mt-8">
                   <div
-                    className="w-full h-12 flex items-center justify-center font-bold text-sm bg-slate-100 dark:bg-zinc-800 text-slate-800 dark:text-zinc-200 group-hover:bg-blue-600 dark:group-hover:bg-blue-600 group-hover:text-white dark:group-hover:text-white transition-all duration-300 rounded-xl shadow-inner group-hover:shadow-[0_4px_20px_-4px_rgba(37,99,235,0.4)]"
+                    className="w-full h-8 md:h-12 flex items-center justify-center font-bold text-[10px] md:text-sm bg-slate-100 dark:bg-zinc-800 text-slate-800 dark:text-zinc-200 group-hover:bg-blue-600 dark:group-hover:bg-blue-600 group-hover:text-white dark:group-hover:text-white transition-all duration-300 rounded-lg md:rounded-xl shadow-inner group-hover:shadow-[0_4px_20px_-4px_rgba(37,99,235,0.4)]"
                   >
-                    Contribute Now
+                    Contribute
                   </div>
                 </div>
               </motion.div>
