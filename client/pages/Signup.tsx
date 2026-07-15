@@ -202,7 +202,7 @@ export const Signup: React.FC<SignupProps> = ({ onLogin, onSwitchToLogin, onBack
                 <input id="terms" type="checkbox" required className="w-4 h-4 rounded border-zinc-300 text-blue-600 focus:ring-blue-500" />
               </div>
               <label htmlFor="terms" className="text-xs text-slate-500 dark:text-zinc-400">
-                I agree to the <a href="#" className="underline text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300">Contributor Agreement</a> and <a href="#" className="underline text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300">Privacy Policy</a>.
+                I agree to the <a href="/terms" target="_blank" rel="noopener noreferrer" title="View the complete Contributor Agreement outlining your rights and responsibilities" className="underline text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300">Contributor Agreement</a> and <a href="/privacy" target="_blank" rel="noopener noreferrer" title="Read our Privacy Policy to understand how we protect your data" className="underline text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300">Privacy Policy</a>.
               </label>
             </div>
 
