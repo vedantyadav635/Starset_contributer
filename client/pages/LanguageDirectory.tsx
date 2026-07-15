@@ -92,7 +92,7 @@ export const LanguageDirectory: React.FC<PageProps> = ({ onNavigate, onEnterApp 
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.4 }}
                 onClick={() => onNavigate('signup')}
-                className="group relative flex flex-col justify-between p-6 md:p-8 rounded-3xl bg-white dark:bg-zinc-900/40 border border-slate-200 dark:border-white/5 hover:border-blue-500 dark:hover:border-blue-500/30 shadow-md hover:shadow-xl shadow-slate-100 dark:shadow-none hover:-translate-y-2 transition-all duration-300 cursor-pointer"
+                className="group relative flex flex-col justify-between p-5 md:p-8 rounded-3xl bg-white dark:bg-zinc-900/40 border border-slate-200 dark:border-white/5 hover:border-blue-500 dark:hover:border-blue-500/30 shadow-md hover:shadow-xl shadow-slate-100 dark:shadow-none hover:-translate-y-2 transition-all duration-300 cursor-pointer"
               >
                 {/* Popular Badge */}
                 {lang.popular && (

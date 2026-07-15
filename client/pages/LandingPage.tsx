@@ -523,7 +523,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onEnterApp, onStartSig
                </div>
 
                {/* Grid Layout of Language Cards */}
-               <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
+               <div className="flex overflow-x-auto pb-6 gap-4 md:gap-8 snap-x snap-mandatory no-scrollbar -mx-4 px-4 md:grid md:grid-cols-2 lg:grid-cols-3 md:mx-0 md:px-0">
                   {LANGUAGES_DIRECTORY.filter(lang => selectedCategory === 'all' || lang.category === selectedCategory).slice(0, 6).map((lang) => (
                      <motion.div
                         key={lang.id}
@@ -533,7 +533,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onEnterApp, onStartSig
                         viewport={{ once: true }}
                         transition={{ duration: 0.4 }}
                         onClick={() => onNavigate('signup')}
-                        className="group relative flex flex-col justify-between p-6 md:p-8 rounded-3xl bg-white/60 dark:bg-zinc-900/40 backdrop-blur-md border border-slate-200/60 dark:border-white/5 hover:border-blue-500/30 dark:hover:border-blue-500/30 shadow-md hover:shadow-xl hover:-translate-y-1 transition-all duration-300 cursor-pointer"
+                        className="group relative flex flex-col justify-between p-5 md:p-8 rounded-3xl bg-white/60 dark:bg-zinc-900/40 backdrop-blur-md border border-slate-200/60 dark:border-white/5 hover:border-blue-500/30 dark:hover:border-blue-500/30 shadow-md hover:shadow-xl md:hover:-translate-y-1 transition-all duration-300 cursor-pointer flex-shrink-0 w-[85vw] sm:w-[320px] md:w-auto snap-center"
                      >
                         {/* Popular Badge */}
                         {lang.popular && (
