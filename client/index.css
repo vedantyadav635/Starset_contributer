@@ -5,6 +5,7 @@
 @import "tailwindcss";
 
 @custom-variant dark (&:where(.dark, .dark *));
+@custom-variant light (&:where(.light, .light *));
 
 
 @theme {
@@ -94,9 +95,24 @@
 
 
 
-/* ─── Design Tokens (Dark Default) ─── */
+/* ─── Design Tokens (Light Default) ─── */
 
 :root {
+  --foreground: #0f172a;
+  --background: #f8fafc;
+  --surface: #ffffff;
+  --surface-elevated: #ffffff;
+  --border: rgba(15, 23, 42, 0.08);
+  --heading: #020617;
+  --body: #475569;
+  --muted: #94a3b8;
+  --accent: #3b82f6;
+  --accent-hover: #2563eb;
+  --radius-card: 16px;
+  --radius-pill: 9999px;
+}
+
+html.dark {
   --foreground: #f8fafc;
   --background: #020205;
   --surface: #09090b;
@@ -107,8 +123,6 @@
   --muted: #71717a;
   --accent: #3b82f6;
   --accent-hover: #2563eb;
-  --radius-card: 16px;
-  --radius-pill: 9999px;
 }
 
 body {
@@ -132,6 +146,9 @@ h1, h2, h3, h4, h5, h6, .font-outfit {
 
 /* ═══════════════════════════════════════════════════════
    LIGHT THEME
+   Clean approach: Components use dark: variants for 
+   theme-aware styling. This section only handles the
+   few edge cases that need CSS-level overrides.
    ═══════════════════════════════════════════════════════ */
 
 html.light {
@@ -158,207 +175,6 @@ html.light ::selection {
   color: #1e293b;
 }
 
-/* ─── Background Layers ─── */
-
-html.light [class*="bg-[#020205]"],
-html.light [class*="bg-[#050505]"],
-html.light [class*="bg-[#09090b]"],
-html.light [class*="bg-[#0a0a0a]"] {
-  background-color: var(--background) !important;
-  background-image: none !important;
-}
-
-html.light [class*="radial-gradient"] {
-  opacity: 0.3;
-}
-
-/* ─── Surfaces & Cards ─── */
-
-html.light [class*="bg-zinc-900"],
-html.light [class*="bg-zinc-950"] {
-  background-color: #ffffff !important;
-  border-color: var(--border) !important;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04), 0 4px 16px rgba(0, 0, 0, 0.03) !important;
-}
-
-html.light [class*="bg-zinc-800"] {
-  background-color: #f1f5f9 !important;
-}
-
-html.light [class*="bg-white/5"],
-html.light [class*="bg-white/10"],
-html.light [class*="bg-white/20"] {
-  background-color: rgba(255, 255, 255, 0.85) !important;
-  border-color: var(--border) !important;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04) !important;
-}
-
-html.light [class*="bg-black/20"],
-html.light [class*="bg-black/30"],
-html.light [class*="bg-black/40"] {
-  background-color: rgba(248, 250, 252, 0.9) !important;
-}
-
-html.light [class*="bg-black/50"],
-html.light [class*="bg-black/60"] {
-  background-color: rgba(15, 23, 42, 0.5) !important;
-}
-
-html.light [class*="bg-black/90"] {
-  background-color: rgba(15, 23, 42, 0.9) !important;
-}
-
-html.light nav[class*="bg-black"],
-html.light header[class*="bg-black"] {
-  background-color: rgba(248, 250, 252, 0.85) !important;
-  backdrop-filter: blur(16px) !important;
-}
-
-html.light [class~="min-h-screen"][class~="bg-black"],
-html.light [class~="min-h-screen"][class*="bg-[#020205]"] {
-  background: var(--background) !important;
-}
-
-html.light [class*="#ffffff03"] {
-  background-image:
-    linear-gradient(to right, rgba(15, 23, 42, 0.025) 1px, transparent 1px),
-    linear-gradient(to bottom, rgba(15, 23, 42, 0.025) 1px, transparent 1px) !important;
-}
-
-/* ─── Typography ─── */
-
-html.light [class*="text-white"] {
-  color: var(--heading) !important;
-}
-
-html.light [class*="bg-blue-500"] [class*="text-white"],
-html.light [class*="bg-blue-600"] [class*="text-white"],
-html.light [class*="bg-blue-700"] [class*="text-white"],
-html.light [class*="bg-emerald-500"] [class*="text-white"],
-html.light [class*="bg-emerald-600"] [class*="text-white"],
-html.light [class*="bg-red-500"] [class*="text-white"],
-html.light [class*="bg-red-600"] [class*="text-white"],
-html.light [class*="bg-purple-600"] [class*="text-white"],
-html.light [class*="bg-black/50"] [class*="text-white"],
-html.light [class*="bg-black/60"] [class*="text-white"],
-html.light [class*="bg-black/90"] [class*="text-white"],
-html.light [class*="bg-slate-900"] [class*="text-white"],
-html.light [class*="bg-emerald-500/90"] [class*="text-white"] {
-  color: #ffffff !important;
-}
-
-html.light .text-white[class*="bg-slate-900"],
-html.light .text-white[class*="bg-black"] {
-  color: #ffffff !important;
-}
-
-html.light [class*="text-zinc-200"],
-html.light [class*="text-zinc-300"],
-html.light [class*="text-stone-300"] {
-  color: #334155 !important;
-}
-
-html.light [class*="text-zinc-400"],
-html.light [class*="text-zinc-500"],
-html.light [class*="text-zinc-600"],
-html.light [class*="text-stone-400"],
-html.light [class*="text-stone-500"] {
-  color: var(--body) !important;
-}
-
-html.light [class*="text-zinc-700"],
-html.light [class*="text-stone-600"] {
-  color: #334155 !important;
-}
-
-html.light [class*="text-white/10"],
-html.light [class*="text-white/20"] {
-  color: rgba(15, 23, 42, 0.08) !important;
-}
-
-html.light [class~="text-blue-100"] {
-  color: #3b82f6 !important;
-}
-
-html.light [class~="text-blue-300"] {
-  color: #2563eb !important;
-}
-
-html.light [class~="text-indigo-300"] {
-  color: #4f46e5 !important;
-}
-
-html.light [class*="from-white"][class*="to-zinc-400"] {
-  --tw-gradient-from: #020617 !important;
-  --tw-gradient-to: #475569 !important;
-}
-
-/* ─── Borders ─── */
-
-html.light [class*="border-white/5"],
-html.light [class*="border-white/10"],
-html.light [class*="border-white/20"] {
-  border-color: var(--border) !important;
-}
-
-html.light [class*="border-zinc-700"],
-html.light [class*="border-zinc-800"] {
-  border-color: #e2e8f0 !important;
-}
-
-/* ─── Hover States ─── */
-
-html.light [class~="hover:text-white"]:hover {
-  color: var(--heading) !important;
-}
-
-html.light [class*="hover:bg-white/5"]:hover,
-html.light [class*="hover:bg-white/10"]:hover,
-html.light [class*="hover:bg-white/20"]:hover {
-  background-color: rgba(15, 23, 42, 0.05) !important;
-}
-
-html.light [class*="hover:border-white/20"]:hover,
-html.light [class*="hover:border-white/30"]:hover {
-  border-color: rgba(59, 130, 246, 0.2) !important;
-}
-
-html.light [class*="hover:border-blue-500"]:hover,
-html.light [class*="hover:border-blue-500/50"]:hover {
-  border-color: rgba(59, 130, 246, 0.4) !important;
-}
-
-html.light [class*="hover:border-purple-500"]:hover,
-html.light [class*="hover:border-purple-500/50"]:hover {
-  border-color: rgba(139, 92, 246, 0.4) !important;
-}
-
-html.light [class*="hover:border-emerald-500"]:hover,
-html.light [class*="hover:border-emerald-500/50"]:hover {
-  border-color: rgba(16, 185, 129, 0.4) !important;
-}
-
-/* ─── Buttons ─── */
-
-html.light [class*="bg-white"][class*="text-black"] {
-  background-color: #0f172a !important;
-  color: #ffffff !important;
-}
-
-html.light [class*="bg-white"][class*="text-black"]:hover {
-  background-color: #1e293b !important;
-}
-
-html.light button[class*="bg-white"][class*="text-black"] {
-  background-color: #0f172a !important;
-  color: #ffffff !important;
-  box-shadow: 0 4px 12px rgba(15, 23, 42, 0.15) !important;
-}
-
-html.light [class*="hover:text-white"]:hover {
-  color: #0f172a !important;
-}
-
 /* ─── Form Elements ─── */
 
 html.light input,
@@ -374,84 +190,9 @@ html.light textarea::placeholder {
   color: #94a3b8 !important;
 }
 
-html.light [class*="bg-black/20"][class*="text-white"],
-html.light input[class*="bg-black/20"] {
-  background-color: #f8fafc !important;
-  color: #0f172a !important;
-}
-
 html.light option {
   background-color: #ffffff;
   color: #0f172a;
-}
-
-html.light [class*="focus:bg-black"]:focus {
-  background-color: #ffffff !important;
-}
-
-/* ─── Shadows ─── */
-
-html.light [class*="shadow-[0_0_20px_rgba(255,255,255"],
-html.light [class*="shadow-[0_0_60px_rgba(255,255,255"],
-html.light [class*="shadow-[0_0_30px_rgba(59,130,246"],
-html.light [class*="shadow-[0_0_40px_rgba(59,130,246"],
-html.light [class*="shadow-[0_0_40px_rgba(168,85,247"] {
-  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.06) !important;
-}
-
-/* ─── Glow & Blur Backgrounds ─── */
-
-html.light [class*="bg-blue-600/10"],
-html.light [class*="bg-indigo-600/10"],
-html.light [class*="bg-indigo-900/20"],
-html.light [class*="bg-blue-500/5"],
-html.light [class*="bg-blue-500/10"] {
-  opacity: 0.25;
-}
-
-html.light [class*="bg-blue-900/10"],
-html.light [class*="bg-blue-900/20"] {
-  background-color: rgba(59, 130, 246, 0.06) !important;
-}
-
-html.light [class*="bg-purple-900/10"],
-html.light [class*="bg-purple-900/20"] {
-  background-color: rgba(139, 92, 246, 0.06) !important;
-}
-
-html.light [class*="bg-emerald-900/10"],
-html.light [class*="bg-emerald-900/20"],
-html.light [class*="bg-emerald-500/10"],
-html.light [class*="bg-emerald-500/20"] {
-  background-color: rgba(16, 185, 129, 0.06) !important;
-}
-
-html.light [class*="bg-amber-900/10"] {
-  background-color: rgba(245, 158, 11, 0.06) !important;
-}
-
-html.light [class*="bg-red-900/20"] {
-  background-color: rgba(239, 68, 68, 0.06) !important;
-}
-
-html.light [class*="bg-purple-500/10"] {
-  background-color: rgba(168, 85, 247, 0.06) !important;
-}
-
-html.light [class*="bg-indigo-500/10"] {
-  background-color: rgba(99, 102, 241, 0.06) !important;
-}
-
-/* ─── Sidebar ─── */
-
-html.light aside[class*="bg-black/40"] {
-  background-color: #ffffff !important;
-  border-color: #e2e8f0 !important;
-  box-shadow: 2px 0 12px rgba(0, 0, 0, 0.04) !important;
-}
-
-html.light [class~="bg-blue-500"][class~="text-white"] {
-  color: #ffffff !important;
 }
 
 /* ─── Glass & Cards ─── */
@@ -461,79 +202,6 @@ html.light .glass-card {
   background: rgba(255, 255, 255, 0.85) !important;
   border-color: var(--border) !important;
   box-shadow: 0 4px 24px rgba(0, 0, 0, 0.04) !important;
-}
-
-/* ─── Badge Type Colors (Task List) ─── */
-
-html.light [class*="bg-blue-900/20"][class*="text-blue-300"] {
-  background-color: rgba(59, 130, 246, 0.08) !important;
-  color: #2563eb !important;
-}
-
-html.light [class*="bg-pink-900/20"][class*="text-pink-300"] {
-  background-color: rgba(236, 72, 153, 0.08) !important;
-  color: #db2777 !important;
-}
-
-html.light [class*="bg-violet-900/20"][class*="text-violet-300"] {
-  background-color: rgba(139, 92, 246, 0.08) !important;
-  color: #7c3aed !important;
-}
-
-html.light [class*="bg-purple-900/20"][class*="text-purple-300"] {
-  background-color: rgba(168, 85, 247, 0.08) !important;
-  color: #9333ea !important;
-}
-
-html.light [class*="bg-orange-900/20"][class*="text-orange-300"] {
-  background-color: rgba(249, 115, 22, 0.08) !important;
-  color: #ea580c !important;
-}
-
-html.light [class*="text-emerald-400"][class*="bg-emerald-900/10"] {
-  color: #059669 !important;
-  background-color: rgba(16, 185, 129, 0.08) !important;
-}
-
-html.light [class*="text-amber-400"][class*="bg-amber-900/10"] {
-  color: #d97706 !important;
-  background-color: rgba(245, 158, 11, 0.08) !important;
-}
-
-html.light [class*="text-red-400"][class*="bg-red-900/10"] {
-  color: #dc2626 !important;
-  background-color: rgba(239, 68, 68, 0.08) !important;
-}
-
-html.light [class*="text-stone-300"][class*="bg-white/10"],
-html.light [class*="text-stone-400"][class*="bg-white/10"] {
-  color: var(--body) !important;
-  background-color: rgba(15, 23, 42, 0.05) !important;
-}
-
-html.light [class*="text-blue-400"][class*="bg-blue-900/20"] {
-  color: #2563eb !important;
-  background-color: rgba(59, 130, 246, 0.08) !important;
-}
-
-/* ─── Login Page ─── */
-
-html.light [class*="bg-gradient-to-br"][class*="from-blue-500/20"][class*="to-indigo-500/20"] {
-  background: rgba(59, 130, 246, 0.06) !important;
-}
-
-html.light [class*="text-zinc-400"][class*="hover:text-white"]:hover {
-  color: var(--heading) !important;
-}
-
-html.light [class*="bg-white/5"][class*="text-zinc-400"] {
-  background-color: rgba(15, 23, 42, 0.05) !important;
-  color: var(--body) !important;
-}
-
-html.light [class*="text-zinc-300"],
-html.light [class*="text-zinc-300"] {
-  color: var(--body) !important;
 }
 
 /* ═══════════════════════════════════════════════════════
@@ -1180,7 +848,9 @@ html.light .skeleton {
 
 /* ─── Smooth Scroll for entire page ─── */
 html {
-  scroll-behavior: auto;
+  scroll-behavior: smooth;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
 /* ─── Reduced Motion Preference ─── */
@@ -1194,4 +864,15 @@ html {
   .card-3d:hover {
     transform: none;
   }
+}
+
+/* ═══════════════════════════════════════════════════════
+   LIGHT THEME — SUPPLEMENTARY FIXES
+   ═══════════════════════════════════════════════════════ */
+
+/* Keep gradient text working in both themes */
+html.light [class*="bg-clip-text"] span,
+html.light [class*="bg-clip-text"] {
+  color: transparent !important;
+  -webkit-text-fill-color: transparent !important;
 }
