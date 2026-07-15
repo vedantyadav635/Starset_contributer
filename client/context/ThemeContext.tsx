@@ -20,12 +20,44 @@ const getInitialTheme = (): Theme => {
     return storedTheme as Theme;
   }
 
+  // Fallback to system preference
+  if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+    return 'dark';
+  }
+
   // Default to light theme
   return 'light';
 };
 
 export const ThemeProvider: React.FC<React.PropsWithChildren> = ({ children }) => {
   const [theme, setThemeState] = useState<Theme>(getInitialTheme);
+
+  useEffect(() => {
+    const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
+    
+    const handleChange = (e: MediaQueryListEvent) => {
+      // Only adapt if the user hasn't explicitly set a preference in localStorage
+      if (!window.localStorage.getItem(THEME_STORAGE_KEY)) {
+        setThemeState(e.matches ? 'dark' : 'light');
+      }
+    };
+
+    // Modern browsers use addEventListener
+    if (mediaQuery.addEventListener) {
+      mediaQuery.addEventListener('change', handleChange);
+    } else {
+      // Fallback for older browsers
+      mediaQuery.addListener(handleChange);
+    }
+
+    return () => {
+      if (mediaQuery.removeEventListener) {
+        mediaQuery.removeEventListener('change', handleChange);
+      } else {
+        mediaQuery.removeListener(handleChange);
+      }
+    };
+  }, []);
 
   useEffect(() => {
     const root = document.documentElement;

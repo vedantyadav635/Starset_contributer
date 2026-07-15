@@ -192,7 +192,7 @@ export const Dashboard: React.FC<DashboardProps> = ({ onNavigate }) => {
              <div className="relative z-10">
             <div className="flex items-center justify-between mb-6">
               <motion.div
-                className={`p-3 rounded-2xl transition-colors ${stat.label === 'Acceptance' ? 'bg-blue-900/20 text-blue-400' : stat.label === 'Accepted' ? 'bg-emerald-900/20 text-emerald-400' : stat.label === 'In Review' ? 'bg-amber-900/20 text-amber-400' : 'bg-purple-900/20 text-purple-400'}`}
+                className={`p-3 rounded-2xl transition-colors ${stat.label === 'Acceptance Rate' ? 'bg-blue-100 text-blue-600 dark:bg-blue-900/20 dark:text-blue-400' : stat.label === 'Accepted Units' ? 'bg-emerald-100 text-emerald-600 dark:bg-emerald-900/20 dark:text-emerald-400' : stat.label === 'Validation Queue' ? 'bg-amber-100 text-amber-600 dark:bg-amber-900/20 dark:text-amber-400' : 'bg-purple-100 text-purple-600 dark:bg-purple-900/20 dark:text-purple-400'}`}
                 whileHover={{ scale: 1.15, rotate: -5 }}
                 transition={{ type: 'spring', stiffness: 400, damping: 17 }}
               >

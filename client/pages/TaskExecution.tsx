@@ -473,8 +473,8 @@ export const TaskExecution: React.FC<TaskExecutionProps> = ({ task, onBack, onCo
               </div>
               <h2 className="text-xl md:text-3xl font-black text-slate-900 dark:text-white leading-tight tracking-tight">{task.title}</h2>
               <div className="flex flex-wrap items-center mt-3 gap-2 text-sm text-stone-500">
-                <span className="flex items-center bg-black/40 px-3 py-1.5 rounded-lg border border-slate-200 dark:border-white/10 shadow-sm font-bold text-xs"><Info className="h-3.5 w-3.5 mr-2 text-blue-400" /> {task.type}</span>
-                <span className="flex items-center bg-black/40 px-3 py-1.5 rounded-lg border border-slate-200 dark:border-white/10 shadow-sm font-bold text-xs"><Clock className="h-3.5 w-3.5 mr-2 text-stone-400" /> {task.estimatedTimeSec}s Est.</span>
+                <span className="flex items-center bg-white dark:bg-black/40 px-3 py-1.5 rounded-lg border border-slate-200 dark:border-white/10 shadow-sm font-bold text-xs text-slate-700 dark:text-white"><Info className="h-3.5 w-3.5 mr-2 text-blue-500 dark:text-blue-400" /> {task.type}</span>
+                <span className="flex items-center bg-white dark:bg-black/40 px-3 py-1.5 rounded-lg border border-slate-200 dark:border-white/10 shadow-sm font-bold text-xs text-slate-700 dark:text-white"><Clock className="h-3.5 w-3.5 mr-2 text-stone-500 dark:text-stone-400" /> {task.estimatedTimeSec}s Est.</span>
               </div>
             </div>
             <div className="flex items-center md:flex-col justify-between w-full md:w-auto md:text-right border-t md:border-t-0 border-slate-200 dark:border-white/10 pt-4 md:pt-0">
@@ -550,7 +550,7 @@ export const TaskExecution: React.FC<TaskExecutionProps> = ({ task, onBack, onCo
             </ul>
           </div>
 
-          <div className="flex items-start md:items-center mb-8 md:mb-10 bg-black/20 border border-slate-200 dark:border-white/10 p-5 rounded-xl cursor-pointer hover:border-blue-500 transition-colors" onClick={() => setConsentGiven(!consentGiven)}>
+          <div className="flex items-start md:items-center mb-8 md:mb-10 bg-white dark:bg-black/20 border border-slate-200 dark:border-white/10 p-5 rounded-xl cursor-pointer hover:border-blue-500 transition-colors" onClick={() => setConsentGiven(!consentGiven)}>
             <div className="flex items-center h-6">
               <input
                 id="consent"
@@ -616,7 +616,7 @@ export const TaskExecution: React.FC<TaskExecutionProps> = ({ task, onBack, onCo
       <div className="bg-slate-100 dark:bg-zinc-900 rounded-3xl border border-slate-200 dark:border-white/10 shadow-2xl overflow-hidden flex flex-col md:flex-row min-h-[600px]">
 
         {/* Sidebar for Task Context */}
-        <div className="w-full md:w-1/3 bg-black/30 border-b md:border-b-0 md:border-r border-slate-200 dark:border-white/10 p-6 md:p-8 flex flex-col order-1 md:order-1">
+        <div className="w-full md:w-1/3 bg-slate-50 dark:bg-black/30 border-b md:border-b-0 md:border-r border-slate-200 dark:border-white/10 p-6 md:p-8 flex flex-col order-1 md:order-1">
           {task.imageUrl && task.type === TaskType.AUDIO_COLLECTION && (
             <div className="w-full h-32 md:h-48 rounded-xl overflow-hidden mb-6 border border-slate-200 dark:border-white/10 shadow-sm hidden md:block">
               <img src={task.imageUrl} alt="" className="w-full h-full object-cover" />
@@ -648,7 +648,7 @@ export const TaskExecution: React.FC<TaskExecutionProps> = ({ task, onBack, onCo
                 })()}%
               </span>
             </div>
-            <div className="h-2 bg-white/10 rounded-full overflow-hidden">
+            <div className="h-2 bg-slate-200 dark:bg-white/10 rounded-full overflow-hidden">
               <div className="h-full bg-blue-500 transition-all duration-300" style={{ width: `${(() => {
                   if (task.type === TaskType.PLAYLIST && parsedPlaylist.length > 0) {
                     const answeredCount = Object.keys(playlistAnswers).filter(k => {
@@ -752,7 +752,7 @@ export const TaskExecution: React.FC<TaskExecutionProps> = ({ task, onBack, onCo
 
           {/* IMAGE TASK UI */}
           {task.type === TaskType.IMAGE_COLLECTION && (
-            <div className="w-full max-w-lg aspect-[4/3] bg-white dark:bg-black rounded-2xl overflow-hidden relative border-4 border-zinc-800 shadow-2xl">
+            <div className="w-full max-w-lg aspect-[4/3] bg-slate-100 dark:bg-black rounded-2xl overflow-hidden relative border-4 border-slate-200 dark:border-zinc-800 shadow-xl">
               {!capturedImage ? (
                 !isCameraActive ? (
                   <div className="absolute inset-0 flex flex-col items-center justify-center bg-slate-100 dark:bg-zinc-900 p-6 text-center">
@@ -772,7 +772,7 @@ export const TaskExecution: React.FC<TaskExecutionProps> = ({ task, onBack, onCo
               ) : (
                 <>
                   <img src={capturedImage} className="w-full h-full object-cover" alt="Captured" />
-                  <button onClick={retakePhoto} className="absolute bottom-4 right-4 px-4 h-9 bg-black/60 text-white font-bold text-xs rounded-lg backdrop-blur-md">Retake</button>
+                  <button onClick={retakePhoto} className="absolute bottom-4 right-4 px-4 h-9 bg-white/80 dark:bg-black/60 text-slate-900 dark:text-white font-bold text-xs rounded-lg backdrop-blur-md">Retake</button>
                 </>
               )}
             </div>
@@ -798,7 +798,7 @@ export const TaskExecution: React.FC<TaskExecutionProps> = ({ task, onBack, onCo
                   ))}
                 </div>
               ) : (
-                <textarea value={textInput} onChange={e => setTextInput(e.target.value)} className="w-full h-40 bg-black/20 border border-slate-200 dark:border-white/10 rounded-xl p-6 text-slate-900 dark:text-white outline-none focus:border-blue-500 transition-all" placeholder="Enter output..." />
+                <textarea value={textInput} onChange={e => setTextInput(e.target.value)} className="w-full h-40 bg-white dark:bg-black/20 border border-slate-200 dark:border-white/10 rounded-xl p-6 text-slate-900 dark:text-white outline-none focus:border-blue-500 transition-all shadow-inner" placeholder="Enter output..." />
               )}
             </div>
           )}
@@ -816,7 +816,7 @@ export const TaskExecution: React.FC<TaskExecutionProps> = ({ task, onBack, onCo
                     <p className="text-stone-600 dark:text-stone-400 mb-4 text-sm leading-relaxed">{subtask.prompt}</p>
                     
                     <div className="pt-2">
-                      <div className="flex justify-center bg-black/10 dark:bg-black/30 rounded-2xl py-6 border border-slate-200 dark:border-white/5">
+                      <div className="flex justify-center bg-white dark:bg-black/30 rounded-2xl py-6 border border-slate-200 dark:border-white/5 shadow-inner">
                         <SubtaskAudioRecorder 
                           audioBlob={playlistAnswers[idx] instanceof Blob ? playlistAnswers[idx] as Blob : null}
                           onRecord={(b) => setPlaylistAnswers(prev => ({ ...prev, [idx]: b }))}

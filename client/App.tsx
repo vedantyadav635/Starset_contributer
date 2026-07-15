@@ -808,42 +808,42 @@ const App: React.FC = () => {
           return <Earnings />;
         case 'guidelines':
           return (
-            <div className="bg-black/40 backdrop-blur-md p-6 md:p-10 rounded-2xl border border-white/10 shadow-sm max-w-4xl">
-              <h1 className="text-2xl md:text-3xl font-bold mb-8 text-white">Quality Guidelines</h1>
-              <p className="mb-8 text-base md:text-lg text-zinc-300 leading-relaxed">Strict adherence to these guidelines is required for payout. Violations may result in account suspension.</p>
+            <div className="bg-slate-100 dark:bg-black/40 backdrop-blur-md p-6 md:p-10 rounded-2xl border border-slate-200 dark:border-white/10 shadow-sm max-w-4xl">
+              <h1 className="text-2xl md:text-3xl font-bold mb-8 text-slate-900 dark:text-white">Quality Guidelines</h1>
+              <p className="mb-8 text-base md:text-lg text-slate-600 dark:text-zinc-300 leading-relaxed">Strict adherence to these guidelines is required for payout. Violations may result in account suspension.</p>
               <div className="grid md:grid-cols-2 gap-6">
-                <div className="p-6 md:p-8 bg-white/5 rounded-xl border border-white/10">
-                  <h3 className="font-bold text-white mb-3 text-lg">Audio</h3>
-                  <p className="text-zinc-400 leading-relaxed">No background noise (TV, fans, other people). Clear pronunciation required. Use a headset if possible.</p>
+                <div className="p-6 md:p-8 bg-white dark:bg-white/5 rounded-xl border border-slate-200 dark:border-white/10">
+                  <h3 className="font-bold text-slate-900 dark:text-white mb-3 text-lg">Audio</h3>
+                  <p className="text-slate-600 dark:text-zinc-400 leading-relaxed">No background noise (TV, fans, other people). Clear pronunciation required. Use a headset if possible.</p>
                 </div>
-                <div className="p-6 md:p-8 bg-white/5 rounded-xl border border-white/10">
-                  <h3 className="font-bold text-white mb-3 text-lg">Text</h3>
-                  <p className="text-zinc-400 leading-relaxed">Proper grammar and spelling are required unless colloquialisms are explicitly requested.</p>
+                <div className="p-6 md:p-8 bg-white dark:bg-white/5 rounded-xl border border-slate-200 dark:border-white/10">
+                  <h3 className="font-bold text-slate-900 dark:text-white mb-3 text-lg">Text</h3>
+                  <p className="text-slate-600 dark:text-zinc-400 leading-relaxed">Proper grammar and spelling are required unless colloquialisms are explicitly requested.</p>
                 </div>
               </div>
             </div>
           );
         case 'support':
           return (
-            <div className="bg-black/40 backdrop-blur-md p-6 md:p-10 rounded-2xl border border-white/10 shadow-sm max-w-3xl">
-              <h1 className="text-2xl md:text-3xl font-bold mb-4 text-white">Support</h1>
-              <p className="text-zinc-300 mb-10 text-lg">Need help? Submit a ticket below.</p>
+            <div className="bg-slate-100 dark:bg-black/40 backdrop-blur-md p-6 md:p-10 rounded-2xl border border-slate-200 dark:border-white/10 shadow-sm max-w-3xl">
+              <h1 className="text-2xl md:text-3xl font-bold mb-4 text-slate-900 dark:text-white">Support</h1>
+              <p className="text-slate-600 dark:text-zinc-300 mb-10 text-lg">Need help? Submit a ticket below.</p>
               <form className="space-y-8">
                 <div>
-                  <label className="block text-sm font-bold text-zinc-300 mb-2 uppercase tracking-wide">Issue Type</label>
-                  <select className="w-full border-white/10 rounded-xl p-4 border bg-white/5 focus:bg-black focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all outline-none text-base text-white">
-                    <option className="bg-zinc-900">Payment Issue</option>
-                    <option className="bg-zinc-900">Task Bug</option>
-                    <option className="bg-zinc-900">Account Question</option>
-                    <option className="bg-zinc-900">Other</option>
+                  <label className="block text-sm font-bold text-slate-700 dark:text-zinc-300 mb-2 uppercase tracking-wide">Issue Type</label>
+                  <select className="w-full border-slate-200 dark:border-white/10 rounded-xl p-4 border bg-white dark:bg-white/5 focus:bg-slate-50 dark:focus:bg-black focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all outline-none text-base text-slate-900 dark:text-white">
+                    <option className="bg-white dark:bg-zinc-900">Payment Issue</option>
+                    <option className="bg-white dark:bg-zinc-900">Task Bug</option>
+                    <option className="bg-white dark:bg-zinc-900">Account Question</option>
+                    <option className="bg-white dark:bg-zinc-900">Other</option>
                   </select>
                 </div>
                 <div>
-                  <label className="block text-sm font-bold text-zinc-300 mb-2 uppercase tracking-wide">Description</label>
+                  <label className="block text-sm font-bold text-slate-700 dark:text-zinc-300 mb-2 uppercase tracking-wide">Description</label>
                   <textarea
                     required
                     placeholder="Please describe your issue in detail..."
-                    className="w-full border-white/10 rounded-xl p-4 border h-40 bg-white/5 focus:bg-black focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all resize-none outline-none text-base text-white"
+                    className="w-full border-slate-200 dark:border-white/10 rounded-xl p-4 border h-40 bg-white dark:bg-white/5 focus:bg-slate-50 dark:focus:bg-black focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all resize-none outline-none text-base text-slate-900 dark:text-white"
                   ></textarea>
                 </div>
                 <button
@@ -912,9 +912,9 @@ const App: React.FC = () => {
               {/* Info Grid */}
               <div className="grid md:grid-cols-3 gap-6">
                 {/* Biometric Analysis */}
-                <div className="md:col-span-2 bg-black/40 backdrop-blur-xl rounded-[2.5rem] border border-white/10 p-8 md:p-10 shadow-xl relative group">
+                <div className="md:col-span-2 bg-slate-100 dark:bg-black/40 backdrop-blur-xl rounded-[2.5rem] border border-slate-200 dark:border-white/10 p-8 md:p-10 shadow-xl relative group">
                   <div className="flex items-center justify-between mb-8">
-                    <h3 className="text-xs font-black text-white uppercase tracking-[0.4em] flex items-center gap-3">
+                    <h3 className="text-xs font-black text-slate-900 dark:text-white uppercase tracking-[0.4em] flex items-center gap-3">
                       <User className="h-4 w-4 text-blue-500" />
                       Biometric & Regional Profile
                     </h3>
@@ -923,41 +923,41 @@ const App: React.FC = () => {
 
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-y-8 gap-x-12">
                     <div className="space-y-1.5 hover:translate-x-1 transition-transform">
-                      <label className="text-[9px] font-black uppercase tracking-[0.3em] text-stone-500">Age</label>
-                      <p className="text-lg font-black text-white uppercase tracking-tight">{userProfile?.age || 'Not Disclosed'}</p>
+                      <label className="text-[9px] font-black uppercase tracking-[0.3em] text-slate-500 dark:text-stone-500">Age</label>
+                      <p className="text-lg font-black text-slate-900 dark:text-white uppercase tracking-tight">{userProfile?.age || 'Not Disclosed'}</p>
                     </div>
                     <div className="space-y-1.5 hover:translate-x-1 transition-transform">
-                      <label className="text-[9px] font-black uppercase tracking-[0.3em] text-stone-500">Gender</label>
-                      <p className="text-lg font-black text-white uppercase tracking-tight">{userProfile?.gender || 'Not Disclosed'}</p>
+                      <label className="text-[9px] font-black uppercase tracking-[0.3em] text-slate-500 dark:text-stone-500">Gender</label>
+                      <p className="text-lg font-black text-slate-900 dark:text-white uppercase tracking-tight">{userProfile?.gender || 'Not Disclosed'}</p>
                     </div>
                     <div className="space-y-1.5 hover:translate-x-1 transition-transform">
-                      <label className="text-[9px] font-black uppercase tracking-[0.3em] text-stone-500">Location</label>
-                      <p className="text-lg font-black text-white flex items-center gap-2 uppercase tracking-tight">
+                      <label className="text-[9px] font-black uppercase tracking-[0.3em] text-slate-500 dark:text-stone-500">Location</label>
+                      <p className="text-lg font-black text-slate-900 dark:text-white flex items-center gap-2 uppercase tracking-tight">
                         <MapPin className="h-4 w-4 text-blue-500" /> {userProfile?.city || 'City'}, {userProfile?.state || 'State'}
                       </p>
                     </div>
                     <div className="space-y-1.5 hover:translate-x-1 transition-transform">
-                      <label className="text-[9px] font-black uppercase tracking-[0.3em] text-stone-500">Email Address</label>
-                      <p className="text-lg font-black text-white/80 lowercase truncate">{userProfile?.email || 'N/A'}</p>
+                      <label className="text-[9px] font-black uppercase tracking-[0.3em] text-slate-500 dark:text-stone-500">Email Address</label>
+                      <p className="text-lg font-black text-slate-700 dark:text-white/80 lowercase truncate">{userProfile?.email || 'N/A'}</p>
                     </div>
                   </div>
                 </div>
 
                 {/* Compensation Protocol */}
-                <div className="bg-black/40 backdrop-blur-xl rounded-[2.5rem] border border-white/10 p-8 md:p-10 shadow-xl group">
-                  <h3 className="text-xs font-black text-white mb-8 uppercase tracking-[0.4em] flex items-center gap-3">
+                <div className="bg-slate-100 dark:bg-black/40 backdrop-blur-xl rounded-[2.5rem] border border-slate-200 dark:border-white/10 p-8 md:p-10 shadow-xl group">
+                  <h3 className="text-xs font-black text-slate-900 dark:text-white mb-8 uppercase tracking-[0.4em] flex items-center gap-3">
                     <CreditCard className="h-4 w-4 text-emerald-500" />
                     Compensation Hub
                   </h3>
 
                   <div className="space-y-6">
-                    <div className="p-5 bg-white/5 rounded-2xl border border-white/5 group-hover:border-emerald-500/30 transition-all duration-500">
-                      <label className="text-[9px] font-black uppercase tracking-[0.3em] text-stone-500 mb-2 block">Active UPI ID</label>
-                      <p className="text-lg font-black text-emerald-500 truncate tracking-tighter drop-shadow-[0_0_10px_rgba(16,185,129,0.2)]">{userProfile?.upi_id || 'Not Assigned'}</p>
+                    <div className="p-5 bg-white dark:bg-white/5 rounded-2xl border border-slate-200 dark:border-white/5 group-hover:border-emerald-500/30 transition-all duration-500">
+                      <label className="text-[9px] font-black uppercase tracking-[0.3em] text-slate-500 dark:text-stone-500 mb-2 block">Active UPI ID</label>
+                      <p className="text-lg font-black text-emerald-600 dark:text-emerald-500 truncate tracking-tighter drop-shadow-[0_0_10px_rgba(16,185,129,0.2)]">{userProfile?.upi_id || 'Not Assigned'}</p>
                     </div>
                     <Button
                       variant="secondary"
-                      className="w-full py-6 rounded-2xl text-[10px] font-black uppercase tracking-[0.3em] bg-white/5 hover:bg-white/10 border-white/10 hover:border-blue-500/50 transition-all duration-300"
+                      className="w-full py-6 rounded-2xl text-[10px] font-black uppercase tracking-[0.3em] bg-white dark:bg-white/5 hover:bg-slate-50 dark:hover:bg-white/10 border-slate-200 dark:border-white/10 hover:border-blue-500/50 transition-all duration-300 text-slate-900 dark:text-white"
                       onClick={() => setCurrentPage('earnings')}
                     >
                       Reset Payment Method
