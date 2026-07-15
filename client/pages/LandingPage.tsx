@@ -465,10 +465,10 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onEnterApp, onStartSig
             <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-blue-500/10 dark:bg-blue-500/5 rounded-full blur-[120px] pointer-events-none -z-10"></div>
             
             <motion.div
-                initial={{ opacity: 0, y: 30 }}
+                initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true, margin: "-100px" }}
-                transition={{ duration: 0.8, ease: "easeOut" }}
+                viewport={{ once: true, margin: "-50px" }}
+                transition={{ duration: 0.5, ease: "easeOut" }}
                 className="max-w-7xl mx-auto px-6 relative z-10"
              >
                <div className="text-center mb-12 md:mb-16">
@@ -621,10 +621,10 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onEnterApp, onStartSig
          {/* --- WHY STARSET / BENEFITS --- */}
          <section className="py-8 md:py-24 px-4 md:px-6 relative">
             <motion.div
-               initial={{ opacity: 0, y: 30 }}
+               initial={{ opacity: 0, y: 20 }}
                whileInView={{ opacity: 1, y: 0 }}
-               viewport={{ once: true, margin: "-100px" }}
-               transition={{ duration: 0.8, ease: "easeOut" }}
+               viewport={{ once: true, margin: "-50px" }}
+               transition={{ duration: 0.5, ease: "easeOut" }}
                className="max-w-7xl mx-auto"
             >
                <div className="text-center mb-6 md:mb-20 px-2">
@@ -641,6 +641,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onEnterApp, onStartSig
                      rootMargin="-100px"
                      textAlign="center"
                      tag="h2"
+                     onLetterAnimationComplete={() => {}}
                   />
                   <p className="text-sm md:text-2xl text-zinc-500 max-w-3xl mx-auto">The most flexible and rewarding way to join the AI economy.</p>
                </div>
@@ -687,10 +688,10 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onEnterApp, onStartSig
             <div className="absolute inset-0 bg-transparent opacity-50 pointer-events-none"></div>
 
             <motion.div
-               initial={{ opacity: 0, y: 30 }}
+               initial={{ opacity: 0, y: 20 }}
                whileInView={{ opacity: 1, y: 0 }}
-               viewport={{ once: true, margin: "-100px" }}
-               transition={{ duration: 0.8, ease: "easeOut" }}
+               viewport={{ once: true, margin: "-50px" }}
+               transition={{ duration: 0.5, ease: "easeOut" }}
                className="max-w-7xl mx-auto relative z-10"
             >
                <div className="flex flex-col items-center justify-center text-center mb-12 md:mb-20 gap-6">
@@ -768,10 +769,10 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onEnterApp, onStartSig
          {/* --- HOW IT WORKS (CLEAN & MINIMAL) --- */}
          <section className="py-16 md:py-24 px-4 md:px-6 relative overflow-hidden bg-slate-50/50 dark:bg-zinc-950/50 border-y border-slate-200 dark:border-white/5">
             <motion.div
-               initial={{ opacity: 0, y: 30 }}
+               initial={{ opacity: 0, y: 20 }}
                whileInView={{ opacity: 1, y: 0 }}
-               viewport={{ once: true, margin: "-100px" }}
-               transition={{ duration: 0.8, ease: "easeOut" }}
+               viewport={{ once: true, margin: "-50px" }}
+               transition={{ duration: 0.5, ease: "easeOut" }}
                className="max-w-7xl mx-auto relative z-10"
             >
                <div className="text-center mb-16 md:mb-24 px-2">
@@ -788,6 +789,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onEnterApp, onStartSig
                      rootMargin="-100px"
                      textAlign="center"
                      tag="h2"
+                     onLetterAnimationComplete={() => {}}
                   />
                   <p className="text-base md:text-lg text-slate-500 dark:text-zinc-400 max-w-2xl mx-auto">
                      No complex onboarding. Just create an account, select a task, and start contributing.
