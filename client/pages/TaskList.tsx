@@ -65,12 +65,12 @@ export const TaskList: React.FC<TaskListProps> = ({ onSelectTask, tasks, userRol
 
   const getTypeColors = (type: TaskType) => {
     switch (type) {
-      case TaskType.AUDIO_COLLECTION: return 'bg-blue-900/20 text-blue-300 border-blue-800/50';
-      case TaskType.IMAGE_COLLECTION: return 'bg-pink-900/20 text-pink-300 border-pink-800/50';
-      case TaskType.TEXT_ANNOTATION: return 'bg-violet-900/20 text-violet-300 border-violet-800/50';
-      case TaskType.IMAGE_LABELING: return 'bg-purple-900/20 text-purple-300 border-purple-800/50';
-      case TaskType.PLAYLIST: return 'bg-cyan-900/20 text-cyan-300 border-cyan-800/50';
-      default: return 'bg-orange-900/20 text-orange-300 border-orange-800/50';
+      case TaskType.AUDIO_COLLECTION: return 'bg-blue-100 dark:bg-blue-900/20 text-blue-600 dark:text-blue-300 border-blue-200 dark:border-blue-800/50';
+      case TaskType.IMAGE_COLLECTION: return 'bg-pink-100 dark:bg-pink-900/20 text-pink-600 dark:text-pink-300 border-pink-200 dark:border-pink-800/50';
+      case TaskType.TEXT_ANNOTATION: return 'bg-violet-100 dark:bg-violet-900/20 text-violet-600 dark:text-violet-300 border-violet-200 dark:border-violet-800/50';
+      case TaskType.IMAGE_LABELING: return 'bg-purple-100 dark:bg-purple-900/20 text-purple-600 dark:text-purple-300 border-purple-200 dark:border-purple-800/50';
+      case TaskType.PLAYLIST: return 'bg-cyan-100 dark:bg-cyan-900/20 text-cyan-600 dark:text-cyan-300 border-cyan-200 dark:border-cyan-800/50';
+      default: return 'bg-orange-100 dark:bg-orange-900/20 text-orange-600 dark:text-orange-300 border-orange-200 dark:border-orange-800/50';
     }
   };
 
@@ -87,7 +87,7 @@ export const TaskList: React.FC<TaskListProps> = ({ onSelectTask, tasks, userRol
         <h1 className="text-3xl font-bold text-slate-900 dark:text-white tracking-tight">
           {userRole === 'admin' ? 'Task Registry' : 'Active Projects'}
         </h1>
-        <p className="text-zinc-500 text-base">
+        <p className="text-slate-500 dark:text-zinc-500 text-base">
           {userRole === 'admin' ? 'Manage global task distribution and status.' : 'Select a task from available corporate campaigns.'}
         </p>
       </motion.div>
@@ -230,7 +230,7 @@ export const TaskList: React.FC<TaskListProps> = ({ onSelectTask, tasks, userRol
                             <FileAudio className="h-3.5 w-3.5" />
                           </button>
                           <button
-                            className="h-8 w-8 flex items-center justify-center rounded-lg bg-white/10 hover:bg-white/20 text-stone-400 transition-colors"
+                            className="h-8 w-8 flex items-center justify-center rounded-lg bg-slate-100 dark:bg-white/10 hover:bg-slate-200 dark:hover:bg-white/20 text-slate-500 dark:text-stone-400 transition-colors"
                             title="Edit task"
                             onClick={e => e.stopPropagation()}
                           >
@@ -278,10 +278,10 @@ export const TaskList: React.FC<TaskListProps> = ({ onSelectTask, tasks, userRol
                     {/* Bottom row: time, payout, quota, CTA */}
                     <div className="flex items-center gap-3 mt-auto pt-1 flex-wrap">
                       <span className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-slate-100 dark:bg-white/5 border border-slate-200 dark:border-white/10 rounded-lg text-sm font-semibold text-slate-900 dark:text-white">
-                        <Clock className="h-3.5 w-3.5 text-stone-400" />
+                        <Clock className="h-3.5 w-3.5 text-slate-500 dark:text-stone-400" />
                         {task.estimatedTimeSec} sec
                       </span>
-                      <span className="inline-flex items-center text-base font-black text-blue-400 bg-blue-900/20 px-4 py-1.5 rounded-lg border border-blue-800/50">
+                      <span className="inline-flex items-center text-base font-black text-blue-600 dark:text-blue-400 bg-blue-100 dark:bg-blue-900/20 px-4 py-1.5 rounded-lg border border-blue-200 dark:border-blue-800/50">
                         ₹{task.compensation.toFixed(2)}
                       </span>
 
@@ -289,12 +289,12 @@ export const TaskList: React.FC<TaskListProps> = ({ onSelectTask, tasks, userRol
                       {task.submissionCount !== undefined && (
                         <div className="flex-1 min-w-[120px] hidden md:block">
                           <div className="flex justify-between items-center mb-1">
-                            <span className={`text-[10px] font-bold uppercase tracking-wider ${isCritical ? 'text-red-500' : isLow ? 'text-amber-500' : 'text-stone-400'}`}>
+                            <span className={`text-[10px] font-bold uppercase tracking-wider ${isCritical ? 'text-red-600 dark:text-red-500' : isLow ? 'text-amber-600 dark:text-amber-500' : 'text-slate-500 dark:text-stone-400'}`}>
                               {remaining} slot{remaining !== 1 ? 's' : ''} left
                             </span>
-                            <span className="text-[10px] text-stone-400 font-mono">{used}/{MAX}</span>
+                            <span className="text-[10px] text-slate-500 dark:text-stone-400 font-mono">{used}/{MAX}</span>
                           </div>
-                          <div className="h-1.5 bg-white/10 rounded-full overflow-hidden">
+                          <div className="h-1.5 bg-slate-200 dark:bg-white/10 rounded-full overflow-hidden">
                             <div
                               className={`h-full rounded-full transition-all duration-500 ${isCritical ? 'bg-red-500' : isLow ? 'bg-amber-500' : 'bg-emerald-500'}`}
                               style={{ width: `${pct}%` }}
@@ -323,7 +323,7 @@ export const TaskList: React.FC<TaskListProps> = ({ onSelectTask, tasks, userRol
               <Filter className="h-10 w-10 text-slate-400 dark:text-stone-400" />
             </div>
             <h3 className="text-xl font-bold text-slate-900 dark:text-white">No active campaigns</h3>
-            <p className="text-stone-500 mt-2 text-base">Try adjusting your filters or come back later.</p>
+            <p className="text-slate-500 dark:text-stone-500 mt-2 text-base">Try adjusting your filters or come back later.</p>
             <Button variant="secondary" className="mt-6 bg-slate-100 dark:bg-white/5 text-slate-700 dark:text-white border-slate-200 dark:border-white/10" onClick={() => setFilterType('All')}>
               Clear Filters
             </Button>
