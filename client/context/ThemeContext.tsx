@@ -13,20 +13,15 @@ const THEME_STORAGE_KEY = 'starset-theme';
 const ThemeContext = createContext<ThemeContextValue | undefined>(undefined);
 
 const getInitialTheme = (): Theme => {
-  if (typeof window === 'undefined') return 'light';
+  if (typeof window === 'undefined') return 'dark';
 
   const storedTheme = window.localStorage.getItem(THEME_STORAGE_KEY);
   if (storedTheme === 'dark' || storedTheme === 'light') {
     return storedTheme as Theme;
   }
 
-  // Fallback to system preference
-  if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
-    return 'dark';
-  }
-
-  // Default to light theme
-  return 'light';
+  // Default to dark theme for all devices
+  return 'dark';
 };
 
 export const ThemeProvider: React.FC<React.PropsWithChildren> = ({ children }) => {
@@ -38,7 +33,11 @@ export const ThemeProvider: React.FC<React.PropsWithChildren> = ({ children }) =
     const handleChange = (e: MediaQueryListEvent) => {
       // Only adapt if the user hasn't explicitly set a preference in localStorage
       if (!window.localStorage.getItem(THEME_STORAGE_KEY)) {
-        setThemeState(e.matches ? 'dark' : 'light');
+        // By default we are dark now, but if they want to adopt system changes we can leave this.
+        // Actually, to ensure dark is the absolute main theme for new users, we will ignore system light mode.
+        if (e.matches) {
+           setThemeState('dark');
+        }
       }
     };
 
