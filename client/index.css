@@ -125,6 +125,12 @@ html.dark {
   --accent-hover: #2563eb;
 }
 
+html {
+  /* Fluid typography and spacing scale: 13px at 320px screen width, 16px at >= 560px screen width */
+  /* This automatically scales all Tailwind rem values (padding, margins, text, gaps) on small mobile devices */
+  font-size: clamp(13px, 1.25vw + 9px, 16px);
+}
+
 body {
   background-color: var(--background);
   color: var(--foreground);
