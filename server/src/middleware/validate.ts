@@ -25,19 +25,19 @@ export const validate = (schema: z.ZodSchema) => {
 export const CreateTaskSchema = z.object({
     body: z.object({
         title: z.string().min(3).max(100),
-        type: z.enum(["audio_collection", "image_collection", "text_annotation", "image_labeling", "survey"]),
+        type: z.enum(["Audio Collection", "Image Collection", "Text Annotation", "Image Labeling", "Evaluation", "Playlist"]),
         compensation: z.number().positive(),
         currency: z.string().length(3).default("INR"),
         estimated_time_min: z.number().positive(),
-        status: z.enum(["active", "paused", "completed", "deleted"]).default("active"),
+        status: z.enum(["AVAILABLE", "IN_PROGRESS", "VALIDATING", "ACCEPTED", "NOT_ACCEPTED", "active", "paused", "completed", "deleted"]).default("AVAILABLE"),
         language: z.string().min(2).max(50),
         project: z.string().optional(),
         difficulty: z.enum(["Beginner", "Intermediate", "Expert"]).default("Beginner"),
         prompt: z.string().optional(),
-        instructions: z.array(z.string()).optional(),
+        instructions: z.string().optional(),
         ai_capability: z.string().optional(),
         data_usage: z.string().optional(),
-        image_url: z.string().url().optional().or(z.literal("")),
+        image_url: z.string().url().optional().or(z.literal("").optional()).nullable(),
         requirements: z.array(z.string()).optional(),
     }),
 });

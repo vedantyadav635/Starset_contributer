@@ -272,7 +272,26 @@ export const AdminSubmissions: React.FC = () => {
                                     {sub.text_content && (
                                         <div className="bg-white/5 rounded-xl p-4">
                                             <p className="text-xs font-bold text-zinc-400 uppercase tracking-wider mb-2">Submitted Text</p>
-                                            <p className="text-sm text-zinc-300">{sub.text_content}</p>
+                                            <div className="text-sm text-zinc-300">
+                                                {(() => {
+                                                    try {
+                                                        const parsed = JSON.parse(sub.text_content || '{}');
+                                                        if (typeof parsed === 'object' && parsed !== null) {
+                                                            return (
+                                                                <div className="space-y-2">
+                                                                    {Object.entries(parsed).map(([key, val]) => (
+                                                                        <div key={key} className="bg-black/20 p-2 rounded border border-white/5">
+                                                                            <span className="text-zinc-500 font-mono text-xs mr-2">#{parseInt(key) + 1}</span>
+                                                                            <span>{String(val)}</span>
+                                                                        </div>
+                                                                    ))}
+                                                                </div>
+                                                            );
+                                                        }
+                                                    } catch(e) {}
+                                                    return sub.text_content;
+                                                })()}
+                                            </div>
                                         </div>
                                     )}
 

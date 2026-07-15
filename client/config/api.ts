@@ -30,6 +30,7 @@ export const API_ENDPOINTS = {
     SUBMIT_AUDIO: `${API_URL}/submissions/audio`,
     SUBMIT_IMAGE: `${API_URL}/submissions/image`,
     SUBMIT_TEXT: `${API_URL}/submissions/text`,
+    SUBMIT_PLAYLIST: `${API_URL}/submissions/playlist`,
 
     // User submissions (check completed tasks)
     USER_SUBMISSIONS: (userId: string) => `${API_URL}/user/submissions/${userId}`,

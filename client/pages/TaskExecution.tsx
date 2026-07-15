@@ -13,6 +13,58 @@ interface TaskExecutionProps {
 
 type Step = 'brief' | 'consent' | 'execute' | 'submitted';
 
+const SubtaskAudioRecorder = ({ onRecord, onClear, audioBlob }: { onRecord: (blob: Blob) => void, onClear: () => void, audioBlob: Blob | null }) => {
+  const [isRecording, setIsRecording] = useState(false);
+  const mediaRecorderRef = useRef<MediaRecorder | null>(null);
+  const audioChunksRef = useRef<Blob[]>([]);
+
+  const start = async () => {
+    try {
+      const stream = await navigator.mediaDevices.getUserMedia({ audio: { echoCancellation: true, noiseSuppression: true } });
+      audioChunksRef.current = [];
+      const mediaRecorder = new MediaRecorder(stream);
+      mediaRecorderRef.current = mediaRecorder;
+      mediaRecorder.ondataavailable = (e) => {
+        if (e.data.size > 0) audioChunksRef.current.push(e.data);
+      };
+      mediaRecorder.onstop = () => {
+        const blob = new Blob(audioChunksRef.current, { type: 'audio/webm' });
+        onRecord(blob);
+        stream.getTracks().forEach(track => track.stop());
+      };
+      mediaRecorder.start(100);
+      setIsRecording(true);
+    } catch (err) {
+      console.error(err);
+      alert("Could not access microphone.");
+    }
+  };
+
+  const stop = () => {
+    if (mediaRecorderRef.current && mediaRecorderRef.current.state !== 'inactive') {
+      mediaRecorderRef.current.stop();
+    }
+    setIsRecording(false);
+  };
+
+  return (
+    <div className="flex items-center gap-3">
+      {!audioBlob ? (
+        !isRecording ? (
+           <button onClick={start} className="flex items-center gap-2 px-3 py-1.5 bg-red-600 hover:bg-red-500 rounded-lg text-white text-xs font-bold transition-all"><Mic className="h-3 w-3"/> Record Audio</button>
+        ) : (
+           <button onClick={stop} className="flex items-center gap-2 px-3 py-1.5 bg-white hover:bg-slate-200 text-black rounded-lg text-xs font-bold transition-all animate-pulse"><Square className="h-3 w-3"/> Stop Recording</button>
+        )
+      ) : (
+        <div className="flex items-center gap-3 bg-black/30 border border-white/10 pl-3 pr-2 py-1 rounded-lg">
+           <span className="text-xs text-emerald-400 font-bold flex items-center gap-1.5"><CheckCircle className="h-3 w-3" /> Audio Attached</span>
+           <button onClick={onClear} className="text-stone-400 hover:text-red-400 text-[10px] font-bold uppercase tracking-wider bg-white/5 px-2 py-1 rounded">Retake</button>
+        </div>
+      )}
+    </div>
+  );
+};
+
 export const TaskExecution: React.FC<TaskExecutionProps> = ({ task, onBack, onComplete }) => {
   const [step, setStep] = useState<Step>('brief');
 
@@ -38,6 +90,9 @@ export const TaskExecution: React.FC<TaskExecutionProps> = ({ task, onBack, onCo
   // Text/Survey State
   const [textInput, setTextInput] = useState('');
   const [selectedOption, setSelectedOption] = useState<string | null>(null);
+  
+  // Playlist State
+  const [playlistAnswers, setPlaylistAnswers] = useState<Record<number, string | Blob>>({});
 
   const [consentGiven, setConsentGiven] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -298,9 +353,38 @@ export const TaskExecution: React.FC<TaskExecutionProps> = ({ task, onBack, onCo
         }
       }
 
+      else if (task.type === TaskType.PLAYLIST) {
+        const formData = new FormData();
+        formData.append('taskId', task.id);
+        formData.append('userId', user.id);
+        
+        const textPayload: Record<string, string> = {};
+        
+        Object.entries(playlistAnswers).forEach(([idx, val]) => {
+          if (val instanceof Blob) {
+            formData.append(`audio_${idx}`, val, `audio_${idx}.webm`);
+          } else {
+            textPayload[idx] = val as string;
+          }
+        });
+        
+        formData.append('textContent', JSON.stringify(textPayload));
+        
+        const response = await fetchWithRetry(API_ENDPOINTS.SUBMIT_PLAYLIST, {
+          method: 'POST',
+          body: formData,
+        });
+
+        if (!response.ok) {
+          const error = await response.json();
+          throw new Error(error.error || 'Failed to submit playlist');
+        }
+      }
+
       else if (task.type === TaskType.IMAGE_LABELING ||
         task.type === TaskType.TEXT_ANNOTATION ||
         task.type === TaskType.SURVEY) {
+        
         const response = await fetchWithRetry(API_ENDPOINTS.SUBMIT_TEXT, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
@@ -336,12 +420,28 @@ export const TaskExecution: React.FC<TaskExecutionProps> = ({ task, onBack, onCo
     return `${mins}:${secs.toString().padStart(2, '0')}`;
   };
 
+  let parsedPlaylist: { title: string; prompt: string }[] = [];
+  if (task.type === TaskType.PLAYLIST) {
+    try {
+      parsedPlaylist = JSON.parse(task.prompt);
+    } catch (e) {
+      console.error("Failed to parse playlist");
+    }
+  }
+
   const isSubmitDisabled = () => {
     if (isSubmitting) return true;
     if (task.type === TaskType.AUDIO_COLLECTION) return !hasRecorded;
     if (task.type === TaskType.IMAGE_COLLECTION) return !capturedImage;
     if (task.type === TaskType.IMAGE_LABELING) return textInput.length < 5;
     if (task.type === TaskType.TEXT_ANNOTATION || task.type === TaskType.SURVEY) return !selectedOption;
+    if (task.type === TaskType.PLAYLIST) {
+      const answeredCount = Object.keys(playlistAnswers).filter(k => {
+        const val = playlistAnswers[Number(k)];
+        return val instanceof Blob || (typeof val === 'string' && val.trim().length > 0);
+      }).length;
+      return answeredCount < parsedPlaylist.length;
+    }
     return true;
   };
 
@@ -523,10 +623,32 @@ export const TaskExecution: React.FC<TaskExecutionProps> = ({ task, onBack, onCo
           <div className="mt-8 pt-6 border-t border-slate-200 dark:border-white/10 hidden md:block">
             <div className="flex justify-between items-center mb-2">
               <span className="text-xs font-bold text-stone-500 uppercase tracking-wider">Completion Status</span>
-              <span className="text-xs font-bold text-slate-900 dark:text-white">0%</span>
+              <span className="text-xs font-bold text-slate-900 dark:text-white">
+                {(() => {
+                  if (task.type === TaskType.PLAYLIST && parsedPlaylist.length > 0) {
+                    const answeredCount = Object.keys(playlistAnswers).filter(k => {
+                      const val = playlistAnswers[Number(k)];
+                      return val instanceof Blob || (typeof val === 'string' && val.trim().length > 0);
+                    }).length;
+                    return Math.round((answeredCount / parsedPlaylist.length) * 100);
+                  }
+                  if (hasRecorded || capturedImage || (textInput.trim().length > 0) || selectedOption) return 100;
+                  return 0;
+                })()}%
+              </span>
             </div>
             <div className="h-2 bg-white/10 rounded-full overflow-hidden">
-              <div className="h-full bg-blue-500 w-0"></div>
+              <div className="h-full bg-blue-500 transition-all duration-300" style={{ width: `${(() => {
+                  if (task.type === TaskType.PLAYLIST && parsedPlaylist.length > 0) {
+                    const answeredCount = Object.keys(playlistAnswers).filter(k => {
+                      const val = playlistAnswers[Number(k)];
+                      return val instanceof Blob || (typeof val === 'string' && val.trim().length > 0);
+                    }).length;
+                    return Math.round((answeredCount / parsedPlaylist.length) * 100);
+                  }
+                  if (hasRecorded || capturedImage || (textInput.trim().length > 0) || selectedOption) return 100;
+                  return 0;
+              })()}%` }}></div>
             </div>
           </div>
         </div>
@@ -670,6 +792,52 @@ export const TaskExecution: React.FC<TaskExecutionProps> = ({ task, onBack, onCo
             </div>
           )}
 
+          {/* PLAYLIST UI */}
+          {task.type === TaskType.PLAYLIST && (
+            <div className="w-full max-w-2xl space-y-6 max-h-[70vh] overflow-y-auto pr-2 custom-scrollbar">
+              {parsedPlaylist.length > 0 ? (
+                parsedPlaylist.map((subtask, idx) => (
+                  <div key={idx} className="bg-slate-100 dark:bg-white/5 p-5 rounded-2xl border border-slate-200 dark:border-white/10">
+                    <div className="flex items-center gap-3 mb-3">
+                      <span className="flex items-center justify-center h-6 w-6 rounded-full bg-blue-500/20 text-blue-400 text-xs font-bold">{idx + 1}</span>
+                      <h4 className="font-bold text-slate-900 dark:text-white">{subtask.title}</h4>
+                    </div>
+                    <p className="text-stone-600 dark:text-stone-400 mb-4 text-sm leading-relaxed">{subtask.prompt}</p>
+                    
+                    <div className="space-y-3">
+                      <textarea
+                        rows={2}
+                        value={typeof playlistAnswers[idx] === 'string' ? playlistAnswers[idx] as string : ''}
+                        onChange={(e) => setPlaylistAnswers(prev => ({ ...prev, [idx]: e.target.value }))}
+                        disabled={playlistAnswers[idx] instanceof Blob}
+                        className="w-full bg-white dark:bg-black/40 border border-slate-200 dark:border-white/10 rounded-xl p-4 text-slate-900 dark:text-white outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 transition-all resize-none text-sm disabled:opacity-50"
+                        placeholder={playlistAnswers[idx] instanceof Blob ? "Audio recorded. Retake to type instead." : "Enter text answer..."}
+                      />
+                      
+                      <div className="flex items-center gap-4">
+                        <div className="h-px bg-white/10 flex-1"></div>
+                        <span className="text-[10px] text-stone-500 font-black uppercase tracking-widest">OR</span>
+                        <div className="h-px bg-white/10 flex-1"></div>
+                      </div>
+                      
+                      <div className="flex justify-center">
+                        <SubtaskAudioRecorder 
+                          audioBlob={playlistAnswers[idx] instanceof Blob ? playlistAnswers[idx] as Blob : null}
+                          onRecord={(b) => setPlaylistAnswers(prev => ({ ...prev, [idx]: b }))}
+                          onClear={() => setPlaylistAnswers(prev => { const n = {...prev}; delete n[idx]; return n; })}
+                        />
+                      </div>
+                    </div>
+                  </div>
+                ))
+              ) : (
+                <div className="text-center p-8 text-stone-500 bg-white/5 rounded-2xl">
+                  No subtasks found in this playlist.
+                </div>
+              )}
+            </div>
+          )}
+
           {/* Reset/Submit Actions */}
           <div className="w-full max-w-2xl mt-10 md:mt-12 flex gap-4 md:gap-5 justify-center">
             <Button variant="outline" onClick={() => {
@@ -677,6 +845,7 @@ export const TaskExecution: React.FC<TaskExecutionProps> = ({ task, onBack, onCo
               setRecordingTime(0);
               setTextInput('');
               setSelectedOption(null);
+              setPlaylistAnswers({});
               setCapturedImage(null);
               setAudioBlob(null);
               setAudioUrl(null);

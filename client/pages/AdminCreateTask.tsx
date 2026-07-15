@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Button } from '../components/Button';
 import { Task, TaskType, TaskStatus } from '../types';
-import { Save, AlertCircle, Sparkles } from 'lucide-react';
+import { Save, AlertCircle, Sparkles, Plus, Trash2 } from 'lucide-react';
 import { API_ENDPOINTS } from '../config/api';
 
 
@@ -23,7 +23,8 @@ export const AdminCreateTask: React.FC<AdminCreateTaskProps> = ({ onSave }) => {
     aiCapability: '',
     dataUsage: '',
     imageUrl: '',
-    requirementsString: '' // Temp field for parsing
+    requirementsString: '', // Temp field for parsing
+    subtasks: [] as { title: string; prompt: string }[]
   });
 
   const [isLoading, setIsLoading] = useState(false);
@@ -41,7 +42,7 @@ export const AdminCreateTask: React.FC<AdminCreateTaskProps> = ({ onSave }) => {
       language: formData.language,
       project: formData.project,
       difficulty: formData.difficulty,
-      prompt: formData.prompt,
+      prompt: formData.type === TaskType.PLAYLIST ? JSON.stringify(formData.subtasks) : formData.prompt,
       instructions: formData.instructions,
       ai_capability: formData.aiCapability,
       data_usage: formData.dataUsage,
@@ -161,7 +162,7 @@ export const AdminCreateTask: React.FC<AdminCreateTaskProps> = ({ onSave }) => {
             <select
               className="w-full px-4 py-3 bg-black/30 border border-white/10 rounded-lg outline-none text-white"
               value={formData.difficulty}
-              onChange={e => setFormData({ ...formData, difficulty: e.target.value as any })}
+              onChange={e => setFormData({ ...formData, difficulty: e.target.value as 'Beginner' | 'Intermediate' | 'Expert' })}
             >
               <option>Beginner</option>
               <option>Intermediate</option>
@@ -195,17 +196,81 @@ export const AdminCreateTask: React.FC<AdminCreateTaskProps> = ({ onSave }) => {
 
         {/* Content Details */}
         <div className="space-y-6 pt-4 border-t border-white/10">
-          <div className="space-y-2">
-            <label className="block text-xs font-bold uppercase tracking-wider text-stone-500">Prompt / Script</label>
-            <textarea
-              required
-              rows={3}
-              className="w-full px-4 py-3 bg-black/30 border border-white/10 rounded-lg outline-none text-white resize-none"
-              placeholder="What should the user see or read?"
-              value={formData.prompt}
-              onChange={e => setFormData({ ...formData, prompt: e.target.value })}
-            />
-          </div>
+          {formData.type === TaskType.PLAYLIST ? (
+            <div className="space-y-4">
+              <div className="flex items-center justify-between">
+                <label className="block text-xs font-bold uppercase tracking-wider text-stone-500">Playlist Subtasks</label>
+                <button
+                  type="button"
+                  onClick={() => setFormData({ ...formData, subtasks: [...formData.subtasks, { title: '', prompt: '' }] })}
+                  className="flex items-center text-xs text-blue-400 hover:text-blue-300 font-bold bg-blue-900/20 px-3 py-1.5 rounded-lg"
+                >
+                  <Plus className="h-3 w-3 mr-1" /> Add Subtask
+                </button>
+              </div>
+              
+              {formData.subtasks.map((subtask, index) => (
+                <div key={index} className="bg-black/20 border border-white/5 rounded-lg p-4 space-y-4 relative">
+                  <div className="absolute top-4 right-4">
+                    <button
+                      type="button"
+                      onClick={() => {
+                        const newSubtasks = [...formData.subtasks];
+                        newSubtasks.splice(index, 1);
+                        setFormData({ ...formData, subtasks: newSubtasks });
+                      }}
+                      className="text-stone-500 hover:text-red-400"
+                    >
+                      <Trash2 className="h-4 w-4" />
+                    </button>
+                  </div>
+                  <div className="pr-8">
+                    <input
+                      required
+                      className="w-full px-3 py-2 bg-black/40 border border-white/10 rounded-md outline-none text-white text-sm mb-3"
+                      placeholder="Subtask Title (e.g., Step 1)"
+                      value={subtask.title}
+                      onChange={e => {
+                        const newSubtasks = [...formData.subtasks];
+                        newSubtasks[index].title = e.target.value;
+                        setFormData({ ...formData, subtasks: newSubtasks });
+                      }}
+                    />
+                    <textarea
+                      required
+                      rows={2}
+                      className="w-full px-3 py-2 bg-black/40 border border-white/10 rounded-md outline-none text-white text-sm resize-none"
+                      placeholder="What should the user do in this step?"
+                      value={subtask.prompt}
+                      onChange={e => {
+                        const newSubtasks = [...formData.subtasks];
+                        newSubtasks[index].prompt = e.target.value;
+                        setFormData({ ...formData, subtasks: newSubtasks });
+                      }}
+                    />
+                  </div>
+                </div>
+              ))}
+              
+              {formData.subtasks.length === 0 && (
+                <div className="text-center py-6 border border-dashed border-white/10 rounded-lg text-stone-500 text-sm">
+                  No subtasks added yet. Click "Add Subtask" to build the playlist.
+                </div>
+              )}
+            </div>
+          ) : (
+            <div className="space-y-2">
+              <label className="block text-xs font-bold uppercase tracking-wider text-stone-500">Prompt / Script</label>
+              <textarea
+                required
+                rows={3}
+                className="w-full px-4 py-3 bg-black/30 border border-white/10 rounded-lg outline-none text-white resize-none"
+                placeholder="What should the user see or read?"
+                value={formData.prompt}
+                onChange={e => setFormData({ ...formData, prompt: e.target.value })}
+              />
+            </div>
+          )}
 
           <div className="space-y-2">
             <label className="block text-xs font-bold uppercase tracking-wider text-stone-500">Detailed Instructions</label>

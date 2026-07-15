@@ -12,7 +12,8 @@ export enum TaskType {
   IMAGE_COLLECTION = 'Image Collection',
   TEXT_ANNOTATION = 'Text Annotation',
   IMAGE_LABELING = 'Image Labeling',
-  SURVEY = 'Evaluation' // Was Survey
+  SURVEY = 'Evaluation', // Was Survey
+  PLAYLIST = 'Playlist'
 }
 
 export type UserRole = 'contributor' | 'admin';

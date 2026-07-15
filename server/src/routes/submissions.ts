@@ -4,7 +4,7 @@ import rateLimit from "express-rate-limit";
 import { uploadToBucket, copyBetweenBuckets, uploadToB2, generateAudioFileName } from "../utils/b2Upload";
 import { validateAudio } from "../utils/audioValidator";
 import { supabase } from "../db/supabase";
-
+import * as mm from "music-metadata";
 const router = Router();
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -81,7 +81,6 @@ const upload = multer({
     },
 });
 
-import * as mm from 'music-metadata';
 
 // ─────────────────────────────────────────────────────────────────────────────
 // Technical Audio Metadata Extraction
@@ -454,6 +453,75 @@ router.post("/text", async (req: Request, res: Response) => {
 
     } catch (error: any) {
         return res.status(500).json({ error: "Failed to process text submission", details: error.message });
+    }
+});
+
+// ================================================================================================================
+// POST /submissions/playlist
+// Handles an array of files (audio) and a textContent JSON blob for Playlist tasks.
+// ================================================================================================================
+router.post("/playlist", uploadLimiter, upload.any(), async (req: Request, res: Response) => {
+    try {
+        const { taskId, textContent } = req.body;
+        const userId = (req as any).user?.id;
+
+        if (!taskId || !userId) {
+            return res.status(400).json({ error: "Missing required fields" });
+        }
+
+        if (await checkAlreadySubmitted(taskId, userId)) {
+            return res.status(409).json({ error: "You have already submitted this task." });
+        }
+
+        let parsedAnswers: Record<string, string> = {};
+        if (textContent) {
+            try {
+                parsedAnswers = JSON.parse(textContent);
+            } catch (e) {
+                return res.status(400).json({ error: "Invalid JSON in textContent" });
+            }
+        }
+
+        const files = req.files as Express.Multer.File[];
+        
+        if (files && files.length > 0) {
+            for (const file of files) {
+                // file.fieldname will be like "audio_0"
+                const idx = file.fieldname.split('_')[1];
+                if (!idx) continue;
+                
+                const ext = file.mimetype.includes('webm') ? 'webm' : 'mp3';
+                const fileName = `playlist_${taskId}_${userId}_part${idx}_${Date.now()}.${ext}`;
+                const result = await uploadToBucket(file.buffer, fileName, file.mimetype, 'raw');
+                
+                // Store the raw URL in the JSON map
+                parsedAnswers[idx] = result.url;
+            }
+        }
+
+        const finalJson = JSON.stringify(parsedAnswers);
+
+        const { data, error } = await supabase
+            .from('submissions')
+            .insert({
+                task_id: taskId,
+                user_id: userId,
+                text_content: finalJson,
+                status: 'pending_validation',
+                storage_stage: 'raw',
+            })
+            .select()
+            .single();
+
+        if (error) throw error;
+        
+        await checkAndDeleteTaskIfFull(taskId);
+
+        return res.status(201).json({ message: "Playlist submitted", submission: data });
+
+    } catch (err: any) {
+        console.error("Playlist submission error:", err);
+        return res.status(500).json({ error: err.message || "Failed to submit playlist" });
     }
 });
 

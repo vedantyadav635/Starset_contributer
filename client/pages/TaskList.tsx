@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Task, TaskType, UserRole } from '../types';
 import { Button } from '../components/Button';
-import { Clock, Globe, Filter, ChevronRight, Edit3, Image as ImageIcon, CheckCircle2, Camera, Trash2, Edit, BadgeCheck, Mic, FileAudio } from 'lucide-react';
+import { Clock, Globe, Filter, ChevronRight, Edit3, Image as ImageIcon, CheckCircle2, Camera, Trash2, Edit, BadgeCheck, Mic, FileAudio, ListTodo } from 'lucide-react';
 import { motion } from 'framer-motion';
 
 const EASE = [0.16, 1, 0.3, 1] as const;
@@ -58,6 +58,7 @@ export const TaskList: React.FC<TaskListProps> = ({ onSelectTask, tasks, userRol
       case TaskType.TEXT_ANNOTATION: return <Edit3 className="h-4 w-4" />;
       case TaskType.IMAGE_LABELING: return <ImageIcon className="h-4 w-4" />;
       case TaskType.SURVEY: return <CheckCircle2 className="h-4 w-4" />;
+      case TaskType.PLAYLIST: return <ListTodo className="h-4 w-4" />;
       default: return <Clock className="h-4 w-4" />;
     }
   };
@@ -68,6 +69,7 @@ export const TaskList: React.FC<TaskListProps> = ({ onSelectTask, tasks, userRol
       case TaskType.IMAGE_COLLECTION: return 'bg-pink-900/20 text-pink-300 border-pink-800/50';
       case TaskType.TEXT_ANNOTATION: return 'bg-violet-900/20 text-violet-300 border-violet-800/50';
       case TaskType.IMAGE_LABELING: return 'bg-purple-900/20 text-purple-300 border-purple-800/50';
+      case TaskType.PLAYLIST: return 'bg-cyan-900/20 text-cyan-300 border-cyan-800/50';
       default: return 'bg-orange-900/20 text-orange-300 border-orange-800/50';
     }
   };
@@ -92,7 +94,7 @@ export const TaskList: React.FC<TaskListProps> = ({ onSelectTask, tasks, userRol
 
       {/* Filters */}
       <motion.div variants={itemVariants} className="bg-slate-100 dark:bg-white/5 p-1.5 rounded-2xl border border-slate-200 dark:border-white/10 shadow-sm flex flex-wrap gap-1 overflow-x-auto no-scrollbar">
-        {(['All', TaskType.AUDIO_COLLECTION, TaskType.IMAGE_COLLECTION, TaskType.TEXT_ANNOTATION, TaskType.IMAGE_LABELING, TaskType.SURVEY] as string[]).map((type) => (
+        {(['All', TaskType.AUDIO_COLLECTION, TaskType.IMAGE_COLLECTION, TaskType.TEXT_ANNOTATION, TaskType.IMAGE_LABELING, TaskType.SURVEY, TaskType.PLAYLIST] as string[]).map((type) => (
           <button
             key={type}
             onClick={() => setFilterType(type)}

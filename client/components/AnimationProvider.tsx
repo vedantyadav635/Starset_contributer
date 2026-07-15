@@ -10,8 +10,8 @@ import React, { useRef, useEffect, useState, createContext, useContext } from 'r
 import { motion, AnimatePresence, useInView, Variants } from 'framer-motion';
 
 // ─── Animation configuration ───────────────────────────────────────
-const EASE_OUT_EXPO = [0.16, 1, 0.3, 1];
-const EASE_OUT_QUART = [0.25, 1, 0.5, 1];
+const EASE_OUT_EXPO: [number, number, number, number] = [0.16, 1, 0.3, 1];
+const EASE_OUT_QUART: [number, number, number, number] = [0.25, 1, 0.5, 1];
 
 // ─── Reusable Variant Presets ───────────────────────────────────────
 
@@ -90,7 +90,7 @@ interface AnimatedProps {
   delay?: number;
   once?: boolean;
   variants?: Variants;
-  as?: keyof JSX.IntrinsicElements;
+  as?: React.ElementType;
 }
 
 /**
