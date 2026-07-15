@@ -83,7 +83,7 @@ export const LanguageDirectory: React.FC<PageProps> = ({ onNavigate, onEnterApp 
           </div>
 
           {/* Grid Layout of All Language Cards */}
-          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 md:gap-6">
+          <div className="grid grid-cols-[repeat(auto-fit,minmax(140px,1fr))] md:grid-cols-[repeat(auto-fill,minmax(300px,1fr))] gap-3 md:gap-6">
             {LANGUAGES_DIRECTORY.filter(lang => selectedCategory === 'all' || lang.category === selectedCategory).map((lang) => (
               <motion.div
                 key={lang.id}
