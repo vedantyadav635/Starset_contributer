@@ -533,40 +533,40 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onEnterApp, onStartSig
                         viewport={{ once: true }}
                         transition={{ duration: 0.4 }}
                         onClick={() => onNavigate('signup')}
-                        className="group relative flex flex-col justify-between p-5 md:p-8 rounded-3xl bg-white/60 dark:bg-zinc-900/40 backdrop-blur-md border border-slate-200/60 dark:border-white/5 hover:border-blue-500/30 dark:hover:border-blue-500/30 shadow-md hover:shadow-xl md:hover:-translate-y-1 transition-all duration-300 cursor-pointer flex-shrink-0 w-[85vw] sm:w-[320px] md:w-auto snap-center"
+                        className="group relative flex flex-col justify-between p-4 md:p-8 rounded-2xl md:rounded-3xl bg-white/60 dark:bg-zinc-900/40 backdrop-blur-md border border-slate-200/60 dark:border-white/5 hover:border-blue-500/30 dark:hover:border-blue-500/30 shadow-md hover:shadow-xl md:hover:-translate-y-1 transition-all duration-300 cursor-pointer flex-shrink-0 w-[75vw] sm:w-[320px] md:w-auto snap-center"
                      >
                         {/* Popular Badge */}
                         {lang.popular && (
-                           <div className="absolute top-4 right-4 px-3 py-1 rounded-full text-[10px] font-black tracking-wider uppercase bg-amber-500/10 dark:bg-amber-500/20 text-amber-600 dark:text-amber-400 border border-amber-500/20">
+                           <div className="absolute top-3 right-3 md:top-4 md:right-4 px-2 md:px-3 py-1 rounded-full text-[9px] md:text-[10px] font-black tracking-wider uppercase bg-amber-500/10 dark:bg-amber-500/20 text-amber-600 dark:text-amber-400 border border-amber-500/20">
                               High Volume
                            </div>
                         )}
 
-                        <div className="space-y-4">
+                        <div className="space-y-3 md:space-y-4">
                            <div className="flex items-center gap-3">
-                              <div className="w-12 h-12 rounded-2xl flex items-center justify-center bg-blue-50 dark:bg-blue-950/40 text-blue-600 dark:text-blue-400 font-bold text-xl uppercase group-hover:scale-110 transition-transform">
+                              <div className="w-10 h-10 md:w-12 md:h-12 rounded-xl md:rounded-2xl flex items-center justify-center bg-blue-50 dark:bg-blue-950/40 text-blue-600 dark:text-blue-400 font-bold text-lg md:text-xl uppercase group-hover:scale-110 transition-transform">
                                  {lang.name[0]}
                               </div>
                               <div>
-                                 <h3 className="text-xl font-extrabold text-slate-900 dark:text-white flex items-center gap-2">
+                                 <h3 className="text-lg md:text-xl font-extrabold text-slate-900 dark:text-white flex items-center gap-1.5 md:gap-2">
                                     {lang.name}
-                                    <span className="text-sm font-medium text-slate-400 dark:text-zinc-500">
+                                    <span className="text-xs md:text-sm font-medium text-slate-400 dark:text-zinc-500">
                                        ({lang.nativeName})
                                     </span>
                                  </h3>
-                                 <p className="text-xs font-bold text-blue-600 dark:text-blue-400 uppercase tracking-wider">
+                                 <p className="text-[10px] md:text-xs font-bold text-blue-600 dark:text-blue-400 uppercase tracking-wider">
                                     {lang.category === 'hinglish' ? 'Conversational' : lang.category === 'north' ? 'North Dialects' : 'South Dialects'}
                                  </p>
                               </div>
                            </div>
 
-                           <div className="py-2 border-y border-slate-100 dark:border-white/5 space-y-2">
+                           <div className="py-2 border-y border-slate-100 dark:border-white/5 space-y-1.5 md:space-y-2">
                               <div className="flex items-baseline justify-between">
-                                 <span className="text-xs text-slate-400 dark:text-zinc-500 font-medium">Payout Rate</span>
-                                 <span className="text-lg font-black text-emerald-600 dark:text-emerald-400">{lang.payout}</span>
+                                 <span className="text-[10px] md:text-xs text-slate-400 dark:text-zinc-500 font-medium">Payout Rate</span>
+                                 <span className="text-base md:text-lg font-black text-emerald-600 dark:text-emerald-400">{lang.payout}</span>
                               </div>
                               {lang.payoutBonus && (
-                                 <div className="text-[10px] text-right font-semibold text-amber-600 dark:text-amber-400">
+                                 <div className="text-[9px] md:text-[10px] text-right font-semibold text-amber-600 dark:text-amber-400">
                                     {lang.payoutBonus}
                                  </div>
                               )}
@@ -574,14 +574,14 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onEnterApp, onStartSig
 
                            <div className="space-y-2">
                               <div>
-                                 <h4 className="text-xs font-bold text-slate-500 dark:text-zinc-400 uppercase tracking-widest mb-1">Supported Dialects</h4>
-                                 <p className="text-sm font-medium text-slate-700 dark:text-zinc-300">{lang.dialects}</p>
+                                 <h4 className="text-[10px] md:text-xs font-bold text-slate-500 dark:text-zinc-400 uppercase tracking-widest mb-1">Supported Dialects</h4>
+                                 <p className="text-xs md:text-sm font-medium text-slate-700 dark:text-zinc-300">{lang.dialects}</p>
                               </div>
                               <div>
-                                 <h4 className="text-xs font-bold text-slate-500 dark:text-zinc-400 uppercase tracking-widest mb-1">Active Projects</h4>
+                                 <h4 className="text-[10px] md:text-xs font-bold text-slate-500 dark:text-zinc-400 uppercase tracking-widest mb-1">Active Projects</h4>
                                  <div className="flex flex-wrap gap-1.5 mt-1">
                                     {lang.tasks.map((task, i) => (
-                                       <span key={i} className="px-2.5 py-1 rounded-lg text-xs font-semibold bg-slate-100 dark:bg-zinc-800 text-slate-700 dark:text-zinc-300">
+                                       <span key={i} className="px-2 py-1 md:px-2.5 md:py-1 rounded-md md:rounded-lg text-[10px] md:text-xs font-semibold bg-slate-100 dark:bg-zinc-800 text-slate-700 dark:text-zinc-300">
                                           {task}
                                        </span>
                                     ))}
@@ -590,9 +590,9 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onEnterApp, onStartSig
                            </div>
                         </div>
 
-                        <div className="mt-8">
+                        <div className="mt-4 md:mt-8">
                            <div
-                              className="w-full h-12 flex items-center justify-center font-bold text-sm bg-slate-100 dark:bg-zinc-800 text-slate-800 dark:text-zinc-200 group-hover:bg-blue-600 dark:group-hover:bg-blue-600 group-hover:text-white dark:group-hover:text-white transition-all duration-300 rounded-xl shadow-inner group-hover:shadow-[0_4px_20px_-4px_rgba(37,99,235,0.4)]"
+                              className="w-full h-10 md:h-12 flex items-center justify-center font-bold text-xs md:text-sm bg-slate-100 dark:bg-zinc-800 text-slate-800 dark:text-zinc-200 group-hover:bg-blue-600 dark:group-hover:bg-blue-600 group-hover:text-white dark:group-hover:text-white transition-all duration-300 rounded-lg md:rounded-xl shadow-inner group-hover:shadow-[0_4px_20px_-4px_rgba(37,99,235,0.4)]"
                            >
                               Contribute Now
                            </div>
