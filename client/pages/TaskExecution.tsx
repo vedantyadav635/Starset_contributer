@@ -48,17 +48,28 @@ const SubtaskAudioRecorder = ({ onRecord, onClear, audioBlob }: { onRecord: (blo
   };
 
   return (
-    <div className="flex items-center gap-3">
+    <div className="flex flex-col items-center gap-4 py-2">
       {!audioBlob ? (
         !isRecording ? (
-           <button onClick={start} className="flex items-center gap-2 px-3 py-1.5 bg-red-600 hover:bg-red-500 rounded-lg text-white text-xs font-bold transition-all"><Mic className="h-3 w-3"/> Record Audio</button>
+           <button onClick={start} className="group relative h-16 w-16 md:h-20 md:w-20 rounded-full bg-red-600 text-white flex items-center justify-center shadow-xl shadow-red-500/20 transition-all hover:scale-110">
+             <Mic className="h-6 w-6 md:h-8 md:w-8" />
+           </button>
         ) : (
-           <button onClick={stop} className="flex items-center gap-2 px-3 py-1.5 bg-white hover:bg-slate-200 text-black rounded-lg text-xs font-bold transition-all animate-pulse"><Square className="h-3 w-3"/> Stop Recording</button>
+           <div className="flex flex-col items-center gap-3">
+             <button onClick={stop} className="h-16 w-16 md:h-20 md:w-20 rounded-full bg-white text-black flex items-center justify-center shadow-xl transition-all hover:scale-105">
+               <Square className="h-5 w-5 md:h-6 md:w-6 fill-current" />
+             </button>
+             <div className="flex items-center gap-1.5 text-[10px] font-black text-red-500 uppercase tracking-widest animate-pulse">
+               Recording...
+             </div>
+           </div>
         )
       ) : (
-        <div className="flex items-center gap-3 bg-black/30 border border-white/10 pl-3 pr-2 py-1 rounded-lg">
-           <span className="text-xs text-emerald-400 font-bold flex items-center gap-1.5"><CheckCircle className="h-3 w-3" /> Audio Attached</span>
-           <button onClick={onClear} className="text-stone-400 hover:text-red-400 text-[10px] font-bold uppercase tracking-wider bg-white/5 px-2 py-1 rounded">Retake</button>
+        <div className="flex flex-col items-center gap-3">
+           <div className="flex items-center gap-2 bg-emerald-500/10 text-emerald-500 border border-emerald-500/20 px-4 py-2 rounded-full font-bold text-sm">
+             <CheckCircle className="h-4 w-4" /> Audio Recorded
+           </div>
+           <button onClick={onClear} className="text-stone-400 hover:text-red-400 text-xs font-bold uppercase tracking-wider underline underline-offset-4 transition-colors">Retake Audio</button>
         </div>
       )}
     </div>
@@ -804,23 +815,8 @@ export const TaskExecution: React.FC<TaskExecutionProps> = ({ task, onBack, onCo
                     </div>
                     <p className="text-stone-600 dark:text-stone-400 mb-4 text-sm leading-relaxed">{subtask.prompt}</p>
                     
-                    <div className="space-y-3">
-                      <textarea
-                        rows={2}
-                        value={typeof playlistAnswers[idx] === 'string' ? playlistAnswers[idx] as string : ''}
-                        onChange={(e) => setPlaylistAnswers(prev => ({ ...prev, [idx]: e.target.value }))}
-                        disabled={playlistAnswers[idx] instanceof Blob}
-                        className="w-full bg-white dark:bg-black/40 border border-slate-200 dark:border-white/10 rounded-xl p-4 text-slate-900 dark:text-white outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 transition-all resize-none text-sm disabled:opacity-50"
-                        placeholder={playlistAnswers[idx] instanceof Blob ? "Audio recorded. Retake to type instead." : "Enter text answer..."}
-                      />
-                      
-                      <div className="flex items-center gap-4">
-                        <div className="h-px bg-white/10 flex-1"></div>
-                        <span className="text-[10px] text-stone-500 font-black uppercase tracking-widest">OR</span>
-                        <div className="h-px bg-white/10 flex-1"></div>
-                      </div>
-                      
-                      <div className="flex justify-center">
+                    <div className="pt-2">
+                      <div className="flex justify-center bg-black/10 dark:bg-black/30 rounded-2xl py-6 border border-slate-200 dark:border-white/5">
                         <SubtaskAudioRecorder 
                           audioBlob={playlistAnswers[idx] instanceof Blob ? playlistAnswers[idx] as Blob : null}
                           onRecord={(b) => setPlaylistAnswers(prev => ({ ...prev, [idx]: b }))}
