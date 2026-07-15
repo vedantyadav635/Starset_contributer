@@ -87,9 +87,15 @@ const SEO_CONFIG: Record<string, { title: string; description: string; keywords:
     keywords: 'AI languages, train AI Hindi, regional Indian languages, Hinglish AI, Tamil AI jobs, Bengali AI tasks, Indian languages directory, Starset languages, English AI training',
     canonicalPath: '/language-directory',
   },
+  'ai-training-guide': {
+    title: 'How AI Models Are Trained — Educational Guide | Starset Intelligence',
+    description: 'Learn how modern AI models like ChatGPT are trained using human data collection, supervised fine-tuning (SFT), and RLHF. A comprehensive guide by Starset Intelligence.',
+    keywords: 'AI training guide, how AI is trained, RLHF explained, supervised fine-tuning, data annotation, AI learning, Starset educational guide, train AI models',
+    canonicalPath: '/ai-training-guide',
+  },
 };
 
-export type PublicPageType = 'home' | 'about' | 'contributors' | 'money' | 'terms' | 'privacy' | 'cookies' | 'data-processing' | 'task-types' | 'careers' | 'blog' | 'contact' | 'language-directory';
+export type PublicPageType = 'home' | 'about' | 'contributors' | 'money' | 'terms' | 'privacy' | 'cookies' | 'data-processing' | 'task-types' | 'careers' | 'blog' | 'contact' | 'language-directory' | 'ai-training-guide';
 
 interface PublicLayoutProps {
    children: React.ReactNode;

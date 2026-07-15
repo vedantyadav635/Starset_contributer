@@ -105,7 +105,14 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
               <FooterLink href="/contact" page="contact" onNavigate={onNavigate}>Contact</FooterLink>
             </div>
 
-            {/* Column 3: Legal */}
+            {/* Column 3: Resources */}
+            <div className="flex flex-col gap-4">
+              <h4 className="font-bold text-slate-900 dark:text-white uppercase tracking-widest text-xs mb-2 opacity-80">Resources</h4>
+              <FooterLink href="/language-directory" page="language-directory" onNavigate={onNavigate}>Language Directory</FooterLink>
+              <FooterLink href="/ai-training-guide" page="ai-training-guide" onNavigate={onNavigate}>AI Training Guide</FooterLink>
+            </div>
+
+            {/* Column 4: Legal */}
             <div className="flex flex-col gap-4">
               <h4 className="font-bold text-slate-900 dark:text-white uppercase tracking-widest text-xs mb-2 opacity-80">Legal</h4>
               <FooterLink href="/terms" page="terms" onNavigate={onNavigate}>Terms of Service</FooterLink>

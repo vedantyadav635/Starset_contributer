@@ -24,6 +24,7 @@ const Careers = lazy(() => import('./pages/Careers').then(m => ({ default: m.Car
 const Blog = lazy(() => import('./pages/Blog').then(m => ({ default: m.Blog })));
 const Contact = lazy(() => import('./pages/Contact').then(m => ({ default: m.Contact })));
 const LanguageDirectory = lazy(() => import('./pages/LanguageDirectory').then(m => ({ default: m.LanguageDirectory })));
+const AITrainingGuide = lazy(() => import('./pages/AITrainingGuide').then(m => ({ default: m.AITrainingGuide })));
 
 // Type definitions for TypeScript
 import { PageView, Task, UserRole, TaskType, TaskStatus } from './types';
@@ -600,6 +601,8 @@ const App: React.FC = () => {
           return <Contact {...publicProps} />;
         case 'language-directory':
           return <LanguageDirectory {...publicProps} />;
+        case 'ai-training-guide':
+          return <AITrainingGuide {...publicProps} />;
         case 'terms':
         case 'privacy':
         case 'cookies':
