@@ -29,7 +29,8 @@ const LanguageDirectory = lazy(() => import('./pages/LanguageDirectory').then(m 
 import { PageView, Task, UserRole, TaskType, TaskStatus } from './types';
 
 // Icon library - Lucide React icons
-import { Menu, User, MapPin, Globe, Shield, LayoutDashboard, Database, CreditCard, MoreHorizontal, CheckCircle2, ShieldAlert, Clock } from 'lucide-react';
+import { Menu, User, MapPin, Globe, Shield, LayoutDashboard, Database, CreditCard, MoreHorizontal, CheckCircle2, ShieldAlert, Clock, Mic, FileText, Send, LifeBuoy, AlertCircle, CheckCircle } from 'lucide-react';
+import { motion } from 'framer-motion';
 
 // Custom components and utilities
 import { Logo } from './components/Logo';
@@ -808,60 +809,130 @@ const App: React.FC = () => {
           return <Earnings />;
         case 'guidelines':
           return (
-            <div className="bg-slate-100 dark:bg-black/40 backdrop-blur-md p-6 md:p-10 rounded-2xl border border-slate-200 dark:border-white/10 shadow-sm max-w-4xl">
-              <h1 className="text-2xl md:text-3xl font-bold mb-8 text-slate-900 dark:text-white">Quality Guidelines</h1>
-              <p className="mb-8 text-base md:text-lg text-slate-600 dark:text-zinc-300 leading-relaxed">Strict adherence to these guidelines is required for payout. Violations may result in account suspension.</p>
-              <div className="grid md:grid-cols-2 gap-6">
-                <div className="p-6 md:p-8 bg-white dark:bg-white/5 rounded-xl border border-slate-200 dark:border-white/10">
-                  <h3 className="font-bold text-slate-900 dark:text-white mb-3 text-lg">Audio</h3>
-                  <p className="text-slate-600 dark:text-zinc-400 leading-relaxed">No background noise (TV, fans, other people). Clear pronunciation required. Use a headset if possible.</p>
-                </div>
-                <div className="p-6 md:p-8 bg-white dark:bg-white/5 rounded-xl border border-slate-200 dark:border-white/10">
-                  <h3 className="font-bold text-slate-900 dark:text-white mb-3 text-lg">Text</h3>
-                  <p className="text-slate-600 dark:text-zinc-400 leading-relaxed">Proper grammar and spelling are required unless colloquialisms are explicitly requested.</p>
+            <motion.div 
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, ease: "easeOut" }}
+              className="max-w-5xl mx-auto py-4"
+            >
+              <div className="bg-white/80 dark:bg-[#09090b]/80 backdrop-blur-2xl p-8 md:p-12 rounded-[2.5rem] border border-slate-200 dark:border-white/10 shadow-2xl relative overflow-hidden group">
+                <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-blue-500/10 dark:bg-blue-500/20 rounded-full blur-[100px] -translate-y-1/2 translate-x-1/3 pointer-events-none transition-transform duration-700 group-hover:scale-110"></div>
+                
+                <div className="relative z-10 flex flex-col md:flex-row gap-12">
+                  <div className="md:w-1/3">
+                    <div className="inline-flex items-center justify-center p-4 bg-blue-500/10 text-blue-600 dark:text-blue-400 rounded-2xl mb-6 shadow-inner border border-blue-500/20">
+                      <Shield className="h-8 w-8" />
+                    </div>
+                    <h1 className="text-3xl md:text-5xl font-black mb-4 text-slate-900 dark:text-white tracking-tight">Quality Protocols</h1>
+                    <p className="text-base text-slate-600 dark:text-stone-400 leading-relaxed font-medium">
+                      Strict adherence to these operational guidelines is mandatory for compensation. Violations may result in immediate account suspension and withholding of funds.
+                    </p>
+                  </div>
+                  
+                  <div className="md:w-2/3 grid grid-cols-1 gap-6">
+                    <motion.div 
+                      whileHover={{ scale: 1.02 }}
+                      className="p-8 bg-slate-50 dark:bg-white/5 rounded-3xl border border-slate-200 dark:border-white/10 flex gap-6 items-start shadow-sm"
+                    >
+                      <div className="p-3 bg-indigo-500/10 text-indigo-600 dark:text-indigo-400 rounded-xl border border-indigo-500/20 shrink-0">
+                        <Mic className="h-6 w-6" />
+                      </div>
+                      <div>
+                        <h3 className="font-black text-slate-900 dark:text-white mb-2 text-xl tracking-tight">Audio Collection Standards</h3>
+                        <p className="text-slate-600 dark:text-zinc-400 leading-relaxed text-sm">
+                          Absolutely <span className="font-bold text-slate-900 dark:text-white">no background noise</span> (TV, fans, other people, traffic). Clear, natural pronunciation is required. Do not rush or artificially slow down speech. Use a dedicated headset microphone if possible for optimal SNR (Signal-to-Noise Ratio).
+                        </p>
+                      </div>
+                    </motion.div>
+
+                    <motion.div 
+                      whileHover={{ scale: 1.02 }}
+                      className="p-8 bg-slate-50 dark:bg-white/5 rounded-3xl border border-slate-200 dark:border-white/10 flex gap-6 items-start shadow-sm"
+                    >
+                      <div className="p-3 bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 rounded-xl border border-emerald-500/20 shrink-0">
+                        <FileText className="h-6 w-6" />
+                      </div>
+                      <div>
+                        <h3 className="font-black text-slate-900 dark:text-white mb-2 text-xl tracking-tight">Text Annotation Standards</h3>
+                        <p className="text-slate-600 dark:text-zinc-400 leading-relaxed text-sm">
+                          Proper grammar, capitalization, and punctuation are strictly required unless colloquialisms or specific formatting are explicitly requested in the task prompt. Fact-check information where applicable.
+                        </p>
+                      </div>
+                    </motion.div>
+                  </div>
                 </div>
               </div>
-            </div>
+            </motion.div>
           );
         case 'support':
           return (
-            <div className="bg-slate-100 dark:bg-black/40 backdrop-blur-md p-6 md:p-10 rounded-2xl border border-slate-200 dark:border-white/10 shadow-sm max-w-3xl">
-              <h1 className="text-2xl md:text-3xl font-bold mb-4 text-slate-900 dark:text-white">Support</h1>
-              <p className="text-slate-600 dark:text-zinc-300 mb-10 text-lg">Need help? Submit a ticket below.</p>
-              <form className="space-y-8">
-                <div>
-                  <label className="block text-sm font-bold text-slate-700 dark:text-zinc-300 mb-2 uppercase tracking-wide">Issue Type</label>
-                  <select className="w-full border-slate-200 dark:border-white/10 rounded-xl p-4 border bg-white dark:bg-white/5 focus:bg-slate-50 dark:focus:bg-black focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all outline-none text-base text-slate-900 dark:text-white">
-                    <option className="bg-white dark:bg-zinc-900">Payment Issue</option>
-                    <option className="bg-white dark:bg-zinc-900">Task Bug</option>
-                    <option className="bg-white dark:bg-zinc-900">Account Question</option>
-                    <option className="bg-white dark:bg-zinc-900">Other</option>
-                  </select>
+            <motion.div 
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, ease: "easeOut" }}
+              className="max-w-4xl mx-auto py-4"
+            >
+              <div className="bg-white/80 dark:bg-[#09090b]/80 backdrop-blur-2xl p-8 md:p-12 rounded-[2.5rem] border border-slate-200 dark:border-white/10 shadow-2xl relative overflow-hidden group">
+                <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-indigo-500/10 dark:bg-indigo-500/20 rounded-full blur-[100px] -translate-y-1/2 translate-x-1/3 pointer-events-none transition-transform duration-700 group-hover:scale-110"></div>
+                
+                <div className="relative z-10 flex flex-col md:flex-row gap-12">
+                  <div className="md:w-5/12">
+                    <div className="inline-flex items-center justify-center p-4 bg-indigo-500/10 text-indigo-600 dark:text-indigo-400 rounded-2xl mb-6 shadow-inner border border-indigo-500/20">
+                      <LifeBuoy className="h-8 w-8" />
+                    </div>
+                    <h1 className="text-3xl md:text-5xl font-black mb-4 text-slate-900 dark:text-white tracking-tight">Support Desk</h1>
+                    <p className="text-base text-slate-600 dark:text-stone-400 leading-relaxed font-medium mb-8">
+                      Encountering issues with a task, payout, or your account? Our team is available 24/7 to assist verified contributors.
+                    </p>
+                    
+                    <div className="space-y-4">
+                      <div className="flex items-center gap-3 text-sm text-slate-600 dark:text-stone-400">
+                        <CheckCircle className="h-4 w-4 text-emerald-500" /> Response time: ~2 hours
+                      </div>
+                      <div className="flex items-center gap-3 text-sm text-slate-600 dark:text-stone-400">
+                        <AlertCircle className="h-4 w-4 text-blue-500" /> Include Task IDs for faster resolution
+                      </div>
+                    </div>
+                  </div>
+                  
+                  <div className="md:w-7/12">
+                    <form className="bg-slate-50 dark:bg-white/5 p-8 rounded-3xl border border-slate-200 dark:border-white/10 shadow-sm space-y-6">
+                      <div>
+                        <label className="block text-xs font-black text-slate-500 dark:text-stone-500 mb-2 uppercase tracking-widest">Issue Type</label>
+                        <select className="w-full border-slate-200 dark:border-white/10 rounded-2xl p-4 border bg-white dark:bg-zinc-900/50 focus:bg-white dark:focus:bg-black focus:ring-4 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all outline-none text-sm font-semibold text-slate-900 dark:text-white shadow-inner cursor-pointer appearance-none">
+                          <option className="bg-white dark:bg-zinc-900 text-slate-900 dark:text-white font-medium">Payment & Compensation</option>
+                          <option className="bg-white dark:bg-zinc-900 text-slate-900 dark:text-white font-medium">Task Technical Bug</option>
+                          <option className="bg-white dark:bg-zinc-900 text-slate-900 dark:text-white font-medium">Account Access</option>
+                          <option className="bg-white dark:bg-zinc-900 text-slate-900 dark:text-white font-medium">Other</option>
+                        </select>
+                      </div>
+                      <div>
+                        <label className="block text-xs font-black text-slate-500 dark:text-stone-500 mb-2 uppercase tracking-widest">Description</label>
+                        <textarea
+                          required
+                          placeholder="Please provide specific details, including Task IDs if applicable..."
+                          className="w-full border-slate-200 dark:border-white/10 rounded-2xl p-4 border h-40 bg-white dark:bg-zinc-900/50 focus:bg-white dark:focus:bg-black focus:ring-4 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all resize-none outline-none text-sm text-slate-900 dark:text-white shadow-inner leading-relaxed"
+                        ></textarea>
+                      </div>
+                      <button
+                        type="submit"
+                        className="w-full bg-indigo-600 text-white px-8 py-4 rounded-2xl font-bold shadow-xl shadow-indigo-500/20 hover:shadow-indigo-500/40 hover:-translate-y-1 transition-all flex items-center justify-center gap-2 group"
+                        onClick={(e) => {
+                          const form = (e.target as HTMLButtonElement).form;
+                          if (form && form.checkValidity()) {
+                            e.preventDefault();
+                            alert("Support ticket securely submitted. Our team will contact you shortly.");
+                            form.reset();
+                          }
+                        }}
+                      >
+                        Submit Ticket <Send className="h-4 w-4 group-hover:translate-x-1 transition-transform" />
+                      </button>
+                    </form>
+                  </div>
                 </div>
-                <div>
-                  <label className="block text-sm font-bold text-slate-700 dark:text-zinc-300 mb-2 uppercase tracking-wide">Description</label>
-                  <textarea
-                    required
-                    placeholder="Please describe your issue in detail..."
-                    className="w-full border-slate-200 dark:border-white/10 rounded-xl p-4 border h-40 bg-white dark:bg-white/5 focus:bg-slate-50 dark:focus:bg-black focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all resize-none outline-none text-base text-slate-900 dark:text-white"
-                  ></textarea>
-                </div>
-                <button
-                  type="submit"
-                  className="bg-blue-600 text-white px-8 py-4 rounded-xl font-bold shadow-lg shadow-blue-500/10 hover:shadow-blue-500/20 hover:-translate-y-0.5 transition-all text-lg w-full md:w-auto"
-                  onClick={(e) => {
-                    const form = (e.target as HTMLButtonElement).form;
-                    if (form && form.checkValidity()) {
-                      e.preventDefault();
-                      alert("Support ticket submitted. Our team will contact you shortly.");
-                      form.reset();
-                    }
-                  }}
-                >
-                  Submit Ticket
-                </button>
-              </form>
-            </div>
+              </div>
+            </motion.div>
           );
         case 'account':
           const getInitials = (name: string) => {
