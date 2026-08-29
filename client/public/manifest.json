@@ -1,29 +1,18 @@
 {
-  "name": "Starset Intelligence — Earn Money by Training AI",
+  "name": "Starset — Human audio data for AI",
   "short_name": "Starset",
-  "description": "Starset Intelligence is the #1 AI data contribution platform. Earn real money daily by completing simple AI training tasks. Free to join, instant payouts.",
+  "description": "Record short audio tasks and get paid per accepted submission, or commission a human audio dataset for your AI model.",
   "start_url": "/",
   "display": "standalone",
-  "background_color": "#f8fafc",
-  "theme_color": "#2563eb",
+  "background_color": "#fbfaf8",
+  "theme_color": "#fbfaf8",
   "orientation": "portrait-primary",
   "scope": "/",
-  "lang": "en-US",
-  "categories": ["business", "productivity", "finance"],
+  "lang": "en",
+  "categories": ["business", "productivity"],
   "icons": [
-    {
-      "src": "/logo.png",
-      "sizes": "192x192",
-      "type": "image/png",
-      "purpose": "any maskable"
-    },
-    {
-      "src": "/logo.png",
-      "sizes": "512x512",
-      "type": "image/png",
-      "purpose": "any maskable"
-    }
+    { "src": "/logo.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "/logo.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
   ],
-  "screenshots": [],
   "prefer_related_applications": false
 }

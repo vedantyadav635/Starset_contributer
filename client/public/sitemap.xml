@@ -1,118 +1,94 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
-        xmlns:xhtml="http://www.w3.org/1999/xhtml"
-        xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 
-  <!-- ══ Homepage ══ -->
   <url>
     <loc>https://www.starset.online/</loc>
-    <lastmod>2026-05-30</lastmod>
-    <changefreq>daily</changefreq>
+    <lastmod>2026-08-26</lastmod>
+    <changefreq>weekly</changefreq>
     <priority>1.0</priority>
-    <image:image>
-      <image:loc>https://www.starset.online/logo.png</image:loc>
-      <image:title>Starset Intelligence Logo</image:title>
-      <image:caption>Starset Intelligence — Earn Money by Training AI</image:caption>
-    </image:image>
   </url>
 
-  <!-- ══ Contributors ══ -->
   <url>
-    <loc>https://www.starset.online/contributors</loc>
-    <lastmod>2026-05-30</lastmod>
+    <loc>https://www.starset.online/marketplace</loc>
+    <lastmod>2026-08-26</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
   </url>
 
-  <!-- ══ Earnings / Money ══ -->
+
   <url>
-    <loc>https://www.starset.online/money</loc>
-    <lastmod>2026-05-30</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.9</priority>
+    <loc>https://www.starset.online/ai-training-guide</loc>
+    <lastmod>2026-08-26</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
   </url>
 
-  <!-- ══ Task Types ══ -->
-  <url>
-    <loc>https://www.starset.online/task-types</loc>
-    <lastmod>2026-05-30</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-  </url>
-
-  <!-- ══ About ══ -->
   <url>
     <loc>https://www.starset.online/about</loc>
-    <lastmod>2026-05-30</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-
-  <!-- ══ Careers ══ -->
-  <url>
-    <loc>https://www.starset.online/careers</loc>
-    <lastmod>2026-05-30</lastmod>
+    <lastmod>2026-08-26</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
 
-  <!-- ══ Blog ══ -->
-  <url>
-    <loc>https://www.starset.online/blog</loc>
-    <lastmod>2026-05-30</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-  </url>
-
-  <!-- ══ Contact ══ -->
   <url>
     <loc>https://www.starset.online/contact</loc>
-    <lastmod>2026-05-30</lastmod>
+    <lastmod>2026-08-26</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
 
-  <!-- ══ Login ══ -->
+  <url>
+    <loc>https://www.starset.online/blog</loc>
+    <lastmod>2026-08-26</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+  </url>
+
+  <url>
+    <loc>https://www.starset.online/careers</loc>
+    <lastmod>2026-08-26</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+  </url>
+
   <url>
     <loc>https://www.starset.online/login</loc>
-    <lastmod>2026-05-30</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.5</priority>
+    <lastmod>2026-08-26</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.4</priority>
   </url>
 
-  <!-- ══ Signup ══ -->
   <url>
     <loc>https://www.starset.online/signup</loc>
-    <lastmod>2026-05-30</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.5</priority>
+    <lastmod>2026-08-26</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.4</priority>
   </url>
 
-  <!-- ══ Legal Pages ══ -->
   <url>
     <loc>https://www.starset.online/terms</loc>
-    <lastmod>2026-05-30</lastmod>
+    <lastmod>2026-08-26</lastmod>
     <changefreq>yearly</changefreq>
     <priority>0.3</priority>
   </url>
 
   <url>
     <loc>https://www.starset.online/privacy</loc>
-    <lastmod>2026-05-30</lastmod>
+    <lastmod>2026-08-26</lastmod>
     <changefreq>yearly</changefreq>
     <priority>0.3</priority>
   </url>
 
   <url>
     <loc>https://www.starset.online/cookies</loc>
-    <lastmod>2026-05-30</lastmod>
+    <lastmod>2026-08-26</lastmod>
     <changefreq>yearly</changefreq>
     <priority>0.3</priority>
   </url>
 
   <url>
     <loc>https://www.starset.online/data-processing</loc>
-    <lastmod>2026-05-30</lastmod>
+    <lastmod>2026-08-26</lastmod>
     <changefreq>yearly</changefreq>
     <priority>0.3</priority>
   </url>

@@ -1,148 +1,133 @@
-import React, { useEffect, useRef } from 'react';
-import { PublicPageType } from './PublicLayout';
-import { Logo } from './Logo';
-import { Mail, Linkedin, Twitter, Github, ArrowRight } from 'lucide-react';
+import React from 'react';
+import { Mail, Linkedin, Github } from 'lucide-react';
+import type { PublicPageType } from './PublicLayout';
+import { LogoLockup } from './Logo';
+import { Container } from './ui/Layout';
+import { WaveLine } from './Waveform';
 
 interface FooterProps {
   onNavigate: (page: PublicPageType) => void;
 }
 
-// Helper: real <a href> for SEO crawlability + SPA navigation via preventDefault
-const FooterLink: React.FC<{
-  href: string;
-  page: PublicPageType;
-  onNavigate: (page: PublicPageType) => void;
-  children: React.ReactNode;
-}> = ({ href, page, onNavigate, children }) => (
-  <a
-    href={href}
-    onClick={(e) => { e.preventDefault(); onNavigate(page); }}
-    className="text-left text-slate-500 dark:text-zinc-400 hover:text-blue-600 dark:hover:text-blue-400 font-medium transition-colors"
-  >
-    {children}
-  </a>
-);
+type Link = { label: string; page: PublicPageType; href: string };
+
+const COLUMNS: { heading: string; links: Link[] }[] = [
+  {
+    heading: 'Platform',
+    links: [
+      { label: 'Marketplace', page: 'marketplace', href: '/marketplace' },
+    ],
+  },
+  {
+    heading: 'Company',
+    links: [
+      { label: 'About', page: 'about', href: '/about' },
+      { label: 'Careers', page: 'careers', href: '/careers' },
+      { label: 'Notes', page: 'blog', href: '/blog' },
+      { label: 'Contact', page: 'contact', href: '/contact' },
+    ],
+  },
+  {
+    heading: 'Resources',
+    links: [
+      { label: 'How AI models learn', page: 'ai-training-guide', href: '/ai-training-guide' },
+    ],
+  },
+  {
+    heading: 'Legal',
+    links: [
+      { label: 'Terms of Service', page: 'terms', href: '/terms' },
+      { label: 'Privacy Policy', page: 'privacy', href: '/privacy' },
+      { label: 'Cookie Policy', page: 'cookies', href: '/cookies' },
+      { label: 'Data Processing', page: 'data-processing', href: '/data-processing' },
+    ],
+  },
+];
 
 export const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
+  const go = (e: React.MouseEvent, page: PublicPageType) => {
+    e.preventDefault();
+    onNavigate(page);
+  };
+
   return (
-    <footer className="relative pt-24 pb-12 overflow-hidden border-t border-slate-200 dark:border-white/5 bg-white dark:bg-[#020205] z-10">
-      {/* Background Glows */}
-      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-[1000px] h-[300px] bg-blue-500/10 dark:bg-blue-500/5 blur-[120px] rounded-full pointer-events-none" />
-      
-      <div className="max-w-7xl mx-auto px-6 relative z-10">
-        {/* Top CTA Section */}
-        <div className="flex flex-col md:flex-row justify-between items-center p-10 md:p-14 mb-20 rounded-[32px] bg-gradient-to-br from-blue-50 to-indigo-50 dark:from-white/5 dark:to-white/5 border border-blue-100 dark:border-white/10 relative overflow-hidden shadow-xl shadow-slate-200/50 dark:shadow-none">
-          {/* Decorative element */}
-          <div className="absolute top-0 right-0 w-[400px] h-[400px] bg-blue-600/10 dark:bg-blue-500/20 blur-[80px] rounded-full translate-x-1/3 -translate-y-1/3 pointer-events-none" />
-          
-          <div className="max-w-xl text-center md:text-left relative z-10 mb-8 md:mb-0">
-            <h2 className="text-3xl md:text-4xl font-black text-slate-900 dark:text-white mb-4 tracking-tight">
-              Ready to start your <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-700 via-blue-500 to-blue-700 dark:from-blue-600 dark:via-blue-500 dark:to-blue-600 animate-shimmer">journey?</span>
-            </h2>
-            <p className="text-slate-500 dark:text-zinc-400 text-lg">
-              Join thousands of contributors earning money daily by training the world's most advanced AI models.
-            </p>
-          </div>
-          
-          <div className="relative z-10 flex w-full md:w-auto">
-            <a href="/signup" onClick={(e) => { e.preventDefault(); onNavigate('signup' as PublicPageType); }} className="w-full md:w-auto px-8 py-4 bg-slate-900 dark:bg-white text-white dark:text-slate-900 font-bold rounded-2xl flex items-center justify-center gap-3 hover:scale-105 hover:bg-blue-600 dark:hover:bg-blue-50 transition-all duration-300 shadow-xl shadow-slate-900/20 dark:shadow-white/10 group">
-              Become a Contributor
-              <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
+    <footer className="relative border-t border-line bg-paper-sunk">
+      {/* A quiet signal line marks the seam between page and footer. */}
+      <div className="pointer-events-none absolute inset-x-0 top-0 -translate-y-1/2 opacity-40" aria-hidden="true">
+        <WaveLine seed="footer-seam" points={200} height={22} strokeWidth={1} color="var(--line-strong)" />
+      </div>
+
+      <Container className="relative">
+        <div className="grid gap-10 py-14 lg:grid-cols-[minmax(0,1.1fr)_minmax(0,2fr)] lg:gap-16 lg:py-16">
+          {/* Brand */}
+          <div>
+            <a href="/" onClick={(e) => go(e, 'home')} className="inline-flex">
+              <LogoLockup markClassName="h-9 w-9" />
             </a>
-          </div>
-        </div>
-
-        {/* Main Footer Content */}
-        <div className="grid grid-cols-1 md:grid-cols-12 gap-12 lg:gap-8 mb-20">
-          
-          {/* Brand Column */}
-          <div className="md:col-span-5 lg:col-span-4 flex flex-col items-center md:items-start text-center md:text-left">
-            <a href="/" onClick={(e) => { e.preventDefault(); onNavigate('home'); }} className="flex items-center gap-3 mb-6 cursor-pointer group">
-              <Logo className="w-10 h-10 transition-transform duration-300 group-hover:scale-110" />
-              <span className="font-black text-2xl tracking-tighter text-slate-900 dark:text-white">STARSET</span>
-            </a>
-            <p className="text-slate-500 dark:text-zinc-400 leading-relaxed mb-8 max-w-sm">
-              The premier platform connecting human intelligence with the next generation of artificial intelligence. Smarter tasks, faster payouts.
+            <p className="mt-4 max-w-xs text-sm leading-relaxed text-body">
+              Starset collects human audio from real speakers and prepares it as structured,
+              validated data for speech and voice AI.
             </p>
-            
-            {/* Socials */}
-            <div className="flex gap-4">
-              <a href="#" className="w-10 h-10 rounded-full bg-slate-100 dark:bg-white/5 border border-slate-200 dark:border-white/10 flex items-center justify-center text-slate-500 dark:text-zinc-400 hover:text-white hover:bg-slate-900 dark:hover:bg-white/10 dark:hover:text-white transition-all duration-300 hover:-translate-y-1">
-                <Twitter className="w-4 h-4" />
+
+            <div className="mt-6 flex gap-2">
+              <a
+                href="mailto:hello@starset.ai"
+                aria-label="Email Starset"
+                className="flex h-9 w-9 items-center justify-center rounded-md border border-line text-muted transition-colors hover:border-line-strong hover:text-ink"
+              >
+                <Mail className="h-4 w-4" strokeWidth={1.75} aria-hidden="true" />
               </a>
-              <a href="#" className="w-10 h-10 rounded-full bg-slate-100 dark:bg-white/5 border border-slate-200 dark:border-white/10 flex items-center justify-center text-slate-500 dark:text-zinc-400 hover:text-white hover:bg-slate-900 dark:hover:bg-white/10 dark:hover:text-white transition-all duration-300 hover:-translate-y-1">
-                <Linkedin className="w-4 h-4" />
+              <a
+                href="https://linkedin.com/company/starsetai"
+                target="_blank"
+                rel="noreferrer noopener"
+                aria-label="Starset on LinkedIn"
+                className="flex h-9 w-9 items-center justify-center rounded-md border border-line text-muted transition-colors hover:border-line-strong hover:text-ink"
+              >
+                <Linkedin className="h-4 w-4" strokeWidth={1.75} aria-hidden="true" />
               </a>
-              <a href="#" className="w-10 h-10 rounded-full bg-slate-100 dark:bg-white/5 border border-slate-200 dark:border-white/10 flex items-center justify-center text-slate-500 dark:text-zinc-400 hover:text-white hover:bg-slate-900 dark:hover:bg-white/10 dark:hover:text-white transition-all duration-300 hover:-translate-y-1">
-                <Github className="w-4 h-4" />
-              </a>
-              <a href="#" className="w-10 h-10 rounded-full bg-slate-100 dark:bg-white/5 border border-slate-200 dark:border-white/10 flex items-center justify-center text-slate-500 dark:text-zinc-400 hover:text-white hover:bg-slate-900 dark:hover:bg-white/10 dark:hover:text-white transition-all duration-300 hover:-translate-y-1">
-                <Mail className="w-4 h-4" />
+              <a
+                href="https://github.com/vedantyadav635/Starset_contributer"
+                target="_blank"
+                rel="noreferrer noopener"
+                aria-label="Starset on GitHub"
+                className="flex h-9 w-9 items-center justify-center rounded-md border border-line text-muted transition-colors hover:border-line-strong hover:text-ink"
+              >
+                <Github className="h-4 w-4" strokeWidth={1.75} aria-hidden="true" />
               </a>
             </div>
           </div>
 
-          {/* Spacer */}
-          <div className="hidden lg:block lg:col-span-1"></div>
-
-          {/* Links Columns — ALL <a> tags for Google crawlability */}
-          <nav className="md:col-span-7 flex flex-wrap md:flex-nowrap justify-between md:justify-around gap-10" aria-label="Footer navigation">
-            {/* Column 1: Platform */}
-            <div className="flex flex-col gap-4">
-              <h4 className="font-bold text-slate-900 dark:text-white uppercase tracking-widest text-xs mb-2 opacity-80">Platform</h4>
-              <FooterLink href="/" page="home" onNavigate={onNavigate}>Home</FooterLink>
-              <FooterLink href="/contributors" page="contributors" onNavigate={onNavigate}>Contributors</FooterLink>
-              <FooterLink href="/money" page="money" onNavigate={onNavigate}>Earnings</FooterLink>
-              <FooterLink href="/task-types" page="task-types" onNavigate={onNavigate}>Task Types</FooterLink>
-            </div>
-
-            {/* Column 2: Company */}
-            <div className="flex flex-col gap-4">
-              <h4 className="font-bold text-slate-900 dark:text-white uppercase tracking-widest text-xs mb-2 opacity-80">Company</h4>
-              <FooterLink href="/about" page="about" onNavigate={onNavigate}>About Us</FooterLink>
-              <FooterLink href="/careers" page="careers" onNavigate={onNavigate}>Careers</FooterLink>
-              <FooterLink href="/blog" page="blog" onNavigate={onNavigate}>Blog</FooterLink>
-              <FooterLink href="/contact" page="contact" onNavigate={onNavigate}>Contact</FooterLink>
-            </div>
-
-            {/* Column 3: Resources */}
-            <div className="flex flex-col gap-4">
-              <h4 className="font-bold text-slate-900 dark:text-white uppercase tracking-widest text-xs mb-2 opacity-80">Resources</h4>
-              <FooterLink href="/language-directory" page="language-directory" onNavigate={onNavigate}>Language Directory</FooterLink>
-              <FooterLink href="/ai-training-guide" page="ai-training-guide" onNavigate={onNavigate}>AI Training Guide</FooterLink>
-            </div>
-
-            {/* Column 4: Legal */}
-            <div className="flex flex-col gap-4">
-              <h4 className="font-bold text-slate-900 dark:text-white uppercase tracking-widest text-xs mb-2 opacity-80">Legal</h4>
-              <FooterLink href="/terms" page="terms" onNavigate={onNavigate}>Terms of Service</FooterLink>
-              <FooterLink href="/privacy" page="privacy" onNavigate={onNavigate}>Privacy Policy</FooterLink>
-              <FooterLink href="/cookies" page="cookies" onNavigate={onNavigate}>Cookie Policy</FooterLink>
-              <FooterLink href="/data-processing" page="data-processing" onNavigate={onNavigate}>Data Processing</FooterLink>
-            </div>
+          {/* Link columns */}
+          <nav aria-label="Footer" className="grid grid-cols-2 gap-8 sm:grid-cols-4">
+            {COLUMNS.map((column) => (
+              <div key={column.heading}>
+                <h2 className="t-meta">{column.heading}</h2>
+                <ul className="mt-4 space-y-2.5">
+                  {column.links.map((link) => (
+                    <li key={link.page}>
+                      <a
+                        href={link.href}
+                        onClick={(e) => go(e, link.page)}
+                        className="text-sm text-body transition-colors hover:text-ink"
+                      >
+                        {link.label}
+                      </a>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            ))}
           </nav>
         </div>
 
-        {/* Bottom Bar */}
-        <div className="pt-8 border-t border-slate-200 dark:border-white/10 flex flex-col md:flex-row justify-between items-center gap-4">
-          <div className="text-sm font-medium text-slate-500 dark:text-zinc-500">
-            &copy; {new Date().getFullYear()} Starset Intelligence. All rights reserved.
-          </div>
-          <div className="flex gap-6 text-sm font-medium text-slate-500 dark:text-zinc-500">
-            <span className="flex items-center gap-2">
-              <div className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></div>
-              All systems operational
-            </span>
-          </div>
+        <div className="flex flex-col gap-3 border-t border-line py-6 sm:flex-row sm:items-center sm:justify-between">
+          <p className="text-xs text-muted">
+            © {new Date().getFullYear()} Starset. All rights reserved.
+          </p>
+          <p className="t-meta">Human audio · Structured data · Built for AI</p>
         </div>
-      </div>
-      
-      {/* Massive subtle watermark */}
-      <div className="w-full overflow-hidden flex justify-center pointer-events-none select-none absolute bottom-0 left-0 right-0 z-0 opacity-5 dark:opacity-10">
-        <h1 className="text-[15vw] leading-none font-black text-slate-900 dark:text-white whitespace-nowrap translate-y-1/3">
-          STARSET
-        </h1>
-      </div>
+      </Container>
     </footer>
   );
 };

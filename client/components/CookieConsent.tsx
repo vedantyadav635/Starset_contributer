@@ -1,87 +1,59 @@
-import React, { useState, useEffect } from 'react';
-import { Cookie, X } from 'lucide-react';
-import { motion, AnimatePresence } from 'framer-motion';
+import React, { useEffect, useState } from 'react';
+import { X } from 'lucide-react';
 import { Button } from './Button';
 
+const STORAGE_KEY = 'cookie-consent';
+
 export const CookieConsent: React.FC = () => {
-    const [isVisible, setIsVisible] = useState(false);
+  const [visible, setVisible] = useState(false);
 
-    useEffect(() => {
-        // Check if user has already made a choice
-        const consent = localStorage.getItem('cookie-consent');
-        if (!consent) {
-            // Show banner with a small delay for better UX
-            const timer = setTimeout(() => setIsVisible(true), 1500);
-            return () => clearTimeout(timer);
-        }
-    }, []);
+  useEffect(() => {
+    let stored: string | null = null;
+    try { stored = localStorage.getItem(STORAGE_KEY); } catch { /* storage blocked */ }
+    if (stored) return;
 
-    const handleAccept = () => {
-        localStorage.setItem('cookie-consent', 'accepted');
-        setIsVisible(false);
-    };
+    const timer = setTimeout(() => setVisible(true), 1200);
+    return () => clearTimeout(timer);
+  }, []);
 
-    const handleDecline = () => {
-        localStorage.setItem('cookie-consent', 'declined');
-        setIsVisible(false);
-    };
+  const decide = (value: 'accepted' | 'declined') => {
+    try { localStorage.setItem(STORAGE_KEY, value); } catch { /* storage blocked */ }
+    setVisible(false);
+  };
 
-    return (
-        <AnimatePresence>
-            {isVisible && (
-                <motion.div
-                    initial={{ y: 100, opacity: 0 }}
-                    animate={{ y: 0, opacity: 1 }}
-                    exit={{ y: 100, opacity: 0 }}
-                    transition={{ type: 'spring', damping: 25, stiffness: 200 }}
-                    className="fixed bottom-6 left-6 right-6 md:left-auto md:right-8 md:max-w-md z-[100]"
-                >
-                    <div className="bg-zinc-900/90 border border-white/10 rounded-2xl shadow-2xl p-6 backdrop-blur-xl relative overflow-hidden group">
-                        {/* Subtle glow effect */}
-                        <div className="absolute -top-10 -right-10 w-32 h-32 bg-blue-500/10 rounded-full blur-3xl group-hover:bg-blue-500/20 transition-colors duration-500" />
+  if (!visible) return null;
 
-                        <div className="flex items-start gap-4">
-                            <div className="h-10 w-10 rounded-xl bg-blue-500/10 flex items-center justify-center shrink-0">
-                                <Cookie className="h-5 w-5 text-blue-500" />
-                            </div>
+  return (
+    <div
+      role="dialog"
+      aria-label="Cookie notice"
+      className="animate-reveal fixed inset-x-4 bottom-4 z-[90] sm:left-auto sm:right-6 sm:bottom-6 sm:max-w-sm"
+    >
+      <div className="card relative bg-surface p-5 shadow-lg">
+        <button
+          type="button"
+          onClick={() => setVisible(false)}
+          aria-label="Dismiss cookie notice"
+          className="absolute right-3 top-3 rounded p-1 text-muted transition-colors hover:text-ink"
+        >
+          <X className="h-4 w-4" aria-hidden="true" />
+        </button>
 
-                            <div className="flex-1">
-                                <h3 className="text-lg font-bold text-white mb-2 flex items-center justify-between">
-                                    Cookie Notice
-                                    <button
-                                        onClick={() => setIsVisible(false)}
-                                        className="text-zinc-500 hover:text-white transition-colors"
-                                    >
-                                        <X className="h-4 w-4" />
-                                    </button>
-                                </h3>
-                                <p className="text-sm text-zinc-400 leading-relaxed mb-6 font-medium">
-                                    We use cookies to enhance your experience, analyze site traffic, and for security. By continuing to visit this site you agree to our use of cookies.
-                                </p>
+        <p className="t-meta">Cookies</p>
+        <p className="mt-2 pr-6 text-sm leading-relaxed text-body">
+          We use essential cookies to keep you signed in, plus optional analytics to understand how
+          the platform is used. You can decline the optional ones.
+        </p>
 
-                                <div className="flex gap-3">
-                                    <Button
-                                        variant="primary"
-                                        size="sm"
-                                        className="flex-1 justify-center bg-blue-600 hover:bg-blue-700 text-white border-none shadow-lg shadow-blue-500/20"
-                                        onClick={handleAccept}
-                                    >
-                                        Accept Data
-                                    </Button>
-                                    <Button
-                                        variant="outline"
-                                        size="sm"
-                                        className="flex-1 justify-center bg-white/5 border-white/10 hover:bg-white/10 text-white"
-                                        onClick={handleDecline}
-                                    >
-                                        Decline
-                                    </Button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </motion.div>
-            )}
-        </AnimatePresence>
-    );
+        <div className="mt-4 flex gap-2">
+          <Button size="sm" onClick={() => decide('accepted')} className="flex-1">
+            Accept
+          </Button>
+          <Button size="sm" variant="secondary" onClick={() => decide('declined')} className="flex-1">
+            Decline
+          </Button>
+        </div>
+      </div>
+    </div>
+  );
 };

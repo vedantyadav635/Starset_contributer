@@ -1,23 +1,11 @@
-import React, { useState } from "react";
-import { Button } from "../components/Button";
-import {
-  ArrowRight,
-  AlertCircle,
-  Shield,
-  User,
-  Eye,
-  EyeOff,
-  Lock,
-  Key,
-  Sun,
-  Moon,
-} from "lucide-react";
-import { Logo } from "../components/Logo";
-import { ThemeToggle } from "../components/ThemeToggle";
-import { UserRole } from "../types";
-import { supabase } from "../supabaseClient";
-import { useAuth } from "../context/AuthContext";
-import { AuthProvider } from "../context/AuthContext";
+import React, { useState } from 'react';
+import { ArrowRight, Eye, EyeOff, Mail, Lock, ShieldCheck, User } from 'lucide-react';
+
+import { Button } from '../components/Button';
+import { AuthLayout, AuthError, AuthField } from '../components/AuthLayout';
+import { UserRole } from '../types';
+import { supabase } from '../supabaseClient';
+import { useAuth } from '../context/AuthContext';
 
 interface LoginProps {
   onLogin: (role: UserRole) => void;
@@ -32,15 +20,15 @@ export const Login: React.FC<LoginProps> = ({
   onBackHome,
   onForgotPassword,
 }) => {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [showPassword, setShowPassword] = useState(false);
+  const [loginMode, setLoginMode] = useState<UserRole>('contributor');
 
-  const { login, user } = useAuth();
-  const [loginMode, setLoginMode] = useState<UserRole>("contributor");
-  const isContributor = loginMode === "contributor";
+  const { login } = useAuth();
+  const isContributor = loginMode === 'contributor';
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -51,213 +39,183 @@ export const Login: React.FC<LoginProps> = ({
       const result = await login(email, password);
 
       if (!result.success) {
-        setError(result.error || "Login failed");
+        setError(result.error || 'Login failed');
         setIsLoading(false);
         return;
       }
 
       if (!result.user) {
-        setError("Login failed - no user data");
+        setError('Login failed — no user data returned');
         setIsLoading(false);
         return;
       }
 
       const { data: profile, error: profileError } = await supabase
-        .from("profiles")
-        .select("role")
-        .eq("id", result.user.id)
+        .from('profiles')
+        .select('role')
+        .eq('id', result.user.id)
         .single();
 
       if (profileError) {
-        console.error("Profile fetch error:", profileError);
-        setError("Failed to load user profile");
+        console.error('Profile fetch error:', profileError);
+        setError('Failed to load your profile');
         setIsLoading(false);
         return;
       }
 
-      const userRole = profile?.role || "contributor";
+      const userRole = profile?.role || 'contributor';
 
-      if (loginMode === "admin") {
-        if (userRole !== "admin") {
-          setError("You are not authorized as admin");
+      if (loginMode === 'admin') {
+        if (userRole !== 'admin') {
+          setError('This account is not authorised for admin access');
           await supabase.auth.signOut();
           setIsLoading(false);
           return;
         }
-        onLogin("admin");
+        onLogin('admin');
         setIsLoading(false);
         return;
       }
 
-      onLogin("contributor");
+      onLogin('contributor');
       setIsLoading(false);
-    } catch (err) {
-      console.error("Login error:", err);
-      setError(err.message || "An unexpected error occurred");
+    } catch (err: any) {
+      console.error('Login error:', err);
+      setError(err?.message || 'An unexpected error occurred');
       setIsLoading(false);
     }
   };
 
   const toggleLoginMode = () => {
-    setLoginMode((prev) =>
-      prev === "contributor" ? "admin" : "contributor"
-    );
+    setLoginMode((prev) => (prev === 'contributor' ? 'admin' : 'contributor'));
     setError(null);
-    setEmail("");
-    setPassword("");
+    setEmail('');
+    setPassword('');
   };
 
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center p-4 font-sans relative overflow-hidden bg-slate-50 dark:bg-[#020205]">
-
-      {/* Background Ambience */}
-      <div className="absolute top-[-20%] left-[-10%] w-[400px] md:w-[600px] h-[400px] md:h-[600px] bg-blue-600/10 rounded-full blur-[80px] md:blur-[100px] "></div>
-      <div className="absolute bottom-[-20%] right-[-10%] w-[400px] md:w-[600px] h-[400px] md:h-[600px] bg-indigo-600/10 rounded-full blur-[80px] md:blur-[100px] "></div>
-
-      {/* Header */}
-      <div className="absolute top-0 left-0 right-0 p-6 flex justify-between items-center z-20">
-        <div className="flex items-center gap-3 cursor-pointer" onClick={onBackHome}>
-          <Logo className="h-8 w-8 text-blue-600 dark:text-white" />
-          <span className="font-bold text-xl tracking-tight text-slate-900 dark:text-white uppercase">STARSET</span>
-        </div>
-        <div className="flex items-center gap-6">
-          <button 
-            onClick={onSwitchToSignup}
-            className="text-sm font-semibold text-slate-600 dark:text-zinc-400 hover:text-slate-900 dark:hover:text-white transition-colors hidden sm:block"
-          >
-            Create Account
-          </button>
-          <button 
-            onClick={onBackHome}
-            className="text-sm font-semibold text-slate-600 dark:text-zinc-400 hover:text-slate-900 dark:hover:text-white transition-colors flex items-center gap-2"
-          >
-            <ArrowRight className="h-4 w-4 rotate-180" /> Back to Home
-          </button>
-          <ThemeToggle />
-        </div>
-      </div>
-
-      <div className="w-full max-w-md relative z-10 pt-8 pb-8">
-        <div className="mb-6 md:mb-8 text-center px-4">
-          <div className="flex flex-col items-center justify-center gap-3 md:gap-4 mb-4 md:mb-6">
-            <div className="h-12 w-12 md:h-16 md:w-16 bg-gradient-to-br from-blue-500/20 to-indigo-500/20 rounded-xl md:rounded-2xl flex items-center justify-center shadow-[0_0_30px_rgba(59,130,246,0.15)] backdrop-blur-md border border-white/10">
-              {isContributor ? (
-                <Logo className="h-10 w-10 md:h-14 md:w-14" />
-              ) : (
-                <Shield className="h-6 w-6 md:h-8 md:w-8 text-purple-500" />
-              )}
-            </div>
-            <span className="font-bold text-xl md:text-2xl tracking-[0.15em] text-slate-900 dark:text-white uppercase">STARSET</span>
-          </div>
-          <h1 className="text-lg md:text-xl font-bold tracking-tight mb-1 text-slate-900 dark:text-white">
-            {isContributor ? "Contributor Access" : "Admin Console"}
-          </h1>
-          <p className="text-zinc-400 text-xs md:text-sm">
-            {isContributor
-              ? "Enter your credentials to access your account."
-              : "Authorized personnel only. Activities logged."}
-          </p>
-        </div>
-
-        <div className="bg-gradient-to-br from-blue-50 to-indigo-50 dark:from-white/5 dark:to-white/5 p-6 md:p-8 rounded-[32px] border border-blue-100 dark:border-white/10 shadow-xl shadow-slate-200/50 dark:shadow-2xl mx-1 md:mx-0 relative overflow-hidden">
-          <div className="absolute top-0 right-0 w-[400px] h-[400px] bg-blue-600/10 dark:bg-blue-500/20 blur-[80px] rounded-full translate-x-1/3 -translate-y-1/3 pointer-events-none z-0" />
-          
-          <div className="relative z-10">
-          {error && (
-            <div className="mb-4 p-3 bg-red-900/20 border border-red-200 rounded-lg flex items-center gap-2 text-red-600 text-sm">
-              <AlertCircle className="h-4 w-4" />
-              {error}
-            </div>
+    <AuthLayout
+      seed="login"
+      seo={{
+        title: 'Sign in — Starset',
+        description: 'Sign in to your Starset account to pick up audio tasks and check your submissions.',
+        canonicalPath: '/login',
+      }}
+      kicker={isContributor ? 'Sign in' : 'Admin console'}
+      title={isContributor ? 'Welcome back' : 'Administrator access'}
+      subtitle={
+        isContributor
+          ? 'Sign in to pick up tasks and check your submissions.'
+          : 'Restricted to accounts with the administrator role.'
+      }
+      onBackHome={onBackHome}
+      headerAction={
+        <Button variant="ghost" size="sm" onClick={onSwitchToSignup} className="hidden sm:inline-flex">
+          Create an account
+        </Button>
+      }
+      aside={{
+        heading: 'Real voices, structured into data',
+        body: 'Pick up a task, record it in your browser, and get paid for every submission that passes review.',
+        points: [
+          'Compensation shown before you start',
+          'Automated checks, then a human listen',
+          'Rejections always explain why',
+        ],
+      }}
+      footer={
+        <div className="space-y-4 text-center">
+          {isContributor && (
+            <p className="text-sm text-body">
+              New here?{' '}
+              <button type="button" onClick={onSwitchToSignup} className="link font-medium">
+                Create an account
+              </button>
+            </p>
           )}
 
-          <form onSubmit={handleLogin} className="space-y-5">
-            <div className="space-y-4">
-              <div className="relative group">
-                <div className="absolute top-3.5 left-4 h-5 w-5 pointer-events-none transition-colors">
-                  {isContributor ? (
-                    <User className="h-5 w-5 text-zinc-400 group-focus-within:text-blue-500" />
-                  ) : (
-                    <Shield className="h-5 w-5 text-purple-400 group-focus-within:text-purple-500" />
-                  )}
-                </div>
-                <input
-                  type="email"
-                  required
-                  className="w-full pl-12 pr-4 py-3 border border-slate-200 dark:border-white/10 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500 transition-all bg-slate-50 dark:bg-black/20 text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-zinc-600"
-                  placeholder="Email Address"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                />
-              </div>
+          <button
+            type="button"
+            onClick={toggleLoginMode}
+            className="inline-flex items-center gap-2 text-xs font-medium text-muted transition-colors hover:text-ink"
+          >
+            {isContributor
+              ? <><ShieldCheck className="h-3.5 w-3.5" strokeWidth={2} aria-hidden="true" /> Administrator sign in</>
+              : <><User className="h-3.5 w-3.5" strokeWidth={2} aria-hidden="true" /> Contributor sign in</>}
+          </button>
+        </div>
+      }
+    >
+      {!isContributor && (
+        <div className="mb-6 flex items-start gap-2.5 rounded-md border border-line bg-paper-sunk px-3.5 py-3">
+          <ShieldCheck className="mt-0.5 h-4 w-4 flex-none text-muted" strokeWidth={1.75} aria-hidden="true" />
+          <p className="text-xs text-body">
+            Administrator sessions are logged. Non-admin accounts are signed out automatically.
+          </p>
+        </div>
+      )}
 
-              <div className="relative group">
-                <Lock className="absolute top-3.5 left-4 h-5 w-5 text-zinc-400 group-focus-within:text-blue-500 transition-colors" />
-                <input
-                  type={showPassword ? "text" : "password"}
-                  required
-                  className="w-full pl-12 pr-12 py-3 border border-slate-200 dark:border-white/10 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500 transition-all bg-slate-50 dark:bg-black/20 text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-zinc-600"
-                  placeholder="Password"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                />
-                <button
-                  type="button"
-                  onClick={() => setShowPassword(!showPassword)}
-                  className="absolute top-3.5 right-4 text-zinc-400 hover:text-slate-900 dark:hover:text-white transition-colors"
-                >
-                  {showPassword ? (
-                    <EyeOff className="h-5 w-5" />
-                  ) : (
-                    <Eye className="h-5 w-5" />
-                  )}
-                </button>
-              </div>
-            </div>
+      {error && <AuthError>{error}</AuthError>}
 
+      <form onSubmit={handleLogin} className="space-y-5" noValidate>
+        <AuthField
+          id="login-email"
+          label="Email address"
+          type="email"
+          required
+          autoComplete="email"
+          placeholder="you@example.com"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+          icon={<Mail className="h-4 w-4" strokeWidth={1.75} />}
+        />
+
+        <div>
+          <div className="flex items-baseline justify-between gap-3">
+            <label className="field-label" htmlFor="login-password">Password</label>
             {onForgotPassword && (
-              <div className="flex justify-end -mt-1">
-                <button
-                  type="button"
-                  onClick={onForgotPassword}
-                  className="text-xs text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 font-medium hover:underline transition-colors"
-                >
-                  Forgot Password?
-                </button>
-              </div>
-            )}
-
-            <Button type="submit" variant="primary" className="w-full h-12 shadow-[0_0_20px_rgba(59,130,246,0.2)] bg-blue-600 hover:bg-blue-500 border-blue-500/50 mt-4" isLoading={isLoading}>
-              Continue <ArrowRight className="ml-2 h-4 w-4" />
-            </Button>
-
-            <div className="pt-4 border-t border-slate-200 dark:border-white/10 mt-6 text-center space-y-4">
-              {isContributor && (
-                <div className="text-sm text-slate-500 dark:text-zinc-500">
-                  New contributor? <button type="button" onClick={onSwitchToSignup} className="text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 transition-colors font-bold ml-1">Create Account</button>
-                </div>
-              )}
-
               <button
                 type="button"
-                onClick={toggleLoginMode}
-                className="text-[10px] uppercase tracking-widest font-black text-slate-500 dark:text-zinc-400 hover:text-slate-900 dark:hover:text-zinc-200 transition-colors flex items-center justify-center gap-2 w-full"
+                onClick={onForgotPassword}
+                className="mb-[0.4375rem] text-xs font-medium text-signal transition-colors hover:text-signal-hover"
               >
-                {isContributor ? (
-                  <>
-                    <Key className="h-3.5 w-3.5" /> Administrator Access
-                  </>
-                ) : (
-                  <>
-                    <User className="h-3.5 w-3.5" /> Contributor Access
-                  </>
-                )}
+                Forgot password?
               </button>
-            </div>
-          </form>
+            )}
+          </div>
+
+          <div className="relative">
+            <span className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-muted" aria-hidden="true">
+              <Lock className="h-4 w-4" strokeWidth={1.75} />
+            </span>
+            <input
+              id="login-password"
+              type={showPassword ? 'text' : 'password'}
+              required
+              autoComplete="current-password"
+              placeholder="Your password"
+              className="field field-with-icon pr-11"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+            />
+            <button
+              type="button"
+              onClick={() => setShowPassword((v) => !v)}
+              aria-label={showPassword ? 'Hide password' : 'Show password'}
+              className="absolute right-1.5 top-1/2 flex h-8 w-8 -translate-y-1/2 items-center justify-center rounded text-muted transition-colors hover:text-ink"
+            >
+              {showPassword
+                ? <EyeOff className="h-4 w-4" strokeWidth={1.75} aria-hidden="true" />
+                : <Eye className="h-4 w-4" strokeWidth={1.75} aria-hidden="true" />}
+            </button>
           </div>
         </div>
-      </div>
 
-    </div>
+        <Button type="submit" size="lg" block isLoading={isLoading}>
+          {isLoading ? 'Signing in…' : 'Sign in'}
+          {!isLoading && <ArrowRight className="h-4 w-4" strokeWidth={2} aria-hidden="true" />}
+        </Button>
+      </form>
+    </AuthLayout>
   );
 };

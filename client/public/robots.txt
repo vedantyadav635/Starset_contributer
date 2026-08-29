@@ -1,81 +1,13 @@
 # ══════════════════════════════════════════════════════════════
-# Starset Intelligence — robots.txt
-# Domain: https://www.starset.online
+# Starset — robots.txt
+# https://www.starset.online
 # ══════════════════════════════════════════════════════════════
 
-# Allow all search engine crawlers
 User-agent: *
 Allow: /
-Allow: /contributors
-Allow: /money
-Allow: /task-types
-Allow: /about
-Allow: /careers
-Allow: /blog
-Allow: /contact
-Allow: /login
-Allow: /signup
-Allow: /terms
-Allow: /privacy
-Allow: /cookies
-Allow: /data-processing
 
-# Block private/authenticated routes
+# Authenticated product routes hold no public content.
 Disallow: /dashboard
 Disallow: /dashboard/*
-Disallow: /admin
-Disallow: /admin/*
 
-# ── Google ──
-User-agent: Googlebot
-Allow: /
-Crawl-delay: 1
-
-# ── Bing ──
-User-agent: Bingbot
-Allow: /
-Crawl-delay: 2
-
-# ── Google AI Overview / Gemini ──
-User-agent: Google-Extended
-Allow: /
-
-# ── ChatGPT / OpenAI ──
-User-agent: ChatGPT-User
-Allow: /
-
-User-agent: GPTBot
-Allow: /
-
-# ── Microsoft Copilot ──
-User-agent: Copilot
-Allow: /
-
-# ── Brave Search ──
-User-agent: BraveBot
-Allow: /
-
-# ── Common crawlers ──
-User-agent: DuckDuckBot
-Allow: /
-
-User-agent: Slurp
-Allow: /
-
-User-agent: facebookexternalhit
-Allow: /
-
-User-agent: LinkedInBot
-Allow: /
-
-User-agent: Twitterbot
-Allow: /
-
-User-agent: WhatsApp
-Allow: /
-
-# ── Sitemap location ──
 Sitemap: https://www.starset.online/sitemap.xml
-
-# ── Host directive (Yandex) ──
-Host: https://www.starset.online
