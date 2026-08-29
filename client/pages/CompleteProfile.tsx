@@ -1,240 +1,250 @@
-import React, { useState } from "react";
-import { supabase } from "../supabaseClient";
-import { User, MapPin, CreditCard, Calendar, Users } from "lucide-react";
+import React, { useState } from 'react';
+import { ArrowRight, CalendarDays, Users, MapPin, Smartphone, Lock } from 'lucide-react';
+
+import { supabase } from '../supabaseClient';
+import { Button } from '../components/Button';
+import { Waveform } from '../components/Waveform';
 
 interface CompleteProfileProps {
   onComplete: () => void;
 }
 
+/**
+ * One-time profile completion. Two groups: who is speaking (which is what
+ * makes a collection representative) and where compensation should go.
+ */
 const CompleteProfile: React.FC<CompleteProfileProps> = ({ onComplete }) => {
-  const [age, setAge] = useState("");
-  const [gender, setGender] = useState("");
-  const [city, setCity] = useState("");
-  const [state, setState] = useState("");
-  const [upiId, setUpiId] = useState("");
+  const [age, setAge] = useState('');
+  const [gender, setGender] = useState('');
+  const [city, setCity] = useState('');
+  const [state, setState] = useState('');
+  const [upiId, setUpiId] = useState('');
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState("");
+  const [error, setError] = useState('');
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setError("");
+    setError('');
 
-    // Validation
     if (!age || !gender || !city || !state || !upiId) {
-      setError("Please fill in all fields");
+      setError('Please fill in every field.');
       return;
     }
 
     if (Number(age) < 18 || Number(age) > 100) {
-      setError("Age must be between 18 and 100");
+      setError('Age must be between 18 and 100.');
       return;
     }
 
     setLoading(true);
 
     try {
-      const {
-        data: { user },
-        error: userError,
-      } = await supabase.auth.getUser();
+      const { data: { user }, error: userError } = await supabase.auth.getUser();
 
       if (!user || userError) {
-        console.error("User error:", userError);
-        setError("User session not found. Please log in again.");
+        console.error('User error:', userError);
+        setError('Your session was not found. Please sign in again.');
         setLoading(false);
         return;
       }
 
-      console.log("Updating profile for user:", user.id);
-      const profileData = {
-        age: Number(age),
-        gender: gender,
-        city: city,
-        state: state,
-        upi_id: upiId,
-        profile_completed: true,
-      };
-
       const { data: updateData, error: updateError } = await supabase
-        .from("profiles")
-        .update(profileData)
-        .eq("id", user.id)
+        .from('profiles')
+        .update({
+          age: Number(age),
+          gender,
+          city,
+          state,
+          upi_id: upiId,
+          profile_completed: true,
+        })
+        .eq('id', user.id)
         .select();
-
-      console.log("Update result:", { data: updateData, error: updateError });
 
       setLoading(false);
 
       if (updateError) {
-        console.error("Update error:", updateError);
+        console.error('Update error:', updateError);
         setError(updateError.message);
         return;
       }
 
       if (!updateData || updateData.length === 0) {
-        console.error("No rows were updated!");
-        setError("Failed to update profile. No matching record found.");
+        setError('Could not update your profile — no matching record was found.');
         return;
       }
 
-      console.log("Profile updated successfully:", updateData);
       onComplete();
     } catch (err) {
-      console.error("Unexpected error:", err);
-      setError("An unexpected error occurred. Please try again.");
+      console.error('Unexpected error:', err);
+      setError('An unexpected error occurred. Please try again.');
       setLoading(false);
     }
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center p-4 bg-[#0a0a0a]">
-      <div className="w-full max-w-2xl">
-        {/* Header */}
-        <div className="text-center mb-8 animate-in fade-in duration-700">
-          <div className="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-br from-blue-500 to-indigo-500 rounded-2xl mb-4 shadow-lg shadow-blue-500/30">
-            <User className="h-8 w-8 text-white" />
-          </div>
-          <h1 className="text-3xl md:text-4xl font-bold text-white mb-2">
-            Complete Your Profile
-          </h1>
-          <p className="text-stone-400 text-lg">
-            Just a few more details to get you started
-          </p>
+    <div className="mx-auto w-full max-w-3xl py-4">
+      {/* Header */}
+      <header className="mb-8">
+        <p className="t-meta">Step 1 of 1</p>
+        <h1 className="t-h2 mt-2">Complete your profile</h1>
+        <p className="mt-3 max-w-xl text-body">
+          Two things before you can pick up tasks: enough about you for a collection to be
+          representative, and where your compensation should go.
+        </p>
+        <div className="mt-6">
+          <Waveform seed="complete-profile" bars={80} height={22} color="var(--line-strong)" />
         </div>
+      </header>
 
-        {/* Form Card */}
-        <div className="bg-zinc-900 rounded-3xl shadow-xl border border-white/10 p-8 md:p-10 animate-in slide-in-from-bottom duration-700">
-          <form onSubmit={handleSubmit} className="space-y-6">
-            {/* Error Message */}
-            {error && (
-              <div className="bg-red-900/20 border border-red-800 rounded-xl p-4 text-red-400 text-sm animate-in fade-in duration-300">
-                {error}
-              </div>
-            )}
+      <form onSubmit={handleSubmit} className="space-y-4">
+        {error && (
+          <div
+            role="alert"
+            className="flex items-start gap-2.5 rounded-md border border-[color-mix(in_srgb,var(--danger)_30%,transparent)] bg-danger-soft px-3.5 py-3 text-sm text-[color:var(--danger)]"
+          >
+            <span className="mt-1.5 h-1 w-1 flex-none rounded-full bg-[var(--danger)]" aria-hidden="true" />
+            {error}
+          </div>
+        )}
 
-            {/* Age & Gender Row */}
-            <div className="grid md:grid-cols-2 gap-6">
-              {/* Age */}
-              <div className="space-y-2">
-                <label className="flex items-center gap-2 text-sm font-bold text-stone-300 uppercase tracking-wide">
-                  <Calendar className="h-4 w-4 text-blue-500" />
-                  Age
-                </label>
-                <input
-                  type="number"
-                  placeholder="Enter your age"
-                  className="w-full px-4 py-3.5 border border-white/20 rounded-xl bg-white/5 focus:bg-black/50 focus:ring-2 focus:ring-blue-500/20 focus:border-blue-400 transition-all outline-none text-base text-white placeholder:text-stone-500"
-                  value={age}
-                  onChange={(e) => setAge(e.target.value)}
-                  min="18"
-                  max="100"
-                  required
-                />
-              </div>
-
-              {/* Gender */}
-              <div className="space-y-2">
-                <label className="flex items-center gap-2 text-sm font-bold text-stone-300 uppercase tracking-wide">
-                  <Users className="h-4 w-4 text-blue-500" />
-                  Gender
-                </label>
-                <select
-                  className="w-full px-4 py-3.5 border border-white/20 rounded-xl bg-white/5 focus:bg-black/50 focus:ring-2 focus:ring-blue-500/20 focus:border-blue-400 transition-all outline-none text-base text-white"
-                  value={gender}
-                  onChange={(e) => setGender(e.target.value)}
-                  required
-                >
-                  <option value="">Select Gender</option>
-                  <option value="Male">Male</option>
-                  <option value="Female">Female</option>
-                  <option value="Other">Other</option>
-                  <option value="Prefer not to say">Prefer not to say</option>
-                </select>
-              </div>
-            </div>
-
-            {/* City & State Row */}
-            <div className="grid md:grid-cols-2 gap-6">
-              {/* City */}
-              <div className="space-y-2">
-                <label className="flex items-center gap-2 text-sm font-bold text-stone-300 uppercase tracking-wide">
-                  <MapPin className="h-4 w-4 text-blue-500" />
-                  City
-                </label>
-                <input
-                  type="text"
-                  placeholder="e.g., Mumbai"
-                  className="w-full px-4 py-3.5 border border-white/20 rounded-xl bg-white/5 focus:bg-black/50 focus:ring-2 focus:ring-blue-500/20 focus:border-blue-400 transition-all outline-none text-base text-white placeholder:text-stone-500"
-                  value={city}
-                  onChange={(e) => setCity(e.target.value)}
-                  required
-                />
-              </div>
-
-              {/* State */}
-              <div className="space-y-2">
-                <label className="flex items-center gap-2 text-sm font-bold text-stone-300 uppercase tracking-wide">
-                  <MapPin className="h-4 w-4 text-blue-500" />
-                  State
-                </label>
-                <input
-                  type="text"
-                  placeholder="e.g., Maharashtra"
-                  className="w-full px-4 py-3.5 border border-white/20 rounded-xl bg-white/5 focus:bg-black/50 focus:ring-2 focus:ring-blue-500/20 focus:border-blue-400 transition-all outline-none text-base text-white placeholder:text-stone-500"
-                  value={state}
-                  onChange={(e) => setState(e.target.value)}
-                  required
-                />
-              </div>
-            </div>
-
-            {/* UPI ID */}
-            <div className="space-y-2">
-              <label className="flex items-center gap-2 text-sm font-bold text-stone-300 uppercase tracking-wide">
-                <CreditCard className="h-4 w-4 text-purple-500" />
-                UPI ID
-              </label>
-              <input
-                type="text"
-                placeholder="yourname@upi"
-                className="w-full px-4 py-3.5 border border-white/20 rounded-xl bg-white/5 focus:bg-black/50 focus:ring-2 focus:ring-purple-500/20 focus:border-purple-400 transition-all outline-none text-base text-white placeholder:text-stone-500"
-                value={upiId}
-                onChange={(e) => setUpiId(e.target.value)}
-                required
-              />
-              <p className="text-xs text-stone-400 mt-1 ml-1">
-                This will be used for payment processing
+        {/* ── Speaker profile ── */}
+        <section className="panel">
+          <div className="panel-head">
+            <div>
+              <h2 className="text-sm font-semibold text-ink">Speaker profile</h2>
+              <p className="mt-0.5 text-xs text-muted">
+                Used to match you to collections. Never attached to the audio itself.
               </p>
             </div>
+          </div>
 
-            {/* Submit Button */}
-            <button
-              type="submit"
-              disabled={loading}
-              className="w-full bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-bold py-4 px-6 rounded-xl shadow-lg shadow-blue-500/50 hover:-translate-y-0.5 transition-all duration-200 text-lg disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none mt-8"
-            >
-              {loading ? (
-                <span className="flex items-center justify-center gap-2">
-                  <svg className="animate-spin h-5 w-5" viewBox="0 0 24 24">
-                    <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none" />
-                    <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
-                  </svg>
-                  Saving...
+          <div className="panel-body grid gap-5 sm:grid-cols-2">
+            <div>
+              <label className="field-label" htmlFor="profile-age">
+                <span className="inline-flex items-center gap-1.5">
+                  <CalendarDays className="h-3.5 w-3.5 text-muted" strokeWidth={1.75} aria-hidden="true" />
+                  Age
                 </span>
-              ) : (
-                "Complete Profile"
-              )}
-            </button>
-          </form>
+              </label>
+              <input
+                id="profile-age"
+                type="number"
+                inputMode="numeric"
+                className="field"
+                placeholder="e.g. 24"
+                min={18}
+                max={100}
+                required
+                value={age}
+                onChange={(e) => setAge(e.target.value)}
+              />
+              <p className="field-hint">You must be 18 or over to contribute.</p>
+            </div>
 
-          {/* Info Footer */}
-          <div className="mt-8 pt-6 border-t border-white/10">
-            <p className="text-center text-sm text-stone-400">
-              🔒 Your information is secure and will only be used for verification and payments
+            <div>
+              <label className="field-label" htmlFor="profile-gender">
+                <span className="inline-flex items-center gap-1.5">
+                  <Users className="h-3.5 w-3.5 text-muted" strokeWidth={1.75} aria-hidden="true" />
+                  Gender
+                </span>
+              </label>
+              <select
+                id="profile-gender"
+                className="field"
+                required
+                value={gender}
+                onChange={(e) => setGender(e.target.value)}
+              >
+                <option value="" disabled>Select</option>
+                <option value="Male">Male</option>
+                <option value="Female">Female</option>
+                <option value="Other">Other</option>
+                <option value="Prefer not to say">Prefer not to say</option>
+              </select>
+            </div>
+
+            <div>
+              <label className="field-label" htmlFor="profile-city">
+                <span className="inline-flex items-center gap-1.5">
+                  <MapPin className="h-3.5 w-3.5 text-muted" strokeWidth={1.75} aria-hidden="true" />
+                  City
+                </span>
+              </label>
+              <input
+                id="profile-city"
+                className="field"
+                placeholder="e.g. Pune"
+                required
+                autoComplete="address-level2"
+                value={city}
+                onChange={(e) => setCity(e.target.value)}
+              />
+            </div>
+
+            <div>
+              <label className="field-label" htmlFor="profile-state">
+                <span className="inline-flex items-center gap-1.5">
+                  <MapPin className="h-3.5 w-3.5 text-muted" strokeWidth={1.75} aria-hidden="true" />
+                  State
+                </span>
+              </label>
+              <input
+                id="profile-state"
+                className="field"
+                placeholder="e.g. Maharashtra"
+                required
+                autoComplete="address-level1"
+                value={state}
+                onChange={(e) => setState(e.target.value)}
+              />
+              <p className="field-hint">Region helps match you to dialect-specific collections.</p>
+            </div>
+          </div>
+        </section>
+
+        {/* ── Payout ── */}
+        <section className="panel">
+          <div className="panel-head">
+            <div>
+              <h2 className="text-sm font-semibold text-ink">Payout details</h2>
+              <p className="mt-0.5 text-xs text-muted">Where accepted work settles.</p>
+            </div>
+          </div>
+
+          <div className="panel-body">
+            <label className="field-label" htmlFor="profile-upi">
+              <span className="inline-flex items-center gap-1.5">
+                <Smartphone className="h-3.5 w-3.5 text-muted" strokeWidth={1.75} aria-hidden="true" />
+                UPI ID
+              </span>
+            </label>
+            <input
+              id="profile-upi"
+              className="field font-mono"
+              placeholder="yourname@upi"
+              required
+              value={upiId}
+              onChange={(e) => setUpiId(e.target.value)}
+            />
+            <p className="field-hint">
+              Double-check this — it is the account accepted submissions settle to. You can change
+              it later from your profile.
             </p>
           </div>
+        </section>
+
+        <div className="flex flex-col-reverse items-center gap-4 pt-2 sm:flex-row sm:justify-between">
+          <p className="flex items-center gap-2 text-xs text-muted">
+            <Lock className="h-3.5 w-3.5" strokeWidth={1.75} aria-hidden="true" />
+            Used for matching and payment only.
+          </p>
+          <Button type="submit" size="lg" isLoading={loading} className="w-full sm:w-auto">
+            {loading ? 'Saving…' : 'Save and continue'}
+            {!loading && <ArrowRight className="h-4 w-4" strokeWidth={2} aria-hidden="true" />}
+          </Button>
         </div>
-      </div>
+      </form>
     </div>
   );
 };

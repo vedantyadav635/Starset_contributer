@@ -2,23 +2,24 @@ import React from 'react';
 import {
   LayoutDashboard,
   Database,
-  CreditCard,
-  ShieldAlert,
+  ShieldCheck,
   LifeBuoy,
   User,
-  Power,
+  LogOut,
   PlusCircle,
-  Settings,
-  Users,
+  ClipboardList,
   PanelLeftClose,
   PanelLeftOpen,
-  Menu,
-  ClipboardList
+  ArrowUpRight,
+  BadgeIndianRupee,
+  X,
 } from 'lucide-react';
+
 import { PageView, UserRole } from '../types';
-import { Logo } from './Logo';
+import { LogoLockup, Logo } from './Logo';
 import { useAuth } from '../context/AuthContext';
 import { ThemeToggle } from './ThemeToggle';
+import { cn } from '../lib/utils';
 
 interface SidebarProps {
   currentPage: PageView;
@@ -30,6 +31,52 @@ interface SidebarProps {
   userRole?: UserRole;
 }
 
+interface NavItem {
+  id: PageView;
+  label: string;
+  icon: typeof Database;
+}
+
+interface NavGroup {
+  heading: string;
+  items: NavItem[];
+}
+
+const CONTRIBUTOR_GROUPS: NavGroup[] = [
+  {
+    heading: 'Work',
+    items: [
+      { id: 'tasks', label: 'Tasks', icon: Database },
+      { id: 'dashboard', label: 'Overview', icon: LayoutDashboard },
+      { id: 'earnings', label: 'Compensation', icon: BadgeIndianRupee },
+    ],
+  },
+  {
+    heading: 'Account',
+    items: [
+      { id: 'guidelines', label: 'Quality standards', icon: ShieldCheck },
+      { id: 'support', label: 'Support', icon: LifeBuoy },
+      { id: 'account', label: 'Profile', icon: User },
+    ],
+  },
+];
+
+const ADMIN_GROUPS: NavGroup[] = [
+  {
+    heading: 'Operations',
+    items: [
+      { id: 'admin-dashboard', label: 'Overview', icon: LayoutDashboard },
+      { id: 'admin-submissions', label: 'Review queue', icon: ClipboardList },
+      { id: 'tasks', label: 'Task registry', icon: Database },
+      { id: 'admin-create-task', label: 'New collection', icon: PlusCircle },
+    ],
+  },
+  {
+    heading: 'Account',
+    items: [{ id: 'account', label: 'Profile', icon: User }],
+  },
+];
+
 export const Sidebar: React.FC<SidebarProps> = ({
   currentPage,
   onNavigate,
@@ -37,125 +84,161 @@ export const Sidebar: React.FC<SidebarProps> = ({
   setIsMobileOpen,
   onLogout,
   onExitApp,
-  userRole = 'contributor'
+  userRole = 'contributor',
 }) => {
   const { user } = useAuth();
-  const [isCollapsed, setIsCollapsed] = React.useState(false);
+  const [collapsed, setCollapsed] = React.useState(false);
 
-  const toggleSidebar = () => setIsCollapsed(!isCollapsed);
+  const groups = userRole === 'admin' ? ADMIN_GROUPS : CONTRIBUTOR_GROUPS;
+  const displayName = user?.user_metadata?.full_name || (userRole === 'admin' ? 'Administrator' : 'Contributor');
+  const email = user?.email || '';
 
-  const contributorNavItems = [
-    { id: 'tasks', label: 'Data Tasks', icon: Database },
-    { id: 'dashboard', label: 'Dashboard', icon: LayoutDashboard },
-    { id: 'guidelines', label: 'Protocols', icon: ShieldAlert },
-    { id: 'support', label: 'Support', icon: LifeBuoy },
-    { id: 'account', label: 'Profile', icon: User },
-  ];
-
-  const adminNavItems = [
-    { id: 'admin-dashboard', label: 'Analytics', icon: LayoutDashboard },
-    { id: 'admin-create-task', label: 'Create Task', icon: PlusCircle },
-    { id: 'tasks', label: 'Task Registry', icon: Database },
-    { id: 'admin-submissions', label: 'Submissions', icon: ClipboardList },
-    { id: 'account', label: 'Profile', icon: User },
-  ];
-
-  const navItems = userRole === 'admin' ? adminNavItems : contributorNavItems;
-
-  const sidebarClasses = `
-    fixed inset-y-0 left-0 z-50 ${isCollapsed ? 'w-24' : 'w-64'} bg-white dark:bg-black/40 backdrop-blur-xl border-r border-slate-200 dark:border-white/5 text-slate-500 dark:text-zinc-400 transform transition-all duration-300 cubic-bezier(0.4, 0, 0.2, 1)
-    ${isMobileOpen ? 'translate-x-0' : '-translate-x-full'} md:translate-x-0 md:static md:inset-auto flex flex-col h-full
-  `;
+  const isActive = (id: PageView) =>
+    currentPage === id || (id === 'tasks' && currentPage === 'execution');
 
   return (
     <>
-      {/* Mobile Overlay */}
+      {/* Mobile scrim */}
       {isMobileOpen && (
         <div
-          className="fixed inset-0 bg-black/60 backdrop-blur-sm z-40 md:hidden transition-opacity"
+          className="fixed inset-0 z-40 bg-[color-mix(in_srgb,var(--ink)_45%,transparent)] backdrop-blur-[2px] md:hidden"
           onClick={() => setIsMobileOpen(false)}
+          aria-hidden="true"
         />
       )}
 
-      <aside className={sidebarClasses}>
-        <div className="flex flex-col h-full relative">
-
-          {/* Simplified Toggle — Locked to 48px center axis */}
-          <div className={`flex items-center py-6 px-4 gap-3 ${isCollapsed ? 'flex-col justify-center' : 'justify-between'}`}>
+      <aside
+        className={cn(
+          'fixed inset-y-0 left-0 z-50 flex h-full flex-col border-r border-line bg-surface',
+          'transition-[transform,width] duration-200 ease-out',
+          'md:static md:translate-x-0',
+          collapsed ? 'w-64 md:w-[4.5rem]' : 'w-64',
+          isMobileOpen ? 'translate-x-0' : '-translate-x-full',
+        )}
+        aria-label="Product navigation"
+      >
+        {/* ── Brand row ── */}
+        <div className="flex h-[var(--nav-h)] flex-none items-center justify-between gap-2 border-b border-line px-3">
+          {collapsed ? (
             <button
-              onClick={toggleSidebar}
-              className="h-10 w-10 flex items-center justify-center rounded-xl bg-slate-100 dark:bg-white/10 text-slate-400 dark:text-zinc-500 hover:text-slate-900 dark:hover:text-white transition-all shadow-sm active:scale-95"
-              title={isCollapsed ? "Open Sidebar" : "Close Sidebar"}
+              type="button"
+              onClick={onExitApp}
+              className="mx-auto"
+              aria-label="Back to the Starset site"
             >
-              {isCollapsed ? (
-                <PanelLeftOpen className="h-5 w-5" />
-              ) : (
-                <PanelLeftClose className="h-5 w-5" />
-              )}
+              <Logo className="h-8 w-8" />
             </button>
-            <ThemeToggle />
+          ) : (
+            <button type="button" onClick={onExitApp} className="min-w-0 pl-1" aria-label="Back to the Starset site">
+              <LogoLockup markClassName="h-7 w-7" />
+            </button>
+          )}
+
+          <button
+            type="button"
+            onClick={() => setIsMobileOpen(false)}
+            className="flex h-8 w-8 flex-none items-center justify-center rounded-md text-muted transition-colors hover:bg-paper-sunk hover:text-ink md:hidden"
+            aria-label="Close navigation"
+          >
+            <X className="h-4 w-4" strokeWidth={1.75} aria-hidden="true" />
+          </button>
+        </div>
+
+        {/* ── Navigation ── */}
+        <nav className="thin-scroll flex-1 overflow-y-auto px-2.5 py-4">
+          {groups.map((group) => (
+            <div key={group.heading} className="mb-5 last:mb-0">
+              {!collapsed && <p className="t-meta px-2.5 pb-2">{group.heading}</p>}
+
+              <ul className="space-y-0.5">
+                {group.items.map((item) => {
+                  const active = isActive(item.id);
+                  return (
+                    <li key={item.id}>
+                      <button
+                        type="button"
+                        onClick={() => { onNavigate(item.id); setIsMobileOpen(false); }}
+                        aria-current={active ? 'page' : undefined}
+                        title={collapsed ? item.label : undefined}
+                        className={cn(
+                          'group flex w-full items-center gap-3 rounded-md px-2.5 py-2 text-sm transition-colors',
+                          collapsed && 'md:justify-center md:px-0',
+                          active
+                            ? 'bg-paper-sunk font-medium text-ink'
+                            : 'text-body hover:bg-paper-sunk hover:text-ink',
+                        )}
+                      >
+                        <span className="relative flex-none">
+                          <item.icon
+                            className={cn('h-[18px] w-[18px]', active ? 'text-signal' : 'text-muted group-hover:text-ink')}
+                            strokeWidth={1.75}
+                            aria-hidden="true"
+                          />
+                        </span>
+                        <span className={cn('truncate', collapsed && 'md:hidden')}>{item.label}</span>
+                      </button>
+                    </li>
+                  );
+                })}
+              </ul>
+            </div>
+          ))}
+        </nav>
+
+        {/* ── Footer ── */}
+        <div className="flex-none border-t border-line p-2.5">
+          <div className={cn('flex items-center gap-2.5 rounded-md px-2 py-2', collapsed && 'md:justify-center md:px-0')}>
+            <span
+              className={cn(
+                'flex h-8 w-8 flex-none items-center justify-center rounded-md text-xs font-semibold',
+                userRole === 'admin'
+                  ? 'bg-signal-soft text-signal'
+                  : 'bg-paper-sunk text-ink',
+              )}
+              aria-hidden="true"
+            >
+              {displayName.charAt(0).toUpperCase()}
+            </span>
+            <div className={cn('min-w-0 flex-1', collapsed && 'md:hidden')}>
+              <p className="truncate text-sm font-medium text-ink">{displayName}</p>
+              <p className="truncate text-xs text-muted">{email || (userRole === 'admin' ? 'Administrator' : 'Signed in')}</p>
+            </div>
           </div>
 
-          {/* Navigation */}
-          <nav className="flex-1 px-4 py-6 space-y-1.5 overflow-y-auto no-scrollbar">
-
-            {navItems.map((item) => {
-              const isActive = currentPage === item.id || (item.id === 'tasks' && currentPage === 'execution');
-              return (
-                <button
-                  key={item.id}
-                  onClick={() => {
-                    onNavigate(item.id as PageView);
-                    setIsMobileOpen(false);
-                  }}
-                  className={`
-                    w-full flex items-center transition-all duration-300 group relative
-                    pl-[22px] py-3.5 text-sm font-bold rounded-2xl
-                    ${isActive
-                      ? 'bg-blue-500 text-white shadow-md'
-                      : 'hover:bg-slate-100 dark:hover:bg-white/5 text-slate-500 dark:text-zinc-500 hover:text-slate-900 dark:hover:text-white'}
-                  `}
-                  title={isCollapsed ? item.label : ''}
-                >
-                  <item.icon className="h-5 w-5 mr-4 flex-shrink-0 transition-transform duration-300 group-hover:scale-110" strokeWidth={isActive ? 3 : 2} />
-                  <span className={`truncate tracking-tight transition-all duration-300 ${isCollapsed ? 'opacity-0 w-0' : 'opacity-100 w-auto'}`}>
-                    {item.label}
-                  </span>
-
-                  {isActive && !isCollapsed && (
-                    <div className="absolute right-3 w-1.5 h-1.5 bg-white rounded-full"></div>
-                  )}
-                </button>
-              );
-            })}
-          </nav>
-
-          {/* User Status */}
-          <div className="border-t border-slate-200 dark:border-white/5 bg-transparent px-4 py-6 space-y-4 overflow-hidden">
-            <div className="flex items-center">
-              <div className={`h-10 w-10 ml-3 flex-shrink-0 rounded-lg border border-slate-200 dark:border-white/5 flex items-center justify-center shadow-sm ${userRole === 'admin' ? 'bg-purple-900/20 text-purple-400' : 'bg-slate-100 dark:bg-white/10 text-slate-700 dark:text-white'}`}>
-                {userRole === 'admin' ? (
-                  <ShieldAlert className="h-5 w-5" />
-                ) : (
-                  <User className="h-5 w-5" />
-                )}
-              </div>
-              <div className={`flex flex-col truncate flex-1 ml-4 transition-all duration-300 ${isCollapsed ? 'opacity-0 w-0' : 'opacity-100 w-auto'}`}>
-                <span className="text-sm font-bold text-slate-900 dark:text-white truncate tracking-tight">
-                  {user?.user_metadata?.full_name || 'Contributor'}
-                </span>
-                <span className="text-[10px] text-zinc-500 truncate font-mono uppercase">
-                  {user?.user_metadata?.email?.split('@')[0] || 'active_node'}
-                </span>
-              </div>
-            </div>
+          <div className={cn('mt-1 flex items-center gap-1', collapsed && 'md:flex-col')}>
             <button
-              onClick={onLogout}
-              className="w-full flex items-center transition-all duration-300 group pl-[22px] py-3 text-sm font-bold text-slate-400 dark:text-zinc-500 hover:text-red-500 dark:hover:text-red-400 hover:bg-red-500/10 rounded-xl border border-transparent hover:border-red-500/20"
-              title={isCollapsed ? 'Disconnect' : ''}
+              type="button"
+              onClick={onExitApp}
+              title="Back to the site"
+              className="flex h-9 flex-1 items-center justify-center gap-2 rounded-md text-xs font-medium text-body transition-colors hover:bg-paper-sunk hover:text-ink"
             >
-              <Power className="h-5 w-5 mr-4 flex-shrink-0" />
-              <span className={`truncate transition-all duration-300 ${isCollapsed ? 'opacity-0 w-0' : 'opacity-100 w-auto'}`}>Log Out</span>
+              <ArrowUpRight className="h-4 w-4" strokeWidth={1.75} aria-hidden="true" />
+              <span className={cn(collapsed && 'md:hidden')}>Site</span>
+            </button>
+
+            <button
+              type="button"
+              onClick={onLogout}
+              title="Sign out"
+              className="flex h-9 flex-1 items-center justify-center gap-2 rounded-md text-xs font-medium text-body transition-colors hover:bg-danger-soft hover:text-[color:var(--danger)]"
+            >
+              <LogOut className="h-4 w-4" strokeWidth={1.75} aria-hidden="true" />
+              <span className={cn(collapsed && 'md:hidden')}>Sign out</span>
+            </button>
+          </div>
+
+          <div className={cn('mt-1 flex items-center gap-1 border-t border-line pt-2', collapsed && 'md:flex-col')}>
+            <ThemeToggle className="flex-1 border-0" />
+            <button
+              type="button"
+              onClick={() => setCollapsed((v) => !v)}
+              aria-label={collapsed ? 'Expand navigation' : 'Collapse navigation'}
+              title={collapsed ? 'Expand' : 'Collapse'}
+              className="hidden h-9 w-9 flex-none items-center justify-center rounded-md text-muted transition-colors hover:bg-paper-sunk hover:text-ink md:flex"
+            >
+              {collapsed
+                ? <PanelLeftOpen className="h-4 w-4" strokeWidth={1.75} aria-hidden="true" />
+                : <PanelLeftClose className="h-4 w-4" strokeWidth={1.75} aria-hidden="true" />}
             </button>
           </div>
         </div>

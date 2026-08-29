@@ -13,7 +13,7 @@ interface SEOHeadProps {
 
 const BASE_URL = 'https://www.starset.online';
 const DEFAULT_IMAGE = `${BASE_URL}/logo.png`;
-const SITE_NAME = 'Starset Intelligence';
+const SITE_NAME = 'Starset';
 
 /**
  * SEOHead — sets dynamic document title, meta description, canonical URL,

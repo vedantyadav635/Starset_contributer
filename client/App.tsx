@@ -1,7 +1,7 @@
 import React, { useState, useEffect, Suspense, lazy } from 'react';
-import { useLocation, useNavigate, Routes, Route, Navigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 
-// Lazy-loaded page components for better performance
+// ── Lazy-loaded pages ─────────────────────────────────────────────────────
 const Dashboard = lazy(() => import('./pages/Dashboard').then(m => ({ default: m.Dashboard })));
 const TaskList = lazy(() => import('./pages/TaskList').then(m => ({ default: m.TaskList })));
 const TaskExecution = lazy(() => import('./pages/TaskExecution').then(m => ({ default: m.TaskExecution })));
@@ -10,8 +10,7 @@ const Login = lazy(() => import('./pages/Login').then(m => ({ default: m.Login }
 const Signup = lazy(() => import('./pages/Signup').then(m => ({ default: m.Signup })));
 const LandingPage = lazy(() => import('./pages/LandingPage').then(m => ({ default: m.LandingPage })));
 const About = lazy(() => import('./pages/About').then(m => ({ default: m.About })));
-const Contributors = lazy(() => import('./pages/Contributors').then(m => ({ default: m.Contributors })));
-const Money = lazy(() => import('./pages/Money').then(m => ({ default: m.Money })));
+const Marketplace = lazy(() => import('./pages/Marketplace').then(m => ({ default: m.Marketplace })));
 const AdminCreateTask = lazy(() => import('./pages/AdminCreateTask').then(m => ({ default: m.AdminCreateTask })));
 const AdminDashboard = lazy(() => import('./pages/AdminDashboard').then(m => ({ default: m.AdminDashboard })));
 const AdminSubmissions = lazy(() => import('./pages/AdminSubmissions').then(m => ({ default: m.AdminSubmissions })));
@@ -19,81 +18,118 @@ const ForgotPassword = lazy(() => import('./pages/ForgotPassword').then(m => ({ 
 const ResetPassword = lazy(() => import('./pages/ResetPassword').then(m => ({ default: m.ResetPassword })));
 const CompleteProfile = lazy(() => import('./pages/CompleteProfile').then(m => ({ default: m.default })));
 const Legal = lazy(() => import('./pages/Legal').then(m => ({ default: m.Legal })));
-const TaskTypes = lazy(() => import('./pages/TaskTypes').then(m => ({ default: m.TaskTypes })));
 const Careers = lazy(() => import('./pages/Careers').then(m => ({ default: m.Careers })));
 const Blog = lazy(() => import('./pages/Blog').then(m => ({ default: m.Blog })));
 const Contact = lazy(() => import('./pages/Contact').then(m => ({ default: m.Contact })));
-const LanguageDirectory = lazy(() => import('./pages/LanguageDirectory').then(m => ({ default: m.LanguageDirectory })));
 const AITrainingGuide = lazy(() => import('./pages/AITrainingGuide').then(m => ({ default: m.AITrainingGuide })));
 
-// Type definitions for TypeScript
-import { PageView, Task, UserRole, TaskType, TaskStatus } from './types';
+import { PageView, Task, UserRole } from './types';
 
-// Icon library - Lucide React icons
-import { Menu, User, MapPin, Globe, Shield, LayoutDashboard, Database, CreditCard, MoreHorizontal, CheckCircle2, ShieldAlert, Clock, Mic, FileText, Send, LifeBuoy, AlertCircle, CheckCircle } from 'lucide-react';
-import { motion } from 'framer-motion';
+import {
+  LayoutDashboard,
+  Database,
+  BadgeIndianRupee,
+  User,
+  MapPin,
+  Mail,
+  ShieldCheck,
+  ShieldAlert,
+  Mic,
+  PenLine,
+  LifeBuoy,
+  Send,
+  Menu,
+  CheckCircle2,
+  Volume2,
+  Clock,
+  AlertTriangle,
+} from 'lucide-react';
 
-// Custom components and utilities
-import { Logo } from './components/Logo';
+import { LogoLockup } from './components/Logo';
 import { API_URL } from './config/api';
 import { PublicPageType } from './components/PublicLayout';
-import { supabase } from "./supabaseClient"; // Supabase client for database operations
+import { supabase } from './supabaseClient';
 import { Sidebar } from './components/Sidebar';
-import { Button } from "./components/Button";
+import { Button } from './components/Button';
 import { ThemeToggle } from './components/ThemeToggle';
+import { SpecList } from './components/ui/Layout';
+import { Waveform } from './components/Waveform';
+import { cn } from './lib/utils';
 
 // ============================================================================
 // CONSTANTS
 // ============================================================================
 
-// Auto-logout timer: 15 minutes of inactivity for security
-const INACTIVITY_LIMIT_MS = 15 * 60 * 1000; // 15 Minutes
+/** Auto sign-out after 15 minutes of inactivity. */
+const INACTIVITY_LIMIT_MS = 15 * 60 * 1000;
 
-// Keep-alive ping interval: ping backend every 9 minutes to prevent Render free-tier sleep
-const KEEP_ALIVE_INTERVAL_MS = 9 * 60 * 1000; // 9 Minutes
+/** Ping the backend every 9 minutes so a free-tier host stays warm. */
+const KEEP_ALIVE_INTERVAL_MS = 9 * 60 * 1000;
 
+/** Public routes that map straight onto a PublicPageType. */
+const PUBLIC_PAGES: PublicPageType[] = [
+  'home', 'marketplace', 'about', 'ai-training-guide',
+  'careers', 'blog', 'contact', 'terms', 'privacy', 'cookies', 'data-processing',
+];
 
-// Lighweight loading shim for Suspense
+/** Public routes that have moved. Old URL → new slug. */
+const LEGACY_REDIRECTS: Record<string, PublicPageType> = {
+  'for-ai': 'marketplace',
+};
+
+// ============================================================================
+// SHARED SHELL PIECES
+// ============================================================================
+
 const PageLoader = () => (
-  <div className="fixed inset-0 flex items-center justify-center bg-white dark:bg-[#020205] z-[1000]">
-    <div className="relative">
-      <div className="h-12 w-12 rounded-full border-t-2 border-b-2 border-blue-500 animate-spin"></div>
-      <div className="absolute inset-0 h-12 w-12 rounded-full border-t-2 border-b-2 border-blue-500/20"></div>
+  <div className="fixed inset-0 z-[1000] flex items-center justify-center bg-paper">
+    <div className="flex flex-col items-center gap-4">
+      <div className="w-40">
+        <Waveform seed="loading" bars={28} height={26} live color="var(--line-strong)" />
+      </div>
+      <span className="t-meta">Loading</span>
     </div>
   </div>
 );
 
+/** Consistent heading for the product-side inline views. */
+const ViewHeader: React.FC<{ kicker: string; title: string; lede?: string }> = ({ kicker, title, lede }) => (
+  <header className="border-b border-line pb-6">
+    <p className="t-meta">{kicker}</p>
+    <h1 className="t-h2 mt-1.5">{title}</h1>
+    {lede && <p className="mt-2 max-w-2xl text-sm text-body">{lede}</p>}
+  </header>
+);
+
 // ============================================================================
-// MAIN APP COMPONENT
+// MAIN APP
 // ============================================================================
 
 const App: React.FC = () => {
+  // ── Navigation state ──
+  const [viewMode, setViewMode] = useState<'public' | 'app'>('public');
+  const [authMode, setAuthMode] = useState<'login' | 'signup' | 'forgot-password' | 'reset-password'>('login');
+  const [publicPage, setPublicPage] = useState<PublicPageType>('home');
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [userRole, setUserRole] = useState<UserRole>('contributor');
+  const [currentPage, setCurrentPage] = useState<PageView>('dashboard');
+  const [isMobileNavOpen, setIsMobileNavOpen] = useState(false);
+  const [activeTask, setActiveTask] = useState<Task | null>(null);
+  const [userProfile, setUserProfile] = useState<any>(null);
 
-  // --------------------------------------------------------------------------
-  // STATE MANAGEMENT
-  // --------------------------------------------------------------------------
-
-  // Navigation State - Controls which part of the app is displayed
-  const [viewMode, setViewMode] = useState<'public' | 'app'>('public'); // 'public' = landing page, 'app' = authenticated app
-  const [authMode, setAuthMode] = useState<'login' | 'signup' | 'forgot-password' | 'reset-password'>('login'); // Which auth form to show
-  const [publicPage, setPublicPage] = useState<PublicPageType>('home'); // Which public page (home, about, etc.)
-  const [isAuthenticated, setIsAuthenticated] = useState(false); // Is user logged in?
-  const [userRole, setUserRole] = useState<UserRole>('contributor'); // User's role (contributor or admin)
-  const [currentPage, setCurrentPage] = useState<PageView>('dashboard'); // Current page in authenticated app
-  const [isMobileNavOpen, setIsMobileNavOpen] = useState(false); // Mobile navigation menu state
-  const [activeTask, setActiveTask] = useState<Task | null>(null); // Currently selected task for execution
-  const [userProfile, setUserProfile] = useState<any>(null); // User profile data from database
+  // ── Data state ──
+  const [tasks, setTasks] = useState<Task[]>([]);
+  const [completedTaskIds, setCompletedTaskIds] = useState<string[]>([]);
 
   const navigate = useNavigate();
   const location = useLocation();
 
   // --------------------------------------------------------------------------
-  // URL SYNC - Makes back button work
+  // URL SYNC — keeps the back button working
   // --------------------------------------------------------------------------
   useEffect(() => {
     const path = location.pathname;
 
-    // Auth modes
     if (path === '/login') {
       setViewMode('app');
       setAuthMode('login');
@@ -106,12 +142,9 @@ const App: React.FC = () => {
     } else if (path === '/reset-password') {
       setViewMode('app');
       setAuthMode('reset-password');
-    }
-    // App/Dashboard routes
-    else if (path.startsWith('/dashboard')) {
+    } else if (path.startsWith('/dashboard')) {
       if (isAuthenticated) {
         setViewMode('app');
-        // Extract specific page if any, e.g., /dashboard/tasks
         const parts = path.split('/');
         if (parts[2]) {
           setCurrentPage(parts[2] as PageView);
@@ -119,106 +152,83 @@ const App: React.FC = () => {
           setCurrentPage(userRole === 'admin' ? 'admin-dashboard' : 'dashboard');
         }
       }
-    }
-    // Public routes
-    else {
+    } else {
       setViewMode('public');
-      const page = path.substring(1) || 'home';
-      setPublicPage(page as PublicPageType);
+      const slug = (path.substring(1) || 'home') as PublicPageType;
+
+      // Routes that moved. Redirect rather than silently serving the homepage,
+      // so old links and anything already indexed land where they should.
+      const moved = LEGACY_REDIRECTS[slug as string];
+      if (moved) {
+        navigate('/' + moved, { replace: true });
+        return;
+      }
+
+      setPublicPage(PUBLIC_PAGES.includes(slug) ? slug : 'home');
     }
-  }, [location.pathname, isAuthenticated, userRole]);
-
-  // Global Data State - Tasks loaded from backend
-  const [tasks, setTasks] = useState<Task[]>([]); // Array of all tasks
-  const [completedTaskIds, setCompletedTaskIds] = useState<string[]>([]); // Track completed tasks
+  }, [location.pathname, isAuthenticated, userRole, navigate]);
 
   // --------------------------------------------------------------------------
-  // SIDE EFFECTS (useEffect hooks)
+  // SESSION RESTORE
   // --------------------------------------------------------------------------
-
-  /**
-   * EFFECT 0: Restore session on page load
-   * Checks if user has an existing Supabase session (survives reload)
-   * Also listens for auth state changes (login/logout/token refresh)
-   */
   useEffect(() => {
-    // 0. Check if user arrived via password reset link
     if (window.location.hash.includes('reset-password') || window.location.hash.includes('type=recovery')) {
       setViewMode('app');
       setAuthMode('reset-password');
     }
 
-    // 1. Check for existing session on mount
     const restoreSession = async () => {
       try {
         const { data: { session } } = await supabase.auth.getSession();
 
         if (session?.user) {
-          console.log("🔄 Restoring session for:", session.user.email);
-
-          // Fetch profile
           const { data: profile, error: profileError } = await supabase
-            .from("profiles")
-            .select("*")
-            .eq("id", session.user.id)
+            .from('profiles')
+            .select('*')
+            .eq('id', session.user.id)
             .single();
 
           if (profile && !profileError) {
             setUserProfile({ ...profile, email: session.user.email });
-            setUserRole(profile.role || "contributor");
+            setUserRole(profile.role || 'contributor');
             setIsAuthenticated(true);
             setViewMode('app');
 
             if (!profile.profile_completed) {
-              setCurrentPage("complete-profile");
+              setCurrentPage('complete-profile');
             } else {
-              setCurrentPage(
-                (profile.role || "contributor") === "admin"
-                  ? "admin-dashboard"
-                  : "dashboard"
-              );
+              setCurrentPage((profile.role || 'contributor') === 'admin' ? 'admin-dashboard' : 'dashboard');
             }
-            console.log("✅ Session restored successfully");
           }
         }
       } catch (err) {
-        console.error("Error restoring session:", err);
+        console.error('Error restoring session:', err);
       }
     };
 
     restoreSession();
 
-    // 2. Listen for auth state changes (login, logout, token refresh)
-    const { data: { subscription } } = supabase.auth.onAuthStateChange(
-      async (event, session) => {
-        console.log("🔑 Auth event:", event);
-        if (event === "SIGNED_OUT") {
-          setIsAuthenticated(false);
-          setUserProfile(null);
-          setViewMode('public');
-          setPublicPage('home');
-        }
-        // Handle password recovery flow
-        if (event === "PASSWORD_RECOVERY") {
-          setViewMode('app');
-          setAuthMode('reset-password');
-        }
+    const { data: { subscription } } = supabase.auth.onAuthStateChange(async (event) => {
+      if (event === 'SIGNED_OUT') {
+        setIsAuthenticated(false);
+        setUserProfile(null);
+        setViewMode('public');
+        setPublicPage('home');
       }
-    );
+      if (event === 'PASSWORD_RECOVERY') {
+        setViewMode('app');
+        setAuthMode('reset-password');
+      }
+    });
 
-    return () => {
-      subscription.unsubscribe();
-    };
+    return () => { subscription.unsubscribe(); };
   }, []);
 
-  /**
-   * EFFECT 1: Fetch tasks via Backend API (RLS-proof)
-   * Fetches different endpoints based on user role (Admin vs Contributor)
-   * Re-runs when authentication state or user role changes.
-   */
+  // --------------------------------------------------------------------------
+  // TASKS
+  // --------------------------------------------------------------------------
   useEffect(() => {
     const fetchTasks = async () => {
-      // Don't fetch if not authenticated to avoid noisy 401/403 console errors
       if (!isAuthenticated) {
         setTasks([]);
         return;
@@ -228,12 +238,10 @@ const App: React.FC = () => {
         const { API_ENDPOINTS } = await import('./config/api');
         const { fetchApi } = await import('./lib/api');
 
-        // Choose endpoint based on role: Admin gets all tasks, Contributor gets only available ones
         const endpoint = userRole === 'admin'
           ? API_ENDPOINTS.ADMIN_TASKS
           : API_ENDPOINTS.CONTRIBUTOR_TASKS;
 
-        console.log(`📡 Fetching tasks for active session [Role: ${userRole}]...`);
         const response = await fetchApi(endpoint);
 
         if (!response.ok) {
@@ -242,8 +250,6 @@ const App: React.FC = () => {
 
         const data = await response.json();
 
-        // The admin endpoint returns tasks already ordered and with counts if possible
-        // But let's map it safely
         const mappedTasks: Task[] = (data || []).map((t: any) => ({
           id: t.id,
           title: t.title,
@@ -267,7 +273,6 @@ const App: React.FC = () => {
         }));
 
         setTasks(mappedTasks);
-        console.log(`✅ Loaded ${mappedTasks.length} tasks via API (${userRole} view)`);
       } catch (err) {
         console.error('Error fetching tasks via API:', err);
       }
@@ -276,9 +281,9 @@ const App: React.FC = () => {
     fetchTasks();
   }, [isAuthenticated, userRole]);
 
-  /**
-   * EFFECT: Fetch user's completed tasks directly from Supabase
-   */
+  // --------------------------------------------------------------------------
+  // COMPLETED TASKS
+  // --------------------------------------------------------------------------
   useEffect(() => {
     const fetchCompletedTasks = async () => {
       if (isAuthenticated && userProfile) {
@@ -291,9 +296,7 @@ const App: React.FC = () => {
               .eq('user_id', user.id);
 
             if (!error && data) {
-              const ids = data.map((s: any) => s.task_id).filter(Boolean);
-              setCompletedTaskIds(ids);
-              console.log(`✅ User completed ${ids.length} tasks`);
+              setCompletedTaskIds(data.map((s: any) => s.task_id).filter(Boolean));
             }
           }
         } catch (err) {
@@ -307,34 +310,27 @@ const App: React.FC = () => {
     fetchCompletedTasks();
   }, [isAuthenticated, userProfile]);
 
-
-
-  /**
-   * EFFECT 3: Security - Auto-logout on inactivity
-   * Logs out user after 15 minutes of no activity
-   * Monitors mouse, keyboard, click, and scroll events
-   */
+  // --------------------------------------------------------------------------
+  // INACTIVITY SIGN-OUT
+  // --------------------------------------------------------------------------
   useEffect(() => {
-    if (!isAuthenticated) return; // Only run if user is logged in
+    if (!isAuthenticated) return;
 
     let inactivityTimer: number;
 
     const resetTimer = () => {
       clearTimeout(inactivityTimer);
       inactivityTimer = window.setTimeout(() => {
-        // Securely clear session after inactivity
         handleLogout();
-        alert("Session terminated due to inactivity for security.");
-      }, INACTIVITY_LIMIT_MS); // 15 minutes
+        alert('You were signed out after 15 minutes of inactivity.');
+      }, INACTIVITY_LIMIT_MS);
     };
 
-    // Events to monitor
     window.addEventListener('mousemove', resetTimer);
     window.addEventListener('keypress', resetTimer);
     window.addEventListener('click', resetTimer);
     window.addEventListener('scroll', resetTimer);
 
-    // Init
     resetTimer();
 
     return () => {
@@ -346,125 +342,71 @@ const App: React.FC = () => {
     };
   }, [isAuthenticated]);
 
-  /**
-   * EFFECT 4: Keep-alive ping to prevent Render free-tier from sleeping
-   * Pings the backend /health endpoint every 9 minutes so the backend
-   * is always warm when a user submits a task.
-   */
+  // --------------------------------------------------------------------------
+  // KEEP-ALIVE
+  // --------------------------------------------------------------------------
   useEffect(() => {
-    const ping = () => {
-      fetch(`${API_URL}/health`).catch(() => {
-        // Silently ignore errors - this is just a keep-alive
-      });
-    };
-    ping(); // Ping immediately on mount
+    const ping = () => { fetch(`${API_URL}/health`).catch(() => { }); };
+    ping();
     const interval = window.setInterval(ping, KEEP_ALIVE_INTERVAL_MS);
     return () => window.clearInterval(interval);
   }, []);
 
   // --------------------------------------------------------------------------
-  // HANDLER FUNCTIONS - Navigation & Authentication
+  // HANDLERS
   // --------------------------------------------------------------------------
 
+  const handleEnterApp = () => navigate('/login');
+  const handleStartSignup = () => navigate('/signup');
 
-
-
-  /**
-   * Navigate to login page from public landing page
-   * Switches to app view mode and shows login form
-   */
-  const handleEnterApp = () => {
-    navigate('/login');
-  };
-
-  /**
-   * Navigate to signup page from public landing page
-   * Switches to app view mode and shows signup form
-   */
-  const handleStartSignup = () => {
-    navigate('/signup');
-  };
-
-  /**
-   * Exit the app and return to public landing page
-   * Resets all navigation state and clears authentication
-   */
   const handleExitApp = () => {
     navigate('/');
     setIsAuthenticated(false);
   };
 
-  /**
-   * Handle user login after authentication
-   * 
-   * Flow:
-   * 1. Get authenticated user from Supabase
-   * 2. Fetch user profile from database
-   * 3. Set user role and authentication state
-   * 4. Redirect to appropriate page (profile completion or dashboard)
-   * 
-   * @param role - The role the user is logging in as (admin or contributor)
-   */
   const handleLogin = async (role: UserRole) => {
     try {
-      // Step 1: Get the authenticated user
       const { data: { user }, error: userError } = await supabase.auth.getUser();
 
       if (userError || !user) {
-        console.error("Failed to get user:", userError);
-        alert("Failed to get user information. Please try logging in again.");
+        console.error('Failed to get user:', userError);
+        alert('Could not read your account. Please sign in again.');
         return;
       }
 
-      console.log("User authenticated:", user.id);
-
-      // Step 2: Fetch user profile from database
       const { data: profile, error: profileError } = await supabase
-        .from("profiles")
-        .select("*")
-        .eq("id", user.id)
+        .from('profiles')
+        .select('*')
+        .eq('id', user.id)
         .single();
 
       if (profileError) {
-        console.error("Profile fetch error:", profileError);
-        alert(`Failed to load user profile: ${profileError.message}`);
+        console.error('Profile fetch error:', profileError);
+        alert(`Failed to load your profile: ${profileError.message}`);
         return;
       }
 
       if (!profile) {
-        console.error("No profile found for user:", user.id);
-        alert("No profile found. Please contact support.");
+        console.error('No profile found for user:', user.id);
+        alert('No profile found for this account. Please contact support.');
         return;
       }
 
-      console.log("Profile loaded successfully:", profile);
-
-      // Step 3: Store user data in state
       setUserProfile({ ...profile, email: user.email });
-      setUserRole(profile.role || "contributor");
+      setUserRole(profile.role || 'contributor');
       setIsAuthenticated(true);
 
-      // Step 4: Redirect based on profile completion status
       if (!profile.profile_completed) {
-        // New user - needs to complete profile
-        setCurrentPage("complete-profile");
+        setCurrentPage('complete-profile');
       } else {
-        // Existing user - go to dashboard
-        setCurrentPage(role === "admin" ? "admin-dashboard" : "dashboard");
+        setCurrentPage(role === 'admin' ? 'admin-dashboard' : 'dashboard');
       }
     } catch (err) {
-      console.error("Unexpected error in handleLogin:", err);
-      alert("An unexpected error occurred. Please try again.");
+      console.error('Unexpected error in handleLogin:', err);
+      alert('An unexpected error occurred. Please try again.');
     }
   };
 
-
-
-
-  /**
-   * Handle user logout
-   * Clears authentication state and returns to public landing page
-   */
   const handleLogout = async () => {
     await supabase.auth.signOut();
     setIsAuthenticated(false);
@@ -474,38 +416,20 @@ const App: React.FC = () => {
     setPublicPage('home');
   };
 
-  /**
-   * Handle task selection from task list
-   * Sets the active task and navigates to execution page
-   * @param task - The task object to execute
-   */
   const handleSelectTask = (task: Task) => {
     setActiveTask(task);
     navigate('/dashboard/execution');
   };
 
-  /**
-   * Handle task completion
-   * Clears active task, marks it as done locally, and returns to task list
-   */
   const handleCompleteTask = () => {
-    // Optimistically mark this task as completed so the badge shows immediately
     if (activeTask) {
-      setCompletedTaskIds(prev =>
-        prev.includes(activeTask.id) ? prev : [...prev, activeTask.id]
-      );
+      setCompletedTaskIds(prev => (prev.includes(activeTask.id) ? prev : [...prev, activeTask.id]));
     }
     setActiveTask(null);
     navigate('/dashboard/tasks');
   };
 
-  /**
-   * Handle new task creation (Admin only)
-   * Adds new task to the beginning of the task list
-   * @param newTask - The newly created task object
-   */
   const handleCreateTask = async (newTask: any) => {
-    // Map snake_case API response to camelCase frontend format
     const mappedTask: Task = {
       id: newTask.id,
       title: newTask.title,
@@ -527,113 +451,483 @@ const App: React.FC = () => {
       requirements: newTask.requirements || [],
     };
     setTasks(prev => [mappedTask, ...prev]);
-    setCurrentPage("tasks");
+    navigate('/dashboard/tasks');
   };
 
-
-
-  /**
-   * Handle task deletion (Admin only)
-   * Removes task from the task list by ID
-   * @param taskId - The ID of the task to delete
-   */
   const handleDeleteTask = async (taskId: string) => {
     try {
       const { API_ENDPOINTS } = await import('./config/api');
-      const res = await fetch(API_ENDPOINTS.DELETE_TASK(taskId), {
-        method: "DELETE",
-      });
+      const { fetchApi } = await import('./lib/api');
+      const res = await fetchApi(API_ENDPOINTS.DELETE_TASK(taskId), { method: 'DELETE' });
 
-      if (!res.ok) {
-        throw new Error("Failed to delete task");
-      }
+      if (!res.ok) throw new Error('Failed to delete task');
 
-      // Remove from UI
       setTasks(prev => prev.filter(t => t.id !== taskId));
-      console.log("✅ Task soft-deleted:", taskId);
     } catch (err) {
-      console.error("Error deleting task:", err);
-      alert("Failed to delete task");
+      console.error('Error deleting task:', err);
+      alert('Failed to delete the task.');
     }
   };
 
-  /**
-   * Handle navigation between public pages
-   * Scrolls to top smoothly when changing pages
-   * @param page - The public page to navigate to (home, about, contributors, money)
-   */
   const handlePublicNavigate = (page: PublicPageType) => {
     navigate(page === 'home' ? '/' : `/${page}`);
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
-  const handleAppNavigate = (page: PageView) => {
-    navigate(`/dashboard/${page}`);
+
+  const handleAppNavigate = (page: PageView) => navigate(`/dashboard/${page}`);
+
+  // --------------------------------------------------------------------------
+  // INLINE PRODUCT VIEWS
+  // --------------------------------------------------------------------------
+
+  const renderGuidelines = () => (
+    <div className="mx-auto w-full max-w-4xl space-y-6">
+      <ViewHeader
+        kicker="Reference"
+        title="Quality standards"
+        lede="What a reviewer listens for, and the specific reasons a submission gets rejected. Only accepted submissions are compensated."
+      />
+
+      <section className="panel overflow-hidden">
+        <div className="panel-head">
+          <h2 className="flex items-center gap-2 text-sm font-semibold text-ink">
+            <Mic className="h-4 w-4 text-muted" strokeWidth={1.75} aria-hidden="true" />
+            Audio recording
+          </h2>
+          <span className="t-meta">Most collections</span>
+        </div>
+
+        <div className="panel-body">
+          <p className="max-w-prose text-body">
+            The single biggest cause of rejection is the room, not the microphone. Find somewhere
+            quiet, then speak at your normal pace — neither rushed nor artificially slowed.
+          </p>
+
+          <div className="mt-5 grid gap-4 sm:grid-cols-2">
+            <div className="rounded-md border border-line p-4">
+              <p className="flex items-center gap-2 text-sm font-semibold text-ink">
+                <CheckCircle2 className="h-4 w-4 text-[color:var(--ok)]" strokeWidth={2} aria-hidden="true" />
+                Do
+              </p>
+              <ul className="mt-3 space-y-2">
+                {[
+                  'Record somewhere quiet, away from TV, fans and traffic',
+                  'Read the script exactly as written',
+                  'Speak clearly at a natural pace',
+                  'Play the take back before you submit it',
+                ].map(item => (
+                  <li key={item} className="flex gap-2.5 text-sm text-body">
+                    <span className="mt-2 h-1 w-1 flex-none rounded-full bg-[var(--ok)]" aria-hidden="true" />
+                    {item}
+                  </li>
+                ))}
+              </ul>
+            </div>
+
+            <div className="rounded-md border border-line p-4">
+              <p className="flex items-center gap-2 text-sm font-semibold text-ink">
+                <AlertTriangle className="h-4 w-4 text-[color:var(--danger)]" strokeWidth={2} aria-hidden="true" />
+                Avoid
+              </p>
+              <ul className="mt-3 space-y-2">
+                {[
+                  'Background conversation or music',
+                  'Paraphrasing instead of reading the prompt',
+                  'Cutting the recording before you finish speaking',
+                  'Submitting a take you have not listened to',
+                ].map(item => (
+                  <li key={item} className="flex gap-2.5 text-sm text-body">
+                    <span className="mt-2 h-1 w-1 flex-none rounded-full bg-[var(--danger)]" aria-hidden="true" />
+                    {item}
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <div className="border-t border-line bg-paper-sunk px-5 py-4">
+          <p className="t-meta mb-3">Enforced automatically at upload</p>
+          <SpecList
+            items={[
+              { label: 'Minimum duration', value: '1.5 s' },
+              { label: 'Maximum duration', value: '90 s' },
+              { label: 'Minimum file size', value: '1 KB' },
+              { label: 'Maximum file size', value: '15 MB' },
+              { label: 'Silence screening', value: 'Energy estimate' },
+            ]}
+          />
+        </div>
+      </section>
+
+      <section className="panel">
+        <div className="panel-head">
+          <h2 className="flex items-center gap-2 text-sm font-semibold text-ink">
+            <PenLine className="h-4 w-4 text-muted" strokeWidth={1.75} aria-hidden="true" />
+            Text and labelling
+          </h2>
+        </div>
+        <div className="panel-body">
+          <p className="max-w-prose text-body">
+            Use proper grammar, capitalisation and punctuation unless the task explicitly asks for
+            something else. For labelling, a short accurate description is worth more than a long
+            vague one — say what is actually there, not what is probably there.
+          </p>
+        </div>
+      </section>
+
+      <section className="panel">
+        <div className="panel-head">
+          <h2 className="flex items-center gap-2 text-sm font-semibold text-ink">
+            <Volume2 className="h-4 w-4 text-muted" strokeWidth={1.75} aria-hidden="true" />
+            Rejection reasons you may see
+          </h2>
+        </div>
+        <ul className="divide-y divide-line-faint">
+          {[
+            'Audio is silent or inaudible',
+            'Background noise too loud',
+            'Wrong script — the prompt was not followed',
+            'Recording too short',
+            'Audio quality too poor',
+            'Duplicate submission',
+          ].map(reason => (
+            <li key={reason} className="px-5 py-3.5 text-sm text-body">{reason}</li>
+          ))}
+        </ul>
+        <div className="border-t border-line bg-paper-sunk px-5 py-3">
+          <p className="text-xs text-body">
+            Repeated quality failures can lead to account suspension. The reason is always shown so
+            it can be fixed.
+          </p>
+        </div>
+      </section>
+    </div>
+  );
+
+  const renderSupport = () => (
+    <div className="mx-auto w-full max-w-4xl space-y-6">
+      <ViewHeader
+        kicker="Help"
+        title="Support"
+        lede="Problems with a task, a rejected submission, your profile, or a payout."
+      />
+
+      <div className="grid gap-4 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.2fr)]">
+        <section className="panel h-max">
+          <div className="panel-head">
+            <h2 className="flex items-center gap-2 text-sm font-semibold text-ink">
+              <LifeBuoy className="h-4 w-4 text-muted" strokeWidth={1.75} aria-hidden="true" />
+              Before you write
+            </h2>
+          </div>
+          <ul className="divide-y divide-line-faint">
+            {[
+              { icon: Clock, title: 'Submission still in review?', body: 'Most decisions land within about 24 hours. Your status is on the Compensation page.' },
+              { icon: ShieldCheck, title: 'Submission rejected?', body: 'The specific reason is recorded against it. The quality standards page explains each one.' },
+              { icon: BadgeIndianRupee, title: 'Payout question?', body: 'Settlement is processed manually and goes to the UPI ID on your profile.' },
+            ].map(item => (
+              <li key={item.title} className="flex gap-3.5 px-5 py-4">
+                <span className="mt-0.5 flex h-8 w-8 flex-none items-center justify-center rounded-md border border-line bg-paper-sunk text-muted">
+                  <item.icon className="h-4 w-4" strokeWidth={1.75} aria-hidden="true" />
+                </span>
+                <div>
+                  <p className="text-sm font-medium text-ink">{item.title}</p>
+                  <p className="mt-0.5 text-xs leading-relaxed text-body">{item.body}</p>
+                </div>
+              </li>
+            ))}
+          </ul>
+        </section>
+
+        <section className="panel">
+          <div className="panel-head">
+            <h2 className="text-sm font-semibold text-ink">Contact support</h2>
+            <span className="t-meta">support@starset.ai</span>
+          </div>
+
+          <form
+            className="panel-body space-y-5"
+            onSubmit={(e) => {
+              e.preventDefault();
+              const form = e.currentTarget;
+              const issue = (form.elements.namedItem('issue') as HTMLSelectElement).value;
+              const detail = (form.elements.namedItem('detail') as HTMLTextAreaElement).value;
+
+              const body = [
+                `Issue: ${issue}`,
+                `Account: ${userProfile?.email || 'unknown'}`,
+                '',
+                detail,
+              ].join('\n');
+
+              // No support endpoint exists server-side, so this composes a real
+              // email rather than pretending a ticket was filed.
+              window.location.href =
+                `mailto:support@starset.ai?subject=${encodeURIComponent(`Contributor support — ${issue}`)}&body=${encodeURIComponent(body)}`;
+            }}
+          >
+            <div>
+              <label className="field-label" htmlFor="support-issue">Issue type</label>
+              <select id="support-issue" name="issue" className="field" defaultValue="A task or recording problem">
+                <option>A task or recording problem</option>
+                <option>A rejected submission</option>
+                <option>Payout or UPI details</option>
+                <option>Account access</option>
+                <option>Something else</option>
+              </select>
+            </div>
+
+            <div>
+              <label className="field-label" htmlFor="support-detail">Details</label>
+              <textarea
+                id="support-detail"
+                name="detail"
+                required
+                className="field min-h-[9rem]"
+                placeholder="Include the task title or submission reference if you have it — it gets you a faster answer."
+              />
+              <p className="field-hint">
+                This opens your email client with the details filled in, addressed to support.
+              </p>
+            </div>
+
+            <Button type="submit" size="lg" block>
+              Compose email
+              <Send className="h-4 w-4" strokeWidth={2} aria-hidden="true" />
+            </Button>
+          </form>
+        </section>
+      </div>
+    </div>
+  );
+
+  const renderAccount = () => {
+    const isAdmin = userRole === 'admin';
+    const displayName = userProfile?.full_name || (isAdmin ? 'Administrator' : 'Contributor');
+    const initial = displayName.charAt(0).toUpperCase();
+
+    const joined = userProfile?.created_at
+      ? new Date(userProfile.created_at).toLocaleDateString('en-GB', { month: 'long', year: 'numeric' })
+      : '—';
+
+    return (
+      <div className="mx-auto w-full max-w-4xl space-y-6">
+        <ViewHeader
+          kicker="Account"
+          title="Your profile"
+          lede={isAdmin
+            ? 'Your administrator account and the privileges attached to it.'
+            : 'Details used to match you to collections, and where your compensation settles.'}
+        />
+
+        {/* Identity */}
+        <section className="panel">
+          <div className="panel-body flex flex-col gap-5 sm:flex-row sm:items-center">
+            <span
+              className={cn(
+                'flex h-14 w-14 flex-none items-center justify-center rounded-lg font-display text-xl font-semibold',
+                isAdmin ? 'bg-signal-soft text-signal' : 'bg-paper-sunk text-ink',
+              )}
+              aria-hidden="true"
+            >
+              {initial}
+            </span>
+
+            <div className="min-w-0 flex-1">
+              <div className="flex flex-wrap items-center gap-x-3 gap-y-1.5">
+                <h2 className="t-h3">{displayName}</h2>
+                <span className={cn('tag', isAdmin ? 'tag-signal' : 'tag-ok')}>
+                  {isAdmin ? 'Administrator' : 'Contributor'}
+                </span>
+              </div>
+              <p className="mt-1.5 flex flex-wrap items-center gap-x-4 gap-y-1 text-xs text-muted">
+                <span className="flex items-center gap-1.5">
+                  <Mail className="h-3 w-3" strokeWidth={2} aria-hidden="true" />
+                  {userProfile?.email || '—'}
+                </span>
+                <span>Joined {joined}</span>
+              </p>
+            </div>
+
+            {!isAdmin && userProfile?.contributor_id && (
+              <div className="flex-none rounded-md border border-line bg-paper-sunk px-4 py-3 text-center">
+                <p className="t-meta">Contributor ID</p>
+                <p className="t-mono mt-1 text-ink">#{userProfile.contributor_id}</p>
+              </div>
+            )}
+          </div>
+        </section>
+
+        <div className="grid gap-4 lg:grid-cols-2">
+          {/* Profile details */}
+          <section className="panel">
+            <div className="panel-head">
+              <h2 className="flex items-center gap-2 text-sm font-semibold text-ink">
+                <User className="h-4 w-4 text-muted" strokeWidth={1.75} aria-hidden="true" />
+                {isAdmin ? 'Account details' : 'Speaker profile'}
+              </h2>
+            </div>
+            <div className="px-5 py-2">
+              <SpecList
+                items={isAdmin
+                  ? [
+                      { label: 'Role', value: userProfile?.role_text || 'Administrator' },
+                      { label: 'Account ID', value: userProfile?.id ? `#${String(userProfile.id).slice(0, 8)}` : '—' },
+                      { label: 'Email', value: userProfile?.email || '—' },
+                      { label: 'Created', value: joined },
+                    ]
+                  : [
+                      { label: 'Age', value: userProfile?.age || 'Not set' },
+                      { label: 'Gender', value: userProfile?.gender || 'Not set' },
+                      {
+                        label: 'Location',
+                        value: (
+                          <span className="inline-flex items-center gap-1.5">
+                            <MapPin className="h-3.5 w-3.5 text-muted" strokeWidth={1.75} aria-hidden="true" />
+                            {userProfile?.city || '—'}{userProfile?.state ? `, ${userProfile.state}` : ''}
+                          </span>
+                        ),
+                      },
+                      { label: 'Trust score', value: `${userProfile?.trust_score ?? 100} / 100` },
+                    ]}
+              />
+            </div>
+            {!isAdmin && (
+              <p className="border-t border-line bg-paper-sunk px-5 py-3 text-xs text-body">
+                Used to match you to collections. Never attached to the audio itself.
+              </p>
+            )}
+          </section>
+
+          {/* Payout or privileges */}
+          <section className="panel">
+            <div className="panel-head">
+              <h2 className="flex items-center gap-2 text-sm font-semibold text-ink">
+                {isAdmin
+                  ? <><ShieldCheck className="h-4 w-4 text-muted" strokeWidth={1.75} aria-hidden="true" /> Privileges</>
+                  : <><BadgeIndianRupee className="h-4 w-4 text-muted" strokeWidth={1.75} aria-hidden="true" /> Payout</>}
+              </h2>
+            </div>
+
+            {isAdmin ? (
+              <ul className="divide-y divide-line-faint">
+                {['Publish and withdraw collections', 'Review and decide submissions', 'Export task metadata', 'View platform statistics'].map(perm => (
+                  <li key={perm} className="flex items-center gap-2.5 px-5 py-3.5 text-sm text-body">
+                    <CheckCircle2 className="h-4 w-4 flex-none text-[color:var(--ok)]" strokeWidth={2} aria-hidden="true" />
+                    {perm}
+                  </li>
+                ))}
+              </ul>
+            ) : (
+              <div className="panel-body">
+                <p className="t-meta">UPI ID</p>
+                <p className="t-mono mt-1.5 truncate text-ink">{userProfile?.upi_id || 'Not set'}</p>
+                <p className="mt-3 text-xs text-body">
+                  Accepted work settles here. Settlement is processed manually by the team.
+                </p>
+                <Button
+                  className="mt-5"
+                  variant="secondary"
+                  block
+                  onClick={() => handleAppNavigate('earnings')}
+                >
+                  View compensation
+                </Button>
+              </div>
+            )}
+          </section>
+        </div>
+
+        {/* Danger zone */}
+        <section className="rounded-lg border border-[color-mix(in_srgb,var(--danger)_25%,transparent)] bg-danger-soft">
+          <div className="flex flex-col gap-4 p-5 sm:flex-row sm:items-center sm:justify-between">
+            <div className="flex gap-3.5">
+              <ShieldAlert
+                className="mt-0.5 h-4 w-4 flex-none text-[color:var(--danger)]"
+                strokeWidth={1.75}
+                aria-hidden="true"
+              />
+              <div>
+                <h2 className="text-sm font-semibold text-ink">
+                  {isAdmin ? 'Revoke administrator access' : 'Delete your account'}
+                </h2>
+                <p className="mt-1 max-w-lg text-xs text-body">
+                  {isAdmin
+                    ? 'Administrator access is revoked manually. Contact the platform owner to start the process.'
+                    : 'Account deletion is handled by support so we can confirm your identity and settle anything outstanding first.'}
+                </p>
+              </div>
+            </div>
+
+            <Button
+              variant="quiet-danger"
+              className="flex-none self-start sm:self-auto"
+              onClick={() => {
+                const address = isAdmin ? 'root@starset.ai' : 'support@starset.ai';
+                const subject = isAdmin ? 'Revoke administrator access' : 'Delete my Starset account';
+                window.location.href = `mailto:${address}?subject=${encodeURIComponent(subject)}`;
+              }}
+            >
+              Request removal
+            </Button>
+          </div>
+        </section>
+      </div>
+    );
   };
 
-  // Render logic
-  const renderMainContent = () => {
-    const renderAuthView = (content: React.ReactNode) => (
-      <>
-        {content}
-      </>
-    );
+  // --------------------------------------------------------------------------
+  // RENDER
+  // --------------------------------------------------------------------------
 
+  const renderMainContent = () => {
+    // ── Public site ──
     if (viewMode === 'public') {
       const publicProps = {
         onNavigate: handlePublicNavigate,
-        onEnterApp: handleEnterApp
+        onEnterApp: handleEnterApp,
       };
 
       switch (publicPage) {
         case 'about':
           return <About {...publicProps} />;
-        case 'contributors':
-          return <Contributors {...publicProps} onEnterApp={handleStartSignup} />;
-        case 'money':
-          return <Money {...publicProps} onEnterApp={handleStartSignup} />;
-        case 'task-types':
-          return <TaskTypes {...publicProps} />;
+        case 'marketplace':
+          return <Marketplace {...publicProps} />;
         case 'careers':
           return <Careers {...publicProps} />;
         case 'blog':
           return <Blog {...publicProps} />;
         case 'contact':
           return <Contact {...publicProps} />;
-        case 'language-directory':
-          return <LanguageDirectory {...publicProps} />;
         case 'ai-training-guide':
-          return <AITrainingGuide {...publicProps} />;
+          return <AITrainingGuide {...publicProps} onEnterApp={handleStartSignup} />;
         case 'terms':
         case 'privacy':
         case 'cookies':
         case 'data-processing':
-          return <Legal {...publicProps} pageType={publicPage as any} />;
+          return <Legal {...publicProps} pageType={publicPage} />;
         default:
-          return <LandingPage onNavigate={handlePublicNavigate} onEnterApp={handleEnterApp} onStartSignup={handleStartSignup} />;
+          return (
+            <LandingPage
+              onNavigate={handlePublicNavigate}
+              onEnterApp={handleEnterApp}
+              onStartSignup={handleStartSignup}
+            />
+          );
       }
     }
 
+    // ── Authentication ──
     if (!isAuthenticated) {
       if (authMode === 'forgot-password') {
-        return renderAuthView(
-          <ForgotPassword
-            onBackToLogin={() => setAuthMode('login')}
-            onBackHome={handleExitApp}
-          />
-        );
+        return <ForgotPassword onBackToLogin={() => setAuthMode('login')} onBackHome={handleExitApp} />;
       }
       if (authMode === 'reset-password') {
-        return renderAuthView(
-          <ResetPassword
-            onBackToLogin={() => {
-              setAuthMode('login');
-            }}
-            onBackHome={handleExitApp}
-          />
-        );
+        return <ResetPassword onBackToLogin={() => setAuthMode('login')} onBackHome={handleExitApp} />;
       }
       if (authMode === 'signup') {
-        return renderAuthView(
+        return (
           <Signup
             onLogin={() => handleLogin('contributor')}
             onSwitchToLogin={() => setAuthMode('login')}
@@ -641,7 +935,7 @@ const App: React.FC = () => {
           />
         );
       }
-      return renderAuthView(
+      return (
         <Login
           onLogin={handleLogin}
           onSwitchToSignup={() => setAuthMode('signup')}
@@ -651,516 +945,148 @@ const App: React.FC = () => {
       );
     }
 
+    // ── Product ──
     const renderContent = () => {
-      // Admin Views
       if (userRole === 'admin') {
         switch (currentPage) {
-          case 'admin-dashboard':
-            return <AdminDashboard onNavigate={handleAppNavigate} tasks={tasks} />;
           case 'admin-create-task':
             return <AdminCreateTask onSave={handleCreateTask} />;
           case 'admin-submissions':
             return <AdminSubmissions />;
           case 'tasks':
-            return <TaskList onSelectTask={handleSelectTask} tasks={tasks} userRole="admin" onDeleteTask={handleDeleteTask} />;
-          case 'account':
-            const formatLastLogin = () => {
-              const now = new Date();
-              return now.toLocaleString('en-US', {
-                month: 'short',
-                day: 'numeric',
-                year: 'numeric',
-                hour: '2-digit',
-                minute: '2-digit'
-              });
-            };
-
             return (
-              <div className="max-w-6xl mx-auto space-y-3 h-full flex flex-col justify-center pb-2">
-                {/* Admin Header Section */}
-                <div className="flex flex-col md:flex-row items-center gap-5 bg-[#09090b] rounded-3xl border border-white/5 p-4 shadow-lg relative overflow-hidden">
-                  <div className="absolute top-0 right-0 w-32 h-32 bg-purple-500/5 rounded-full blur-3xl"></div>
-
-                  <div className="relative h-16 w-16 bg-gradient-to-br from-purple-500 to-indigo-600 rounded-full flex items-center justify-center text-xl font-black text-white border-2 border-zinc-900 shadow-inner flex-shrink-0">
-                    {userProfile?.full_name?.charAt(0) || userProfile?.email?.charAt(0) || 'A'}
-                    <div className="absolute bottom-0 right-0 h-4 w-4 bg-emerald-500 border-2 border-zinc-900 rounded-full shadow-lg"></div>
-                  </div>
-
-                  <div className="flex-1 min-w-0 text-center md:text-left">
-                    <div className="flex flex-col md:flex-row md:items-center gap-2 mb-0.5">
-                      <h1 className="text-xl font-black text-white truncate">
-                        {userProfile?.full_name || 'Administrator'}
-                      </h1>
-                      <span className="inline-flex items-center px-2 py-0.5 rounded-full text-[9px] font-black bg-purple-900/30 text-purple-400 w-fit mx-auto md:mx-0 uppercase tracking-tighter">
-                        Admin ID: #{userProfile?.id?.slice(0, 8) || '0xAF'}
-                      </span>
-                    </div>
-                    <div className="flex items-center justify-center md:justify-start gap-4 text-stone-400 text-[10px] font-bold uppercase tracking-wider">
-                      <span className="flex items-center gap-1.5 text-purple-500">
-                        <Shield className="h-3 w-3" /> Level 5 Clearance
-                      </span>
-                      <span>• Last Sync: {formatLastLogin()}</span>
-                    </div>
-                  </div>
-
-                  <div className="bg-white/5 border border-white/5 rounded-2xl p-3 px-6 text-center shadow-inner">
-                    <div className="text-[9px] font-black uppercase tracking-widest text-stone-400 mb-1">Starset Reputation</div>
-                    <div className="flex items-baseline justify-center gap-1">
-                      <span className="text-2xl font-black text-emerald-500">{userProfile?.trust_score || 100}</span>
-                      <span className="text-[10px] text-stone-500 font-bold">/100</span>
-                    </div>
-                  </div>
-                </div>
-
-                {/* Info Grid */}
-                <div className="grid md:grid-cols-3 gap-3">
-                  {/* Registry Details */}
-                  <div className="md:col-span-2 bg-[#09090b] rounded-3xl border border-white/5 p-5 shadow-sm">
-                    <h3 className="text-[10px] font-black text-white mb-4 uppercase tracking-[0.2em] flex items-center gap-2 opacity-60">
-                      <Database className="h-3 w-3 text-purple-400" />
-                      Registry & System Data
-                    </h3>
-
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-y-8 gap-x-12">
-                      <div className="space-y-1.5">
-                        <label className="text-[9px] font-black uppercase tracking-[0.3em] text-stone-500">System Role</label>
-                        <p className="text-lg font-black text-white uppercase tracking-tight">{userProfile?.role_text || 'System Administrator'}</p>
-                      </div>
-                      <div className="space-y-1.5">
-                        <label className="text-[9px] font-black uppercase tracking-[0.3em] text-stone-500">Security Clearance</label>
-                        <p className="text-lg font-black text-purple-500 uppercase tracking-tight">Level 5 (Encrypted)</p>
-                      </div>
-                      <div className="space-y-1.5">
-                        <label className="text-[9px] font-black uppercase tracking-[0.3em] text-stone-500">Registry Origin</label>
-                        <p className="text-lg font-black text-white flex items-center gap-2 uppercase tracking-tight">
-                          <MapPin className="h-4 w-4 text-purple-500" /> {userProfile?.created_at ? new Date(userProfile.created_at).toLocaleDateString() : 'ActiveSince_Deployment'}
-                        </p>
-                      </div>
-                      <div className="space-y-1.5">
-                        <label className="text-[9px] font-black uppercase tracking-[0.3em] text-stone-500">Email Address</label>
-                        <p className="text-lg font-black text-white/80 lowercase truncate">{userProfile?.email || 'admin@starset.ai'}</p>
-                      </div>
-                    </div>
-                  </div>
-
-                  {/* Permissions */}
-                  <div className="bg-[#09090b] rounded-3xl border border-white/5 p-5 shadow-sm">
-                    <h3 className="text-[10px] font-black text-white mb-3 uppercase tracking-[0.2em] flex items-center gap-2 opacity-60">
-                      <Shield className="h-3 w-3 text-purple-400" />
-                      Privileges
-                    </h3>
-
-                    <div className="space-y-2">
-                      {[
-                        'Task Creation',
-                        'User Compliance',
-                        'Payout Validation',
-                        'System Config'
-                      ].map((perm, i) => (
-                        <div key={i} className="flex items-center gap-2 p-1.5 bg-white/5 rounded-lg border border-white/5">
-                          <CheckCircle2 className="h-3 w-3 text-emerald-500 flex-shrink-0" />
-                          <span className="text-[9px] font-black uppercase tracking-tight opacity-80">{perm}</span>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-                </div>
-
-                {/* Small Danger Zone Footer */}
-                <div className="bg-red-950/5 rounded-2xl border border-red-900/10 p-3 px-5 flex items-center justify-between">
-                  <div className="flex items-center gap-3">
-                    <ShieldAlert className="h-3.5 w-3.5 text-red-500/30" />
-                    <span className="text-[10px] font-bold text-red-400/30 uppercase tracking-tighter">System Access Resignation Protocol</span>
-                  </div>
-                  <button
-                    className="text-[9px] font-black text-red-600/80 hover:text-red-700 hover:underline transition-colors uppercase tracking-widest"
-                    onClick={() => window.confirm("Terminate admin access? Contact root@starset.intelligence") && alert("Contact root.")}
-                  >
-                    Initiate Removal
-                  </button>
-                </div>
-              </div>
+              <TaskList
+                onSelectTask={handleSelectTask}
+                tasks={tasks}
+                userRole="admin"
+                onDeleteTask={handleDeleteTask}
+              />
             );
+          case 'account':
+            return renderAccount();
+          case 'admin-dashboard':
           default:
             return <AdminDashboard onNavigate={handleAppNavigate} tasks={tasks} />;
         }
       }
 
-      // Contributor Views
       switch (currentPage) {
         case 'complete-profile':
-          return <CompleteProfile
-            onComplete={() => {
-              // Reload profile after completion
-              handleLogin(userRole);
-            }}
-          />;
-        case 'dashboard':
-          return <Dashboard onNavigate={handleAppNavigate} />;
+          return <CompleteProfile onComplete={() => handleLogin(userRole)} />;
         case 'tasks':
-          return <TaskList onSelectTask={handleSelectTask} tasks={tasks} completedTaskIds={completedTaskIds} />;
+          return (
+            <TaskList
+              onSelectTask={handleSelectTask}
+              tasks={tasks}
+              completedTaskIds={completedTaskIds}
+            />
+          );
         case 'execution':
-          if (!activeTask) return <TaskList onSelectTask={handleSelectTask} tasks={tasks} completedTaskIds={completedTaskIds} />;
+          if (!activeTask) {
+            return (
+              <TaskList
+                onSelectTask={handleSelectTask}
+                tasks={tasks}
+                completedTaskIds={completedTaskIds}
+              />
+            );
+          }
           return (
             <TaskExecution
               task={activeTask}
-              onBack={() => setCurrentPage('tasks')}
+              onBack={() => handleAppNavigate('tasks')}
               onComplete={handleCompleteTask}
             />
           );
         case 'earnings':
           return <Earnings />;
         case 'guidelines':
-          return (
-            <motion.div 
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, ease: "easeOut" }}
-              className="max-w-5xl mx-auto py-4"
-            >
-              <div className="bg-white/80 dark:bg-[#09090b]/80 backdrop-blur-2xl p-8 md:p-12 rounded-[2.5rem] border border-slate-200 dark:border-white/10 shadow-2xl relative overflow-hidden group">
-                <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-blue-500/10 dark:bg-blue-500/20 rounded-full blur-[100px] -translate-y-1/2 translate-x-1/3 pointer-events-none transition-transform duration-700 group-hover:scale-110"></div>
-                
-                <div className="relative z-10 flex flex-col md:flex-row gap-12">
-                  <div className="md:w-1/3">
-                    <div className="inline-flex items-center justify-center p-4 bg-blue-500/10 text-blue-600 dark:text-blue-400 rounded-2xl mb-6 shadow-inner border border-blue-500/20">
-                      <Shield className="h-8 w-8" />
-                    </div>
-                    <h1 className="text-3xl md:text-5xl font-black mb-4 text-slate-900 dark:text-white tracking-tight">Quality Protocols</h1>
-                    <p className="text-base text-slate-600 dark:text-stone-400 leading-relaxed font-medium">
-                      Strict adherence to these operational guidelines is mandatory for compensation. Violations may result in immediate account suspension and withholding of funds.
-                    </p>
-                  </div>
-                  
-                  <div className="md:w-2/3 grid grid-cols-1 gap-6">
-                    <motion.div 
-                      whileHover={{ scale: 1.02 }}
-                      className="p-8 bg-slate-50 dark:bg-white/5 rounded-3xl border border-slate-200 dark:border-white/10 flex gap-6 items-start shadow-sm"
-                    >
-                      <div className="p-3 bg-indigo-500/10 text-indigo-600 dark:text-indigo-400 rounded-xl border border-indigo-500/20 shrink-0">
-                        <Mic className="h-6 w-6" />
-                      </div>
-                      <div>
-                        <h3 className="font-black text-slate-900 dark:text-white mb-2 text-xl tracking-tight">Audio Collection Standards</h3>
-                        <p className="text-slate-600 dark:text-zinc-400 leading-relaxed text-sm">
-                          Absolutely <span className="font-bold text-slate-900 dark:text-white">no background noise</span> (TV, fans, other people, traffic). Clear, natural pronunciation is required. Do not rush or artificially slow down speech. Use a dedicated headset microphone if possible for optimal SNR (Signal-to-Noise Ratio).
-                        </p>
-                      </div>
-                    </motion.div>
-
-                    <motion.div 
-                      whileHover={{ scale: 1.02 }}
-                      className="p-8 bg-slate-50 dark:bg-white/5 rounded-3xl border border-slate-200 dark:border-white/10 flex gap-6 items-start shadow-sm"
-                    >
-                      <div className="p-3 bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 rounded-xl border border-emerald-500/20 shrink-0">
-                        <FileText className="h-6 w-6" />
-                      </div>
-                      <div>
-                        <h3 className="font-black text-slate-900 dark:text-white mb-2 text-xl tracking-tight">Text Annotation Standards</h3>
-                        <p className="text-slate-600 dark:text-zinc-400 leading-relaxed text-sm">
-                          Proper grammar, capitalization, and punctuation are strictly required unless colloquialisms or specific formatting are explicitly requested in the task prompt. Fact-check information where applicable.
-                        </p>
-                      </div>
-                    </motion.div>
-                  </div>
-                </div>
-              </div>
-            </motion.div>
-          );
+          return renderGuidelines();
         case 'support':
-          return (
-            <motion.div 
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, ease: "easeOut" }}
-              className="max-w-4xl mx-auto py-4"
-            >
-              <div className="bg-white/80 dark:bg-[#09090b]/80 backdrop-blur-2xl p-8 md:p-12 rounded-[2.5rem] border border-slate-200 dark:border-white/10 shadow-2xl relative overflow-hidden group">
-                <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-indigo-500/10 dark:bg-indigo-500/20 rounded-full blur-[100px] -translate-y-1/2 translate-x-1/3 pointer-events-none transition-transform duration-700 group-hover:scale-110"></div>
-                
-                <div className="relative z-10 flex flex-col md:flex-row gap-12">
-                  <div className="md:w-5/12">
-                    <div className="inline-flex items-center justify-center p-4 bg-indigo-500/10 text-indigo-600 dark:text-indigo-400 rounded-2xl mb-6 shadow-inner border border-indigo-500/20">
-                      <LifeBuoy className="h-8 w-8" />
-                    </div>
-                    <h1 className="text-3xl md:text-5xl font-black mb-4 text-slate-900 dark:text-white tracking-tight">Support Desk</h1>
-                    <p className="text-base text-slate-600 dark:text-stone-400 leading-relaxed font-medium mb-8">
-                      Encountering issues with a task, payout, or your account? Our team is available 24/7 to assist verified contributors.
-                    </p>
-                    
-                    <div className="space-y-4">
-                      <div className="flex items-center gap-3 text-sm text-slate-600 dark:text-stone-400">
-                        <CheckCircle className="h-4 w-4 text-emerald-500" /> Response time: ~2 hours
-                      </div>
-                      <div className="flex items-center gap-3 text-sm text-slate-600 dark:text-stone-400">
-                        <AlertCircle className="h-4 w-4 text-blue-500" /> Include Task IDs for faster resolution
-                      </div>
-                    </div>
-                  </div>
-                  
-                  <div className="md:w-7/12">
-                    <form className="bg-slate-50 dark:bg-white/5 p-8 rounded-3xl border border-slate-200 dark:border-white/10 shadow-sm space-y-6">
-                      <div>
-                        <label className="block text-xs font-black text-slate-500 dark:text-stone-500 mb-2 uppercase tracking-widest">Issue Type</label>
-                        <select className="w-full border-slate-200 dark:border-white/10 rounded-2xl p-4 border bg-white dark:bg-zinc-900/50 focus:bg-white dark:focus:bg-black focus:ring-4 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all outline-none text-sm font-semibold text-slate-900 dark:text-white shadow-inner cursor-pointer appearance-none">
-                          <option className="bg-white dark:bg-zinc-900 text-slate-900 dark:text-white font-medium">Payment & Compensation</option>
-                          <option className="bg-white dark:bg-zinc-900 text-slate-900 dark:text-white font-medium">Task Technical Bug</option>
-                          <option className="bg-white dark:bg-zinc-900 text-slate-900 dark:text-white font-medium">Account Access</option>
-                          <option className="bg-white dark:bg-zinc-900 text-slate-900 dark:text-white font-medium">Other</option>
-                        </select>
-                      </div>
-                      <div>
-                        <label className="block text-xs font-black text-slate-500 dark:text-stone-500 mb-2 uppercase tracking-widest">Description</label>
-                        <textarea
-                          required
-                          placeholder="Please provide specific details, including Task IDs if applicable..."
-                          className="w-full border-slate-200 dark:border-white/10 rounded-2xl p-4 border h-40 bg-white dark:bg-zinc-900/50 focus:bg-white dark:focus:bg-black focus:ring-4 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all resize-none outline-none text-sm text-slate-900 dark:text-white shadow-inner leading-relaxed"
-                        ></textarea>
-                      </div>
-                      <button
-                        type="submit"
-                        className="w-full bg-indigo-600 text-white px-8 py-4 rounded-2xl font-bold shadow-xl shadow-indigo-500/20 hover:shadow-indigo-500/40 hover:-translate-y-1 transition-all flex items-center justify-center gap-2 group"
-                        onClick={(e) => {
-                          const form = (e.target as HTMLButtonElement).form;
-                          if (form && form.checkValidity()) {
-                            e.preventDefault();
-                            alert("Support ticket securely submitted. Our team will contact you shortly.");
-                            form.reset();
-                          }
-                        }}
-                      >
-                        Submit Ticket <Send className="h-4 w-4 group-hover:translate-x-1 transition-transform" />
-                      </button>
-                    </form>
-                  </div>
-                </div>
-              </div>
-            </motion.div>
-          );
+          return renderSupport();
         case 'account':
-          const getInitials = (name: string) => {
-            if (!name) return 'U';
-            const parts = name.split(' ');
-            return parts.length > 1
-              ? `${parts[0][0]}${parts[1][0]}`.toUpperCase()
-              : parts[0][0].toUpperCase();
-          };
-
-          const formatDate = (dateString: string) => {
-            if (!dateString) return 'Recently';
-            const date = new Date(dateString);
-            return date.toLocaleDateString('en-US', { month: 'short', year: 'numeric' });
-          };
-
-          return (
-            <div className="max-w-6xl mx-auto space-y-3 h-full flex flex-col justify-center pb-2">
-              {/* Profile Header Section */}
-              <div className="flex flex-col md:flex-row items-center gap-5 bg-white dark:bg-[#09090b] rounded-3xl border border-stone-200 dark:border-white/5 p-4 shadow-lg relative overflow-hidden">
-                <div className="absolute top-0 right-0 w-32 h-32 bg-blue-500/5 rounded-full blur-3xl"></div>
-
-                <div className="relative h-16 w-16 bg-stone-100 dark:bg-zinc-800 rounded-full flex items-center justify-center text-xl font-black text-stone-500 dark:text-white border-2 border-white dark:border-zinc-900 shadow-inner flex-shrink-0">
-                  {getInitials(userProfile?.full_name || userProfile?.email || 'User')}
-                  <div className="absolute bottom-0 right-0 h-4 w-4 bg-emerald-500 border-2 border-white dark:border-zinc-900 rounded-full shadow-lg"></div>
-                </div>
-
-                <div className="flex-1 min-w-0 text-center md:text-left">
-                  <div className="flex flex-col md:flex-row md:items-center gap-2 mb-0.5">
-                    <h1 className="text-xl font-black text-[#121212] dark:text-white truncate">
-                      {userProfile?.full_name || 'Contributor'}
-                    </h1>
-                    <span className="inline-flex items-center px-2 py-0.5 rounded-full text-[9px] font-black bg-blue-100 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400 w-fit mx-auto md:mx-0 uppercase">
-                      User ID: #{userProfile?.contributor_id || '101'}
-                    </span>
-                  </div>
-                  <div className="flex items-center justify-center md:justify-start gap-4 text-stone-500 dark:text-stone-400 text-[10px] font-bold uppercase tracking-wider">
-                    <span className="flex items-center gap-1.5 text-emerald-500">
-                      <Shield className="h-3 w-3" /> Verified Contributor
-                    </span>
-                    <span>• Joined Date: {formatDate(userProfile?.created_at)}</span>
-                  </div>
-                </div>
-
-
-              </div>
-
-              {/* Info Grid */}
-              <div className="grid md:grid-cols-3 gap-6">
-                {/* Biometric Analysis */}
-                <div className="md:col-span-2 bg-slate-100 dark:bg-black/40 backdrop-blur-xl rounded-[2.5rem] border border-slate-200 dark:border-white/10 p-8 md:p-10 shadow-xl relative group">
-                  <div className="flex items-center justify-between mb-8">
-                    <h3 className="text-xs font-black text-slate-900 dark:text-white uppercase tracking-[0.4em] flex items-center gap-3">
-                      <User className="h-4 w-4 text-blue-500" />
-                      Biometric & Regional Profile
-                    </h3>
-                    <div className="h-px flex-1 bg-gradient-to-r from-blue-500/20 to-transparent ml-6"></div>
-                  </div>
-
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-y-8 gap-x-12">
-                    <div className="space-y-1.5 hover:translate-x-1 transition-transform">
-                      <label className="text-[9px] font-black uppercase tracking-[0.3em] text-slate-500 dark:text-stone-500">Age</label>
-                      <p className="text-lg font-black text-slate-900 dark:text-white uppercase tracking-tight">{userProfile?.age || 'Not Disclosed'}</p>
-                    </div>
-                    <div className="space-y-1.5 hover:translate-x-1 transition-transform">
-                      <label className="text-[9px] font-black uppercase tracking-[0.3em] text-slate-500 dark:text-stone-500">Gender</label>
-                      <p className="text-lg font-black text-slate-900 dark:text-white uppercase tracking-tight">{userProfile?.gender || 'Not Disclosed'}</p>
-                    </div>
-                    <div className="space-y-1.5 hover:translate-x-1 transition-transform">
-                      <label className="text-[9px] font-black uppercase tracking-[0.3em] text-slate-500 dark:text-stone-500">Location</label>
-                      <p className="text-lg font-black text-slate-900 dark:text-white flex items-center gap-2 uppercase tracking-tight">
-                        <MapPin className="h-4 w-4 text-blue-500" /> {userProfile?.city || 'City'}, {userProfile?.state || 'State'}
-                      </p>
-                    </div>
-                    <div className="space-y-1.5 hover:translate-x-1 transition-transform">
-                      <label className="text-[9px] font-black uppercase tracking-[0.3em] text-slate-500 dark:text-stone-500">Email Address</label>
-                      <p className="text-lg font-black text-slate-700 dark:text-white/80 lowercase truncate">{userProfile?.email || 'N/A'}</p>
-                    </div>
-                  </div>
-                </div>
-
-                {/* Compensation Protocol */}
-                <div className="bg-slate-100 dark:bg-black/40 backdrop-blur-xl rounded-[2.5rem] border border-slate-200 dark:border-white/10 p-8 md:p-10 shadow-xl group">
-                  <h3 className="text-xs font-black text-slate-900 dark:text-white mb-8 uppercase tracking-[0.4em] flex items-center gap-3">
-                    <CreditCard className="h-4 w-4 text-emerald-500" />
-                    Compensation Hub
-                  </h3>
-
-                  <div className="space-y-6">
-                    <div className="p-5 bg-white dark:bg-white/5 rounded-2xl border border-slate-200 dark:border-white/5 group-hover:border-emerald-500/30 transition-all duration-500">
-                      <label className="text-[9px] font-black uppercase tracking-[0.3em] text-slate-500 dark:text-stone-500 mb-2 block">Active UPI ID</label>
-                      <p className="text-lg font-black text-emerald-600 dark:text-emerald-500 truncate tracking-tighter drop-shadow-[0_0_10px_rgba(16,185,129,0.2)]">{userProfile?.upi_id || 'Not Assigned'}</p>
-                    </div>
-                    <Button
-                      variant="secondary"
-                      className="w-full py-6 rounded-2xl text-[10px] font-black uppercase tracking-[0.3em] bg-white dark:bg-white/5 hover:bg-slate-50 dark:hover:bg-white/10 border-slate-200 dark:border-white/10 hover:border-blue-500/50 transition-all duration-300 text-slate-900 dark:text-white"
-                      onClick={() => setCurrentPage('earnings')}
-                    >
-                      Reset Payment Method
-                    </Button>
-                  </div>
-                </div>
-              </div>
-
-              {/* Security Alerts Section */}
-              <div className="bg-red-950/10 backdrop-blur-md rounded-3xl border border-red-900/20 p-6 flex flex-col md:flex-row items-center justify-between gap-6 px-10">
-                <div className="flex items-center gap-5">
-                  <div className="h-12 w-12 rounded-2xl bg-red-500/10 flex items-center justify-center border border-red-500/20">
-                    <ShieldAlert className="h-6 w-6 text-red-500 animate-pulse" />
-                  </div>
-                  <div className="text-center md:text-left">
-                    <h4 className="text-[10px] font-black text-red-500 uppercase tracking-[0.4em] mb-1">Account Termination</h4>
-                    <p className="text-xs font-bold text-stone-500">Initiating this action will permanently delete your acount from our database.</p>
-                  </div>
-                </div>
-                <button
-                  className="px-8 py-3 bg-red-500/10 hover:bg-red-500 text-red-500 hover:text-white border border-red-500/30 rounded-full text-[10px] font-black uppercase tracking-[0.2em] transition-all duration-300"
-                  onClick={() => window.confirm("Terminate account? Contact support@starset.ai") && alert("Contact support.")}
-                >
-                  Initiate Removal
-                </button>
-              </div>
-            </div>
-          );
+          return renderAccount();
+        case 'dashboard':
         default:
           return <Dashboard onNavigate={handleAppNavigate} />;
       }
     };
 
-    // Authenticated App Structure
-    return (
-      <div className="flex h-[100dvh] bg-zinc-50 dark:bg-[#020205] text-[#121212] dark:text-white font-sans selection:bg-blue-100 selection:text-blue-900 overflow-hidden transition-colors duration-300">
-        {/* Desktop Sidebar - Hidden on Mobile */}
-        <div className="hidden md:block h-full">
-          <Sidebar
-            currentPage={currentPage}
-            onNavigate={handleAppNavigate}
-            isMobileOpen={isMobileNavOpen}
-            setIsMobileOpen={setIsMobileNavOpen}
-            onLogout={handleLogout}
-            onExitApp={handleExitApp}
-            userRole={userRole}
-          />
-        </div>
+    const mobileTabs: { page: PageView; label: string; icon: typeof Database; match: PageView[] }[] =
+      userRole === 'admin'
+        ? [
+            { page: 'admin-dashboard', label: 'Overview', icon: LayoutDashboard, match: ['admin-dashboard'] },
+            { page: 'admin-submissions', label: 'Review', icon: ShieldCheck, match: ['admin-submissions'] },
+            { page: 'tasks', label: 'Tasks', icon: Database, match: ['tasks', 'execution'] },
+            { page: 'account', label: 'Profile', icon: User, match: ['account'] },
+          ]
+        : [
+            { page: 'dashboard', label: 'Overview', icon: LayoutDashboard, match: ['dashboard'] },
+            { page: 'tasks', label: 'Tasks', icon: Database, match: ['tasks', 'execution'] },
+            { page: 'earnings', label: 'Money', icon: BadgeIndianRupee, match: ['earnings'] },
+            { page: 'account', label: 'Profile', icon: User, match: ['account'] },
+          ];
 
-        <div className="flex-1 flex flex-col h-full overflow-hidden relative">
-          {/* Mobile Header - Visible only on Mobile */}
-          <header className="md:hidden bg-white/90 dark:bg-black/95 backdrop-blur-md border-b border-stone-200 dark:border-white/10 h-16 flex items-center justify-between px-4 flex-shrink-0 z-30 relative">
+    return (
+      <div className="flex h-[100dvh] overflow-hidden bg-paper text-body">
+        <Sidebar
+          currentPage={currentPage}
+          onNavigate={handleAppNavigate}
+          isMobileOpen={isMobileNavOpen}
+          setIsMobileOpen={setIsMobileNavOpen}
+          onLogout={handleLogout}
+          onExitApp={handleExitApp}
+          userRole={userRole}
+        />
+
+        <div className="relative flex min-w-0 flex-1 flex-col overflow-hidden">
+          {/* Mobile header */}
+          <header className="flex h-[var(--nav-h)] flex-none items-center justify-between gap-3 border-b border-line bg-paper px-4 md:hidden">
+            <LogoLockup markClassName="h-7 w-7" />
             <div className="flex items-center gap-2">
-              <Logo className="h-10 w-10" />
-              <span className="font-extrabold text-base text-[#121212] dark:text-white tracking-[0.1em] uppercase whitespace-nowrap">STARSET</span>
-            </div>
-            <div className="flex items-center gap-3">
               <ThemeToggle />
               <button
+                type="button"
                 onClick={() => setIsMobileNavOpen(true)}
-                className="p-2 text-stone-600 dark:text-stone-300 hover:bg-stone-100 dark:hover:bg-white/10 rounded-lg transition-colors"
+                aria-label="Open navigation"
+                className="flex h-9 w-9 items-center justify-center rounded-md border border-line text-ink"
               >
-                <MoreHorizontal className="h-6 w-6" />
+                <Menu className="h-4 w-4" strokeWidth={1.75} aria-hidden="true" />
               </button>
             </div>
           </header>
 
-          {/* Mobile Sidebar Overlay */}
-          <div className="md:hidden">
-            <Sidebar
-              currentPage={currentPage}
-              onNavigate={handleAppNavigate}
-              isMobileOpen={isMobileNavOpen}
-              setIsMobileOpen={setIsMobileNavOpen}
-              onLogout={handleLogout}
-              onExitApp={handleExitApp}
-              userRole={userRole}
-            />
-          </div>
-
-          {/* Main Content Scrollable Area */}
-          <main className="flex-1 overflow-y-auto p-4 md:p-10 scroll-smooth pb-24 md:pb-10 relative">
-            {/* Background Accent Glows */}
-            <div className="fixed inset-0 pointer-events-none overflow-hidden opacity-50 dark:opacity-100">
-              <div className="absolute top-[-10%] right-[-10%] w-[40%] h-[40%] bg-blue-500/10 dark:bg-blue-500/5 rounded-full blur-[120px]"></div>
-              <div className="absolute bottom-[-10%] left-[-10%] w-[40%] h-[40%] bg-purple-500/10 dark:bg-purple-500/5 rounded-full blur-[120px]"></div>
-            </div>
-
-            <div className="max-w-[1600px] mx-auto min-h-full flex flex-col relative z-10">
-              <div className="flex-1">
-                {renderContent()}
-              </div>
+          {/* Scrollable content */}
+          <main className="thin-scroll flex-1 overflow-y-auto scroll-smooth">
+            <div className="mx-auto w-full max-w-[1440px] px-4 py-6 pb-28 sm:px-6 md:px-8 md:pb-10 lg:py-8">
+              {renderContent()}
             </div>
           </main>
 
-          {/* Mobile Bottom Navigation */}
-          <div className="md:hidden absolute bottom-0 left-0 w-full bg-white dark:bg-black border-t border-stone-200 dark:border-white/10 px-6 py-3 flex justify-between items-center z-40 safe-area-bottom">
-            <button
-              onClick={() => handleAppNavigate('dashboard')}
-              className={`flex flex-col items-center gap-1 transition-colors ${currentPage === 'dashboard' ? 'text-blue-600 dark:text-blue-500' : 'text-stone-400'}`}
-            >
-              <LayoutDashboard className="h-6 w-6" strokeWidth={currentPage === 'dashboard' ? 2.5 : 2} />
-              <span className="text-[10px] font-medium">Home</span>
-            </button>
-
-            <button
-              onClick={() => handleAppNavigate('tasks')}
-              className={`flex flex-col items-center gap-1 transition-colors ${currentPage === 'tasks' || currentPage === 'execution' ? 'text-blue-600 dark:text-blue-500' : 'text-stone-400'}`}
-            >
-              <Database className="h-6 w-6" strokeWidth={currentPage === 'tasks' || currentPage === 'execution' ? 2.5 : 2} />
-              <span className="text-[10px] font-medium">Tasks</span>
-            </button>
-
-            <button
-              onClick={() => handleAppNavigate('earnings')}
-              className={`flex flex-col items-center gap-1 transition-colors ${currentPage === 'earnings' ? 'text-blue-600 dark:text-blue-500' : 'text-stone-400'}`}
-            >
-              <CreditCard className="h-6 w-6" strokeWidth={currentPage === 'earnings' ? 2.5 : 2} />
-              <span className="text-[10px] font-medium">Money</span>
-            </button>
-
-            <button
-              onClick={() => handleAppNavigate('account')}
-              className={`flex flex-col items-center gap-1 transition-colors ${currentPage === 'account' ? 'text-blue-600 dark:text-blue-500' : 'text-stone-400'}`}
-            >
-              <User className="h-6 w-6" strokeWidth={currentPage === 'account' ? 2.5 : 2} />
-              <span className="text-[10px] font-medium">Profile</span>
-            </button>
-          </div>
+          {/* Mobile tab bar */}
+          <nav
+            aria-label="Primary"
+            className="absolute inset-x-0 bottom-0 z-30 grid grid-cols-4 border-t border-line bg-paper pb-[env(safe-area-inset-bottom)] md:hidden"
+          >
+            {mobileTabs.map(tab => {
+              const active = tab.match.includes(currentPage);
+              return (
+                <button
+                  key={tab.page}
+                  type="button"
+                  onClick={() => handleAppNavigate(tab.page)}
+                  aria-current={active ? 'page' : undefined}
+                  className={cn(
+                    'flex flex-col items-center gap-1 py-2.5 text-[10px] font-medium transition-colors',
+                    active ? 'text-signal' : 'text-muted',
+                  )}
+                >
+                  <tab.icon className="h-5 w-5" strokeWidth={active ? 2 : 1.75} aria-hidden="true" />
+                  {tab.label}
+                </button>
+              );
+            })}
+          </nav>
         </div>
       </div>
     );

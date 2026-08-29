@@ -1,72 +1,101 @@
 import React from 'react';
-import { BookOpen, Calendar, ArrowRight } from 'lucide-react';
+import { ArrowRight, ArrowUpRight } from 'lucide-react';
+
 import { PublicLayout, PublicPageType } from '../components/PublicLayout';
+import { Button } from '../components/Button';
+import { Section, SectionHeading } from '../components/ui/Layout';
+import { PageHero } from '../components/PageHero';
+import { Reveal } from '../components/Reveal';
+import { Waveform, Spectrogram } from '../components/Waveform';
 
 interface PageProps {
-   onNavigate: (page: PublicPageType) => void;
-   onEnterApp: () => void;
+  onNavigate: (page: PublicPageType) => void;
+  onEnterApp: () => void;
 }
 
-export const Blog: React.FC<PageProps> = ({ onNavigate, onEnterApp }) => {
-   return (
-      <PublicLayout currentPage="blog" onNavigate={onNavigate} onEnterApp={onEnterApp}>
-         <section className="py-24 px-6 relative overflow-hidden min-h-[80vh]">
-            <div className="max-w-7xl mx-auto">
-               <div className="mb-16 text-center">
-                  <span className="text-blue-600 dark:text-blue-400 font-bold uppercase tracking-widest text-xs mb-2 block">Latest Updates</span>
-                  <h1 className="text-4xl md:text-6xl font-black mb-6 tracking-tighter leading-tight">
-                     <span className="text-slate-900 dark:text-white">Insights from the </span>
-                     <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-700 via-blue-500 to-blue-700 dark:from-blue-600 dark:via-blue-500 dark:to-blue-600 animate-shimmer drop-shadow-md">Frontlines of AI</span>
-                  </h1>
-               </div>
+/**
+ * Notes indexes the explanatory writing that actually exists on the site.
+ * No dated posts are invented to make the page look busier than it is.
+ */
+const NOTES: {
+  kicker: string;
+  title: string;
+  summary: string;
+  page: PublicPageType;
+  seed: string;
+  spectro?: boolean;
+}[] = [
+  {
+    kicker: 'Explainer',
+    title: 'How AI models learn from human audio',
+    summary:
+      'A plain account of how speech and voice models are trained, why recorded human speech is still the constraint, and where a contributor sits in that process.',
+    page: 'ai-training-guide',
+    seed: 'note-training',
+    spectro: true,
+  },
+];
 
-               <div className="grid md:grid-cols-2 gap-8 mt-16 max-w-5xl mx-auto">
-                  {/* Blog Post 1 */}
-                  <div className="bg-slate-50 dark:bg-zinc-900/50 backdrop-blur-md rounded-[2rem] border border-slate-200 dark:border-white/10 overflow-hidden group cursor-pointer hover:border-blue-500/50 transition-colors">
-                     <div className="h-48 bg-gradient-to-br from-blue-500/20 to-indigo-500/20 flex items-center justify-center">
-                        <BookOpen className="h-12 w-12 text-blue-500 opacity-50" />
-                     </div>
-                     <div className="p-8">
-                        <div className="flex items-center gap-2 text-sm text-slate-500 dark:text-zinc-500 mb-4">
-                           <Calendar className="h-4 w-4" />
-                           May 24, 2026
-                        </div>
-                        <h3 className="text-2xl font-bold text-slate-900 dark:text-white mb-3 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">
-                           The Importance of Human Context in LLM Training
-                        </h3>
-                        <p className="text-slate-600 dark:text-zinc-400 mb-6 line-clamp-3">
-                           Why automated synthetic data isn't enough to build safe, aligned, and truly intelligent models. Exploring the methodology behind RLHF.
-                        </p>
-                        <span className="text-blue-600 dark:text-blue-400 font-semibold flex items-center gap-2 text-sm">
-                           Read full article <ArrowRight className="h-4 w-4 group-hover:translate-x-1 transition-transform" />
-                        </span>
-                     </div>
-                  </div>
+export const Blog: React.FC<PageProps> = ({ onNavigate, onEnterApp }) => (
+  <PublicLayout currentPage="blog" onNavigate={onNavigate} onEnterApp={onEnterApp}>
+    <PageHero
+      eyebrow="Notes"
+      title={['Working notes', 'on audio data.']}
+      lede="How we collect, what we check for, and why. Written for the people on both ends of the pipeline."
+      atmosphere="points"
+      factsLabel="In this section"
+      facts={[
+        { label: 'Explainer', value: 'How speech models learn from audio' },
+      ]}
+    />
 
-                  {/* Blog Post 2 */}
-                  <div className="bg-slate-50 dark:bg-zinc-900/50 backdrop-blur-md rounded-[2rem] border border-slate-200 dark:border-white/10 overflow-hidden group cursor-pointer hover:border-blue-500/50 transition-colors">
-                     <div className="h-48 bg-gradient-to-br from-emerald-500/20 to-teal-500/20 flex items-center justify-center">
-                        <BookOpen className="h-12 w-12 text-emerald-500 opacity-50" />
-                     </div>
-                     <div className="p-8">
-                        <div className="flex items-center gap-2 text-sm text-slate-500 dark:text-zinc-500 mb-4">
-                           <Calendar className="h-4 w-4" />
-                           May 10, 2026
-                        </div>
-                        <h3 className="text-2xl font-bold text-slate-900 dark:text-white mb-3 group-hover:text-emerald-600 dark:group-hover:text-emerald-400 transition-colors">
-                           Starset Payouts: New Crypto Options Added
-                        </h3>
-                        <p className="text-slate-600 dark:text-zinc-400 mb-6 line-clamp-3">
-                           We are excited to announce expanded global payout options for all contributors. Instantly withdraw your earnings in USDC alongside standard fiat options.
-                        </p>
-                        <span className="text-emerald-600 dark:text-emerald-400 font-semibold flex items-center gap-2 text-sm">
-                           Read full article <ArrowRight className="h-4 w-4 group-hover:translate-x-1 transition-transform" />
-                        </span>
-                     </div>
-                  </div>
-               </div>
-            </div>
-         </section>
-      </PublicLayout>
-   );
-};
+    <Section space="md">
+      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+        {NOTES.map((note, i) => (
+          <Reveal key={note.page} delay={i * 80}>
+            <article className="card card-interactive flex h-full flex-col overflow-hidden">
+              <div className="border-b border-line bg-paper-sunk px-5 py-6">
+                {note.spectro
+                  ? <Spectrogram seed={note.seed} columns={48} rows={12} height={56} />
+                  : <Waveform seed={note.seed} bars={44} height={56} />}
+              </div>
+
+              <div className="flex flex-1 flex-col p-5">
+                <span className="t-meta">{note.kicker}</span>
+                <h2 className="t-h4 mt-2.5">{note.title}</h2>
+                <p className="mt-2.5 flex-1 text-sm leading-relaxed text-body">{note.summary}</p>
+
+                <button
+                  type="button"
+                  onClick={() => onNavigate(note.page)}
+                  className="link-arrow mt-5 self-start text-signal"
+                >
+                  Read
+                  <ArrowUpRight className="h-3.5 w-3.5" strokeWidth={2} aria-hidden="true" />
+                </button>
+              </div>
+            </article>
+          </Reveal>
+        ))}
+      </div>
+    </Section>
+
+    <Section tone="sunk" bordered space="sm">
+      <Reveal>
+        <div className="flex flex-col gap-5 sm:flex-row sm:items-center sm:justify-between">
+          <div className="max-w-2xl">
+            <SectionHeading
+              title="More is being written"
+              lede="Longer notes on dialect recruitment, validation thresholds and annotation are in progress. We publish them when they say something specific — not on a content calendar."
+              size="h3"
+            />
+          </div>
+          <Button variant="secondary" onClick={() => onNavigate('contact')} className="flex-none self-start sm:self-auto">
+            Suggest a topic
+            <ArrowRight className="h-4 w-4" strokeWidth={2} aria-hidden="true" />
+          </Button>
+        </div>
+      </Reveal>
+    </Section>
+  </PublicLayout>
+);

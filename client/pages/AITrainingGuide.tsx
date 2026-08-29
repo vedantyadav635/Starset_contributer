@@ -1,138 +1,192 @@
 import React, { useEffect } from 'react';
-import { Brain, Database, Mic, Cpu, ShieldCheck, ArrowRight } from 'lucide-react';
+import { ArrowRight } from 'lucide-react';
+
 import { PublicLayout, PublicPageType } from '../components/PublicLayout';
-import { motion } from 'framer-motion';
+import { Button } from '../components/Button';
+import { Section } from '../components/ui/Layout';
+import { PageHero } from '../components/PageHero';
+import { Reveal } from '../components/Reveal';
+import { Waveform, Spectrogram, WaveLine } from '../components/Waveform';
+import { CTASection } from '../components/CTASection';
 
 interface PageProps {
-   onNavigate: (page: PublicPageType) => void;
-   onEnterApp: () => void;
+  onNavigate: (page: PublicPageType) => void;
+  onEnterApp: () => void;
 }
 
+const SECTIONS = [
+  {
+    id: 'sound-to-numbers',
+    kicker: '01',
+    title: 'Sound becomes numbers',
+    body: [
+      'A microphone measures air pressure thousands of times a second. At 16 kHz — the sample rate most speech models expect — that is sixteen thousand numbers for every second of audio. Nothing about that sequence is meaningful yet; it is just a very long list.',
+      'The first thing a speech system does is turn that list into a picture of energy across frequency and time. That is what a spectrogram is: loud in the low bands where vowels live, sparser and sharper where consonants cut through. Models learn on this representation rather than the raw wave.',
+    ],
+    visual: 'spectrogram' as const,
+  },
+  {
+    id: 'patterns',
+    kicker: '02',
+    title: 'The model learns patterns, not language',
+    body: [
+      'Training pairs each stretch of audio with what was actually said. Over millions of pairs, the model learns which spectral shapes tend to correspond to which sounds, and which sequences of sounds tend to form real words.',
+      'It never learns language the way a person does. It learns correlations in the data it was shown — which is why the composition of that data decides everything about what the model can hear.',
+    ],
+    visual: 'wave' as const,
+  },
+  {
+    id: 'gap',
+    kicker: '03',
+    title: 'Which is why coverage is the whole game',
+    body: [
+      'If a training set contains mostly broadcast-standard accents recorded in quiet studios, that is the range the model is confident in. A regional dialect, a noisy kitchen, a cheap phone microphone — each of these is a distribution the model has barely seen, and error rates climb accordingly.',
+      'This failure is not evenly distributed. It falls on exactly the speakers who were hardest to record in the first place, which is a reason to go and record them deliberately rather than hope a scrape happens to include them.',
+    ],
+    visual: 'line' as const,
+  },
+  {
+    id: 'human',
+    kicker: '04',
+    title: 'Where a human contributor fits',
+    body: [
+      'Synthetic audio and augmentation help, but they can only recombine what already exists. They cannot invent the prosody of a dialect nobody recorded, or the specific way a phrase is clipped in ordinary conversation.',
+      'A contributor recording a two-minute task is adding a genuinely new point to that distribution: their accent, their room, their device. Labelled, checked and described, that becomes something a model can learn from.',
+    ],
+    visual: 'wave' as const,
+  },
+  {
+    id: 'structure',
+    kicker: '05',
+    title: 'And why the metadata matters as much as the audio',
+    body: [
+      'A folder of clips is not a dataset. Without knowing the language, the duration, the encoding, the prompt each clip answers and whether anyone verified it, a data team cannot filter, balance or debug what they have.',
+      'Structure is what makes audio trainable. It is also what makes it auditable — which distribution you actually trained on, and which speakers you still have not heard from.',
+    ],
+    visual: 'spectrogram' as const,
+  },
+];
+
 export const AITrainingGuide: React.FC<PageProps> = ({ onNavigate, onEnterApp }) => {
-   useEffect(() => {
-      window.scrollTo(0, 0);
-   }, []);
+  useEffect(() => { window.scrollTo(0, 0); }, []);
 
-   return (
-      <PublicLayout currentPage="blog" onNavigate={onNavigate} onEnterApp={onEnterApp}>
-         <div className="relative overflow-hidden min-h-screen bg-slate-50 dark:bg-[#020205] pb-24">
-            {/* Ambient Backgrounds */}
-            <div className="absolute top-0 right-0 w-full h-[500px] bg-gradient-to-b from-blue-500/10 to-transparent pointer-events-none"></div>
-            
-            <div className="max-w-4xl mx-auto px-6 pt-24 md:pt-32 relative z-10">
-               {/* Header */}
-               <motion.div 
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  className="mb-16 md:mb-24 text-center"
-               >
-                  <span className="inline-block py-1.5 px-4 rounded-full bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-400 font-bold text-xs uppercase tracking-widest mb-6">
-                     Educational Guide
-                  </span>
-                  <h1 className="text-4xl md:text-6xl font-black text-slate-900 dark:text-white mb-6 tracking-tight leading-tight">
-                     How AI Models Learn from <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-indigo-600 dark:from-blue-400 dark:to-indigo-400">Human Intelligence</span>
-                  </h1>
-                  <p className="text-lg md:text-xl text-slate-600 dark:text-zinc-400 leading-relaxed max-w-2xl mx-auto">
-                     Demystifying the process behind ChatGPT, voice assistants, and next-generation AI. Discover why human contributors are the most valuable asset in machine learning.
-                  </p>
-               </motion.div>
-
-               {/* Content Blocks */}
-               <div className="space-y-12 md:space-y-16">
-                  
-                  {/* Step 1 */}
-                  <motion.section 
-                     initial={{ opacity: 0, y: 20 }}
-                     whileInView={{ opacity: 1, y: 0 }}
-                     viewport={{ once: true, margin: "-100px" }}
-                     className="bg-white dark:bg-zinc-900/40 border border-slate-200 dark:border-white/10 rounded-3xl p-8 md:p-12 shadow-xl shadow-slate-200/20 dark:shadow-none"
-                  >
-                     <div className="flex flex-col md:flex-row gap-8 items-start">
-                        <div className="p-4 bg-indigo-50 dark:bg-indigo-900/20 text-indigo-600 dark:text-indigo-400 rounded-2xl shrink-0">
-                           <Database className="h-8 w-8" />
-                        </div>
-                        <div>
-                           <h2 className="text-2xl font-bold text-slate-900 dark:text-white mb-4">1. Raw Data Collection</h2>
-                           <p className="text-slate-600 dark:text-zinc-400 leading-relaxed mb-4 text-lg">
-                              Before an AI can "think," it needs to "read" and "listen." The foundational step of training an AI model involves collecting massive datasets of text, audio, and images. 
-                           </p>
-                           <p className="text-slate-600 dark:text-zinc-400 leading-relaxed text-lg">
-                              However, raw internet data is often messy, biased, or incorrect. This is where <strong className="text-slate-900 dark:text-white">High-Quality Human Data Collection</strong> comes in. Contributors provide clean, native audio recordings and culturally accurate text that form the pristine foundation of modern AI.
-                           </p>
-                        </div>
-                     </div>
-                  </motion.section>
-
-                  {/* Step 2 */}
-                  <motion.section 
-                     initial={{ opacity: 0, y: 20 }}
-                     whileInView={{ opacity: 1, y: 0 }}
-                     viewport={{ once: true, margin: "-100px" }}
-                     className="bg-white dark:bg-zinc-900/40 border border-slate-200 dark:border-white/10 rounded-3xl p-8 md:p-12 shadow-xl shadow-slate-200/20 dark:shadow-none"
-                  >
-                     <div className="flex flex-col md:flex-row gap-8 items-start">
-                        <div className="p-4 bg-blue-50 dark:bg-blue-900/20 text-blue-600 dark:text-blue-400 rounded-2xl shrink-0">
-                           <Brain className="h-8 w-8" />
-                        </div>
-                        <div>
-                           <h2 className="text-2xl font-bold text-slate-900 dark:text-white mb-4">2. Supervised Fine-Tuning (SFT)</h2>
-                           <p className="text-slate-600 dark:text-zinc-400 leading-relaxed mb-4 text-lg">
-                              Once the AI has a basic understanding of language, it needs to learn how to be useful. Supervised Fine-Tuning involves humans showing the AI exactly how to respond.
-                           </p>
-                           <p className="text-slate-600 dark:text-zinc-400 leading-relaxed text-lg">
-                              Contributors write highly accurate question-and-answer pairs, summarize documents, or write code. The AI studies these human-crafted examples to learn structure, tone, and factual accuracy.
-                           </p>
-                        </div>
-                     </div>
-                  </motion.section>
-
-                  {/* Step 3 */}
-                  <motion.section 
-                     initial={{ opacity: 0, y: 20 }}
-                     whileInView={{ opacity: 1, y: 0 }}
-                     viewport={{ once: true, margin: "-100px" }}
-                     className="bg-white dark:bg-zinc-900/40 border border-slate-200 dark:border-white/10 rounded-3xl p-8 md:p-12 shadow-xl shadow-slate-200/20 dark:shadow-none"
-                  >
-                     <div className="flex flex-col md:flex-row gap-8 items-start">
-                        <div className="p-4 bg-emerald-50 dark:bg-emerald-900/20 text-emerald-600 dark:text-emerald-400 rounded-2xl shrink-0">
-                           <ShieldCheck className="h-8 w-8" />
-                        </div>
-                        <div>
-                           <h2 className="text-2xl font-bold text-slate-900 dark:text-white mb-4">3. Reinforcement Learning from Human Feedback (RLHF)</h2>
-                           <p className="text-slate-600 dark:text-zinc-400 leading-relaxed mb-4 text-lg">
-                              This is the secret sauce behind modern conversational AI. The AI generates multiple possible answers to a question, and human contributors rank them from best to worst.
-                           </p>
-                           <p className="text-slate-600 dark:text-zinc-400 leading-relaxed text-lg">
-                              By scoring the AI's output, humans teach the model to align with human values—avoiding harmful responses, remaining unbiased, and being genuinely helpful. <strong className="text-slate-900 dark:text-white">AI alignment cannot exist without continuous human feedback.</strong>
-                           </p>
-                        </div>
-                     </div>
-                  </motion.section>
-               </div>
-
-               {/* Call to Action */}
-               <motion.div 
-                  initial={{ opacity: 0, y: 20 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  className="mt-16 md:mt-24 p-8 md:p-12 bg-gradient-to-br from-blue-600 to-indigo-700 rounded-[2.5rem] text-center relative overflow-hidden"
-               >
-                  <div className="absolute top-0 right-0 w-64 h-64 bg-white/10 rounded-full blur-[80px]"></div>
-                  <h2 className="text-3xl md:text-4xl font-black text-white mb-6 relative z-10 tracking-tight">
-                     Be the Intelligence Behind the AI
-                  </h2>
-                  <p className="text-blue-100 text-lg md:text-xl mb-10 max-w-2xl mx-auto relative z-10 leading-relaxed">
-                     Your voice, language skills, and expertise are exactly what the next generation of AI needs. Join Starset today and get paid to shape the future.
-                  </p>
-                  <button 
-                     onClick={() => onNavigate('signup')}
-                     className="relative z-10 bg-white text-blue-600 px-8 py-4 rounded-full font-bold text-lg hover:scale-105 hover:shadow-[0_0_40px_rgba(255,255,255,0.3)] transition-all flex items-center gap-3 mx-auto"
-                  >
-                     Start Contributing <ArrowRight className="h-5 w-5" />
-                  </button>
-               </motion.div>
+  return (
+    <PublicLayout currentPage="ai-training-guide" onNavigate={onNavigate} onEnterApp={onEnterApp}>
+      {/* ═══════════════════════ HERO ═══════════════════════ */}
+      <PageHero
+        eyebrow="Guide"
+        title={['How AI models learn', 'from human audio.']}
+        lede="No jargon, no hand-waving. What actually happens to a recording between a microphone and a working speech model — and why the data, not the architecture, is usually the limit."
+        atmosphere="points"
+        aside={
+          <div className="card overflow-hidden">
+            <div className="border-b border-line px-5 py-3">
+              <span className="t-meta">Energy across frequency and time</span>
             </div>
-         </div>
-      </PublicLayout>
-   );
+            <div className="px-5 py-6">
+              <Spectrogram seed="guide-hero-panel" columns={80} rows={16} height={110} />
+              <div className="mt-3 flex justify-between">
+                <span className="t-meta">0.0 s</span>
+                <span className="t-meta">Spectrogram</span>
+                <span className="t-meta">2.4 s</span>
+              </div>
+            </div>
+            <p className="border-t border-line bg-paper-sunk px-5 py-3 text-xs text-muted">
+              This representation — not the raw waveform — is what a speech model learns on.
+            </p>
+          </div>
+        }
+      />
+
+      {/* ═══════════════════════ CONTENTS ═══════════════════════ */}
+      <Section space="sm" tone="sunk" bordered>
+        <nav aria-label="On this page">
+          <p className="t-meta">Contents</p>
+          <ol className="mt-4 grid gap-2 sm:grid-cols-2 lg:grid-cols-3">
+            {SECTIONS.map((section) => (
+              <li key={section.id}>
+                <a
+                  href={`#${section.id}`}
+                  className="flex items-baseline gap-3 rounded-md px-3 py-2 text-sm text-body transition-colors hover:bg-surface hover:text-ink"
+                >
+                  <span className="t-meta flex-none">{section.kicker}</span>
+                  {section.title}
+                </a>
+              </li>
+            ))}
+          </ol>
+        </nav>
+      </Section>
+
+      {/* ═══════════════════════ BODY ═══════════════════════ */}
+      <Section space="md">
+        <div className="space-y-16 lg:space-y-24">
+          {SECTIONS.map((section) => (
+            <article key={section.id} id={section.id} className="scroll-mt-28">
+              <div className="grid gap-8 lg:grid-cols-[minmax(0,0.55fr)_minmax(0,1fr)] lg:gap-16">
+                <Reveal>
+                  <span className="t-meta">{section.kicker}</span>
+                  <h2 className="t-h2 mt-3">{section.title}</h2>
+                </Reveal>
+
+                <div>
+                  <Reveal delay={80}>
+                    <div className="space-y-4">
+                      {section.body.map((paragraph) => (
+                        <p key={paragraph.slice(0, 24)} className="text-[1.0625rem] leading-relaxed text-body">
+                          {paragraph}
+                        </p>
+                      ))}
+                    </div>
+                  </Reveal>
+
+                  <Reveal delay={140}>
+                    <div className="mt-8 card overflow-hidden">
+                      <div className="border-b border-line px-4 py-2.5">
+                        <span className="t-meta">
+                          {section.visual === 'spectrogram'
+                            ? 'Energy across frequency and time'
+                            : section.visual === 'line'
+                              ? 'Amplitude over time'
+                              : 'Speech envelope'}
+                        </span>
+                      </div>
+                      <div className="px-4 py-5">
+                        {section.visual === 'spectrogram' && (
+                          <Spectrogram seed={section.id} columns={90} rows={16} height={90} />
+                        )}
+                        {section.visual === 'wave' && (
+                          <Waveform seed={section.id} bars={90} height={70} />
+                        )}
+                        {section.visual === 'line' && (
+                          <WaveLine seed={section.id} points={130} height={80} filled />
+                        )}
+                      </div>
+                    </div>
+                  </Reveal>
+                </div>
+              </div>
+            </article>
+          ))}
+        </div>
+      </Section>
+
+      <CTASection
+        eyebrow="Contribute"
+        title="Add your voice to the distribution"
+        body="Two minutes of your speech is a data point no scrape can produce."
+        primary={
+          <Button size="lg" onClick={onEnterApp}>
+            Start contributing
+            <ArrowRight className="h-4 w-4" strokeWidth={2} aria-hidden="true" />
+          </Button>
+        }
+        secondary={
+          <Button size="lg" variant="secondary" onClick={() => onNavigate('marketplace')}>
+            Browse collections
+          </Button>
+        }
+      />
+    </PublicLayout>
+  );
 };

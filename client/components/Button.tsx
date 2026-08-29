@@ -1,59 +1,80 @@
 import React from 'react';
+import { cn } from '../lib/utils';
 
-interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
-  variant?: 'primary' | 'secondary' | 'danger' | 'ghost' | 'outline' | 'black' | 'glow';
+/**
+ * Starset button.
+ *
+ * Charcoal is the primary action; the signal blue is reserved for moments
+ * that genuinely need it. The legacy variant names (`black`, `glow`,
+ * `outline`) are kept as aliases so existing call sites keep working.
+ */
+export type ButtonVariant =
+  | 'primary'
+  | 'signal'
+  | 'secondary'
+  | 'ghost'
+  | 'danger'
+  | 'quiet-danger'
+  // legacy aliases
+  | 'outline'
+  | 'black'
+  | 'glow';
+
+export interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
+  variant?: ButtonVariant;
   size?: 'sm' | 'md' | 'lg';
   isLoading?: boolean;
+  /** Renders full-width — convenient inside forms and mobile stacks. */
+  block?: boolean;
 }
 
-export const Button: React.FC<ButtonProps> = ({
+const variantClass: Record<ButtonVariant, string> = {
+  primary: 'btn-primary',
+  signal: 'btn-signal',
+  secondary: 'btn-secondary',
+  ghost: 'btn-ghost',
+  danger: 'btn-danger',
+  'quiet-danger': 'btn-quiet-danger',
+  outline: 'btn-secondary',
+  black: 'btn-primary',
+  glow: 'btn-signal',
+};
+
+const Spinner = () => (
+  <svg
+    className="h-4 w-4 shrink-0 animate-spin-slow"
+    style={{ animationDuration: '0.7s' }}
+    viewBox="0 0 24 24"
+    fill="none"
+    aria-hidden="true"
+  >
+    <circle cx="12" cy="12" r="9" stroke="currentColor" strokeWidth="2.5" opacity="0.25" />
+    <path d="M21 12a9 9 0 0 0-9-9" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" />
+  </svg>
+);
+
+export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(({
   children,
   variant = 'primary',
   size = 'md',
-  className = '',
+  className,
   isLoading = false,
+  block = false,
   disabled,
+  type = 'button',
   ...props
-}) => {
-  const baseStyle = "inline-flex items-center justify-center font-semibold rounded-lg focus-ring transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed relative overflow-hidden";
+}, ref) => (
+  <button
+    ref={ref}
+    type={type}
+    className={cn('btn', `btn-${size}`, variantClass[variant], block && 'w-full', className)}
+    disabled={disabled || isLoading}
+    aria-busy={isLoading || undefined}
+    {...props}
+  >
+    {isLoading && <Spinner />}
+    {children}
+  </button>
+));
 
-  const variants = {
-    primary: "bg-blue-600 !text-white hover:bg-blue-500 shadow-[0_4px_0_#1d4ed8,0_2px_4px_rgba(0,0,0,0.1)] active:shadow-[0_0px_0_#1d4ed8] active:translate-y-1 hover:-translate-y-0.5 hover:shadow-[0_6px_0_#1d4ed8,0_8px_16px_-4px_rgba(37,99,235,0.4)] border border-blue-600",
-
-    glow: "bg-blue-600 !text-white hover:bg-blue-500 shadow-[0_4px_0_#1d4ed8,0_2px_4px_rgba(0,0,0,0.1)] active:shadow-[0_0px_0_#1d4ed8] active:translate-y-1 hover:-translate-y-0.5 hover:shadow-[0_6px_0_#1d4ed8,0_8px_16px_-4px_rgba(37,99,235,0.4)] border border-blue-600",
-
-    black: "bg-blue-600 !text-white hover:bg-blue-500 shadow-[0_4px_0_#1d4ed8,0_2px_4px_rgba(0,0,0,0.1)] active:shadow-[0_0px_0_#1d4ed8] active:translate-y-1 hover:-translate-y-0.5 hover:shadow-[0_6px_0_#1d4ed8,0_8px_16px_-4px_rgba(37,99,235,0.4)] border border-blue-600",
-
-    secondary: "bg-blue-600 !text-white hover:bg-blue-500 shadow-[0_4px_0_#1d4ed8,0_2px_4px_rgba(0,0,0,0.1)] active:shadow-[0_0px_0_#1d4ed8] active:translate-y-1 hover:-translate-y-0.5 hover:shadow-[0_6px_0_#1d4ed8,0_8px_16px_-4px_rgba(37,99,235,0.4)] border border-blue-600",
-
-    danger: "bg-red-600 !text-white hover:bg-red-500 shadow-[0_4px_0_#991b1b,0_2px_4px_rgba(0,0,0,0.1)] active:shadow-[0_0px_0_#991b1b] active:translate-y-1 hover:-translate-y-0.5 hover:shadow-[0_6px_0_#991b1b,0_8px_16px_-4px_rgba(220,38,38,0.4)] border border-red-600",
-
-    ghost: "text-slate-600 hover:text-slate-900 hover:bg-slate-100 dark:text-zinc-400 dark:hover:text-white dark:hover:bg-white/5",
-
-    outline: "bg-blue-50 !text-blue-700 dark:bg-blue-900/20 dark:!text-blue-300 border border-blue-200 dark:border-blue-800 shadow-[0_4px_0_#bfdbfe,0_2px_4px_rgba(0,0,0,0.05)] dark:shadow-[0_4px_0_#1e3a8a] active:shadow-[0_0px_0_#bfdbfe] dark:active:shadow-[0_0px_0_#1e3a8a] active:translate-y-1 hover:-translate-y-0.5 hover:shadow-[0_6px_0_#bfdbfe,0_8px_16px_-4px_rgba(59,130,246,0.1)] dark:hover:shadow-[0_6px_0_#1e3a8a] transition-all hover:bg-blue-100 dark:hover:bg-blue-900/40"
-  };
-
-  const sizes = {
-    sm: "px-3 py-1.5 text-xs tracking-wide",
-    md: "px-5 py-2.5 text-sm tracking-wide",
-    lg: "px-8 py-4 text-base tracking-wide"
-  };
-
-  return (
-    <button
-      className={`${baseStyle} ${variants[variant]} ${sizes[size]} ${className}`}
-      disabled={disabled || isLoading}
-      {...props}
-    >
-      {isLoading ? (
-        <span className="mr-2">
-          <svg className="animate-spin h-4 w-4 text-current" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-            <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-            <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-          </svg>
-        </span>
-      ) : null}
-      {children}
-    </button>
-  );
-};
+Button.displayName = 'Button';

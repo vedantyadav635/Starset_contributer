@@ -1,344 +1,158 @@
 <!DOCTYPE html>
-<html lang="en" class="dark" prefix="og: https://ogp.me/ns#">
+<html lang="en" prefix="og: https://ogp.me/ns#">
 
 <head>
   <script>
-    (function() {
+    // Apply the stored theme before first paint. Light is the default.
+    (function () {
       try {
-        const storedTheme = localStorage.getItem('starset-theme');
-        const isDark = storedTheme === 'dark' || !storedTheme; // default to dark
+        var stored = localStorage.getItem('starset-theme');
+        var isDark = stored === 'dark';
         document.documentElement.classList.toggle('dark', isDark);
         document.documentElement.classList.toggle('light', !isDark);
-      } catch (e) {}
+        document.documentElement.style.colorScheme = isDark ? 'dark' : 'light';
+      } catch (e) { }
     })();
   </script>
+
   <meta charset="UTF-8" />
-  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
 
-  <!-- ═══════════════════════════════════════════════════════════════════
-       PRIMARY SEO — Title, Description, Keywords
-       ═══════════════════════════════════════════════════════════════════ -->
-  <title>Starset Intelligence — Earn Money Daily by Training AI | Starset Online</title>
-  <meta name="description" content="Starset Intelligence is the #1 platform to earn real money daily by completing AI training tasks. Join 10,000+ contributors doing data labeling, RLHF evaluation, and creative writing tasks. Instant payouts. No experience needed. Start earning on starset.online today." />
-  <meta name="keywords" content="Starset, starset.online, Starset Intelligence, starset online, star, starset ai, earn money online, earn money daily, daily money, daily earning, AI tasks, AI jobs, AI opportunity, money from AI, earn from home, data labeling jobs, RLHF, task earning, AI contributor, machine learning jobs, earn cash online, remote AI work, side hustle AI, train AI earn money, intelligence, starset contributor, earn daily, online earning platform, work from home, micro tasks, AI training platform, daily payout" />
-  <meta name="author" content="Starset Intelligence" />
-  <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
-  <meta name="googlebot" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
-  <meta name="bingbot" content="index, follow" />
+  <!-- ═══════════════ PRIMARY ═══════════════ -->
+  <title>Starset — Human audio data for AI</title>
+  <meta name="description"
+    content="Starset collects and structures human audio data for speech, voice and conversational AI. Contributors record real voices; AI teams receive validated, documented datasets." />
+  <meta name="author" content="Starset" />
+  <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1" />
   <link rel="canonical" href="https://www.starset.online/" />
-
-  <!-- ═══════════════════════════════════════════════════════════════════
-       ADDITIONAL SEO META TAGS
-       ═══════════════════════════════════════════════════════════════════ -->
-  <meta name="subject" content="Earn Money by Training AI Models" />
-  <meta name="topic" content="AI Data Contribution Platform" />
-  <meta name="summary" content="Starset Intelligence lets you earn real money daily by completing simple AI training tasks like data labeling, text evaluation, and creative writing." />
-  <meta name="classification" content="Business, Technology, AI, Earning Platform" />
-  <meta name="category" content="Artificial Intelligence / Earning Platform" />
-  <meta name="coverage" content="Worldwide" />
-  <meta name="distribution" content="Global" />
-  <meta name="rating" content="General" />
-  <meta name="revisit-after" content="3 days" />
-  <meta name="language" content="English" />
-  <meta name="target" content="all" />
-  <meta name="audience" content="all" />
-  <meta name="placement" content="global" />
-  <meta name="pagetype" content="Homepage" />
-  <meta name="HandheldFriendly" content="True" />
-  <meta name="MobileOptimized" content="320" />
-  <meta name="apple-mobile-web-app-capable" content="yes" />
-  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
-  <meta name="apple-mobile-web-app-title" content="Starset" />
-  <meta name="application-name" content="Starset Intelligence" />
-  <meta name="msapplication-TileColor" content="#2563eb" />
-  <meta name="theme-color" content="#2563eb" />
+  <meta name="theme-color" content="#fbfaf8" media="(prefers-color-scheme: light)" />
+  <meta name="theme-color" content="#0b0c0e" media="(prefers-color-scheme: dark)" />
   <meta name="color-scheme" content="light dark" />
+  <meta name="apple-mobile-web-app-title" content="Starset" />
+  <meta name="application-name" content="Starset" />
   <meta name="format-detection" content="telephone=no" />
 
-  <!-- ═══════════════════════════════════════════════════════════════════
-       FAVICON & APP ICONS
-       ═══════════════════════════════════════════════════════════════════ -->
+  <!-- ═══════════════ ICONS ═══════════════ -->
   <link rel="icon" type="image/png" href="/logo.png" />
   <link rel="apple-touch-icon" href="/logo.png" />
   <link rel="manifest" href="/manifest.json" />
 
-  <!-- ═══════════════════════════════════════════════════════════════════
-       OPEN GRAPH / FACEBOOK / LINKEDIN / WHATSAPP
-       ═══════════════════════════════════════════════════════════════════ -->
+  <!-- ═══════════════ OPEN GRAPH ═══════════════ -->
   <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="Starset" />
   <meta property="og:url" content="https://www.starset.online/" />
-  <meta property="og:title" content="Starset Intelligence — Earn Money Daily by Training AI" />
-  <meta property="og:description" content="Join Starset Intelligence and earn real money daily. Complete simple AI tasks like data labeling, RLHF evaluation, and creative writing. Instant payouts, no experience required." />
+  <meta property="og:title" content="Starset — Human audio data for AI" />
+  <meta property="og:description"
+    content="Real voices. Structured data. Better AI. Starset helps AI teams collect and build high-quality human audio datasets." />
   <meta property="og:image" content="https://www.starset.online/logo.png" />
-  <meta property="og:image:width" content="1200" />
-  <meta property="og:image:height" content="630" />
-  <meta property="og:image:alt" content="Starset Intelligence — Earn Money by Training AI" />
-  <meta property="og:site_name" content="Starset Intelligence" />
+  <meta property="og:image:alt" content="Starset" />
   <meta property="og:locale" content="en_US" />
 
-  <!-- ═══════════════════════════════════════════════════════════════════
-       TWITTER / X CARD
-       ═══════════════════════════════════════════════════════════════════ -->
+  <!-- ═══════════════ TWITTER ═══════════════ -->
   <meta name="twitter:card" content="summary_large_image" />
-  <meta name="twitter:url" content="https://www.starset.online/" />
-  <meta name="twitter:title" content="Starset Intelligence — Earn Money Daily by Training AI" />
-  <meta name="twitter:description" content="Earn real cash daily by doing simple AI training tasks. Join 10,000+ contributors on Starset Intelligence. Instant payouts, zero experience needed." />
+  <meta name="twitter:title" content="Starset — Human audio data for AI" />
+  <meta name="twitter:description"
+    content="Real voices. Structured data. Better AI. Human audio datasets for speech, voice and conversational AI." />
   <meta name="twitter:image" content="https://www.starset.online/logo.png" />
-  <meta name="twitter:image:alt" content="Starset Intelligence Logo" />
-  <meta name="twitter:site" content="@starsetai" />
-  <meta name="twitter:creator" content="@starsetai" />
 
-  <!-- ═══════════════════════════════════════════════════════════════════
-       STRUCTURED DATA / JSON-LD — GLOBAL (per-page data injected by SEOHead)
-       ═══════════════════════════════════════════════════════════════════ -->
+  <!-- ═══════════════ STRUCTURED DATA ═══════════════ -->
   <script type="application/ld+json">
   [
     {
       "@context": "https://schema.org",
       "@type": "WebSite",
-      "name": "Starset Intelligence",
-      "alternateName": ["Starset", "Starset Online", "Starset AI", "Star", "Starset Contributor"],
+      "name": "Starset",
+      "alternateName": ["Starset Intelligence", "starset.online"],
       "url": "https://www.starset.online/",
-      "description": "Earn money daily by completing AI training tasks. The #1 human-in-the-loop AI data platform.",
-      "inLanguage": "en-US",
-      "potentialAction": {
-        "@type": "SearchAction",
-        "target": {
-          "@type": "EntryPoint",
-          "urlTemplate": "https://www.starset.online/?q={search_term_string}"
-        },
-        "query-input": "required name=search_term_string"
-      }
+      "description": "Human audio data collection and dataset preparation for AI.",
+      "inLanguage": "en"
     },
     {
       "@context": "https://schema.org",
       "@type": "Organization",
-      "name": "Starset Intelligence",
-      "alternateName": ["Starset", "Starset Online"],
+      "name": "Starset",
       "url": "https://www.starset.online/",
       "logo": {
         "@type": "ImageObject",
-        "url": "https://www.starset.online/logo.png",
-        "width": 512,
-        "height": 512
+        "url": "https://www.starset.online/logo.png"
       },
-      "description": "Starset Intelligence connects real humans with the world's leading AI companies. Contributors earn money by labeling data, evaluating AI outputs, and writing high-quality training content.",
-      "foundingDate": "2024",
-      "sameAs": [
-        "https://twitter.com/starsetai",
-        "https://linkedin.com/company/starsetai",
-        "https://github.com/vedantyadav635/Starset_contributer"
-      ],
-      "contactPoint": {
-        "@type": "ContactPoint",
-        "contactType": "customer support",
-        "email": "support@starset.ai",
-        "availableLanguage": ["English", "Hindi"]
-      }
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "WebApplication",
-      "name": "Starset Intelligence Contributor Platform",
-      "url": "https://www.starset.online/",
-      "applicationCategory": "BusinessApplication",
-      "operatingSystem": "Any",
-      "browserRequirements": "Requires JavaScript",
-      "offers": {
-        "@type": "Offer",
-        "price": "0",
-        "priceCurrency": "USD",
-        "description": "Free to join — earn money by completing AI training tasks"
-      },
-      "aggregateRating": {
-        "@type": "AggregateRating",
-        "ratingValue": "4.8",
-        "ratingCount": "2500",
-        "bestRating": "5"
-      }
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "FAQPage",
-      "mainEntity": [
+      "description": "Starset collects human audio from real speakers and prepares validated, documented datasets for speech, voice and conversational AI.",
+      "contactPoint": [
         {
-          "@type": "Question",
-          "name": "What is Starset Intelligence?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "Starset Intelligence is a platform where you earn real money by completing AI training tasks like data labeling, RLHF evaluation, and creative writing. It connects human contributors with top AI companies to improve their models."
-          }
+          "@type": "ContactPoint",
+          "contactType": "customer support",
+          "email": "support@starset.ai",
+          "availableLanguage": ["English", "Hindi"]
         },
         {
-          "@type": "Question",
-          "name": "How do I earn money on Starset?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "Sign up for free, complete available tasks such as text evaluation, data labeling, and creative writing, then withdraw your earnings instantly via UPI, bank transfer, or crypto."
-          }
-        },
-        {
-          "@type": "Question",
-          "name": "Is Starset Intelligence free to join?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "Yes, Starset Intelligence is completely free to join. There are no registration fees. You start earning as soon as you complete your first task."
-          }
-        },
-        {
-          "@type": "Question",
-          "name": "How much can I earn daily on Starset?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "Earnings depend on the number and type of tasks you complete. Contributors typically earn between ₹200 to ₹2,000+ per day depending on task availability and speed."
-          }
-        },
-        {
-          "@type": "Question",
-          "name": "What types of tasks are available on Starset?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "Starset offers RLHF text evaluation, data labeling and tagging, creative writing, image classification, audio transcription, and many more AI training tasks."
-          }
+          "@type": "ContactPoint",
+          "contactType": "sales",
+          "email": "data@starset.ai",
+          "availableLanguage": ["English"]
         }
       ]
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "BreadcrumbList",
-      "itemListElement": [
-        { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://www.starset.online/" },
-        { "@type": "ListItem", "position": 2, "name": "Contributors", "item": "https://www.starset.online/contributors" },
-        { "@type": "ListItem", "position": 3, "name": "Earnings", "item": "https://www.starset.online/money" },
-        { "@type": "ListItem", "position": 4, "name": "Task Types", "item": "https://www.starset.online/task-types" },
-        { "@type": "ListItem", "position": 5, "name": "About", "item": "https://www.starset.online/about" },
-        { "@type": "ListItem", "position": 6, "name": "Blog", "item": "https://www.starset.online/blog" },
-        { "@type": "ListItem", "position": 7, "name": "Contact", "item": "https://www.starset.online/contact" }
-      ]
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "SiteNavigationElement",
-      "name": ["Start Contributing Now", "Earnings & Payouts", "Task Types", "About Starset", "Sign In", "Blog", "Terms of Service"],
-      "url": [
-        "https://www.starset.online/contributors",
-        "https://www.starset.online/money",
-        "https://www.starset.online/task-types",
-        "https://www.starset.online/about",
-        "https://www.starset.online/login",
-        "https://www.starset.online/blog",
-        "https://www.starset.online/terms"
-      ]
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "WebPage",
-      "@id": "https://www.starset.online/contributors",
-      "name": "Start Contributing — Earn Money Training AI",
-      "description": "Join Starset Intelligence as a contributor. Complete AI data tasks, earn instant payouts. No experience needed.",
-      "url": "https://www.starset.online/contributors",
-      "isPartOf": { "@id": "https://www.starset.online/" }
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "WebPage",
-      "@id": "https://www.starset.online/money",
-      "name": "Earnings & Payouts",
-      "description": "Learn how much you can earn on Starset Intelligence. Instant payouts via UPI, bank transfer, and crypto.",
-      "url": "https://www.starset.online/money",
-      "isPartOf": { "@id": "https://www.starset.online/" }
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "WebPage",
-      "@id": "https://www.starset.online/task-types",
-      "name": "AI Task Types",
-      "description": "Explore all task types: RLHF text evaluation, data labeling, creative writing, image classification, and more.",
-      "url": "https://www.starset.online/task-types",
-      "isPartOf": { "@id": "https://www.starset.online/" }
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "WebPage",
-      "@id": "https://www.starset.online/about",
-      "name": "About Starset Intelligence",
-      "description": "Starset Intelligence connects human intelligence with the world's leading AI companies.",
-      "url": "https://www.starset.online/about",
-      "isPartOf": { "@id": "https://www.starset.online/" }
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "WebPage",
-      "@id": "https://www.starset.online/login",
-      "name": "Sign In",
-      "description": "Sign in to your Starset Intelligence account to start earning by completing AI training tasks.",
-      "url": "https://www.starset.online/login",
-      "isPartOf": { "@id": "https://www.starset.online/" }
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "WebPage",
-      "@id": "https://www.starset.online/terms",
-      "name": "Terms of Service",
-      "description": "Terms of Service for Starset Intelligence. Platform rules, user agreements, and contributor guidelines.",
-      "url": "https://www.starset.online/terms",
-      "isPartOf": { "@id": "https://www.starset.online/" }
     }
   ]
   </script>
 
-  <!-- ═══════════════════════════════════════════════════════════════════
-       PRECONNECT & DNS PREFETCH FOR PERFORMANCE
-       ═══════════════════════════════════════════════════════════════════ -->
+  <!-- ═══════════════ FONTS ═══════════════ -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="preload" as="style"
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Inter+Tight:wght@500;600;700&family=JetBrains+Mono:wght@400;500&display=swap">
+  <link rel="stylesheet"
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Inter+Tight:wght@500;600;700&family=JetBrains+Mono:wght@400;500&display=swap">
 
-
-
-  <!-- ═══════════════════════════════════════════════════════════════════
-       FONTS
-       ═══════════════════════════════════════════════════════════════════ -->
-  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
-
-  <!-- ═══════════════════════════════════════════════════════════════════
-       INLINE CRITICAL STYLES (minimal — full styles in index.css)
-       ═══════════════════════════════════════════════════════════════════ -->
+  <!-- ═══════════════ CRITICAL SHIM ═══════════════ -->
   <style>
-    body { font-family: 'Outfit', sans-serif; background-color: #f8fafc; color: #18181b; margin: 0; }
-    .dark body { background-color: #020205; color: #ffffff; }
+    html { background-color: #fbfaf8; }
+    html.dark { background-color: #0b0c0e; }
+    body {
+      margin: 0;
+      font-family: 'Inter', ui-sans-serif, system-ui, sans-serif;
+      background-color: #fbfaf8;
+      color: #4b5158;
+    }
+    html.dark body { background-color: #0b0c0e; color: #a9aeb4; }
   </style>
 
   <link rel="stylesheet" href="/index.css">
 </head>
 
-<body class="overflow-x-hidden">
-  <!-- SEO: Accessible hidden content for crawlers that don't execute JS -->
+<body>
+  <!-- Crawler-visible outline for the client-rendered app -->
   <noscript>
-    <div style="padding:2rem;max-width:800px;margin:0 auto;font-family:sans-serif;">
-      <h1>Starset Intelligence — Earn Money Daily by Training AI</h1>
-      <p>Starset Intelligence is the world's #1 platform to earn real money by completing AI training tasks like data labeling, RLHF text evaluation, and creative writing. Join 10,000+ contributors earning daily. Visit <a href="https://www.starset.online">starset.online</a> to get started.</p>
-      
+    <div style="padding:2rem;max-width:56rem;margin:0 auto;font-family:system-ui,sans-serif;line-height:1.6">
+      <h1>Starset — Human audio data for AI</h1>
+      <p>
+        Starset collects high-quality human audio and prepares it as structured, validated datasets for speech,
+        voice and conversational AI. Contributors record real speech and are compensated per accepted submission;
+        AI teams commission collections against their own requirements.
+      </p>
+
       <h2>Platform</h2>
       <ul>
-        <li><a href="https://www.starset.online/">Home — Starset Intelligence</a></li>
-        <li><a href="https://www.starset.online/contributors">Start Contributing — Earn Money Training AI</a></li>
-        <li><a href="https://www.starset.online/money">Earnings & Payouts — How to Earn Money</a></li>
-        <li><a href="https://www.starset.online/task-types">AI Task Types — RLHF, Data Labeling, Writing</a></li>
+        <li><a href="https://www.starset.online/">Home</a></li>
+        <li><a href="https://www.starset.online/marketplace">Marketplace — browse audio collections</a></li>
       </ul>
-      
+
       <h2>Company</h2>
       <ul>
-        <li><a href="https://www.starset.online/about">About Starset Intelligence</a></li>
-        <li><a href="https://www.starset.online/careers">Careers at Starset</a></li>
-        <li><a href="https://www.starset.online/blog">Blog — AI Insights & Updates</a></li>
-        <li><a href="https://www.starset.online/contact">Contact Us</a></li>
+        <li><a href="https://www.starset.online/about">About Starset</a></li>
+        <li><a href="https://www.starset.online/careers">Careers</a></li>
+        <li><a href="https://www.starset.online/blog">Notes</a></li>
+        <li><a href="https://www.starset.online/contact">Contact</a></li>
       </ul>
-      
-      <h2>Get Started</h2>
+
+      <h2>Resources</h2>
       <ul>
-        <li><a href="https://www.starset.online/login">Sign In to Your Account</a></li>
-        <li><a href="https://www.starset.online/signup">Create a Free Account</a></li>
+        <li><a href="https://www.starset.online/ai-training-guide">How AI models learn from human data</a></li>
+      </ul>
+
+      <h2>Account</h2>
+      <ul>
+        <li><a href="https://www.starset.online/login">Sign in</a></li>
+        <li><a href="https://www.starset.online/signup">Create an account</a></li>
       </ul>
 
       <h2>Legal</h2>
@@ -349,9 +163,10 @@
         <li><a href="https://www.starset.online/data-processing">Data Processing Agreement</a></li>
       </ul>
 
-      <p>Please enable JavaScript to use the full Starset Intelligence platform.</p>
+      <p>JavaScript is required to use the Starset platform.</p>
     </div>
   </noscript>
+
   <div id="root"></div>
   <script type="module" src="/index.tsx"></script>
 </body>

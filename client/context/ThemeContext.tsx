@@ -12,50 +12,39 @@ interface ThemeContextValue {
 const THEME_STORAGE_KEY = 'starset-theme';
 const ThemeContext = createContext<ThemeContextValue | undefined>(undefined);
 
+/**
+ * Light is Starset's canonical surface. Dark remains fully supported —
+ * it is honoured when explicitly chosen, or when the OS asks for it and the
+ * visitor has not made a choice of their own.
+ */
 const getInitialTheme = (): Theme => {
-  if (typeof window === 'undefined') return 'dark';
+  if (typeof window === 'undefined') return 'light';
 
-  const storedTheme = window.localStorage.getItem(THEME_STORAGE_KEY);
-  if (storedTheme === 'dark' || storedTheme === 'light') {
-    return storedTheme as Theme;
-  }
+  const stored = window.localStorage.getItem(THEME_STORAGE_KEY);
+  if (stored === 'dark' || stored === 'light') return stored;
 
-  // Default to dark theme for all devices
-  return 'dark';
+  return window.matchMedia?.('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
 };
 
 export const ThemeProvider: React.FC<React.PropsWithChildren> = ({ children }) => {
   const [theme, setThemeState] = useState<Theme>(getInitialTheme);
 
+  // Follow the OS only while the visitor has not picked a theme themselves.
   useEffect(() => {
     const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
-    
+
     const handleChange = (e: MediaQueryListEvent) => {
-      // Only adapt if the user hasn't explicitly set a preference in localStorage
       if (!window.localStorage.getItem(THEME_STORAGE_KEY)) {
-        // By default we are dark now, but if they want to adopt system changes we can leave this.
-        // Actually, to ensure dark is the absolute main theme for new users, we will ignore system light mode.
-        if (e.matches) {
-           setThemeState('dark');
-        }
+        setThemeState(e.matches ? 'dark' : 'light');
       }
     };
 
-    // Modern browsers use addEventListener
     if (mediaQuery.addEventListener) {
       mediaQuery.addEventListener('change', handleChange);
-    } else {
-      // Fallback for older browsers
-      mediaQuery.addListener(handleChange);
+      return () => mediaQuery.removeEventListener('change', handleChange);
     }
-
-    return () => {
-      if (mediaQuery.removeEventListener) {
-        mediaQuery.removeEventListener('change', handleChange);
-      } else {
-        mediaQuery.removeListener(handleChange);
-      }
-    };
+    mediaQuery.addListener(handleChange);
+    return () => mediaQuery.removeListener(handleChange);
   }, []);
 
   useEffect(() => {
@@ -69,23 +58,17 @@ export const ThemeProvider: React.FC<React.PropsWithChildren> = ({ children }) =
 
     window.localStorage.setItem(THEME_STORAGE_KEY, theme);
 
-    const themeColor = isDark ? '#020205' : '#f6f8fc';
-    let metaThemeColor = document.querySelector<HTMLMetaElement>('meta[name="theme-color"]');
-
-    if (!metaThemeColor) {
-      metaThemeColor = document.createElement('meta');
-      metaThemeColor.name = 'theme-color';
-      document.head.appendChild(metaThemeColor);
-    }
-
-    metaThemeColor.content = themeColor;
+    const themeColor = isDark ? '#0b0c0e' : '#fbfaf8';
+    document
+      .querySelectorAll<HTMLMetaElement>('meta[name="theme-color"]')
+      .forEach((meta) => { meta.content = themeColor; });
   }, [theme]);
 
   const value = useMemo<ThemeContextValue>(() => ({
     theme,
     isDark: theme === 'dark',
     setTheme: setThemeState,
-    toggleTheme: () => setThemeState((currentTheme) => currentTheme === 'dark' ? 'light' : 'dark'),
+    toggleTheme: () => setThemeState((current) => (current === 'dark' ? 'light' : 'dark')),
   }), [theme]);
 
   return (
@@ -97,10 +80,6 @@ export const ThemeProvider: React.FC<React.PropsWithChildren> = ({ children }) =
 
 export const useTheme = () => {
   const context = useContext(ThemeContext);
-
-  if (!context) {
-    throw new Error('useTheme must be used within a ThemeProvider');
-  }
-
+  if (!context) throw new Error('useTheme must be used within a ThemeProvider');
   return context;
 };
