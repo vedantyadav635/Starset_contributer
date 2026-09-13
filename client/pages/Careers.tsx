@@ -55,7 +55,10 @@ const PILLARS = [
 const JobCard: React.FC<{ job: JobOpening }> = ({ job }) => {
   const [expanded, setExpanded] = useState(false);
 
-  const applyUrl = `mailto:starset.intelligence@gmail.com?subject=Application:%20${encodeURIComponent(job.title)}`;
+  // Strip special characters like slashes from the title before putting it in the mailto subject
+  // because some OS mail clients break on encoded slashes (%2F)
+  const cleanTitle = job.title.replace(/[^a-zA-Z0-9 ]/g, '');
+  const applyUrl = `mailto:starset.intelligence@gmail.com?subject=Application%20for%20${cleanTitle.replace(/ /g, '%20')}`;
 
   return (
     <Reveal>
