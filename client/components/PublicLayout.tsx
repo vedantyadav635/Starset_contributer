@@ -39,7 +39,7 @@ interface SeoEntry {
 
 const SEO_CONFIG: Record<PublicPageType, SeoEntry> = {
   home: {
-    title: 'Starset Intelligence — India\'s Multilingual Voice Data Engine for AI',
+    title: 'Starset Intelligence — Human Audio Data for AI',
     description:
       'Starset Intelligence collects high-quality multilingual voice datasets across 11 Indian languages for speech, voice and conversational AI. Contributors record and earn; AI teams license validated, structured audio data.',
     keywords:

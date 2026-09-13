@@ -19,13 +19,20 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
 
   <!-- ═══════════════ PRIMARY ═══════════════ -->
-  <title>Starset Intelligence — India's Multilingual Voice Data Engine for AI</title>
+  <title>Starset Intelligence — Human Audio Data for AI</title>
   <meta name="description"
     content="Starset Intelligence collects high-quality multilingual voice datasets across 11 Indian languages for speech, voice and conversational AI. Contributors record and earn; AI teams license validated, structured audio data." />
   <meta name="author" content="Starset Intelligence" />
   <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1" />
   <meta name="keywords" content="Starset Intelligence, Indian voice datasets, Hindi audio dataset, Hinglish speech data, multilingual voice data, emotion-labeled voice AI, Indian accent speech data, data contribution India, audio datasets for AI, speech corpus India, voice data collection, ASR training data, TTS dataset India" />
   <link rel="canonical" href="https://www.starset.online/" />
+  <script>
+    // Set self-referencing canonical for each page (runs before React)
+    (function(){
+      var c = document.querySelector('link[rel="canonical"]');
+      if (c) c.href = 'https://www.starset.online' + (window.location.pathname === '/' ? '/' : window.location.pathname.replace(/\/$/,''));
+    })();
+  </script>
   <meta name="theme-color" content="#fbfaf8" media="(prefers-color-scheme: light)" />
   <meta name="theme-color" content="#0b0c0e" media="(prefers-color-scheme: dark)" />
   <meta name="color-scheme" content="light dark" />
@@ -43,7 +50,7 @@
   <meta property="og:type" content="website" />
   <meta property="og:site_name" content="Starset" />
   <meta property="og:url" content="https://www.starset.online/" />
-  <meta property="og:title" content="Starset Intelligence — India's Multilingual Voice Data Engine" />
+  <meta property="og:title" content="Starset Intelligence — Human Audio Data for AI" />
   <meta property="og:description"
     content="Starset Intelligence collects high-quality multilingual voice datasets across 11 Indian languages for speech, voice and conversational AI. Contributors record and earn; AI teams license validated audio data." />
   <meta property="og:image" content="https://www.starset.online/app-icon.png" />
@@ -52,7 +59,7 @@
 
   <!-- ═══════════════ TWITTER ═══════════════ -->
   <meta name="twitter:card" content="summary_large_image" />
-  <meta name="twitter:title" content="Starset Intelligence — India's Multilingual Voice Data Engine" />
+  <meta name="twitter:title" content="Starset Intelligence — Human Audio Data for AI" />
   <meta name="twitter:description"
     content="Starset Intelligence collects high-quality multilingual voice datasets across 11 Indian languages for AI. Contributors record and earn; AI teams license validated audio data." />
   <meta name="twitter:image" content="https://www.starset.online/app-icon.png" />
@@ -196,7 +203,7 @@
   <!-- Crawler-visible outline for the client-rendered app -->
   <noscript>
     <div style="padding:2rem;max-width:56rem;margin:0 auto;font-family:system-ui,sans-serif;line-height:1.6">
-      <h1>Starset Intelligence — India's Multilingual Voice Data Engine for AI</h1>
+      <h1>Starset Intelligence — Human Audio Data for AI</h1>
       <p>
         <strong>Starset Intelligence</strong> is an Indian data infrastructure company that collects high-quality
         human audio recordings across 11 Indian languages and prepares them as structured, validated datasets
@@ -207,6 +214,21 @@
 
       <h2>Languages Collected</h2>
       <p>Indian English, Hinglish (Hindi-English code-switched), Hindi, Bengali, Punjabi, Gujarati, Marathi, Tamil, Telugu, Kannada, Malayalam — covering major dialects and regional accents.</p>
+
+      <h2>Voice Datasets by Language</h2>
+      <ul>
+        <li><a href="https://www.starset.online/datasets/hindi">Hindi Voice Dataset — Standard Hindi, Bhojpuri, Haryanvi, Rajasthani dialects</a></li>
+        <li><a href="https://www.starset.online/datasets/hinglish">Hinglish Speech Dataset — Hindi-English code-switched conversational data</a></li>
+        <li><a href="https://www.starset.online/datasets/indian-accented-english">Indian-Accented English Dataset — Natural Indian English accent variations</a></li>
+        <li><a href="https://www.starset.online/datasets/bengali">Bengali Voice Dataset — Standard, Ghoti, Bangal dialects</a></li>
+        <li><a href="https://www.starset.online/datasets/tamil">Tamil Voice Dataset — Madras Bashai, Kongu, Nellai dialects</a></li>
+        <li><a href="https://www.starset.online/datasets/telugu">Telugu Voice Dataset — Telangana, Andhra, Rayalaseema dialects</a></li>
+        <li><a href="https://www.starset.online/datasets/marathi">Marathi Voice Dataset — Puneri, Koli, Varhadi dialects</a></li>
+        <li><a href="https://www.starset.online/datasets/gujarati">Gujarati Voice Dataset — Standard, Kathiyawadi, Surati dialects</a></li>
+        <li><a href="https://www.starset.online/datasets/punjabi">Punjabi Voice Dataset — Majhi, Malwai, Doabi dialects</a></li>
+        <li><a href="https://www.starset.online/datasets/kannada">Kannada Voice Dataset — Mysore, Dharwad, Kundapura dialects</a></li>
+        <li><a href="https://www.starset.online/datasets/malayalam">Malayalam Voice Dataset — Malabar, Travancore, Central dialects</a></li>
+      </ul>
 
       <h2>Platform</h2>
       <ul>

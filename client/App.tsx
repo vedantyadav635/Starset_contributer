@@ -22,6 +22,7 @@ const Careers = lazy(() => import('./pages/Careers').then(m => ({ default: m.Car
 const Blog = lazy(() => import('./pages/Blog').then(m => ({ default: m.Blog })));
 const Contact = lazy(() => import('./pages/Contact').then(m => ({ default: m.Contact })));
 const AITrainingGuide = lazy(() => import('./pages/AITrainingGuide').then(m => ({ default: m.AITrainingGuide })));
+const DatasetLandingPage = lazy(() => import('./pages/DatasetLandingPage').then(m => ({ default: m.DatasetLandingPage })));
 
 import { PageView, Task, UserRole } from './types';
 
@@ -48,6 +49,7 @@ import {
 import { LogoLockup } from './components/Logo';
 import { API_URL } from './config/api';
 import { PublicPageType } from './components/PublicLayout';
+import { DATASET_LANDING_MAP } from './data/datasetLandings';
 import { supabase } from './supabaseClient';
 import { Sidebar } from './components/Sidebar';
 import { Button } from './components/Button';
@@ -116,6 +118,7 @@ const App: React.FC = () => {
   const [isMobileNavOpen, setIsMobileNavOpen] = useState(false);
   const [activeTask, setActiveTask] = useState<Task | null>(null);
   const [userProfile, setUserProfile] = useState<any>(null);
+  const [datasetSlug, setDatasetSlug] = useState<string | null>(null);
 
   // ── Data state ──
   const [tasks, setTasks] = useState<Task[]>([]);
@@ -154,6 +157,16 @@ const App: React.FC = () => {
       }
     } else {
       setViewMode('public');
+
+      // Dataset landing pages: /datasets/:slug
+      const datasetMatch = path.match(/^\/datasets\/([a-z-]+)$/);
+      if (datasetMatch && DATASET_LANDING_MAP.has(datasetMatch[1])) {
+        setDatasetSlug(datasetMatch[1]);
+        setPublicPage('marketplace');
+        return;
+      }
+      setDatasetSlug(null);
+
       const slug = (path.substring(1) || 'home') as PublicPageType;
 
       // Routes that moved. Redirect rather than silently serving the homepage,
@@ -907,7 +920,12 @@ const App: React.FC = () => {
         case 'cookies':
         case 'data-processing':
           return <Legal {...publicProps} pageType={publicPage} />;
-        default:
+        default: {
+          // Dataset landing pages
+          if (datasetSlug) {
+            const dl = DATASET_LANDING_MAP.get(datasetSlug);
+            if (dl) return <DatasetLandingPage dataset={dl} {...publicProps} />;
+          }
           return (
             <LandingPage
               onNavigate={handlePublicNavigate}
@@ -915,6 +933,7 @@ const App: React.FC = () => {
               onStartSignup={handleStartSignup}
             />
           );
+        }
       }
     }
 

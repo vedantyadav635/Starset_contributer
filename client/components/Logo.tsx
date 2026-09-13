@@ -79,7 +79,7 @@ export const LogoLockup: React.FC<{
   useEffect(preloadLogos, []);
 
   return (
-    <span className={cn('relative inline-block h-8 md:h-12 shrink-0', className)} style={{ minWidth: 150 }}>
+    <span className={cn('relative inline-block h-10 md:h-12 shrink-0', className)} style={{ minWidth: 150 }}>
       <img
         src="/logo-lockup.png"
         alt="Starset Intelligence"
