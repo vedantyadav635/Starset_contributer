@@ -83,16 +83,7 @@ const LEGACY_REDIRECTS: Record<string, PublicPageType> = {
 // SHARED SHELL PIECES
 // ============================================================================
 
-const PageLoader = () => (
-  <div className="fixed inset-0 z-[1000] flex items-center justify-center bg-paper">
-    <div className="flex flex-col items-center gap-4">
-      <div className="w-40">
-        <Waveform seed="loading" bars={28} height={26} live color="var(--line-strong)" />
-      </div>
-      <span className="t-meta">Loading</span>
-    </div>
-  </div>
-);
+const PageLoader = () => null;
 
 /** Consistent heading for the product-side inline views. */
 const ViewHeader: React.FC<{ kicker: string; title: string; lede?: string }> = ({ kicker, title, lede }) => (
