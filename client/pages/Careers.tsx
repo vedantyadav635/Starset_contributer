@@ -45,7 +45,7 @@ export const Careers: React.FC<PageProps> = ({ onNavigate, onEnterApp }) => (
       factsLabel="How we hire"
       facts={[
         { label: 'Open listings', value: 'None published right now', hint: 'We would rather say so than keep a stale page' },
-        { label: 'How to apply', value: 'careers@starset.ai', hint: 'Name the area your work maps to' },
+        { label: 'How to apply', value: 'starset.intelligence@gmail.com', hint: 'Name the area your work maps to' },
         { label: 'Areas', value: 'Engineering · Data ops · Language · Growth' },
       ]}
     />
@@ -80,8 +80,8 @@ export const Careers: React.FC<PageProps> = ({ onNavigate, onEnterApp }) => (
             We would rather say that than keep a page of roles we are not actively filling. Send
             us what you have worked on and which area it maps to — we read everything that arrives.
           </p>
-          <Button className="mt-7" size="lg" onClick={() => { window.location.href = 'mailto:careers@starset.ai?subject=Careers%20at%20Starset'; }}>
-            Email careers@starset.ai
+          <Button className="mt-7" size="lg" onClick={() => { window.location.href = 'mailto:starset.intelligence@gmail.com?subject=Careers%20at%20Starset'; }}>
+            Email starset.intelligence@gmail.com
             <ArrowRight className="h-4 w-4" strokeWidth={2} aria-hidden="true" />
           </Button>
 
