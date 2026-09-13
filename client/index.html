@@ -168,8 +168,87 @@
     </div>
   </noscript>
 
+  <!-- ═══════════════ SPLASH / LOADING SCREEN ═══════════════ -->
+  <div id="splash-screen" style="
+    position: fixed;
+    inset: 0;
+    z-index: 99999;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background: #0b0c0e;
+    transition: opacity 0.5s ease, visibility 0.5s ease;
+  ">
+    <img
+      src="/app-icon.jpg"
+      alt="Starset"
+      style="
+        width: 120px;
+        height: 120px;
+        object-fit: contain;
+        border-radius: 24px;
+        animation: splash-pulse 2s ease-in-out infinite;
+      "
+    />
+    <p style="
+      margin-top: 24px;
+      font-family: 'Inter Tight', 'Inter', system-ui, sans-serif;
+      font-size: 0.8125rem;
+      font-weight: 600;
+      letter-spacing: 0.28em;
+      text-transform: uppercase;
+      color: rgba(255, 255, 255, 0.7);
+    ">STARSET</p>
+    <div style="
+      margin-top: 32px;
+      width: 36px;
+      height: 36px;
+      border: 2.5px solid rgba(255, 255, 255, 0.1);
+      border-top-color: rgba(255, 255, 255, 0.6);
+      border-radius: 50%;
+      animation: splash-spin 0.8s linear infinite;
+    "></div>
+  </div>
+  <style>
+    @keyframes splash-pulse {
+      0%, 100% { transform: scale(1); filter: drop-shadow(0 0 20px rgba(255,255,255,0.08)); }
+      50%       { transform: scale(1.04); filter: drop-shadow(0 0 40px rgba(255,255,255,0.18)); }
+    }
+    @keyframes splash-spin {
+      to { transform: rotate(360deg); }
+    }
+  </style>
+
   <div id="root"></div>
   <script type="module" src="/index.tsx"></script>
+
+  <script>
+    // Hide splash once React has mounted
+    const observer = new MutationObserver(() => {
+      const root = document.getElementById('root');
+      if (root && root.children.length > 0) {
+        const splash = document.getElementById('splash-screen');
+        if (splash) {
+          splash.style.opacity = '0';
+          splash.style.visibility = 'hidden';
+          setTimeout(() => splash.remove(), 600);
+        }
+        observer.disconnect();
+      }
+    });
+    observer.observe(document.getElementById('root'), { childList: true });
+
+    // Fallback: force-hide after 6 seconds
+    setTimeout(() => {
+      const splash = document.getElementById('splash-screen');
+      if (splash) {
+        splash.style.opacity = '0';
+        splash.style.visibility = 'hidden';
+        setTimeout(() => splash.remove(), 600);
+      }
+    }, 6000);
+  </script>
 </body>
 
 </html>
