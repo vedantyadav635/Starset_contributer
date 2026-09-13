@@ -55,11 +55,7 @@ const PILLARS = [
 const JobCard: React.FC<{ job: JobOpening }> = ({ job }) => {
   const [expanded, setExpanded] = useState(false);
 
-  const applyUrl = `mailto:starset.intelligence@gmail.com?subject=${encodeURIComponent(
-    `Application: ${job.title}`
-  )}&body=${encodeURIComponent(
-    `Hi Starset Intelligence,\n\nI'd like to apply for the ${job.title} position.\n\n[Please attach your resume and share relevant links]\n\nBest regards`
-  )}`;
+  const applyUrl = `mailto:starset.intelligence@gmail.com?subject=Application:%20${encodeURIComponent(job.title)}`;
 
   return (
     <Reveal>
