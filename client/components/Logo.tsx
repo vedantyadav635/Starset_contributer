@@ -1,6 +1,28 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { cn } from '../lib/utils';
 import { useTheme } from '../context/ThemeContext';
+
+/* ── Preload all logo variants on first mount so theme toggles are instant ── */
+const LOGO_SOURCES = ['/logo.png', '/logo-dark.png', '/logo-wordmark.png', '/logo-wordmark-dark.png'];
+let preloaded = false;
+function preloadLogos() {
+  if (preloaded) return;
+  preloaded = true;
+  LOGO_SOURCES.forEach((src) => {
+    const img = new Image();
+    img.src = src;
+  });
+}
+
+/* ── Shared transition style for cross-fading ── */
+const FADE_STYLE: React.CSSProperties = {
+  position: 'absolute',
+  inset: 0,
+  width: '100%',
+  height: '100%',
+  objectFit: 'contain',
+  transition: 'opacity 0.15s ease',
+};
 
 interface LogoProps {
   className?: string;
@@ -9,36 +31,38 @@ interface LogoProps {
 
 /**
  * The Starset brand mark (triangle/star icon).
- * Switches between light- and dark-theme variants automatically.
- * Fallback: light-theme asset if dark variant isn't available yet.
+ * Both light and dark images are always rendered; only opacity toggles,
+ * so there is zero network delay when the theme switches.
  */
 export const Logo: React.FC<LogoProps> = ({ className = 'h-8 w-8', animated = false }) => {
   const { isDark } = useTheme();
-  // Dark variant will be added later – fall back to light logo for now
-  const src = isDark ? '/logo-dark.png' : '/logo.png';
+
+  useEffect(preloadLogos, []);
 
   return (
-    <img
-      src={src}
-      alt=""
-      className={cn(className, animated && 'animate-spin-slow', 'object-contain')}
-      draggable={false}
+    <span
+      className={cn('relative inline-block shrink-0', className, animated && 'animate-spin-slow')}
       aria-hidden="true"
-      onError={(e) => {
-        // Fallback: if dark variant doesn't exist yet, use light logo
-        const img = e.currentTarget;
-        if (img.src.includes('logo-dark')) {
-          img.src = '/logo.png';
-        }
-      }}
-    />
+    >
+      <img
+        src="/logo.png"
+        alt=""
+        draggable={false}
+        style={{ ...FADE_STYLE, opacity: isDark ? 0 : 1 }}
+      />
+      <img
+        src="/logo-dark.png"
+        alt=""
+        draggable={false}
+        style={{ ...FADE_STYLE, opacity: isDark ? 1 : 0 }}
+      />
+    </span>
   );
 };
 
 /**
- * Full wordmark lockup ("STARSET INTELLIGENCE" image).
- * Used in navigation, footer, auth screens, and sidebar.
- * Switches between light- and dark-theme variants automatically.
+ * Mark plus wordmark lockup. Both theme variants of each image are
+ * pre-rendered and cross-faded via opacity for a lag-free toggle.
  */
 export const LogoLockup: React.FC<{
   className?: string;
@@ -47,25 +71,26 @@ export const LogoLockup: React.FC<{
   label?: string;
 }> = ({ className, markClassName = 'h-7 w-7', wordClassName }) => {
   const { isDark } = useTheme();
-  // Dark variant will be added later – fall back to light wordmark for now
-  const src = isDark ? '/logo-wordmark-dark.png' : '/logo-wordmark.png';
+
+  useEffect(preloadLogos, []);
 
   return (
     <span className={cn('inline-flex items-center gap-2.5', className)}>
       <Logo className={markClassName} />
-      <img
-        src={src}
-        alt="Starset Intelligence"
-        className={cn('h-8 object-contain', wordClassName)}
-        draggable={false}
-        onError={(e) => {
-          // Fallback: if dark variant doesn't exist yet, use light wordmark
-          const img = e.currentTarget;
-          if (img.src.includes('logo-wordmark-dark')) {
-            img.src = '/logo-wordmark.png';
-          }
-        }}
-      />
+      <span className={cn('relative inline-block h-8 shrink-0', wordClassName)} style={{ minWidth: 120 }}>
+        <img
+          src="/logo-wordmark.png"
+          alt="Starset Intelligence"
+          draggable={false}
+          style={{ ...FADE_STYLE, opacity: isDark ? 0 : 1 }}
+        />
+        <img
+          src="/logo-wordmark-dark.png"
+          alt=""
+          draggable={false}
+          style={{ ...FADE_STYLE, opacity: isDark ? 1 : 0 }}
+        />
+      </span>
     </span>
   );
 };
