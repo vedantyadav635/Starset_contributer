@@ -1,0 +1,61 @@
+# Starset Intelligence
+> India's multilingual voice data engine for AI
+
+## What is Starset Intelligence?
+Starset Intelligence is an Indian data infrastructure company that collects high-quality human audio recordings and prepares them as structured, validated datasets for speech, voice, and conversational AI. Contributors record real speech in their native languages and accents, and are compensated per accepted submission. AI teams can browse, license, or commission custom audio datasets built to their specifications.
+
+## Mission
+To build India's most comprehensive multilingual voice data infrastructure — enabling AI systems that understand the way real people actually speak, across languages, dialects, accents, and contexts.
+
+## Languages & Dialects Collected
+Starset actively collects audio data in the following Indian languages:
+- **English** (Indian-accented) — Standard Indian, Neutral accent
+- **Hinglish** (Hindi–English code-switched speech) — Urban conversational
+- **Hindi** (हिन्दी) — Standard, Bhojpuri, Haryanvi, Rajasthani dialects
+- **Bengali** (বাংলা) — Standard, Ghoti, Bangal dialects
+- **Punjabi** (ਪੰਜਾਬੀ) — Majhi, Malwai, Doabi dialects
+- **Gujarati** (ગુજરાતી) — Standard, Kathiyawadi, Surati dialects
+- **Marathi** (मराठी) — Puneri, Koli, Varhadi dialects
+- **Tamil** (தமிழ்) — Madras Bashai, Kongu, Nellai dialects
+- **Telugu** (తెలుగు) — Telangana, Andhra, Rayalaseema dialects
+- **Kannada** (ಕನ್ನಡ) — Mysore, Dharwad, Kundapura dialects
+- **Malayalam** (മലയാളം) — Malabar, Travancore, Central dialects
+
+## What Makes Starset Different
+1. **Real speakers, real accents** — No synthetic or studio-polished audio. Recordings capture natural speech patterns, code-switching, and regional pronunciation.
+2. **Structured & validated** — Every recording goes through automated screening and human review before inclusion in a dataset.
+3. **Dialect-level granularity** — Datasets are tagged by language, dialect, and accent region, not just top-level language.
+4. **Ethical collection** — Contributors are compensated fairly and transparently for every accepted submission.
+
+## How to Contribute Audio Data
+1. Create a free account at https://www.starset.online/signup
+2. Browse available recording tasks
+3. Record short audio prompts (most tasks take under 2 minutes)
+4. Submit recordings — accepted work is compensated via UPI
+
+## How to License Datasets (For AI Companies)
+- Browse available datasets at https://www.starset.online/marketplace
+- Request access to existing collections
+- Commission a custom dataset built to your specifications
+- Contact the data team: data@starset.ai
+
+## Key Facts
+- Website: https://www.starset.online
+- Headquartered in India
+- Audio data types: Read speech, spontaneous speech, voice commands, dialogue, emotion-labeled speech
+- Use cases: ASR (Automatic Speech Recognition), TTS (Text-to-Speech), voice assistants, conversational AI, emotion detection
+- Payment: Contributors paid per accepted submission via UPI
+
+## Contact
+- Contributor support: support@starset.ai
+- Dataset licensing & sales: data@starset.ai
+- Website: https://www.starset.online/contact
+
+## Key Pages
+- Homepage: https://www.starset.online/
+- Dataset Marketplace: https://www.starset.online/marketplace
+- About: https://www.starset.online/about
+- How AI Learns from Audio: https://www.starset.online/ai-training-guide
+- Blog / Notes: https://www.starset.online/blog
+- Careers: https://www.starset.online/careers
+- Contact: https://www.starset.online/contact

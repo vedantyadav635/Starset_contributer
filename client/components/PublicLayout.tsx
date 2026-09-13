@@ -39,76 +39,83 @@ interface SeoEntry {
 
 const SEO_CONFIG: Record<PublicPageType, SeoEntry> = {
   home: {
-    title: 'Starset — Human audio data for AI',
+    title: 'Starset Intelligence — India\'s Multilingual Voice Data Engine for AI',
     description:
-      'Starset collects high-quality human audio and prepares it as structured, validated datasets for speech, voice and conversational AI.',
+      'Starset Intelligence collects high-quality multilingual voice datasets across 11 Indian languages for speech, voice and conversational AI. Contributors record and earn; AI teams license validated, structured audio data.',
     keywords:
-      'human audio data, speech datasets, voice AI training data, audio data collection, conversational AI data, Starset',
+      'Starset Intelligence, Indian voice datasets, Hindi audio dataset, Hinglish speech data, multilingual voice data, emotion-labeled voice AI, Indian accent speech data, data contribution India, audio datasets for AI, speech corpus India, voice data collection, ASR training data, TTS dataset India',
     canonicalPath: '/',
   },
   marketplace: {
-    title: 'Speech dataset marketplace — Starset',
+    title: 'Voice & Speech Datasets for AI — Starset Intelligence',
     description:
-      'Browse human audio collections by language, dialect, prompt style and recording environment. Request access, or commission a collection that does not exist yet.',
+      'Browse and license human voice datasets by language, dialect and recording style. Hindi, Hinglish, Tamil, Telugu, Bengali and 8 more Indian languages. Request access or commission a custom collection.',
     keywords:
-      'speech dataset marketplace, buy audio dataset, ASR training data, TTS dataset, multilingual speech corpus, Indian language audio data, custom speech collection',
+      'speech dataset marketplace, buy voice dataset India, ASR training data, TTS dataset, multilingual speech corpus, Indian language audio data, custom speech collection, Hindi speech dataset, Hinglish dataset, voice data licensing',
     canonicalPath: '/marketplace',
   },
   about: {
-    title: 'About Starset',
+    title: 'About Starset Intelligence — Multilingual Audio Data Company',
     description:
-      'Why Starset exists, what is wrong with how audio data is usually collected, and what we are building instead.',
-    keywords: 'about Starset, audio data company, speech data infrastructure, AI data company India',
+      'Starset Intelligence is an Indian data infrastructure company building the most comprehensive multilingual voice data engine. Real speakers, structured datasets, dialect-level granularity.',
+    keywords:
+      'about Starset Intelligence, audio data company India, speech data infrastructure, AI data company India, multilingual voice data company, Indian startup AI',
     canonicalPath: '/about',
   },
   'ai-training-guide': {
-    title: 'How AI models learn from human audio — Starset',
+    title: 'How AI Models Learn from Human Audio — Starset Intelligence',
     description:
-      'A plain explanation of how speech and voice models are trained, and where human recordings fit in the process.',
-    keywords: 'how speech AI is trained, ASR training explained, TTS training data, human in the loop audio',
+      'A plain explanation of how speech recognition, voice synthesis and conversational AI models are trained, and where human audio recordings fit in the process.',
+    keywords:
+      'how speech AI is trained, ASR training explained, TTS training data, human in the loop audio, speech model training, voice AI training process',
     canonicalPath: '/ai-training-guide',
   },
   careers: {
-    title: 'Careers at Starset',
-    description: 'Open-ended roles across engineering, data operations and language quality at Starset.',
-    keywords: 'Starset careers, audio data jobs, data operations jobs, AI data company hiring',
+    title: 'Careers at Starset Intelligence — Join the Team',
+    description:
+      'Open roles across engineering, data operations and language quality at Starset Intelligence. Help build India\'s multilingual voice data infrastructure.',
+    keywords:
+      'Starset Intelligence careers, audio data jobs India, data operations jobs, AI data company hiring, speech data jobs',
     canonicalPath: '/careers',
   },
   blog: {
-    title: 'Notes — Starset',
-    description: 'Working notes on audio data quality, collection methodology and platform changes.',
-    keywords: 'audio data blog, speech data quality notes, Starset updates',
+    title: 'Notes & Insights — Starset Intelligence',
+    description:
+      'Working notes on audio data quality, collection methodology, multilingual dataset challenges and platform updates from the Starset Intelligence team.',
+    keywords:
+      'audio data blog, speech data quality, Starset Intelligence updates, multilingual dataset insights, voice data methodology',
     canonicalPath: '/blog',
   },
   contact: {
-    title: 'Contact Starset',
+    title: 'Contact Starset Intelligence — Dataset Licensing & Support',
     description:
-      'Two ways in: contributor support for help with tasks and payouts, and the data team for dataset requests.',
-    keywords: 'contact Starset, dataset request, contributor support, audio data enquiry',
+      'Reach Starset Intelligence: contributor support for tasks and payouts, or the data team for voice dataset licensing, custom collections and partnerships.',
+    keywords:
+      'contact Starset Intelligence, dataset request, contributor support, audio data enquiry, voice dataset licensing, custom dataset India',
     canonicalPath: '/contact',
   },
   terms: {
-    title: 'Terms of Service — Starset',
-    description: 'The agreement covering use of the Starset platform, contributions and compensation.',
-    keywords: 'Starset terms of service, contributor agreement',
+    title: 'Terms of Service — Starset Intelligence',
+    description: 'The agreement covering use of the Starset Intelligence platform, audio contributions and compensation.',
+    keywords: 'Starset Intelligence terms of service, contributor agreement, audio data terms',
     canonicalPath: '/terms',
   },
   privacy: {
-    title: 'Privacy Policy — Starset',
-    description: 'What personal data Starset collects, how it is used, and how recordings are handled.',
-    keywords: 'Starset privacy policy, audio data privacy, contributor data protection',
+    title: 'Privacy Policy — Starset Intelligence',
+    description: 'What personal data Starset Intelligence collects, how it is used, and how audio recordings are handled and protected.',
+    keywords: 'Starset Intelligence privacy policy, audio data privacy, contributor data protection, voice data security',
     canonicalPath: '/privacy',
   },
   cookies: {
-    title: 'Cookie Policy — Starset',
-    description: 'The cookies Starset sets, what each is for, and how to refuse the optional ones.',
-    keywords: 'Starset cookie policy, cookies',
+    title: 'Cookie Policy — Starset Intelligence',
+    description: 'The cookies Starset Intelligence sets, what each is for, and how to manage or refuse optional ones.',
+    keywords: 'Starset Intelligence cookie policy, cookies',
     canonicalPath: '/cookies',
   },
   'data-processing': {
-    title: 'Data Processing Agreement — Starset',
-    description: 'How submitted data is processed, de-identified, stored and shared with sub-processors.',
-    keywords: 'Starset DPA, data processing agreement, audio data processing',
+    title: 'Data Processing Agreement — Starset Intelligence',
+    description: 'How submitted audio data is processed, de-identified, stored and shared with sub-processors at Starset Intelligence.',
+    keywords: 'Starset Intelligence DPA, data processing agreement, audio data processing, voice data handling',
     canonicalPath: '/data-processing',
   },
 };
@@ -221,6 +228,27 @@ export const PublicLayout: React.FC<PublicLayoutProps> = ({
         description={seo.description}
         keywords={seo.keywords}
         canonicalPath={seo.canonicalPath}
+        structuredData={currentPage === 'marketplace' ? {
+          '@context': 'https://schema.org',
+          '@type': 'Dataset',
+          'name': 'Starset Intelligence Multilingual Voice Dataset Collection',
+          'description': 'A growing collection of high-quality human voice datasets across 11 Indian languages including Hindi, Hinglish, Tamil, Telugu, Bengali, Marathi, Gujarati, Punjabi, Kannada, Malayalam and Indian-accented English. Recordings include read speech, spontaneous speech, voice commands and conversational audio.',
+          'keywords': ['Indian voice dataset', 'Hindi speech data', 'Hinglish dataset', 'multilingual audio corpus', 'ASR training data India', 'TTS dataset', 'Indian accent speech', 'dialect-tagged audio'],
+          'inLanguage': ['en-IN', 'hi-IN', 'bn-IN', 'pa-IN', 'gu-IN', 'mr-IN', 'ta-IN', 'te-IN', 'kn-IN', 'ml-IN'],
+          'spatialCoverage': { '@type': 'Place', 'name': 'India' },
+          'creator': {
+            '@type': 'Organization',
+            'name': 'Starset Intelligence',
+            'url': 'https://www.starset.online/',
+          },
+          'license': 'https://www.starset.online/terms',
+          'url': 'https://www.starset.online/marketplace',
+          'variableMeasured': [
+            { '@type': 'PropertyValue', 'name': 'Audio format', 'value': 'WAV / WebM' },
+            { '@type': 'PropertyValue', 'name': 'Sample rate', 'value': '16 kHz – 48 kHz' },
+            { '@type': 'PropertyValue', 'name': 'Languages', 'value': '11 Indian languages' },
+          ],
+        } : undefined}
       />
 
       <a href="#main" className="skip-link">Skip to content</a>

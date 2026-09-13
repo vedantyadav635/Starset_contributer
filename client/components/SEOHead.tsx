@@ -48,7 +48,7 @@ export const SEOHead: React.FC<SEOHeadProps> = ({
     // ── Standard meta ──
     setMeta('name', 'description', description);
     if (keywords) setMeta('name', 'keywords', keywords);
-    setMeta('name', 'robots', noindex ? 'noindex, nofollow' : 'index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1');
+    setMeta('name', 'robots', noindex ? 'noindex, nofollow' : 'index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1');
 
     // ── Canonical ──
     const canonicalUrl = `${BASE_URL}${canonicalPath}`;
