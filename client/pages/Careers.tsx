@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import {
   ArrowRight, Code2, Headphones, Languages, LineChart,
   MapPin, Clock, Briefcase, ChevronDown, CheckCircle2,
-  Sparkles, Database, Brain, Globe,
+  Sparkles, Database, Brain, Globe, Copy, Check,
 } from 'lucide-react';
 
 import { PublicLayout, PublicPageType } from '../components/PublicLayout';
@@ -50,15 +50,29 @@ const PILLARS = [
   { icon: Globe, title: 'Global Impact', body: 'Build AI for a more inclusive world' },
 ];
 
+const STARSET_CAREERS_EMAIL = 'starset.intelligence@gmail.com';
+
+const getGmailComposeUrl = (subject: string) =>
+  `https://mail.google.com/mail/?view=cm&fs=1&to=${STARSET_CAREERS_EMAIL}&su=${encodeURIComponent(subject)}`;
+
+const getMailtoUrl = (subject: string) =>
+  `mailto:${STARSET_CAREERS_EMAIL}?subject=${encodeURIComponent(subject)}`;
+
 /* ═══════════════════════════ Job card ═══════════════════════════ */
 
 const JobCard: React.FC<{ job: JobOpening }> = ({ job }) => {
   const [expanded, setExpanded] = useState(false);
+  const [copied, setCopied] = useState(false);
 
-  // Strip special characters like slashes from the title before putting it in the mailto subject
-  // because some OS mail clients break on encoded slashes (%2F)
-  const cleanTitle = job.title.replace(/[^a-zA-Z0-9 ]/g, '');
-  const applyUrl = `mailto:starset.intelligence@gmail.com?subject=Application%20for%20${cleanTitle.replace(/ /g, '%20')}`;
+  const subject = `Application for ${job.title}`;
+  const gmailUrl = getGmailComposeUrl(subject);
+  const mailtoUrl = getMailtoUrl(subject);
+
+  const handleCopy = () => {
+    navigator.clipboard.writeText(STARSET_CAREERS_EMAIL);
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2000);
+  };
 
   return (
     <Reveal>
@@ -84,7 +98,12 @@ const JobCard: React.FC<{ job: JobOpening }> = ({ job }) => {
           </div>
 
           <div className="flex items-center gap-3 sm:flex-col sm:items-end">
-            <a href={applyUrl} className="btn btn-lg btn-primary inline-flex items-center gap-2">
+            <a
+              href={gmailUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="btn btn-lg btn-primary inline-flex items-center gap-2"
+            >
               Apply Now <ArrowRight className="h-4 w-4" strokeWidth={2} />
             </a>
             <button
@@ -171,11 +190,29 @@ const JobCard: React.FC<{ job: JobOpening }> = ({ job }) => {
               )}
 
               {/* Bottom CTA */}
-              <div className="flex flex-wrap items-center gap-4 border-t border-line pt-5">
-                <a href={applyUrl} className="btn btn-lg btn-primary inline-flex items-center gap-2">
+              <div className="flex flex-wrap items-center justify-between gap-4 border-t border-line pt-5">
+                <a
+                  href={gmailUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="btn btn-lg btn-primary inline-flex items-center gap-2"
+                >
                   Apply for {job.title} <ArrowRight className="h-4 w-4" strokeWidth={2} />
                 </a>
-                <span className="text-sm text-muted">or email starset.intelligence@gmail.com</span>
+                <div className="flex flex-wrap items-center gap-2 text-sm text-muted">
+                  <span>or email</span>
+                  <a href={mailtoUrl} className="font-mono text-ink underline hover:text-signal">
+                    {STARSET_CAREERS_EMAIL}
+                  </a>
+                  <button
+                    type="button"
+                    onClick={handleCopy}
+                    className="inline-flex items-center gap-1 rounded border border-line bg-surface px-2 py-0.5 text-xs text-signal transition-colors hover:border-line-strong hover:text-signal-hover"
+                  >
+                    {copied ? <Check className="h-3 w-3 text-ok" /> : <Copy className="h-3 w-3" />}
+                    {copied ? 'Copied!' : 'Copy'}
+                  </button>
+                </div>
               </div>
             </div>
           </div>
@@ -278,10 +315,23 @@ export const Careers: React.FC<PageProps> = ({ onNavigate, onEnterApp }) => (
               : 'We would rather say that than keep a page of roles we are not actively filling. Send us what you have worked on and which area it maps to — we read everything that arrives.'
             }
           </p>
-          <a href="mailto:starset.intelligence@gmail.com?subject=Careers%20at%20Starset" className="btn btn-lg btn-primary mt-7 inline-flex items-center gap-2">
-            Email starset.intelligence@gmail.com
-            <ArrowRight className="h-4 w-4" strokeWidth={2} aria-hidden="true" />
-          </a>
+          <div className="mt-7 flex flex-wrap items-center justify-center gap-3">
+            <a
+              href={getGmailComposeUrl('Careers at Starset')}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="btn btn-lg btn-primary inline-flex items-center gap-2"
+            >
+              Email {STARSET_CAREERS_EMAIL}
+              <ArrowRight className="h-4 w-4" strokeWidth={2} aria-hidden="true" />
+            </a>
+            <a
+              href={getMailtoUrl('Careers at Starset')}
+              className="btn btn-lg btn-secondary inline-flex items-center gap-2"
+            >
+              Open in Mail App
+            </a>
+          </div>
 
           <p className="mt-8 border-t border-line pt-6 text-sm text-body">
             Looking to record rather than to be employed?{' '}
