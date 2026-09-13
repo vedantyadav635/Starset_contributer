@@ -3,7 +3,10 @@ import { cn } from '../lib/utils';
 import { useTheme } from '../context/ThemeContext';
 
 /* ── Preload all logo variants on first mount so theme toggles are instant ── */
-const LOGO_SOURCES = ['/logo.png', '/logo-dark.png', '/logo-wordmark.png', '/logo-wordmark-dark.png'];
+const LOGO_SOURCES = [
+  '/logo.png', '/logo-dark.png',
+  '/logo-lockup.png', '/logo-lockup-dark.png',
+];
 let preloaded = false;
 function preloadLogos() {
   if (preloaded) return;
@@ -30,7 +33,7 @@ interface LogoProps {
 }
 
 /**
- * The Starset brand mark (triangle/star icon).
+ * The Starset brand mark (triangle/star icon only).
  * Both light and dark images are always rendered; only opacity toggles,
  * so there is zero network delay when the theme switches.
  */
@@ -61,36 +64,34 @@ export const Logo: React.FC<LogoProps> = ({ className = 'h-8 w-8', animated = fa
 };
 
 /**
- * Mark plus wordmark lockup. Both theme variants of each image are
- * pre-rendered and cross-faded via opacity for a lag-free toggle.
+ * Full logo lockup — icon + divider + "STARSET INTELLIGENCE" as a single
+ * combined image. Both theme variants are pre-rendered and cross-faded
+ * via opacity for an instant, lag-free theme toggle.
  */
 export const LogoLockup: React.FC<{
   className?: string;
   markClassName?: string;
   wordClassName?: string;
   label?: string;
-}> = ({ className, markClassName = 'h-7 w-7', wordClassName }) => {
+}> = ({ className }) => {
   const { isDark } = useTheme();
 
   useEffect(preloadLogos, []);
 
   return (
-    <span className={cn('inline-flex items-center gap-2.5', className)}>
-      <Logo className={markClassName} />
-      <span className={cn('relative inline-block h-8 shrink-0', wordClassName)} style={{ minWidth: 120 }}>
-        <img
-          src="/logo-wordmark.png"
-          alt="Starset Intelligence"
-          draggable={false}
-          style={{ ...FADE_STYLE, opacity: isDark ? 0 : 1 }}
-        />
-        <img
-          src="/logo-wordmark-dark.png"
-          alt=""
-          draggable={false}
-          style={{ ...FADE_STYLE, opacity: isDark ? 1 : 0 }}
-        />
-      </span>
+    <span className={cn('relative inline-block h-12 shrink-0', className)} style={{ minWidth: 220 }}>
+      <img
+        src="/logo-lockup.png"
+        alt="Starset Intelligence"
+        draggable={false}
+        style={{ ...FADE_STYLE, objectFit: 'contain', objectPosition: 'left center', opacity: isDark ? 0 : 1 }}
+      />
+      <img
+        src="/logo-lockup-dark.png"
+        alt=""
+        draggable={false}
+        style={{ ...FADE_STYLE, objectFit: 'contain', objectPosition: 'left center', opacity: isDark ? 1 : 0 }}
+      />
     </span>
   );
 };
