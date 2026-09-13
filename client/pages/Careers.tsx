@@ -84,7 +84,7 @@ const JobCard: React.FC<{ job: JobOpening }> = ({ job }) => {
           </div>
 
           <div className="flex items-center gap-3 sm:flex-col sm:items-end">
-            <a href={applyUrl} target="_blank" rel="noopener noreferrer" className="btn btn-lg btn-primary inline-flex items-center gap-2">
+            <a href={applyUrl} className="btn btn-lg btn-primary inline-flex items-center gap-2">
               Apply Now <ArrowRight className="h-4 w-4" strokeWidth={2} />
             </a>
             <button
@@ -172,7 +172,7 @@ const JobCard: React.FC<{ job: JobOpening }> = ({ job }) => {
 
               {/* Bottom CTA */}
               <div className="flex flex-wrap items-center gap-4 border-t border-line pt-5">
-                <a href={applyUrl} target="_blank" rel="noopener noreferrer" className="btn btn-lg btn-primary inline-flex items-center gap-2">
+                <a href={applyUrl} className="btn btn-lg btn-primary inline-flex items-center gap-2">
                   Apply for {job.title} <ArrowRight className="h-4 w-4" strokeWidth={2} />
                 </a>
                 <span className="text-sm text-muted">or email starset.intelligence@gmail.com</span>
@@ -278,7 +278,7 @@ export const Careers: React.FC<PageProps> = ({ onNavigate, onEnterApp }) => (
               : 'We would rather say that than keep a page of roles we are not actively filling. Send us what you have worked on and which area it maps to — we read everything that arrives.'
             }
           </p>
-          <a href="mailto:starset.intelligence@gmail.com?subject=Careers%20at%20Starset" target="_blank" rel="noopener noreferrer" className="btn btn-lg btn-primary mt-7 inline-flex items-center gap-2">
+          <a href="mailto:starset.intelligence@gmail.com?subject=Careers%20at%20Starset" className="btn btn-lg btn-primary mt-7 inline-flex items-center gap-2">
             Email starset.intelligence@gmail.com
             <ArrowRight className="h-4 w-4" strokeWidth={2} aria-hidden="true" />
           </a>
